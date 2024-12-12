@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Pixel to VW Converter</title>
+</head>
+<body>
+    <textarea id="originalStyles" rows="20" cols="50" placeholder="Enter your CSS here..."></textarea>
+    <br>
+    <button onclick="convertToVW()">Convert to VW</button>
+    <div id="convertedStyles"></div>
+
+    <script>
+        function convertToVW() {
+            const originalStyles = document.getElementById('originalStyles').value;
+            const scale = 0.0521;
+            const regex = /(\d+(\.\d+)?)px/g;
+    
+            let convertedStyles = originalStyles;
+            let inClass = false;
+            let result = '';
+    
+            for (let i = 0; i < convertedStyles.length; i++) {
+                if (convertedStyles[i] === '{') {
+                    inClass = true;
+                } else if (convertedStyles[i] === '}') {
+                    inClass = false;
+                }
+    
+                if (inClass && convertedStyles[i] === 'p' && convertedStyles.slice(i, i + 2) === 'px') {
+                    const match = convertedStyles.slice(i - 3, i).match(/(\d+(\.\d+)?)/);
+                    if (match) {
+                        const pxValue = parseFloat(match[0]);
+                        const vwValue = (pxValue * scale).toFixed(3);
+                        result = result.slice(0, result.length - match[0].length) + vwValue + 'vw';
+                        i += 1; // Skip 'px'
+                        continue;
+                    }
+                }
+                result += convertedStyles[i];
+            }
+    
+            document.getElementById('convertedStyles').innerHTML = '<pre>' + result + '</pre>';
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(result).then(() => {
+                alert('Converted styles copied to clipboard');
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+            });
+        }
+    </script>
+    
+</body>
+</html>
