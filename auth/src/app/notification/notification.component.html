@@ -1,0 +1,196 @@
+<div class="fullHeight w-100 d-md-flex" style="justify-content: space-between;">
+  <div class="w-50">
+      <app-auth-panel class="fullHeight fullWidth"></app-auth-panel>
+  </div>
+  <div style="margin: 20px auto;
+  width: 35%;">
+   <form [formGroup]="notificationForm" (ngSubmit)="notificationSubmit()">
+      <div style="margin: auto; width: 100%;">
+        <div class="credentialCss">
+          <div class="h-80vh">
+            <div class="position h-100">
+              <h2 class="fw-bolder mb-3">Notifications</h2>
+              <div class="mb-3 fw-600">Select an option to set up</div>
+  
+              <!-- SMS -->
+              <div class="d-flex align-items-center mb-3">
+                <div class="fw-600">SMS</div>
+                <div class="d-flex align-items-center ps-2">
+                  <label class="switch">
+                    <input type="checkbox" formControlName="smsToggle" [checked]="notificationForm.get('smsToggle').value" (click)="toggleNotification('sms')">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="d-flex mb-4 jc-sb" formGroupName="smsRiskRating" [ngClass]="!notificationForm.get('smsToggle').value ? 'opacity-50' : ''">
+                <label class="script d-flex align-items-center me-2" style="color:black;">Very High
+                  <input type="checkbox" formControlName="very_high" [disabled]="!notificationForm.get('smsToggle').value" (click)="toggleRiskRating('sms', 'very_high')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('smsToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">High
+                  <input type="checkbox" formControlName="high" [disabled]="!notificationForm.get('smsToggle').value" (click)="toggleRiskRating('sms', 'high')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('smsToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">Medium
+                  <input type="checkbox" formControlName="medium" [disabled]="!notificationForm.get('smsToggle').value" (click)="toggleRiskRating('sms', 'medium')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('smsToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">Low
+                  <input type="checkbox" formControlName="low" [disabled]="!notificationForm.get('smsToggle').value" (click)="toggleRiskRating('sms', 'low')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('smsToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">Very Low
+                  <input type="checkbox" formControlName="very_low" [disabled]="!notificationForm.get('smsToggle').value" (click)="toggleRiskRating('sms', 'very_low')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('smsToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+              </div>
+  
+              <!-- Email -->
+              <div class="d-flex align-items-center mb-3">
+                <div class="fw-600">Email</div>
+                <div class="d-flex align-items-center ps-2">
+                  <label class="switch">
+                    <input type="checkbox" formControlName="emailToggle" [checked]="notificationForm.get('emailToggle').value" (click)="toggleNotification('email')">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="d-flex mb-4 jc-sb" formGroupName="emailRiskRating" [ngClass]="!notificationForm.get('emailToggle').value ? 'opacity-50' : ''">
+                <label class="script d-flex align-items-center me-2" style="color:black;">Very High
+                  <input type="checkbox" formControlName="very_high" [disabled]="!notificationForm.get('emailToggle').value" (click)="toggleRiskRating('email', 'very_high')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('emailToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">High
+                  <input type="checkbox" formControlName="high" [disabled]="!notificationForm.get('emailToggle').value" (click)="toggleRiskRating('email', 'high')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('emailToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">Medium
+                  <input type="checkbox" formControlName="medium" [disabled]="!notificationForm.get('emailToggle').value" (click)="toggleRiskRating('email', 'medium')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('emailToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">Low
+                  <input type="checkbox" formControlName="low" [disabled]="!notificationForm.get('emailToggle').value" (click)="toggleRiskRating('email', 'low')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('emailToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">Very Low
+                  <input type="checkbox" formControlName="very_low" [disabled]="!notificationForm.get('emailToggle').value" (click)="toggleRiskRating('email', 'very_low')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('emailToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+              </div>
+  
+              <!-- Mobile Push Notifications -->
+              <div class="d-flex align-items-center mb-3">
+                <div class="fw-600">Mobile Push Notifications</div>
+                <div class="d-flex align-items-center ps-2">
+                  <label class="switch">
+                    <input type="checkbox" formControlName="mobileToggle" [checked]="notificationForm.get('mobileToggle').value" (click)="toggleNotification('mobile')">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="d-flex mb-4 jc-sb"  formGroupName="mobileRiskRating" [ngClass]="!notificationForm.get('mobileToggle').value ? 'opacity-50' : ''">
+                <label class="script d-flex align-items-center me-2" style="color:black;">Very High
+                  <input type="checkbox" formControlName="very_high" [disabled]="!notificationForm.get('mobileToggle').value" (click)="toggleRiskRating('mobile', 'very_high')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('mobileToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">High
+                  <input type="checkbox" formControlName="high" [disabled]="!notificationForm.get('mobileToggle').value" (click)="toggleRiskRating('mobile', 'high')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('mobileToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">Medium
+                  <input type="checkbox" formControlName="medium" [disabled]="!notificationForm.get('mobileToggle').value" (click)="toggleRiskRating('mobile', 'medium')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('mobileToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">Low
+                  <input type="checkbox" formControlName="low" [disabled]="!notificationForm.get('mobileToggle').value" (click)="toggleRiskRating('mobile', 'low')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('mobileToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">Very Low
+                  <input type="checkbox" formControlName="very_low" [disabled]="!notificationForm.get('mobileToggle').value" (click)="toggleRiskRating('mobile', 'very_low')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('mobileToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+              </div>
+  
+              <!-- Web Popup Notifications -->
+              <div class="d-flex align-items-center mb-3">
+                <div class="fw-600">Web Popup Notifications</div>
+                <div class="d-flex align-items-center ps-2">
+                  <label class="switch">
+                    <input type="checkbox" formControlName="webToggle" [checked]="notificationForm.get('webToggle').value" (click)="toggleNotification('web')">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="d-flex mb-4 jc-sb" formGroupName="webRiskRating" [ngClass]="!notificationForm.get('webToggle').value ? 'opacity-50' : ''">
+                <label class="script d-flex align-items-center me-2" style="color:black;">Very High
+                  <input type="checkbox" formControlName="very_high" [disabled]="!notificationForm.get('webToggle').value" (click)="toggleRiskRating('web', 'very_high')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('webToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">High
+                  <input type="checkbox" formControlName="high" [disabled]="!notificationForm.get('webToggle').value" (click)="toggleRiskRating('web', 'high')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('webToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">Medium
+                  <input type="checkbox" formControlName="medium" [disabled]="!notificationForm.get('webToggle').value" (click)="toggleRiskRating('web', 'medium')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('webToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">Low
+                  <input type="checkbox" formControlName="low" [disabled]="!notificationForm.get('webToggle').value" (click)="toggleRiskRating('web', 'low')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('webToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">Very Low
+                  <input type="checkbox" formControlName="very_low" [disabled]="!notificationForm.get('webToggle').value" (click)="toggleRiskRating('web', 'very_low')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('webToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+              </div>
+  
+              <!-- Popup Notification Sounds -->
+              <div class="d-flex align-items-center mb-3">
+                <div class="fw-600">Popup Notification Sounds</div>
+                <div class="d-flex align-items-center ps-2">
+                  <label class="switch">
+                    <input type="checkbox" [checked]="notificationForm.get('popUpToggle').value" (click)="toggleNotification('popUp')" [disabled]="!notificationForm.get('webToggle').value || !isAnyRiskRatingSelected('web')">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="d-flex mb-4 jc-sb" formGroupName="popUpRiskRating" [ngClass]="!notificationForm.get('popUpToggle').value || !notificationForm.get('webToggle').value ? 'opacity-50' : ''">
+                <label class="script d-flex align-items-center me-2" style="color:black;">Very High
+                  <input type="checkbox" formControlName="very_high" [disabled]="!notificationForm.get('popUpToggle').value" (click)="toggleRiskRating('popUp', 'very_high')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('popUpToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">High
+                  <input type="checkbox" formControlName="high" [disabled]="!notificationForm.get('popUpToggle').value" (click)="toggleRiskRating('popUp', 'high')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('popUpToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">Medium
+                  <input type="checkbox" formControlName="medium" [disabled]="!notificationForm.get('popUpToggle').value" (click)="toggleRiskRating('popUp', 'medium')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('popUpToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">Low
+                  <input type="checkbox" formControlName="low" [disabled]="!notificationForm.get('popUpToggle').value" (click)="toggleRiskRating('popUp', 'low')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('popUpToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+                <label class="script d-flex align-items-center me-2" style="color:black;">Very Low
+                  <input type="checkbox" formControlName="very_low" [disabled]="!notificationForm.get('popUpToggle').value" (click)="toggleRiskRating('popUp', 'very_low')">
+                  <span class="w3docs" [ngClass]="notificationForm.get('popUpToggle').value ? '' :'w3docs-disabled'"></span>
+                </label>
+              </div>
+  
+              <button class="btn btn-basic btn-lg fullWidth mt-4 submit-btn-position" type="submit" [disabled]="btnDisable">SAVE</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </form>
+  
+  
+  
+  </div>
+</div>
+
+<div class="row fullHeight m-0 d-flex d-md-none">
+  <h1 class="text-center m-auto">Portal cannot be viewed in smaller screens</h1>
+</div>
+
+

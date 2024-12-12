@@ -1,0 +1,27 @@
+<div class="credentialCss m-auto">
+  <h2 class="fw-bolder mb-5">Login</h2>
+  <p class="fw-bolder">Username</p>
+  <input type="text" class="form-control form-control-lg" placeholder="Enter username" [(ngModel)]="user.email">
+  <p class="fw-bolder mt-4">Password</p>
+  <div class="input-group">
+    <input [type]="showPassword ? 'text' : 'password'" class="form-control form-control-lg" placeholder="Enter password"
+    [(ngModel)]="user.password" (keyup.enter)="signIn()">
+    <button class="btn border" type="button" (click)="showHidePassword()">
+      <i [ngClass]="showPassword ? 'fa fa-eye'  : 'fa fa-eye-slash'"></i>
+    </button>
+  </div>
+  <button  class="btn btn-basic btn-lg fullWidth mt-4 submit-button" type="button" (click)="signIn()">
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="loading"></span>
+    LOGIN
+  </button>
+   <button *ngIf="siteConfig.is_sso_enabled == true" class="btn btn-basic btn-lg fullWidth mt-4 submit-button" type="button" (click)="signInWithAzure()" [disabled]="loading">
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="loading"></span>
+    SINGLE SIGN-ON LOGIN
+  </button>
+  <!-- <div class="d-flex mt-3" style="float: right;">
+    Don't have an account?<div class="forgotPassword fw-bolder" style="margin-left: 5px;" (click)="signUpClicked()">SignUp</div>
+  </div> -->
+  <div class="d-flex mt-3" (click)="forgotPasswordClicked()">
+    <a class="forgotPassword fw-bolder ms-auto">Forgot Password?</a>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@aws-amplify/ui-angular/theme.css';
+
+body {
+    height: 100vh;
+}
+
+#single-spa-application:cognito-auth {
+    height: 100vh !important;
+}
+
+.submit-button {
+    margin-bottom: -12px;
+    color: #fff!important;
+    background-color: #069!important;
+    border-color: #069!important;
+    border-radius: 7px;
+  }

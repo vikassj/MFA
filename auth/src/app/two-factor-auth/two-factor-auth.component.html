@@ -1,0 +1,59 @@
+<div class="m-auto">
+  <h2 class="fw-bolder mb-5">Two factor authentication</h2>
+  <ng-container *ngIf="step === 1">
+    <p class="fw-bolder card-text">Add a extra layer of security for security reasons. Click Proceed to continue.
+    </p>
+    <button class="btn btn-basic" type="button" (click)="step = 2;">Proceed</button>
+  </ng-container>
+  <ng-container *ngIf="step === 2 && change2faMode == 'true'">
+    <p class="fw-bolder mb-2">Select an option to setup</p>
+    <div *ngFor="let mode of modes" class="form-check mt-2">
+      <input class="form-check-input" type="radio" name="twoFact" id="{{mode.value}}" value="{{mode.value}}"
+        [(ngModel)]="selectedMode">
+      <label class="form-check-label" for="{{mode.value}}">
+        {{mode.label}}
+      </label>
+    </div>
+    <button class="btn btn-basic mt-4" type="button" (click)="submitTwoFactMode()"
+      [disabled]="selectedMode === ''">Next</button>
+  </ng-container>
+  <ng-container *ngIf="step === 3">
+    <ng-container *ngIf="selectedMode === 'qr'">
+      <ng-container *ngIf="setup">
+        <p class="fw-bolder">Scan the code in Google Authenticator to get the security code.</p>
+        <div class="d-flex">
+          <div class="mx-auto">
+            <qrcode [qrdata]="qrCodeUrl"></qrcode>
+          </div>
+        </div>
+      </ng-container>
+      <p *ngIf="!setup" class="fw-bolder">Enter the code shown in Google Authenticator.</p>
+    </ng-container>
+    <p *ngIf="selectedMode === 'email'" class="fw-bolder">Enter the security code sent to your registered email.</p>
+    <div class="input-group">
+      <input class="form-control form-control-lg" type="number" [(ngModel)]="securityCode"
+        (keydown)="onKeydown($event)">
+      <button class="btn border" type="button">
+        <i class="fas fa-key icon"></i>
+      </button>
+    </div>
+    <div class="fullWidth mt-4">
+      <button class="btn btn-basic btn-lg fullWidth mt-4" type="button" (click)="validateSecurityCode()"
+        [disabled]="securityCode === null">VALIDATE</button>
+      <button class="btn btn-outline-warn btn-lg fullWidth mt-3" type="button" (click)="resendEmailSecurityCode()"
+        [disabled]="timer! > 0">RESEND OTP</button>
+      <button *ngIf="change2faMode == 'true'" class="btn  btn-outline-basic btn-lg fullWidth mt-3" type="button" (click)="changeTwoFactMode()">CHANGE
+        2FA
+        MODE</button>
+        <button class="btn btn-basic btn-lg fullWidth mt-3" type="button" (click)="backClicked()">BACK</button>
+    </div>
+    <ng-container *ngIf="selectedMode == 'email'">
+      <p *ngIf="timer > 0" class="text-danger font-italic mt-3">OTP will expire in {{timer!}}
+        seconds.</p>
+      <p *ngIf="timer === 0" class="text-danger font-italic mt-3">OTP expired. Click 'Resend
+        OTP' to get a new OTP.</p>
+      <p *ngIf="timer === 0 && attemptsFailed" class="text-danger font-italic mt-3">You have reached maximum
+        attempts. Click Resend OTP to get a new OTP.</p>
+    </ng-container>
+  </ng-container>
+</div>

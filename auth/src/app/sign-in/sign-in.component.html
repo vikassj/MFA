@@ -1,0 +1,18 @@
+<div class="fullHeight w-100 d-md-flex" style="justify-content: space-between;">
+  <div class="w-50">
+      <app-auth-panel class="fullHeight fullWidth"></app-auth-panel>
+  </div>
+  <div style="margin: auto;
+  width: 33%;
+  margin-right: 120px;">
+    <app-login *ngIf="loginScreen" style="margin: auto;"></app-login>
+    <auth-force-change-password *ngIf="forceChangePasswordScreen"></auth-force-change-password>
+    <auth-forgot-password *ngIf="forgotPasswordScreen"></auth-forgot-password>
+    <auth-change-password *ngIf="resetPasswordScreen"></auth-change-password>
+    <app-two-factor-auth *ngIf="mfaScreen"></app-two-factor-auth>
+  </div>
+</div>
+
+<div class="row fullHeight m-0 d-flex d-md-none">
+  <h1 class="text-center m-auto">Portal cannot be viewed in smaller screens</h1>
+</div>
