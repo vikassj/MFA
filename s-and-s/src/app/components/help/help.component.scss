@@ -1,0 +1,92 @@
+.dashboardContainer {
+  height: calc(100% - 60px);
+  background-color: #f4f7fc;
+}
+
+.selectedItem {
+  border-left: 3px solid #006699;
+  background-color: #cce6ff;
+  color: #006699;
+  font-weight: bolder;
+  padding-left: 15px;
+}
+
+.text-highlight {
+  color: #006699;
+  font-weight: bolder;
+  font-size: 15px;
+}
+
+.pad-80 {
+  padding: 10px 130px;
+}
+
+.childItem {
+  padding: 5px 10px;
+  font-size: 11px !important;
+  color: #8E97A1;
+  cursor: pointer;
+}
+
+.childItem li.nav-item {
+  padding: 6px 9px;
+}
+
+.child-active {
+  color: #000;
+  font-weight: bold;
+  transition: 0.3s ease-in-out
+}
+
+.pl-18px {
+  padding-left: 18px;
+}
+
+.row>* {
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+.col-12 {
+  margin: 0px;
+}
+
+.side-bar-height {
+  height: calc(100vh - 75px);
+  overflow: hidden;
+}
+
+.videoBox {
+  height: calc(100vh - 250px);
+}
+
+.pdfHeight {
+  height: calc(100% - 50px);
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+::ng-deep .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell,
+.ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-group-cell {
+  overflow: hidden;
+  white-space: break-spaces !important;
+  text-overflow: ellipsis;
+  font-size: 13px !important;
+}
+
+.saidBar-icon {
+  width: 30px;
+  display: inline-block;
+}
+
+
+
+#tableHelp ::ng-deep.ngx-datatable.material .datatable-body {
+  position: relative;
+  height: calc(100vh - 180px) !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+

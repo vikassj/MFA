@@ -1,0 +1,95 @@
+<a *ngIf="isModal else pageTemplate" title="Bird's Eye View" class="float cursorPointer d-none d-md-block"
+    data-bs-toggle="modal" data-bs-target="#birdsEyeViewModal" (click)="initializeMaps()">
+    <em class="fas fa-2x fa-binoculars my-float"></em>
+</a>
+
+<div id="birdsEyeViewModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static"
+    data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content mx-auto">
+            <div class="modal-header p-2">
+                <h5 class="modal-title text-detect">
+                    <em class="fas fa-binoculars pe-1"></em>
+                    Bird's Eye View
+                    <ng-container *ngIf="img">
+                        for {{modalHeading}} - {{modalType}}
+                    </ng-container>
+                </h5>
+                <button *ngIf="!modifyBev && hasModifyAccess" type="button" class="btn btn-sm btn-primary ms-3"
+                    (click)="fetchImage(true)">Modify</button>
+                <button *ngIf="modifyBev" type="button" class="btn btn-sm btn-danger ms-3"
+                    (click)="initializeMaps()">Back</button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body fullWidth p-0" [ngClass]="{'d-flex': !img}">
+                <h6 *ngIf="!img" class="m-auto font-weight-bold">{{noDataMsg}}</h6>
+                <ng-container *ngTemplateOutlet="bevTemplate"></ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #pageTemplate>
+    <button *ngIf="!modifyBev && hasModifyAccess" type="button" class="btn btn-sm btn-primary"
+        (click)="fetchImage(true)">Modify</button>
+    <button *ngIf="modifyBev" type="button" class="btn btn-sm btn-danger" (click)="initializeMaps()">Back</button>
+    <h6 *ngIf="!img" class="mb-0 font-weight-bold text-center">{{noDataMsg}}</h6>
+    <ng-container *ngTemplateOutlet="bevTemplate"></ng-container>
+</ng-template>
+
+<ng-template #bevTemplate>
+    <ng-container *ngIf="img && birdsEyeViewClicked">
+        <div *ngIf="!modifyBev" class="mapContainer fullWidth"
+            [ngClass]="{'map-container': !isModal, 'fullHeight': isModal}">
+        </div>
+        <div *ngIf="modifyBev" class="row m-0" [ngClass]="{'map-container': !isModal, 'fullHeight': isModal}">
+            <div *ngIf="!bevImageFile" class="col-12 d-flex">
+                <div class="dropzone-wrapper m-auto">
+                    <div class="dropzone-desc">
+                        <i class="fas fa-upload"></i>
+                        <p>Choose an file or drag it here.</p>
+                    </div>
+                    <input type="file" id="file" name="img_logo" class="dropzone" accept=".jpg,.jpeg,.png"
+                        (change)="selectFile($event)" />
+                </div>
+            </div>
+            <ng-container *ngIf="bevImageFile">
+                <div class="col-12 p-0 fullHeight">
+                    <div class="d-flex fullWidth bevCanvas">
+                        <img id="bevCanvasImage" class="m-auto" crossorigin="anonymous" />
+                        <canvas id="bevCanvas"></canvas>
+                    </div>
+                    <div class="bevDescription row m-0">
+                        <div class="col-10 d-flex ps-0">
+                            <ng-select class="bevLocationsCss my-auto ms-3" [clearable]="false"
+                                [(ngModel)]="newLocation" placeholder="Select location"
+                                (ngModelChange)="onLocationChange()">
+                                <!-- <ng-option *ngFor="let location of bevLocations" [value]="location"
+                                    [disabled]="disableBevLocation(location)">
+                                    {{location}}</ng-option> -->
+                            </ng-select>
+                            <p class="font-weight-bold mb-0 ms-3 my-auto">Highlighted location:
+                                {{hoveredLocationDetails?.name}}</p>
+                            <button title="Draw polygon" class="btn btn-primary fas fa-draw-polygon  my-auto ms-3"
+                                (click)="createPolygon()" [disabled]="duplPoints.length != 0"></button>
+                            <button title="Clear" class="btn btn-primary fas fa-times my-auto ms-3"
+                                (click)="resetCanvas()"></button>
+                            <button title="Reset" class="btn btn-primary fas fa-undo  my-auto ms-3"
+                                (click)="resetBev()"></button>
+                            <button title="Delete" class="btn btn-primary far fa-trash-alt my-auto ms-3"
+                                (click)="deleteLocation()" [disabled]="!selectedLocationDetails?.color"></button>
+                            <button title="Reupload" class="btn btn-primary fas fa-upload my-auto ms-3"
+                                (click)="reuploadBev()"></button>
+                        </div>
+                        <div class="col-2 d-flex p-0">
+                            <button class="btn btn-sm btn-success my-auto me-3 ms-auto" (click)="uploadImage()"
+                                [disabled]="duplPoints.length != 0 && newLocation === ''">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+</ng-template>

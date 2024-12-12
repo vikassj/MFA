@@ -1,0 +1,89 @@
+{
+  "url": "https://tpulse-test-revamp.detectpl.com/",
+  "apiUrl": "https://tpulse-test-revamp.detectpl.com/api/",
+  "websocketUrl": "wss://tpulse-test-revamp.detectpl.com/ws/api/",
+  "adminUrl": "https://tpulse-test-revamp.detectpl.com/client-admin/",
+  "appTimeout": null,
+  "appTimeoutCutOff": 30,
+  "plantName": "Plant",
+  "headerLogoPath": "assets/images/detectLogo.png",
+  "headerLogoWhitePath": "assets/images/detect-white.png",
+  "imageDecryptionKey": "su5k#_vyQ$_G[SPX",
+  "defaultModule": "/safety-and-surveillance",
+  "userActivityPushInterval": 60000,
+  "modules": [
+    {
+      "identifier": "safety-and-surveillance",
+      "moduleName": "Safety and Surveillance",
+      "shortName": "S&S",
+      "iconClass": "assets/icons/S&S1.png",
+      "iconClassWhiteColor": "assets/icons/S&S_White.png",
+      "routeUrl": "/safety-and-surveillance",
+      "spinnerType": "tpulse"
+    },
+    {
+      "identifier": "activity-monitoring",
+      "moduleName": "Schedule Control",
+      "shortName": "SC",
+      "iconClass": "assets/icons/AM1.png",
+      "iconClassWhiteColor": "assets/icons/AM_White.png",
+      "routeUrl": "/activity-monitoring",
+      "spinnerType": "tpulse"
+    },
+    {
+      "identifier": "manpower-counting",
+      "moduleName": "Occupancy Monitoring",
+      "shortName": "OM",
+      "iconClass": "assets/icons/mpc1.png",
+      "iconClassWhiteColor": "assets/icons/MPC_White.png",
+      "routeUrl": "/manpower-counting",
+      "spinnerType": "tpulse"
+    },
+    {
+      "identifier": "compliance",
+      "moduleName": "PPE Compliance",
+      "shortName": "PPE",
+      "iconClass": "assets/icons/ppe3.png",
+      "iconClassWhiteColor": "assets/icons/PPE_White.png",
+      "routeUrl": "/compliance",
+      "spinnerType": "tpulse"
+    },
+    {
+      "identifier": "inspection",
+      "moduleName": "Inspection",
+      "shortName": "Inspection",
+      "iconClass": "fas fa-search",
+      "iconClassWhiteColor": "fas fa-search",
+      "routeUrl": "/inspection/plant/dashboard",
+      "spinnerType": "tpulse"
+    },
+    {
+      "identifier": "live-streaming",
+      "moduleName": "Live Streaming",
+      "shortName": "Live Streaming",
+      "iconClass": "assets/icons/ls1.png",
+      "iconClassWhiteColor": "assets/icons/LS_White.png",
+      "routeUrl": "/live-streaming",
+      "spinnerType": "tpulse"
+    },
+    {
+      "identifier": "employee-wellness",
+      "moduleName": "Employee Wellness",
+      "shortName": "Employee Wellness",
+      "iconClass": "assets/icons/ew1.png",
+      "iconClassWhiteColor": "assets/icons/EW_White.png",
+      "routeUrl": "/employee-wellness",
+      "spinnerType": "default"
+    },
+    {
+      "identifier": "vendor-management",
+        "moduleName": "Vendor Management",
+        "shortName": "VM",
+        "iconClass": "fas fa-boxes",
+        "iconClassWhiteColor": "fas fa-boxes",
+        "routeUrl": "/vendor-management/client",
+        "spinnerType": "default",
+        "type": "module"
+    }
+  ]
+}

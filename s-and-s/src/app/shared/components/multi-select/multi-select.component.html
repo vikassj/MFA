@@ -1,0 +1,33 @@
+<div class="unit-dropdown-page">
+    <ng-select #select [items]="allItems" [bindLabel]="'name'" [bindValue]="'id'" [multiple]="true" [searchable]="false" [dropdownPosition]="'bottom'"
+    [closeOnSelect]="false" [placeholder]="'Select '+ type +'s'" [(ngModel)]="selectedItems" [clearable]="false" (open)="onOpenDropDown()" (close)="onCloseDropDown()"
+    (change)="selectList($event)" [disabled]="disableDropdown">
+    <ng-template ng-header-tmp>
+      <div class="px-2 py-1 fs-11 d-flex align-items-center pointer">
+        <input type="checkbox" class="me-2" (change)="toggleCheckAll($event)"  [checked]="selectedItems.length == allItems.length" id="allUnits"/><label for="allUnits" class="toggleView">All {{type}}s</label>
+      </div>
+    </ng-template>
+    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+      <div class="ng-value">
+        <span class="ng-value-label fs-12">
+          <span *ngIf="selectedItems.length != allItems.length" class="pe-1">{{selectedItems.length}} {{type}}</span>
+          <span *ngIf="selectedItems.length == allItems.length" class="pe-1">All {{type}}s</span>
+        </span>
+      </div>
+    </ng-template >
+    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+      <div class="px-2 py-1 fs-11 d-flex align-items-center" [ngClass]="item?.name?.length > 17 ?'one-liner':''">
+        <input id="item-{{index}}" class="me-2" type="checkbox" [checked]="item$.selected" /><span>{{item.name}}</span>
+      </div>
+    </ng-template>
+    <ng-template ng-footer-tmp>
+      <div class="d-flex justify-content-center">
+        <div>
+          <button class="btn btn-sm btn-basic fs-10px" style="width: 150px;" [disabled]="(selectedItems.length) < 1"
+            (click)="applyBtn(select)">APPLY</button>
+        </div>
+      </div>
+    </ng-template>
+    </ng-select>
+  </div>
+  

@@ -1,0 +1,170 @@
+<div class="p-1">
+  <div class="d-flex justify-content-between align-items-center mt-2">
+    <div class="text-color fs-11px fw-bold">Comments</div>
+    <div class="fs-10px text-ash cursorPointer" (click)="sortUsingTime()">
+    <ng-container *ngIf="sortByTime">
+        Newest first
+        <i class="fas fa-sort-amount-down fs-10px"></i>
+      </ng-container>
+    <ng-container *ngIf="!sortByTime">
+      Oldest first
+        <i class="fas fa-sort-amount-up-alt fs-10px"></i>
+      </ng-container>
+    </div>
+
+  </div>
+  <div class="backs">
+    <!-- <label class="fs-10px text-ash"><i>Enter new comments here...</i></label> -->
+    <div class="line m-h-25px mt-2 position-relative">
+      <!-- <textarea type="text" class="form-control h-25px border-none fs-12px" rows="1" placeholder="Enter new comments here..." [ngxTribute]="tributeOptions" [(ngModel)]="newComment" name="postData"
+      (onMentioned)="onMentioned($event)" (mentionItemSelected)="onMentioned($event)" (input)="getCommentText()"
+      #tributeElement></textarea> -->
+      <div #container></div>
+        <div id="commentbar" contenteditable="true"
+          class="back form-control m-h-40px border-none fs-12px resizable-content" data-ph="Enter new comments here..."
+          [ngxTribute]="tributeOptions" [menuContainer]="container" [(ngModel)]="newComment" name="postData"
+          (onMentioned)="onMentioned($event)" (mentionItemSelected)="onMentioned($event)" (input)="getCommentText()"
+          #tributeElement></div>
+          <div *ngIf="newComment && !commonServices.alphaNumericWithoutSpaceValidator(newComment)" class="text-danger fs-10px mt-1">
+            Comments cannot have spaces at the start and end of the text.
+          </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-center fs-10px mt-2">
+      <div>
+        <div class=" btn-file">
+          <button class="attach btn btn-sm attech-btn  fs-10px fw-800 cursor-pointer"  title="Select image"><i class="fas fa-paperclip pe-2 text-basic"></i>Attach</button>
+          <input type="file" accept="image/jpeg" class="cursor-pointer" title="Select image" (change)="selectImage($event)" (click)="$event.target.value=null">
+        </div>
+      </div>
+      <div class="d-flex">
+        <button class="send btn btn-sm btn-basic me-2  fs-10px fw-800"  [disabled]="!commonServices.alphaNumericWithoutSpaceValidator(newCommentValidation)" (click)="submitComment()">SEND</button>
+        <button class="cancel btn btn-sm btn-outline-basic  fs-10px fw-800" (click)="cancelComment()">CANCEL</button>
+      </div>
+    </div>
+    <div class="d-flex flex-wrap">
+      <div class="d-flex flex-wrap m-1"  *ngFor="let item of actionCommentImage;let i = index">
+        <div class="postImage position-relative w-120px">
+          <div class="pe-2 pb-2 w-120px" >
+            <img [src]="item.actionImage" width="120px" height="80px">
+          </div>
+          <div class="delete-option">
+            <div class="d-flex justify-content-center align-items-center" >
+                <div class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center cursor-pointer" (click)="deleteSlectedCommentImg(i)"><i class="fas fa-trash text-danger"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="issueComment" class="comments-height">
+  <div class="back d-flex mt-4 py-1" *ngFor="let comment of listOfComments">
+    <div class="w-35px h-35px d-flex align-items-center justify-content-center ">
+      <div class="d-flex align-items-center">
+        <ng-container *ngFor="let item of listOfUsers">
+          <ng-container *ngIf="item.id == comment.commented_by">
+            <div class="w-30px h-30px bg-danger rounded-circle d-flex align-items-center justify-content-center me-1 ">{{item.name.slice(0, 1) | uppercase}}</div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+    <div class="width-comment ps-1 pt-1 bg-white px-1">
+      <div class="d-flex justify-content-between align-items-center fs-10px border-bottom pb-2 mb-2">
+        <div class="text-color">
+          <ng-container *ngFor="let item of listOfUsers">
+            <ng-container *ngIf="item.id == comment.commented_by">
+              <div>{{item.email}}</div>
+            </ng-container>
+          </ng-container>
+        </div>
+        <div class="d-flex">
+          <div class="me-2 text-color fw-bold"><i class="far fa-calendar-alt pe-2"></i>{{comment.created_at | date : 'dd MMM yyyy' }}
+          </div>
+          <div class="text-color fw-bold"><i class="far fa-clock pe-2"></i>{{comment.created_at | date : 'HH:mm:ss'}}</div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-between align-items-center fs-12px">
+        <div class="commentWidth ">
+          <ng-container *ngFor="let item of comment.comment">
+            <span class="fw-800 text-color pe-1 fs-11px" *ngIf="containsSpecialChars(item)">{{returnUserMail(item) | titlecase }}</span>
+            <span class="" *ngIf="!containsSpecialChars(item) && item.length >=1">{{item}}</span>
+          </ng-container>
+        </div>
+        <div>
+          <button class="btn btn-sm p-0 cursor-pointer" [disabled]="!(loginUserId == comment?.commented_by)">
+            <i class="fas fa-trash text-danger fs-14px" (click)="deleteComment(comment)"></i>
+          </button>
+        </div>
+      </div>
+      <div class="pt-2 d-flex">
+         <div class="d-flex p-1"  *ngFor="let images of comment.comment_files">
+          <div class="imageComments position-relative w-120px">
+            <div class="pe-2 pb-2 w-120px" id="modalImage" >
+              <img [src]="images.url" width="120px" height="80px">
+              <div class="h-30px rounded-bottom bg-dark text-white w-120px p-1">
+                <div class=" fs-8px">{{images.filename | imageNameHideInfo }}</div>
+                <div class="d-flex fs-8px">
+                  <div class="me-2 fw-bold"><i class="far fa-calendar-alt pe-2"></i>{{images.created_at |  date : 'dd MMM yyyy'}}
+                  </div>
+                  <div class=" fw-bold"><i class="far fa-clock pe-2"></i>{{images.created_at | date : 'HH:mm'}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="download-option">
+              <div class="d-flex justify-content-center align-items-center" >
+                <div class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center me-1 cursor-pointer" (click)="downloadImg(images.url)"><i class="fas fa-download text-color"></i></div>
+                <div class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center">
+                  <button class="btn btn-sm p-0"  [disabled]="!(loginUserId == comment?.commented_by)" (click)="deleteActionCommentImage(comment.id, images.id)">
+                    <i class="fas fa-trash text-danger"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+         </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+ <!-- Delete Image Pop-up -->
+ <div class="modal fade" id="deleteIncidentCommentImageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" id="deleteConfirmation">
+    <div class="modal-content">
+      <div class="text-center border-bottom">
+        <div class="modal-title text-danger p-2" id="exampleModalLabel">Confirmation</div>
+      </div>
+      <div class="modal-body text-center">
+
+      <div>Are you sure, delete the Action comment image?</div>
+      </div>
+      <div class="text-center p-1 mb-2">
+        <button type="button" class="yes btn btn-sm text-color fw-700 fs-12"
+          (click)="deleteIncidentCommentImage()">YES</button>
+        <button type="button" class="no btn btn-sm text-danger fw-700 ms-2 fs-12 "
+          data-bs-dismiss="modal">NO</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Pop-up -->
+<div class="modal fade" id="deleteIncidentCommentModals" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" id="deleteConfirmation">
+    <div class="modal-content">
+      <div class="text-center border-bottom">
+        <div class="modal-title text-danger p-2" id="exampleModalLabel">Confirmation</div>
+      </div>
+      <div class="modal-body text-center">
+        <div>Are you sure, delete the Comment?
+        </div>
+      </div>
+      <div class="text-center p-1 mb-2">
+        <button type="button" class="yes btn btn-sm text-color fw-700 fs-12"
+          (click)="deleteIncidentComment()">YES</button>
+        <button type="button" class="no btn btn-sm text-danger fw-700 ms-2 fs-12 "
+          data-bs-dismiss="modal">NO</button>
+      </div>
+    </div>
+  </div>
+</div>

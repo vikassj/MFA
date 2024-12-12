@@ -1,0 +1,157 @@
+<div class="h-50px mx-2 d-flex align-items-center justify-content-between">
+  <div class="d-flex text-basic">
+    <div class="wid font-weight-bold">
+      Notifications - ({{ notificationLength }})
+    </div>
+    <div class="ms-3 d-flex align-items-center">
+      <div>
+        <small class="mute me-3 align-items-center">Mute</small>
+      </div>
+      <div class="h-8px">
+        <label class="switch">
+          <input type="checkbox" [checked]="isChecked"  (click)="muteNotification('muteAll',null,null)">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <div class="border-end border-1 border-danger h-15px line-h-12px ms-4"></div>
+    <div class="read font-weight-bold ps-3">Unread Notifications</div>
+    <div
+      class="noti border rounded text-blue ms-2 px-2 d-flex align-items-center justify-content-center">{{unreadcount}}
+    </div>
+  </div>
+</div>
+
+<div class="pageBg p-2 d-flex">
+  <div class="bg-white shadow-sm bg-white width-20">
+    <div
+      *ngFor="let category of notificationCategories"
+      (click)="getSelectedCategory(category)"
+      class="d-flex justify-content-between align-items-center p-2 ps-4 fs-16 cursor"
+      [ngClass]="
+        category.key == selectedCategoryName ? 'secondary-bg-color text-light' : ''
+      "
+    >
+      <div>{{ category.name }}</div>
+      <div class="d-flex align-items-center pointer">
+        <div
+          class="volumeIcon mx-2"
+          [ngClass]="
+            category.key == selectedCategoryName
+              ? 'bg-white text-light d-block'
+              : 'd-none'
+          "
+        >
+          <img
+            src="assets/images/volume-icon.svg"
+            class="p-1 rounded"
+            width="25px"
+            height="25px"
+            [ngClass]="
+              category.notification_is_muted == true ? 'd-block' : 'd-none'
+            "
+            (click)="
+              muteNotification('muteIndividual',category?.key, category.notification_is_muted)
+            "
+          />
+          <img
+            src="assets/icons/volume-on.svg"
+            class="p-1 fw-bold rounded"
+            width="25px"
+            height="25px"
+            [ngClass]="
+              category.notification_is_muted == false ? 'd-block' : 'd-none'
+            "
+            (click)="
+              muteNotification('muteIndividual',category?.key, category.notification_is_muted)
+            "
+          />
+        </div>
+
+        <div
+          class="rounded primary-color ps-2 pe-2 pt-1 pb-1"
+          [ngClass]="
+            category.key == selectedCategoryName ? 'bg-white' : 'primary-bg-color'
+          "
+        >
+          {{ category.unread_notification_count }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="width-80 position-relative side-bar-height overflow ">
+    <div class="notification-height bg-body">
+      <div *ngIf="notificationLength < 1" class="w-100 h-100 d-flex justify-content-center align-items-center">
+        No Notifications Recorded
+      </div>
+        <div *ngFor="let item of surpriseTaskTotificationsTemp; let i = index">
+          <div class="px-2" *ngFor="let d of item | keyvalue">
+            <div class="d-flex align-items-center justify-content-between ps-3 h-40px">
+              <div class="font-size-11px">{{ d.key | todayYesterday }}</div>
+              <div class="fw-500 d-flex justify-content-end align-items-center" *ngIf="i == 0">
+                <div class=" clearall pointer pe-2 me-2 border-end border-danger font-size-11px " (click)="deleteAllNotification()">
+                  Clear all Notifications
+                </div>
+                <div class="clearall w-100px font-size-11px pointer" (click)="readAllNotification()">
+                  Mark all as read
+                </div>
+              </div>
+            </div>
+
+            <div class="notification-panel py-2 ps-3 col-12" *ngFor="let c of d.value" [ngClass]="c.is_read == false ? 'one' : 'bg-white'" >
+              <div class="d-flex align-items-center min-h-40px" (click)="updateTheReadStatusForNotification(c)">
+                <div class="w-45px p-0 me-2">
+                  <div class="profile-image">
+                    <img src="../../../../../assets/images/dummy.png" alt="" class="profile-pic" />
+                  </div>
+                </div>
+                <div class="col-11 p-0 d-flex justify-content-between">
+                  <div class="font-size-11px">
+                    <div class="notification-content">
+                      <span *ngFor="let cItem of c.notification_framing">
+                        <span class="pe-1" (click)="navigateToTask(c, cItem)" [ngStyle]="styleForNameAndId(cItem,c.notification_framing)">
+                          <span>
+                          <span *ngIf="cItem?.slice(cItem?.length-1, cItem?.length) === ',' && selectedCategoryName == 'permit' && selectedCategoryName == 'action' && selectedCategoryName == 'observation'" class="text-underline">{{returnFraming(cItem?.slice(0, cItem?.length-2))}}</span> 
+                          <span *ngIf="cItem?.slice(cItem?.length-1, cItem?.length) === ',' && selectedCategoryName == 'permit' && selectedCategoryName == 'action' && selectedCategoryName == 'observation'">,</span> 
+                          </span>
+                          <span *ngIf="cItem?.slice(cItem?.length-1, cItem?.length) !== ','" [ngClass]="cItem?.slice(0, 1) == '%'?'text-underline':''">{{returnFraming(cItem)}}</span> 
+                        </span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </span>
+                    </div>
+                    <div class="unit">
+                      <span class="" style="color: grey; font-size: smaller; font-weight: light;">{{c?.unit_name}}<span *ngIf="c?.unit_name">&nbsp; &nbsp;>&nbsp;&nbsp;</span></span><span style="color: grey; font-size: smaller; font-weight: light;">{{this.plant_name }}</span>
+                    </div>
+                    <div style="color: black; font-size: smaller; font-weight: light;">{{ c?.date_time | dateAgo  }}</div>
+                  </div>
+                  <div class="rem d-flex  align-items-center">
+                    <div class="remov ms-3 w-25px">
+                      <button class="remove" [disabled]="!c.is_read" data-toggle="tooltip" title="Clear Notification"
+                        (click)="deleteNotification(c.id, c.is_read)">
+                        <img [src]="close_btn" width="20px" height="20px" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="w-100 m-0 position-absolute h-40px shadow">
+      <div class="h-100 bg-white d-flex align-items-center justify-content-center">
+        <div class="">
+          <app-pagination [totalRecords]="notificationLength" [recordsPerPage]="noOfRows" [activePage]="activePage"
+            (onPageChange)="displayActivePage($event)"></app-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+

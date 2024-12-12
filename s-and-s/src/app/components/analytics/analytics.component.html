@@ -1,0 +1,935 @@
+<div style="height:45px" class="shadow-sm d-flex justify-content-between w-100  align-items-center pe-2">
+  <div class="d-flex align-items-center">
+    <div id="selectdPersons" class="ms-3" style="height:30px">
+      <ng-select #select [items]="people" [bindLabel]="'title'" [bindValue]="'uuid'" [groupBy]="'subprojects'"
+        [multiple]="true" [selectableGroup]="true" [selectableGroupAsModel]="false" [closeOnSelect]="false"
+        [(ngModel)]="selectedPeople" [clearable]="false" (change)="selectList($event)" class="m-w-220px">
+        <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+          <div class="ng-value">
+            <span class="ng-value-label fs-12 pt-1">
+              <span class="pe-1">{{countOfUnitZone.unit}} {{countOfUnitZone.unit > 1 ? selectedPlantDetails?.[0]?.unit_nomenclature+'s,' : selectedPlantDetails?.[0]?.unit_nomenclature+','}}</span>
+              <span>{{countOfUnitZone.zone}} {{countOfUnitZone.zone > 1 ? selectedPlantDetails?.[0]?.zone_nomenclature+'s,' : selectedPlantDetails?.[0]?.zone_nomenclature+','}} selected</span>
+            </span>
+          </div>
+        </ng-template>
+        <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+          <div class="d-flex align-items-center">
+            <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> <span
+              class="fs-12 ps-1">{{item.title}}</span>
+          </div>
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+          <div class="d-flex align-items-center">
+            <input id="subitem-{{index}}" type="checkbox" [checked]="item$.selected" /> <span
+              class="fs-12 ps-1">{{item.title}}</span>
+          </div>
+        </ng-template>
+        <ng-template ng-footer-tmp>
+          <div class="d-flex justify-content-between">
+            <div>
+              <button (click)="selectedAll(false)" class="btn btn-sm btn-basic fs-10px"
+                [disabled]="totalCountUnit == (countOfUnitZone.unit + countOfUnitZone.zone)">Select all</button>
+              <button (click)="unSelectAll()" class="btn btn-sm btn-basic ms-2 fs-10px"
+                [disabled]="!(countOfUnitZone.unit >= 1 || countOfUnitZone.zone >= 1)">Unselect all</button>
+            </div>
+            <div>
+              <button class="btn btn-sm btn-basic fs-10px" [disabled]="disabledApplyBtn"
+                (click)="applyBtn(select); safetyAndSurveillanceCommonService.sendMatomoEvent('Usage of multi-select unit/ zone and day dropdown filters', 'Analytics features')">APPLY</button>
+            </div>
+          </div>
+        </ng-template>
+      </ng-select>
+    </div>
+    <div class="d-flex align-items-center ms-2" style="height:31px">
+      <div class="dropdown h-100 border rounded w-160px fw-600 ">
+        <div
+          class="text-dark-blue w-160px px-3 fw-600 cursorPointer pt-2 fs-12 ff-montserrat  d-flex justify-content-between align-items-center cursor-pointer"
+          (click)="dayListShow()">
+          <div [title]="selectedObservationDays.days">{{selectedObservationDays.days}}</div>
+          <div><i class="fas fa-chevron-down fs-12 ms-2"></i></div>
+        </div>
+        <div class="dropdown-style shadow rounded w-160px py-2" *ngIf="dayDropdown">
+          <div class="options text-dark-blue fs-12 ff-montserrat" *ngFor="let selectItem of daysList"
+            [ngClass]="selectItem.days == selectedObservationDays.days ? 'selected-dropdown':''"
+            (click)="this.selectedObservationDays = selectItem; this.dayDropdown = fasle; selectDate(); safetyAndSurveillanceCommonService.sendMatomoEvent('Usage of multi-select unit/ zone and day dropdown filters', 'Analytics features')">
+            {{selectItem.days}}</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="height">
+  <div class="d-flex p-2 h-25">
+    <div class="w-240px h-100 bg-white shadow rounded d-flex align-items-center justify-content-center">
+      <div class="">
+        <div class="d-flex align-items-center justify-content-center" style="height: 51px;">
+          <div class="fs-28 text-dark line-h-55px fw-600">{{analyticsCards?.['obs_overview']?.total_obs}}</div>
+          <div class="align-items-center text-center ps-2">
+            <div class="line-h-13px fs-12 "
+              [ngClass]="analyticsCards?.['obs_overview'].obs_for_range.indicator == 'green' ? 'text-green' : 'text-red'">
+              {{analyticsCards?.['obs_overview'].obs_for_range.count < 0 ?
+                -analyticsCards?.['obs_overview'].obs_for_range.count :
+                analyticsCards?.['obs_overview'].obs_for_range.count}}</div>
+                <div class="line-h-11px">
+                  <img src="assets/icons/red_up_arrow.svg" width="18px"
+                    *ngIf="analyticsCards?.['obs_overview'].obs_for_range.indicator != 'green'">
+                  <img src="assets/icons/green_down_arrow.svg" width="18px"
+                    *ngIf="analyticsCards?.['obs_overview'].obs_for_range.indicator == 'green'">
+                </div>
+            </div>
+          </div>
+          <div class="fs-15">Total Observations</div>
+          <div class="fs-15">in {{selectedObservationDays.days}}</div>
+        </div>
+      </div>
+      <div class="w-30 bg-white mx-2 shadow rounded">
+        <div class="h-33 px-3 border-bottom d-flex align-items-center">
+          <div class="d-flex w-100 h-50 align-items-center">
+            <div class="w-75 fs-15">
+              Critical Observations
+            </div>
+            <div class="w-25 d-flex justify-content-end">
+              <div class="fs-18 line-h-25px" [title]="analyticsCards?.['critical_obs']?.total_obs">
+                {{analyticsCards?.['critical_obs']?.total_obs}}</div>
+              <div class="align-items-center ps-2  text-center">
+                <div class="fs-9px"
+                  [ngClass]="analyticsCards?.['critical_obs'].obs_for_range.indicator == 'green' ? 'text-green' : 'text-red'"
+                  [title]="analyticsCards?.['critical_obs'].obs_for_range.count < 0 ? -analyticsCards?.['critical_obs'].obs_for_range.count : analyticsCards?.['critical_obs'].obs_for_range.count ">
+                  {{analyticsCards?.['critical_obs'].obs_for_range.count < 0 ?(
+                    -analyticsCards?.['critical_obs'].obs_for_range.count) :
+                    (analyticsCards?.['critical_obs'].obs_for_range.count) }} </div>
+                    <div class="line-h-5px">
+                      <img src="assets/icons/red_up_arrow.svg" width="11px"
+                        *ngIf="analyticsCards?.['critical_obs'].obs_for_range.indicator != 'green'">
+                      <img src="assets/icons/green_down_arrow.svg" width="11px"
+                        *ngIf="analyticsCards?.['critical_obs'].obs_for_range.indicator == 'green'">
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="h-33 px-3 border-bottom d-flex align-items-center">
+            <div class="d-flex w-100 h-50 align-items-center">
+              <div class="w-75 fs-15">
+                Observation Closure
+              </div>
+              <div class="w-25 d-flex justify-content-end">
+                <div class="fs-18 line-h-25px" [title]="analyticsCards?.['obs_closure']?.total_obs">
+                  {{analyticsCards?.['obs_closure']?.total_obs}}</div>
+                <div class="align-items-center text-center ps-2">
+                  <div class="fs-9px"
+                    [ngClass]="analyticsCards?.['obs_closure'].obs_for_range.indicator == 'green' ? 'text-green' : 'text-red'"
+                    [title]="analyticsCards?.['obs_closure'].obs_for_range.count < 0 ? -analyticsCards?.['obs_closure'].obs_for_range.count : analyticsCards?.['obs_closure'].obs_for_range.count">
+                    {{analyticsCards?.['obs_closure'].obs_for_range.count < 0 ?
+                      (-analyticsCards?.['obs_closure'].obs_for_range.count) :
+                      (analyticsCards?.['obs_closure'].obs_for_range.count)}}</div>
+                      <div class="line-h-5px">
+                        <img src="assets/icons/red_arrow.svg" width="11px"
+                          *ngIf="analyticsCards?.['obs_closure'].obs_for_range.indicator != 'green'">
+                        <img src="assets/icons/green_arrow.svg" width="11px"
+                          *ngIf="analyticsCards?.['obs_closure'].obs_for_range.indicator == 'green'">
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="h-33 px-3 d-flex align-items-center">
+              <div class="d-flex w-100 h-50 align-items-center">
+                <div class="w-60 fs-15 line-h-13px">
+                  Most critical location
+                </div>
+                <div class="w-40 line-h-13px d-flex justify-content-end"
+                  *ngIf="analyticsCards?.['most_critical_location']">
+                  <span class="most_critical_text_size"
+                    [title]="analyticsCards?.['most_critical_location']">{{analyticsCards?.['most_critical_location'].length
+                    ? (analyticsCards?.['most_critical_location']) : 'NA'}}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-240px bg-white me-2 p-2 shadow rounded">
+            <app-analytics-funnel-chart [observationByRiskRating]="observationByRiskRating">
+            </app-analytics-funnel-chart>
+          </div>
+          <div class="w-30 bg-white p-2 shadow rounded position-relative">
+            <div class="fs-15 fw-600 text-color">Risk Trend</div>
+            <div class="w-100 h-100 position-absolute-bar">
+              <app-analytics-bar-chart [observationByTimeAndRiskRating]="observationByTimeAndRiskRating"
+                (backToAddObservationData)="backToAddObservationData($event)"></app-analytics-bar-chart>
+            </div>
+
+          </div>
+        </div>
+        <div class="d-flex align-items-center ps-2 h-24px">
+          <div class="me-3 ps-2 white-space-nowrap">
+            <div class="overview-detailed ps-1 fw-800 text-color" *ngIf="!showCategoryWise && !showUnitWise">Overview</div>
+            <div class="overview-detailed fw-800 text-color" *ngIf="showUnitWise">Detailed View
+              ({{selectedUnit?.unitName}})</div>
+            <div class="overview-detailed fw-800 text-color" *ngIf="showCategoryWise">Detailed View
+              ({{selectedCategory}})
+            </div>
+          </div>
+          <div *ngIf="showCategoryWise || showUnitWise" class="me-3">
+            <button class="btn btn-sm btn-basic fw-800 fs-10px white-space-nowrap" style="height:24px"
+              (click)="this.criticalZoneDropdown = false; resetSelectedActions()">Back to overview</button>
+          </div>
+          <div class="border-blue w-100"></div>
+        </div>
+        <div class="overall-height pb-2 ">
+          <div class="over-flow w-100 h-100">
+            <div class="d-flex  p-2 w-100 h-100">
+              <div class="w-50 pe-1" id="overall_table">
+                <div class=" w-100 h-56 border-ash rounded over-flow" id="unit_table">
+                  <div class="bg-white w-100 over-flow">
+                    <div>
+                      <div class="p-2">
+                        <ng-container *ngIf="!showCategoryWise">
+                          <ng-container *ngIf="unitGrouping">
+                            <div class="fs-15 fw-600 text-color" *ngIf="unitWiseObservationsTotalCount > 0">
+                              <div class="mb-2 ps-1">
+                                <ng-container *ngIf="sumOfUnitWiseObservations.length <= 1">
+                                  <span class="fs-16">{{sumOfUnitWiseObservations?.[0]?.unitName}}</span> is the
+                                  most at risk {{selectedPlantDetails?.[0]?.unit_nomenclature | lowercase}}
+                                  accounting for <span
+                                    class="fs-16">{{sumOfUnitWiseObservations?.[0]?.total_obs}} /
+                                    {{unitWiseObservationsTotalCount}}</span> {{criticalObservationSwitch ? 'critical' :
+                                  ''}} observations
+                                </ng-container>
+                                <ng-container *ngIf="sumOfUnitWiseObservations.length > 1">
+                                  <span class="fw-900 fs-16">{{sumOfUnitWiseObservations.length}} Units </span><sup
+                                    class="cursor-pointer" [title]="getSummationOfAllUnits('names')">[ <i
+                                      class="fas fa-info"></i> ]</sup> has <span
+                                    class="fw-900 fs-16">{{getSummationOfAllUnits('count')}} /
+                                    {{unitWiseObservationsTotalCount}}</span> {{criticalObservationSwitch ? 'critical' :
+                                  ''}} observations
+                                </ng-container>
+                              </div>
+                            </div>
+                            <div class="d-flex align-items-center"
+                              [ngClass]="unitWiseObservationsTotalCount > 0 ? 'h-11px' : 'h-10px'">
+                              <div class="d-flex align-items-center">
+                                <div class="fs-11 ps-1">Critical observation</div>
+                                <div class="d-flex align-items-center ps-2" style="height: 10.5px;">
+                                  <label class="switch" id="toggal">
+                                    <input type="checkbox" [checked]="criticalObservationSwitch"
+                                      (click)="changeCriticalObservationSwitch(); safetyAndSurveillanceCommonService.sendMatomoEvent('Usage of critical observation toggle', 'Analytics overview')">
+                                    <span class="slider round"></span>
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="d-flex ms-3 align-items-center">
+                                <div class="fs-11">Grouping</div>
+                                <div class="d-flex align-items-center ps-2" style="height: 10.5px;">
+                                  <label class="switch" id="toggal">
+                                    <input type="checkbox" [checked]="unitGrouping"
+                                      (click)="changeUnitGrouping(); safetyAndSurveillanceCommonService.sendMatomoEvent('Usage of grouping toggle', 'Analytics overview')">
+                                    <span class="slider round"></span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <ng-container *ngIf="!unitGrouping">
+                            <div class="fs-15 fw-600 text-color" *ngIf="unitZoneWiseObservationsTotalCount > 0">
+                              <div class="mb-2">
+                                <ng-container *ngIf="sumOfunitZoneWiseObservations.length <= 1">
+                                  <span class="fs-16">{{sumOfunitZoneWiseObservations?.[0]?.name}}</span> is the
+                                  most at risk {{selectedPlantDetails?.[0]?.unit_nomenclature | lowercase}}
+                                  accounting for <span
+                                    class="fs-16">{{sumOfunitZoneWiseObservations?.[0]?.total_obs}} /
+                                    {{unitZoneWiseObservationsTotalCount}}</span> {{criticalObservationSwitch ?
+                                  'critical' : ''}} observations
+                                </ng-container>
+                                <ng-container *ngIf="sumOfunitZoneWiseObservations.length > 1">
+                                  <span class="fw-900 fs-16">{{sumOfunitZoneWiseObservations.length}} Zones </span><sup
+                                    class="cursor-pointer" [title]="getSummationOfAllUnitZones('names')">[ <i
+                                      class="fas fa-info"></i> ]</sup> has <span
+                                    class="fw-900 fs-16">{{getSummationOfAllUnitZones('count')}} /
+                                    {{unitZoneWiseObservationsTotalCount}}</span> {{criticalObservationSwitch ?
+                                  'critical' : ''}} observations
+                                </ng-container>
+                              </div>
+                            </div>
+                            <div class="d-flex align-items-center"
+                              [ngClass]="unitZoneWiseObservationsTotalCount > 0 ? 'h-11px' : 'h-10px'">
+                              <div class="d-flex align-items-center">
+                                <div class="fs-11 align-items-center">Critical observation</div>
+                                <div class="d-flex align-items-center ps-2" style="height: 10.5px;">
+                                  <label class="switch" id="toggal">
+                                    <input type="checkbox" [checked]="criticalObservationSwitch"
+                                      (click)="changeCriticalObservationSwitch(); safetyAndSurveillanceCommonService.sendMatomoEvent('Usage of critical observation toggle', 'Analytics overview')">
+                                    <span class="slider round"></span>
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="d-flex ms-3 align-items-center">
+                                <div class="fs-11 align-items-center">Grouping</div>
+                                <div class="d-flex align-items-center ps-2" style="height: 10.5px;">
+                                  <label class="switch" id="toggal">
+                                    <input type="checkbox" [checked]="unitGrouping"
+                                      (click)="changeUnitGrouping(); safetyAndSurveillanceCommonService.sendMatomoEvent('Usage of grouping toggle', 'Analytics overview')">
+                                    <span class="slider round"></span>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="showCategoryWise">
+                          <div class="fs-15 fw-600 text-color" *ngIf="overviewOfCategoryTotalCount > 0">
+                            <div class="mb-2">
+                              <ng-container *ngIf="sumOfObservationCategory.length <= 1">
+                                <span class="fs-16">{{overviewOfCategory[0]?.location}}</span> is the most
+                                frequent
+                                critical observation accounting for <span
+                                  class="fs-16">{{overviewOfCategory[0]?.total_obs}} /
+                                  {{overviewOfCategoryTotalCount}}</span> {{overWiseCategory ? 'critical' : ''}}
+                                observations
+                              </ng-container>
+                              <ng-container *ngIf="sumOfObservationCategory.length > 1">
+                                <span class="fw-900 fs-16">{{sumOfObservationCategory.length}} Categories </span><sup
+                                  class="cursor-pointer" [title]="getSummationOfAllCategorys('names')">[ <i
+                                    class="fas fa-info"></i> ]</sup> has <span
+                                  class="fw-900 fs-16">{{getSummationOfAllCategorys('count')}} /
+                                  {{overviewOfCategoryTotalCount}}</span> {{overWiseCategory ? 'critical' : ''}}
+                                observations
+                              </ng-container>
+                            </div>
+                          </div>
+                          <div class="d-flex align-items-center"
+                            [ngClass]="overviewOfCategoryTotalCount > 0 ? 'h-11px' : 'h-10px'">
+                            <div class="d-flex align-items-center">
+                              <div class="fs-11">Critical observation</div>
+                              <div class="d-flex align-items-center ps-2" style="height: 10.5px;">
+                                <label class="switch" id="toggal">
+                                  <input type="checkbox" [checked]="overWiseCategory"
+                                    (click)="changeOverWiseCategory(); safetyAndSurveillanceCommonService.sendMatomoEvent('Usage of critical observation toggle', 'Analytics overview')">
+                                  <span class="slider round"></span>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </div>
+                    <ng-container *ngIf="!showCategoryWise">
+                      <ng-container *ngIf="unitGrouping">
+                        <div id="overviewTable">
+                          <ngx-datatable class="material" [columnMode]="ColumnMode.flex" [headerHeight]="50"
+                            [footerHeight]="0" rowHeight="auto" [treeFromRelation]="'manager'"
+                            [treeToRelation]="'location'" [rows]="unitWiseObservations" [scrollbarH]="true"
+                            (treeAction)="onTreeAction($event)" [rowClass]="getTaskRowClass">
+                            <ngx-datatable-column [draggable]="false" [resizeable]="false" name="Location"
+                              [flexGrow]="1" [isTreeColumn]="unitWiseObservationsTree" [cellClass]="getCellClass">
+                              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <span class="fw-600 data1 fs-14"
+                                  [ngClass]="row.unitWiseObservationsTree ? '' : 'fst-italic'">{{row?.name}}</span>
+                              </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column [draggable]="false" [resizeable]="false" name="Observations"
+                              [flexGrow]="2">
+                              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <div class="d-flex align-items-center pad-left pe-8px" >
+                                  <div [style.width]="((row?.total_obs) / unitWiseObservations[0]?.total_obs) * 65+ '%'"
+                                    *ngIf="unitWiseObservations[0]?.total_obs > 0" style="height: 10px;">
+                                    <app-horizontal-bar [total_obs]="row?.total_obs" [difference]="row?.difference"
+                                      [color]="row.indicator == 'green' ? '#33A437' : '#F8CECC'"></app-horizontal-bar>
+                                  </div>
+                                  <div class="fw-600 fs-14 text-dark">
+                                    <div class="d-flex justify-content-between">
+                                      <div class=" fw-600 line-h-25px ps-1" [title]="row?.total_obs">
+                                        {{row?.total_obs}}</div>
+                                      <div class="align-items-center ps-2  text-center">
+                                        <div class=" fs-8 line-h-14px "
+                                          [ngClass]="row?.indicator == 'green' ? 'text-green' : 'text-red'"
+                                          [title]="row?.difference < 0 ? -row?.difference : row?.difference ">
+                                          {{row?.difference < 0 ?( -row?.difference) :
+                                            (row?.difference) }} </div>
+                                            <div class="line-h-5px">
+                                              <img src="assets/icons/red_up_arrow.svg" width="9px"
+                                                *ngIf="row?.indicator != 'green'">
+                                              <img src="assets/icons/green_down_arrow.svg" width="9px"
+                                                *ngIf="row?.indicator == 'green'">
+                                            </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column [draggable]="false" [resizeable]="false" name="Critical Observations"
+                              [flexGrow]="1">
+                              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <div class="fs-12 pad-left" *ngIf="!row.critical_obs">NA</div>
+                                <div class="fs-12 pad-left" *ngIf="row.critical_obs">{{ row.critical_obs }}</div>
+                              </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column [draggable]="false" [resizeable]="false"
+                              name="Most critical timing period" [flexGrow]="1">
+                              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <div class="fs-12 pad-left" *ngIf="!row.critical_period[0] && !row.critical_period[1]">NA</div>
+                                <div class="fs-12 pad-left" *ngIf="row.critical_period[0] && row.critical_period[1]">{{
+                                  row.critical_period[0] }} - {{ row.critical_period[1] }}</div>
+                              </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column [draggable]="false" [resizeable]="false" name="" [flexGrow]="1"
+                              [cellClass]="getBtnCellClass">
+                              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <div class="h-26px mt-1 d-flex justify-content-end pe-3">
+                                  <button *ngIf="row.unitWiseObservationsTree"
+                                    class="btn btn-sm btn-outline-basic w-28px border-width h-26px overview-detailed p-0 me-2 showDetails"
+                                    title="Show Details"
+                                    (click)="safetyAndSurveillanceCommonService.sendMatomoEvent('Usage of unit-wise overview', 'Analytics overview'); this.detailedUnitWiseToggle = true; selectUnit(row)">
+                                    <img class="icon-button" src="/assets/icons/noun-data-analysis-3741455 (1).svg"/></button>
+                                  <button class="btn btn-sm btn-outline-basic fs-10 w-28px h-26px p-0 showObservations" [disabled]="row?.total_obs == 0"
+                                    (click)="navigateToObservation(row)" title="Show Observations"><img  class="icon-button"
+                                      src="/assets/icons/Path 14475.svg" alt="" /></button>
+                                </div>
+                              </ng-template>
+                            </ngx-datatable-column>
+                          </ngx-datatable>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="!unitGrouping">
+                        <div id="overviewTable">
+                          <ngx-datatable class="material" [columnMode]="ColumnMode.flex" [headerHeight]="50"
+                            [footerHeight]="0" rowHeight="auto" [rows]="unitZoneWiseObservations"
+                            [rowClass]="getTaskRowClass">
+                            <ngx-datatable-column [draggable]="false" [resizeable]="false" name="Location"
+                              [flexGrow]="1">
+                              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <div class="fw-600 data1 fs-12 ps-3">{{ row?.name }}</div>
+                                <div class="fw-600 data1 fs-12 ps-3 text-color" *ngIf="row.sameLocation">{{ row.unit_name }}
+                                </div>
+                              </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column [draggable]="false" [resizeable]="false" name="Observations"
+                              [flexGrow]="2">
+                              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <div class="d-flex align-items-center pad-left">
+                                  <div
+                                    [style.width]="((row?.total_obs) / unitZoneWiseObservations[0]?.total_obs) * 65+ '%'"
+                                    *ngIf="unitZoneWiseObservations[0]?.total_obs > 0" style="height: 10px;">
+                                    <app-horizontal-bar [total_obs]="row?.total_obs" [difference]="row?.difference"
+                                      [color]="row.indicator == 'green' ? '#33A437' : '#F8CECC'"></app-horizontal-bar>
+                                  </div>
+                                  <div class="fw-600 fs-14 text-dark">
+                                    <div class="d-flex justify-content-between">
+                                      <div class=" fw-600 line-h-25px" [title]="row?.total_obs">
+                                        {{row?.total_obs}}</div>
+                                      <div class="align-items-center ps-2  text-center">
+                                        <div class=" fs-8 line-h-14px "
+                                          [ngClass]="row?.indicator == 'green' ? 'text-green' : 'text-red'"
+                                          [title]="row?.difference < 0 ? -row?.difference : row?.difference ">
+                                          {{row?.difference < 0 ?( -row?.difference) :
+                                            (row?.difference) }} </div>
+                                            <div class="line-h-5px">
+                                              <img src="assets/icons/red_up_arrow.svg" width="9px"
+                                                *ngIf="row?.indicator != 'green'">
+                                              <img src="assets/icons/green_down_arrow.svg" width="9px"
+                                                *ngIf="row?.indicator == 'green'">
+                                            </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column [draggable]="false" [resizeable]="false" name="Critical Observations"
+                              [flexGrow]="1">
+                              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <div class="fs-12 pad-left" *ngIf="!row.critical_obs">NA</div>
+                                <div class="fs-12 pad-left" *ngIf="row.critical_obs">{{ row.critical_obs }}</div>
+                              </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column [draggable]="false" [resizeable]="false"
+                              name="Most critical timing period" [flexGrow]="1">
+                              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <div class="fs-12 pad-left" *ngIf="!row.critical_period[0] && !row.critical_period[1]">NA</div>
+                                <div class="fs-12 pad-left" *ngIf="row.critical_period[0] && row.critical_period[1]">{{
+                                  row.critical_period[0] }} - {{ row.critical_period[1] }}</div>
+                              </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column [draggable]="false" [resizeable]="false" name="" [flexGrow]="1"
+                              [cellClass]="getBtnCellClass">
+                              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <div class="h-26px mt-1 d-flex justify-content-end pe-3">
+                                    <button class="btn btn-sm btn-outline-basic fs-10 w-28px h-26px p-0 showObservations"  [disabled]="row?.total_obs == 0"
+                                    (click)="navigateToObservation(row)" title="Show Observations"><img  class="icon-button"
+                                      src="/assets/icons/Path 14475.svg" alt="" /></button>
+                                </div>
+                              </ng-template>
+                            </ngx-datatable-column>
+                          </ngx-datatable>
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="showCategoryWise">
+                      <div id="overviewCategoryTable" *ngIf="overviewOfCategory.length">
+                        <ngx-datatable class="material" [columnMode]="ColumnMode.flex" [headerHeight]="0"
+                          [footerHeight]="0" [rowHeight]="30" [rowClass]="getTaskRowClass" [rows]="overviewOfCategory">
+                          <ngx-datatable-column name="Location" [flexGrow]="1">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                              <span class="fw-600 fs-14"
+                                [ngClass]="selectedCategory == row?.location ? 'opacity-100' : 'opacity-50'">{{
+                                row?.location
+                                }}</span>
+                            </ng-template>
+                          </ngx-datatable-column>
+                          <ngx-datatable-column name="Observations" [flexGrow]="7">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                              <div class="d-flex align-items-center pe-10px"
+                                [ngClass]="selectedCategory == row?.location ? 'opacity-100' : 'opacity-50'">
+                                <div [style.width]="((row?.total_obs) / overviewOfCategory?.[0]?.total_obs) * 85+ '%'"
+                                  *ngIf="overviewOfCategory?.[0]?.total_obs > 0" style="height: 10px;">
+                                  <app-horizontal-bar [total_obs]="row?.total_obs" [difference]="row?.difference"
+                                    [color]="row.indicator == 'green' ? '#33A437' : '#F8CECC'"></app-horizontal-bar>
+                                </div>
+                                <div class="fs-10 fw-800 fs-14 text-dark">
+                                  <div class="d-flex justify-content-between">
+                                    <div class=" fw-800 line-h-25px" [title]="row?.total_obs">
+                                      {{row?.total_obs}}</div>
+                                    <div class="align-items-center ps-2  text-center">
+                                      <div class=" fs-10 line-h-14px "
+                                        [ngClass]="row?.indicator == 'green' ? 'text-green' : 'text-red'"
+                                        [title]="row?.difference < 0 ? -row?.difference : row?.difference ">
+                                        {{row?.difference < 0 ?( -row?.difference) :
+                                          (row?.difference) }} </div>
+                                          <div class="line-h-5px">
+                                            <img src="assets/icons/red_up_arrow.svg" width="9px"
+                                              *ngIf="row?.indicator != 'green'">
+                                            <img src="assets/icons/green_down_arrow.svg" width="9px"
+                                              *ngIf="row?.indicator == 'green'">
+                                          </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </ng-template>
+                          </ngx-datatable-column>
+                          <ngx-datatable-column [draggable]="false" [resizeable]="false" name="" [flexGrow]="2"
+                            [cellClass]="getBtnCellClass">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                              <div class="h-26px d-flex justify-content-end">
+                                <button
+                                  class="btn btn-sm btn-outline-basic w-28px border-width h-26px overview-detailed p-0 me-3"
+                                  title="Show Details"
+                                  (click)="safetyAndSurveillanceCommonService.sendMatomoEvent('Usage of unit-wise overview', 'Analytics overview'); this.showCategoryWise = true;  this.detailedCategoryWiseToggle = overWiseCategory;this.getChangeDetailedCategoryWiseToggle(this.formattedPeople, this.startDate, this.endDate, this.coountOfDays, this.detailedCategoryWiseToggle, true); selectCategory(row?.location, overWiseCategory);">
+                                  <img class="icon-button" src="/assets/icons/noun-data-analysis-3741455 (1).svg"/></button>
+                              </div>
+                            </ng-template>
+                          </ngx-datatable-column>
+                        </ngx-datatable>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+                <div class=" w-100 bg-white border rounded mt-2  over-flow"
+                  [ngStyle]="{'max-height': getTableHeight()+'px'}" id="category_table">
+                  <div class="w-100 h-100 over-flow">
+                    <div class="py-2 ps-2">
+                      <ng-container *ngIf="!showUnitWise && !showCategoryWise">
+                        <div class="fs-15 fw-600 text-color" *ngIf="overviewOfCategoryTotalCount > 0">
+                          <div class="mb-2 ps-1">
+                            <ng-container *ngIf="sumOfObservationCategory.length <= 1">
+                              <span class="fs-16">{{overviewOfCategory[0]?.location}}</span> is the most frequent
+                              category accounting for <span class="fs-16">{{overviewOfCategory[0]?.total_obs}} /
+                                {{overviewOfCategoryTotalCount}}</span> {{overWiseCategory ? 'critical' : ''}}
+                              observations
+                            </ng-container>
+                            <ng-container *ngIf="sumOfObservationCategory.length > 1">
+                              <span class="fw-900 fs-16">{{sumOfObservationCategory.length}} Categories </span><sup
+                                class="cursor-pointer" [title]="getSummationOfAllCategorys('names')">[ <i
+                                  class="fas fa-info"></i> ]</sup> has <span
+                                class="fw-900 fs-16">{{getSummationOfAllCategorys('count')}} /
+                                {{overviewOfCategoryTotalCount}}</span> {{overWiseCategory ? 'critical' : ''}}
+                              observations
+                            </ng-container>
+                          </div>
+                        </div>
+                        <div class="d-flex align-items-center"
+                          [ngClass]="overviewOfCategoryTotalCount > 0 ? 'h-11px' : 'h-11px'">
+                          <div class="d-flex align-items-center">
+                            <div class="fs-11 ps-1">Critical observation</div>
+                            <div class="d-flex align-items-center ps-2" style="height: 10.5px;">
+                              <label class="switch" id="toggals">
+                                <input type="checkbox" [checked]="overWiseCategory"
+                                  (click)="changeOverWiseCategory(); safetyAndSurveillanceCommonService.sendMatomoEvent('Usage of critical observation toggle', 'Analytics overview')">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mt-2 ps-1 over-flow" id="ngxDatatable">
+                          <ng-container>
+                            <ngx-datatable class="material" [columnMode]="ColumnMode.flex" [headerHeight]="0"
+                              [footerHeight]="0" [rowHeight]="30" [rowClass]="getTaskRowClass"
+                              [rows]="overviewOfCategory">
+                              <ngx-datatable-column name="Location" [flexGrow]="1">
+                                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                  <div class="d-flex pt-1">
+                                    <span class="fw-600 fs-14">{{
+                                      row?.location }}</span>
+                                  </div>
+
+                                </ng-template>
+                              </ngx-datatable-column>
+                              <ngx-datatable-column name="Observations" [flexGrow]="7">
+                                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                  <div class="d-flex  align-items-center pe-10px">
+                                    <div [style.width]="((row?.total_obs) / overviewOfCategory[0]?.total_obs) * 85+ '%'"
+                                      *ngIf="overviewOfCategory[0]?.total_obs > 0" style="height: 10px;">
+                                      <app-horizontal-bar [total_obs]="row?.total_obs" [difference]="row?.difference"
+                                        [color]="row.indicator == 'green' ? '#33A437' : '#F8CECC'"></app-horizontal-bar>
+                                    </div>
+                                    <div class="fs-10 fw-600 fs-14 text-dark">
+                                      <div class="d-flex justify-content-between">
+                                        <div class=" fw-600 line-h-25px ps-2" [title]="row?.total_obs">
+                                          {{row?.total_obs}}</div>
+                                        <div class="align-items-center ps-2  text-center">
+                                          <div class=" fs-8 line-h-14px "
+                                            [ngClass]="row?.indicator == 'green' ? 'text-green' : 'text-red'"
+                                            [title]="row?.difference < 0 ? -row?.difference : row?.difference ">
+                                            {{row?.difference < 0 ?( -row?.difference ) :
+                                              (row?.difference) }} </div>
+                                              <div class="line-h-5px">
+                                                <img src="assets/icons/red_up_arrow.svg" width="9px"
+                                                  *ngIf="row?.indicator != 'green'">
+                                                <img src="assets/icons/green_down_arrow.svg" width="9px"
+                                                  *ngIf="row?.indicator == 'green'">
+                                              </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </ng-template>
+                              </ngx-datatable-column>
+                              <ngx-datatable-column [draggable]="false" [resizeable]="false" name="" [flexGrow]="2"
+                                [cellClass]="getBtnCellClass">
+                                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                  <div class="h-26px d-flex justify-content-end pe-3">
+                                    <button
+                                      class="btn btn-sm btn-outline-basic w-28px border-width h-26px overview-detailed p-0 me-3"
+                                      title="Show Details"
+                                      (click)="this.showCategoryWise = true; this.detailedCategoryWiseToggle = overWiseCategory; selectCategory(row?.location, overWiseCategory); safetyAndSurveillanceCommonService.sendMatomoEvent('Usage of category-wise overview', 'Analytics overview')">
+                                      <img class="icon-button" src="/assets/icons/noun-data-analysis-3741455 (1).svg"/></button>
+
+                                    <button class="btn btn-sm btn-outline-basic fs-10 w-28px h-26px p-0"  [disabled]="row?.total_obs == 0"
+                                    (click)="this.detailedUnitWiseToggle = overWiseCategory;  navigateToObservationWithSelectedCategory(row)" title="Show Observations"><img  class="icon-button"
+                                    src="/assets/icons/Path 14475.svg" alt="" /></button>
+                                  </div>
+                                </ng-template>
+                              </ngx-datatable-column>
+                            </ngx-datatable>
+                          </ng-container>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="showUnitWise">
+                        <div class="fs-15 fw-600 text-color" *ngIf="selectedOverviewOfUnitCategoryTotalCount > 0">
+                          <div class="mb-2">
+                            <ng-container *ngIf="sumOfSelectedOverviewOfUnitCategory.length <= 1">
+                              <span class="fs-16">{{selectedOverviewOfUnitCategory?.[0]?.location}}</span> is the
+                              most at risk category accounting
+                              for <span class="fs-16">{{selectedOverviewOfUnitCategory?.[0]?.total_obs}} /
+                                {{selectedOverviewOfUnitCategoryTotalCount}}</span> {{detailedUnitWiseToggle ?
+                              'critical' : ''}} observations
+                            </ng-container>
+                            <ng-container *ngIf="sumOfSelectedOverviewOfUnitCategory.length > 1">
+                              <span class="fw-900 fs-16">{{sumOfSelectedOverviewOfUnitCategory.length}} Categories
+                              </span><sup class="cursor-pointer"
+                                [title]="getSummationOfSelectedOverviewOfUnitCategory('names')">[ <i
+                                  class="fas fa-info"></i> ]</sup> has <span
+                                class="fw-900 fs-16">{{getSummationOfSelectedOverviewOfUnitCategory('count')}} /
+                                {{selectedOverviewOfUnitCategoryTotalCount}}</span> {{detailedUnitWiseToggle ?
+                              'critical' : ''}} observations
+                            </ng-container>
+                          </div>
+                        </div>
+                        <div class="d-flex align-items-center"
+                          [ngClass]="selectedOverviewOfUnitCategoryTotalCount > 0 ? 'h-11px' : 'h-10px'">
+                          <div class="d-flex align-items-center">
+                            <div class="fs-11">Critical observation</div>
+                            <div class="d-flex align-items-center ps-2" style="height: 10.5px;">
+                              <label class="switch" id="toggals">
+                                <input type="checkbox" [checked]="detailedUnitWiseToggle"
+                                  (click)="changeDetailedUnitWiseToggle(); safetyAndSurveillanceCommonService.sendMatomoEvent('Usage of critical observation toggle', 'Analytics overview')">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mt-2 over-flow" id="ngxDatatable">
+                          <ng-container>
+                            <ngx-datatable class="material" [columnMode]="ColumnMode.flex" [headerHeight]="0"
+                              [footerHeight]="0" [rowHeight]="30" [rowClass]="getTaskRowClass"
+                              [rows]="selectedOverviewOfUnitCategory">
+                              <ngx-datatable-column name="Location" [flexGrow]="1">
+                                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                  <span class="fw-600 fs-14">{{ row?.location }}</span>
+                                </ng-template>
+                              </ngx-datatable-column>
+                              <ngx-datatable-column name="Observations" [flexGrow]="4">
+                                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                  <div class="d-flex  align-items-center pe-10px">
+                                    <div
+                                      [style.width]="((row?.total_obs) / selectedOverviewOfUnitCategory[0]?.total_obs) * 85+ '%'"
+                                      *ngIf="selectedOverviewOfUnitCategory[0]?.total_obs > 0" style="height: 10px;">
+                                      <app-horizontal-bar [total_obs]="row?.total_obs" [difference]="row?.difference"
+                                        [color]="row.indicator == 'green' ? '#33A437' : '#F8CECC'"></app-horizontal-bar>
+                                    </div>
+                                    <div class="fs-10 fw-600 fs-14 text-dark">
+                                      <div class="d-flex justify-content-between">
+                                        <div class=" fw-600 line-h-25px" [title]="row?.total_obs">
+                                          {{row?.total_obs}}</div>
+                                        <div class="align-items-center ps-2  text-center">
+                                          <div class=" fs-10 line-h-14px "
+                                            [ngClass]="row?.indicator == 'green' ? 'text-green' : 'text-red'"
+                                            [title]="row?.difference < 0 ? -row?.difference : row?.difference ">
+                                            {{row?.difference < 0 ?( -row?.difference) :
+                                              (row?.difference) }} </div>
+                                              <div class="line-h-5px">
+                                                <img src="assets/icons/red_up_arrow.svg" width="9px"
+                                                  *ngIf="row?.indicator != 'green'">
+                                                <img src="assets/icons/green_down_arrow.svg" width="9px"
+                                                  *ngIf="row?.indicator == 'green'">
+                                              </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </ng-template>
+                              </ngx-datatable-column>
+                              <ngx-datatable-column [draggable]="false" [resizeable]="false" name="" [flexGrow]="2"
+                                [cellClass]="getBtnCellClass">
+                                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                  <div class="h-26px d-flex justify-content-end pe-3">
+                                    <button style="padding: 0;" class="btn btn-sm btn-outline-basic fs-10 w-28px h-26px"  [disabled]="row?.total_obs == 0"
+                                      (click)="navigateToObservationWithSelectedCategory(row)"
+                                      title="Show Observations"><img  class="icon-button"
+                                      src="/assets/icons/Path 14475.svg" alt="" /></button>
+                                  </div>
+                                </ng-template>
+                              </ngx-datatable-column>
+                            </ngx-datatable>
+                          </ng-container>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="showCategoryWise">
+                        <div class="fs-15 fw-800 pb-2 text-color" *ngIf="selectedOverviewOfCategoryTotalCount > 0">
+                          <ng-container *ngIf="sumOfSelectedOverviewOfCategory.length <= 1">
+                            <span class="fw-900 fs-16">{{selectedOverviewOfCategory[0]?.location}}</span> has the
+                            highest
+                            number of <span class="fw-900 fs-16">{{selectedOverviewOfCategory[0]?.total_obs}} /
+                              {{selectedOverviewOfCategoryTotalCount}}</span> {{detailedCategoryWiseToggle ? 'critical'
+                            : ''}} observations
+                          </ng-container>
+                          <ng-container *ngIf="sumOfSelectedOverviewOfCategory.length > 1">
+                            <span class="fw-900 fs-16">{{sumOfSelectedOverviewOfCategory.length}} Units </span><sup
+                              class="cursor-pointer" [title]="getSummationOfSelectedOverviewOfCategory('names')">[ <i
+                                class="fas fa-info"></i> ]</sup> has <span
+                              class="fw-900 fs-16">{{getSummationOfSelectedOverviewOfCategory('count')}} /
+                              {{selectedOverviewOfCategoryTotalCount}}</span> {{detailedCategoryWiseToggle ? 'critical'
+                            : ''}} observations
+                          </ng-container>
+                        </div>
+                        <div class="d-flex align-items-center h-10px"
+                          [ngClass]="selectedOverviewOfCategoryTotalCount > 0 ? '' : 'h-10px'">
+                          <div class="d-flex align-items-center">
+                            <div class="fs-11">Critical observation</div>
+                            <div class="d-flex align-items-center ps-2" style="height: 10.5px;">
+                              <label class="switch" id="toggal">
+                                <input type="checkbox" [checked]="detailedCategoryWiseToggle"
+                                  (click)="changeDetailedCategoryWiseToggle(); safetyAndSurveillanceCommonService.sendMatomoEvent('Usage of critical observation toggle', 'Analytics overview')">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mt-2 over-flow" id="ngxDatatable">
+                          <ng-container *ngIf="showCategoryWise">
+                            <ngx-datatable class="material" [columnMode]="ColumnMode.flex" [headerHeight]="0"
+                              [footerHeight]="0" [rowHeight]="30" [rowClass]="getTaskRowClass"
+                              [rows]="selectedOverviewOfCategory">
+                              <ngx-datatable-column name="Location" [flexGrow]="2">
+                                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                  <span class="fw-800 fs-14">{{ row?.location }}</span>
+                                </ng-template>
+                              </ngx-datatable-column>
+                              <ngx-datatable-column name="Observations" [flexGrow]="7">
+                                <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                  <div class="d-flex  align-items-center pe-10px">
+                                    <div
+                                      [style.width]="((row?.total_obs) / selectedOverviewOfCategory[0]?.total_obs) * 85+ '%'"
+                                      *ngIf="selectedOverviewOfCategory[0]?.total_obs > 0" style="height: 10px;">
+                                      <app-horizontal-bar [total_obs]="row?.total_obs" [difference]="row?.difference"
+                                        [color]="row.indicator == 'green' ? '#33A437' : '#F8CECC'"></app-horizontal-bar>
+                                    </div>
+                                    <div class="fs-10 fw-800 fs-14 text-dark">
+                                      <div class="d-flex justify-content-between">
+                                        <div class=" fw-800 line-h-25px" [title]="row?.total_obs">
+                                          {{row?.total_obs}}</div>
+                                        <div class="align-items-center ps-2  text-center">
+                                          <div class=" fs-10 line-h-14px "
+                                            [ngClass]="row?.indicator == 'green' ? 'text-green' : 'text-red'"
+                                            [title]="row?.difference < 0 ? -row?.difference : row?.difference ">
+                                            {{row?.difference < 0 ?( -row?.difference) :
+                                              (row?.difference) }} </div>
+                                              <div class="line-h-5px">
+                                                <img src="assets/icons/red_up_arrow.svg" width="9px"
+                                                  *ngIf="row?.indicator != 'green'">
+                                                <img src="assets/icons/green_down_arrow.svg" width="9px"
+                                                  *ngIf="row?.indicator == 'green'">
+                                              </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </ng-template>
+                              </ngx-datatable-column>
+                            </ngx-datatable>
+                          </ng-container>
+                        </div>
+                      </ng-container>
+
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="w-50 ps-1">
+                <div class=" w-100 h-50 bg-white border rounded mb-2">
+                  <div class="w-100 h-100 p-2" id="critical_chart">
+                    <div class="d-flex align-items-center" id="most_critical_chart">
+                      <ng-container *ngIf="sumOfCriticalObs?.length <= 1 && mostCriticalObsData?.totalCount > 0">
+                        <div class="fw-600 fs-15 text-color me-2">Most critical observations occur between
+                          {{mostCriticalObsData?.startTime}} - {{mostCriticalObsData?.endTime}}
+                          ({{mostCriticalObsData?.countOfSelectedTime}} / {{mostCriticalObsData?.totalCount}}) in <span
+                            *ngIf="!showUnitWise">{{clientName}}</span></div>
+                      </ng-container>
+                      <ng-container *ngIf="sumOfCriticalObs?.length > 1 && mostCriticalObsData?.totalCount > 0">
+                        <div class="fw-600 fs-15 text-color me-2">Most critical observations occur at
+                          <span *ngFor="let item of sumOfCriticalObs;let i = index">
+                            <span>{{item.startTime}} - {{item.endTime}}</span> <span
+                              *ngIf="(i + 1) < sumOfCriticalObs?.length"> and </span>
+                          </span>
+                          ({{getMostCriticalObsCount()}} / {{mostCriticalObsData?.totalCount}}) in <span
+                            *ngIf="!showUnitWise">{{clientName}}</span>
+                        </div>
+                      </ng-container>
+
+                      <div *ngIf="showUnitWise">
+                        <div class="dropdown h-24px border rounded w-160px ">
+                          <div
+                            class="text-dark-blue w-160px cursorPointer px-2  pt-1 fs-12 ff-montserrat  d-flex justify-content-between align-items-center cursor-pointer"
+                            (click)="criticalZoneDropdownShow()">
+                            <div class="fw-bold" [title]="selectedCriticalZone.title">{{selectedCriticalZone.title}}
+                            </div>
+                            <div><i class="fas fa-chevron-down fs-12 ms-2 "></i></div>
+                          </div>
+                          <div class="dropdown-style shadow rounded w-160px py-2" *ngIf="criticalZoneDropdown">
+                            <div class="options text-dark-blue fs-12 ff-montserrat"
+                              [ngClass]="'All zones' == selectedCriticalZone.title ? 'selected-dropdown':''"
+                              (click)="this.selectedCriticalZone = {title: 'All zones'}; this.criticalZoneDropdown = fasle; selectedZone('all')">
+                              All zones</div>
+                            <div class="options text-dark-blue fs-12 ff-montserrat"
+                              *ngFor="let selectItem of criticalZoneArray"
+                              [ngClass]="selectItem.title == selectedCriticalZone.title ? 'selected-dropdown':''"
+                              (click)="this.selectedCriticalZone = selectItem; this.criticalZoneDropdown = fasle; selectedZone(this.selectedCriticalZone)">
+                              {{selectItem.title}}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="w-100" [ngStyle]="{'height': getMostCriticalTableHeight()+'px'}">
+                      <app-critical-observation-bar [criticalObsData]="criticalObsData"
+                        (criticalObs)="mostCriticalObs($event)" (sumOfCritical)="getSumOfCritical($event)">
+                      </app-critical-observation-bar>
+                    </div>
+                  </div>
+                </div>
+                <div class=" w-100 h-50 bg-white border rounded mb-2">
+                  <div class="w-100 h-100 p-2 position-relative">
+                    <div class="d-flex align-items-center p-2 position-absolute"
+                      [ngClass]="selectedObservationTrend == 'status' ? 'justify-content-between z-index windt' : ''">
+                      <div class="d-flex align-items-center position-relative">
+                        <div class="d-flex align-items-center position-dropdown  w-280px">
+                          <div class="fw-600 fs-15 text-color me-2 ">Observation trend by</div>
+                          <div class="dropdown h-24px border rounded  w-110px">
+                            <div
+                              class="text-dark-blue w-110px cursorPointer px-2 pt-1 fs-12 ff-montserrat  d-flex justify-content-between align-items-center cursor-pointer"
+                              (click)="observationTrendDropdownShow()">
+                              <div class="fw-bold" [title]="selectedObservationTrend">{{selectedObservationTrend ==
+                                'sif' ? (selectedObservationTrend | uppercase) : (selectedObservationTrend |
+                                titlecase)}}</div>
+                              <div><i class="fas fa-chevron-down fs-12 ms-2 "></i></div>
+                            </div>
+                            <div class="dropdown-style shadow rounded w-110px py-2" *ngIf="observationTrendDropdown">
+                              <div class="options text-dark-blue fs-12 ff-montserrat"
+                                *ngFor="let selectItem of observationTrendOptions"
+                                [ngClass]="selectItem == selectedObservationTrend ? 'selected-dropdown':''"
+                                (click)="this.selectedObsStatus = 'All'; this.selectedObservationTrend = selectItem; this.observationTrendDropdown = fasle;">
+                                {{selectItem == 'sif' ? (selectItem | uppercase) : (selectItem | titlecase)}}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="position-obs-status" *ngIf="selectedObservationTrend == 'status'">
+                        <div class="radius px-1 all-btn-bg-color  h-24px text-white d-flex align-items-center">
+                          <div class="w-45px pointer h-20px radius d-flex justify-content-center align-items-center"
+                            (click)="onStatusChange('All')" [ngClass]="
+                    selectedObsStatus == 'All' ? 'btn-bg-color text-dark' : ''
+                    ">
+                            All
+                          </div>
+                          <div class="w-55px pointer h-20px radius d-flex justify-content-center align-items-center"
+                            (click)="onStatusChange('Open')" [ngClass]="
+                    selectedObsStatus == 'Open' ? 'btn-bg-color text-dark' : ''
+                    ">
+                            Open
+                          </div>
+                          <div class="w-60px pointer h-20px radius d-flex justify-content-center align-items-center"
+                            (click)="onStatusChange('Closed')" [ngClass]="
+                    selectedObsStatus == 'Closed' ? 'btn-bg-color text-dark' : ''
+                    ">
+                            Closed
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="w-100 h-100">
+                      <ng-container *ngIf="selectedObservationTrend == 'category'">
+                        <app-analytics-trend-bar [observationTrendData]="observationTrendData.category"
+                          [selectedCategory]="selectedCategory"></app-analytics-trend-bar>
+                      </ng-container>
+                      <ng-container *ngIf="selectedObservationTrend == 'mode'">
+                        <app-analytics-mode-bar [observationTrendData]="observationTrendData.mode">
+                        </app-analytics-mode-bar>
+
+                      </ng-container>
+                      <ng-container *ngIf="selectedObservationTrend == 'rating'">
+                        <app-analytics-rating-bar [observationTrendData]="observationTrendData.rating">
+                        </app-analytics-rating-bar>
+                      </ng-container>
+                      <ng-container *ngIf="selectedObservationTrend == 'sif'">
+                        <app-analytics-sif-bar [observationTrendData]="observationTrendData.sif">
+                        </app-analytics-sif-bar>
+                      </ng-container>
+                      <ng-container *ngIf="selectedObservationTrend == 'status'">
+                        <app-analytics-status-bar [selectedObsStatus]="selectedObsStatus"
+                          [observationTrendData]="observationTrendData.status"></app-analytics-status-bar>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>

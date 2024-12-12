@@ -1,0 +1,23 @@
+<vg-player *ngIf="url else noVideoTemplate" class="h-100 w-100">
+    <vg-controls>
+        <vg-play-pause></vg-play-pause>
+        <vg-time-display vgProperty="current" vgFormat="hh:mm:ss"></vg-time-display>
+        <vg-scrub-bar>
+            <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+            <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+        </vg-scrub-bar>
+        <vg-time-display vgProperty="total" vgFormat="hh:mm:ss"></vg-time-display>
+        <vg-mute></vg-mute>
+        <vg-fullscreen (click)="resetZoom()"></vg-fullscreen>
+    </vg-controls>
+    <video id="player{{uuid}}" class="img-zoom" #media [vgMedia]="media" preload="auto" autoplay="true"
+        (dblclick)="resetZoom()" crossorigin>
+        <source src="{{url}}" type="video/mp4">
+    </video>
+</vg-player>
+
+<ng-template #noVideoTemplate>
+    <div class="h-100 w-100 d-flex">
+        <p class="m-auto">No video available</p>
+    </div>
+</ng-template>

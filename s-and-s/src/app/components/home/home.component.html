@@ -1,0 +1,7 @@
+<div>
+    <app-home-navbar (selectTab)="selectTab($event)"></app-home-navbar>
+</div>
+<div>
+    <app-dashboard *ngIf="selectedTab == 'home'"></app-dashboard>
+    <app-analytics *ngIf="selectedTab == 'analytics'"></app-analytics>
+</div>

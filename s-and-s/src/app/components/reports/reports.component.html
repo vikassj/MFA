@@ -1,0 +1,1036 @@
+<!--***************** reports header ****************-->
+<!-- <div
+  class="d-flex align-items-center filterHeight justify-content-between w-100 p-2">
+  <div class="d-flex align-items-center">
+    <div id="selectdPersons2" class="unit-selection">
+      <ng-select
+        [items]="unitSelectionValues"
+         
+        [virtualScroll]="true"
+        [clearable]="false"
+        [searchable]="false"
+        bindLabel="value"
+        bindValue="value"
+        placeholder="Select city"
+        [(ngModel)]="selectedSideBarItem"
+        (change)="unitSelectionChange($event)"
+      >
+      </ng-select>
+    </div>
+    <div id="selectdPersons2" class="unit-selection ps-2">
+      <ng-select
+        #select
+        [items]="people"
+        [bindLabel]="'title'"
+        [bindValue]="'uuid'"
+        [groupBy]="'subprojects'"
+        [multiple]="true"
+        [selectableGroup]="true"
+        [selectableGroupAsModel]="false"
+        [closeOnSelect]="false"
+        [(ngModel)]="selectedPeople"
+        [clearable]="false"
+        (change)="multiSelectList($event)"
+         
+      >
+        <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+          <div class="ng-value">
+            <span class="ng-value-label fs-12 pt-1">
+              <span class="pe-1"
+                >{{ countOfUnitZone.unit }}
+                {{ countOfUnitZone.unit > 1 ? " Units" : " Unit" }}</span
+              >
+            </span>
+          </div>
+        </ng-template>
+        <ng-template
+          ng-optgroup-tmp
+          let-item="item"
+          let-item$="item$"
+          let-index="index"
+        >
+          <div class="d-flex align-items-center">
+            <input
+              id="item-{{ index }}"
+              type="checkbox"
+              [checked]="item$.selected"
+            />
+            <span class="fs-12 ps-1">{{ item.title }}</span>
+          </div>
+        </ng-template>
+        <ng-template
+          ng-option-tmp
+          let-item="item"
+          let-item$="item$"
+          let-index="index"
+        >
+          <div class="d-flex align-items-center">
+            <input
+              id="subitem-{{ index }}"
+              type="checkbox"
+              [checked]="item$.selected"
+            />
+            <span class="fs-12 ps-1">{{ item.title }}</span>
+          </div>
+        </ng-template>
+        <ng-template ng-footer-tmp>
+          <div class="d-flex justify-content-between">
+            <div>
+              <button
+                class="btn btn-sm btn-basic fs-10px w-110px"
+                [disabled]="disabledApplyBtn"
+                (click)="applyBtn(select)"
+              >
+                APPLY
+              </button>
+            </div>
+          </div>
+        </ng-template>
+      </ng-select>
+    </div>
+    <div
+      class="d-flex ms-2 me-2 my-auto selectedFilter w-100 justify-content-around"
+    >
+      <span class="nactive noWrap">All</span>
+      <span class="active noWrap">Created by me</span>
+      <span class="nactive noWrap">Schedule Reports</span>
+    </div>
+    <div id="selectdPersons2" class="month">
+      <ng-container>
+        <div class="pt-2 pb-2">
+          <ng-select
+            [items]="selectedItems"
+             
+            [virtualScroll]="true"
+            [clearable]="false"
+            [searchable]="false"
+            [(ngModel)]="selectedItemDate"
+            (change)="
+              fetchReportsData1();
+              safetyAndSurveillanceCommonService.sendMatomoEvent(
+                'Usage of filters',
+                'Reports features'
+              )
+            "
+          >
+          </ng-select>
+        </div>
+
+        <div class="pt-2 pb-2" *ngIf="selectedItemDate == 'Month wise'">
+          <ng-select
+            [items]="months"
+             
+            [virtualScroll]="true"
+            [clearable]="false"
+            [searchable]="false"
+            bindLabel="value"
+            bindValue="key"
+            [(ngModel)]="selectMonth"
+            (change)="
+              fetchReportsData1();
+              safetyAndSurveillanceCommonService.sendMatomoEvent(
+                'Usage of filters',
+                'Reports features'
+              )
+            "
+          >
+          </ng-select>
+        </div>
+        <div class="pt-2 pb-2"></div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="d-flex align-items-center">
+    <div
+      class="generate-button"
+      *ngIf="selectedSideBarItem == 'Entire Plant' && isGenerateButton"
+    >
+      <button
+        class="btn generateReport-btn noWrap"
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#generateReport"
+        (click)="getUserListGenerateReport()"
+      >
+        <i class="fa fa-plus" aria-hidden="true"></i> GENERATE REPORT
+      </button>
+    </div>
+    <div
+      class="generate-button ms-2"
+      *ngIf="selectedSideBarItem == 'Entire Plant' && isGenerateButton"
+    >
+      <button
+        class="btn generateReport-btn noWrap"
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#createReport"
+        (click)="getUserListGenerateReport()"
+      >
+        <i class="fa fa-plus" aria-hidden="true"></i> CREATE REPORT
+      </button>
+    </div>
+    <div
+      class="generate-button ms-2"
+      *ngIf="selectedSideBarItem == 'Entire Plant' && isGenerateButton"
+    >
+      <button
+        class="btn createSchedule-btn noWrap"
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#createSchedule"
+        (click)="getUserListGenerateReport()"
+      >
+        <i class="fa fa-plus" aria-hidden="true"></i> CREATE SCHEDULE
+      </button>
+    </div>
+  </div>
+</div> -->
+
+<!--***************** reports table *****************-->
+<!-- <div class="dashboardContainer">
+  <ngx-datatable
+    #table
+    class="material expandable onBoarded-table-height"
+    [rows]="driverRows"
+    [columnMode]="ColumnMode.force"
+    [headerHeight]="50"
+    [footerHeight]="50"
+    [rowHeight]="'auto'"
+    [scrollbarV]="true"
+  >
+    <ngx-datatable-footer>
+      <ng-template
+        ngx-datatable-footer-template
+        let-rowCount="rowCount"
+        let-pageSize="pageSize"
+        let-selectedCount="selectedCount"
+        let-curPage="curPage"
+        let-offset="offset"
+        class="footer-template-custom"
+      >
+        <div class="result">
+          <div>
+            Result-
+            <span class="result-count"
+              >{{
+                curPage * pageSize > rowCount ? rowCount : curPage * pageSize
+              }}
+              of {{ rowCount }}</span
+            >
+          </div>
+        </div>
+        <div class="pagination-ngx">
+          <datatable-pager
+            [pagerLeftArrowIcon]="'datatable-icon-left'"
+            [pagerRightArrowIcon]="'datatable-icon-right'"
+            [pagerPreviousIcon]="'datatable-icon-prev'"
+            [pagerNextIcon]="'datatable-icon-skip'"
+            [page]="curPage"
+            [size]="pageSize"
+            [count]="rowCount"
+            [hidden]="!(rowCount / pageSize > 1)"
+            (change)="table.onFooterPage($event)"
+          >
+          </datatable-pager>
+        </div>
+      </ng-template>
+    </ngx-datatable-footer>
+    <ngx-datatable-column
+      [width]="30"
+      [sortable]="false"
+      [canAutoResize]="false"
+      [draggable]="false"
+      [resizeable]="false"
+    >
+    </ngx-datatable-column>
+    <ngx-datatable-column
+      name="Report Name"
+      prop="Report Name"
+    ></ngx-datatable-column>
+    <ngx-datatable-column name="Date" prop="Date"></ngx-datatable-column>
+    <ngx-datatable-column name="Time" prop="Time"></ngx-datatable-column>
+    <ngx-datatable-column name="File">
+      <ng-template
+        ngx-datatable-cell-template
+        let-column="column"
+        let-row="row"
+        let-value="value"
+      >
+        <button
+          *ngIf="row['fileUrl']?.length > 0"
+          class="btn btn-sm view-file"
+          (click)="
+            openPDF(row['fileUrl']);
+            safetyAndSurveillanceCommonService.sendMatomoEvent(
+              'Viewing a report',
+              'Reports features'
+            )
+          "
+        >
+          VIEW FILE
+        </button>
+        <div class="msg-generate" *ngIf="!row['fileUrl']">
+          Generating report...
+        </div>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+</div> -->
+
+
+<!--************* revamp code ************************-->
+
+<!--*******part-1*******-->
+<div class="d-flex align-items-center justify-content-between w-100 filterHeight shadow-lg bg-white">
+  <div class="d-flex align-items-center ms-4">
+    <div id="selectdPersons2" class="unit-selection">
+      <ng-select
+        [items]="unitSelectionValues"
+        [virtualScroll]="true"
+        [clearable]="false"
+        [searchable]="false"
+        bindLabel="value"
+        bindValue="key"
+        placeholder="Select city"
+        [(ngModel)]="selectedSideBarItem"
+        (change)="unitSelectionChange($event)"
+      >
+      </ng-select>
+    </div>
+  </div>
+  <div class="d-flex selectedFilter align-items-center justify-content-between">
+    <div  class="noWrap ms-4 pointer" *ngFor="let category of reportCategories" [ngClass]="category.key == selectedReportCategory.key?'active':'nactive'" (click)="getSelectedCategory(category)">{{category.name}}</div>
+  </div>
+  <div  class="d-flex align-items-center">
+    <ng-container>
+      <!-- year and month categorie select dropdown-->
+      <div class="pt-2 pb-2" id="selectdPersons3">
+        <ng-select
+          [items]="selectedItems"
+          [virtualScroll]="true"
+          [clearable]="false"
+          [searchable]="false"
+          [(ngModel)]="selectedItemDate"
+          (change)="
+            fetchReportsData1();
+            safetyAndSurveillanceCommonService.sendMatomoEvent(
+              'Usage of filters',
+              'Reports features'
+            )
+          "
+        >
+        </ng-select>
+      </div>
+      <!-- month select dropdown-->
+      <div class="pt-2 pb-2 ms-2" id="selectdPersons3" *ngIf="selectedItemDate == 'Month wise'">
+        <ng-select
+          [items]="months"
+          [virtualScroll]="true"
+          [clearable]="false"
+          [searchable]="false"
+          bindLabel="value"
+          bindValue="key"
+          [(ngModel)]="selectMonth"
+          (change)="
+            fetchReportsData1();
+            safetyAndSurveillanceCommonService.sendMatomoEvent(
+              'Usage of filters',
+              'Reports features'
+            )
+          "
+        >
+        </ng-select>
+      </div>
+      <!-- year select dropdown-->
+      <div class="pt-2 pb-2 ms-2" id="selectdPersons3" *ngIf="selectedItemDate == 'Year wise'">
+        <ng-select [items]="yearsData"
+        [virtualScroll]="true"
+        [clearable]="false"
+        [searchable]="false"
+        [(ngModel)]="selectedYear"
+        (change)=" fetchReportsData1();
+        safetyAndSurveillanceCommonService.sendMatomoEvent(
+          'Usage of filters',
+          'Reports features'
+        )">
+        </ng-select>
+      </div>
+    </ng-container>
+  </div>
+  <div class="d-flex align-items-center me-4">
+    <div
+      class="generate-button"
+      *ngIf="selectedSideBarItem == 'Entire Plant' && isGenerateButton"
+    >
+      <button
+        class="btn generateReport-btn noWrap fs-12"
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#generateReport"
+        (click)="getUserListGenerateReport()"
+      >
+        <i class="fa fa-plus fs-12 pe-2" aria-hidden="true"></i> GENERATE REPORT
+      </button>
+    </div>
+  </div>
+</div>
+
+<!--*******part-2*******-->
+<div id="table-container" class="page-bg-color p-2">
+  <ngx-datatable
+    #table
+    class="material expandable"
+    [rows]="driverRows"
+    [columnMode]="ColumnMode.force"
+    [headerHeight]="40"
+    [footerHeight]="50"
+    [rowHeight]="'auto'"
+    [scrollbarH]="true"
+    [limit]="12"
+  >
+    <ngx-datatable-column
+      [width]="30"
+      [sortable]="false"
+      [canAutoResize]="false"
+      [draggable]="false"
+      [resizeable]="false"
+    >
+    </ngx-datatable-column>
+    <ngx-datatable-column
+      name="Report Name"
+      prop="Report Name"
+    ></ngx-datatable-column>
+    <ngx-datatable-column name="Date" prop="Date"></ngx-datatable-column>
+    <ngx-datatable-column name="Time" prop="Time"></ngx-datatable-column>
+    <ngx-datatable-column name="File">
+      <ng-template
+        ngx-datatable-cell-template
+        let-column="column"
+        let-row="row"
+        let-value="value"
+      >
+        <button
+          *ngIf="row['fileUrl']?.length>0 && row['fileUrl'] != 'null'"
+          class="btn btn-sm view-file"
+          (click)="
+            openPDF(row['fileUrl']);
+            safetyAndSurveillanceCommonService.sendMatomoEvent(
+              'Viewing a report',
+              'Reports features'
+            )
+          "
+        >
+          VIEW FILE
+        </button>
+        <div class="msg-generate" *ngIf="row['fileUrl'] === 'null' || row['fileUrl'] === ''">Generating report...</div>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+</div> 
+
+
+<!--************ modal for generate report **********-->
+ <div
+  class="route-nav border scroll side-bar-height position col-2 bg-body p-1"
+  *ngIf="isRouteClicked">
+  <div class="d-flex mb-2">
+    <button
+      id="back-button"
+      (click)="onRouteClicked()"
+      style="margin-right: auto"
+    >
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <button class="btn btn-basic btn-sm me-2" (click)="fetchReportsData()">
+      APPLY
+    </button>
+    <button class="cancel-button">RESET</button>
+  </div>
+  <div class="route-nav-blocks">
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Start Date</legend>
+        <div class="input-group p-1 w-100">
+          <input
+            class="form-control input-border"
+            name="mydate"
+            placeholder="yyyy-mm-dd"
+            angular-mydatepicker
+            #startDateCalender="angular-mydatepicker"
+            value="08-08-2022"
+            [(ngModel)]="startDateModel"
+            [options]="startDateOptions"
+            (dateChanged)="onDateChanged('startDate', $event)"
+          />
+          <div
+            class="d-flex pointer align-items-center justify-content-center"
+            (click)="startDateCalender.toggleCalendar()"
+          >
+            <i class="far fa-calendar-alt fs-4"></i>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">End Date</legend>
+        <div class="input-group p-1 w-100">
+          <input
+            class="form-control input-border"
+            name="mydate"
+            placeholder="yyyy-mm-dd"
+            angular-mydatepicker
+            #endDateCalender="angular-mydatepicker"
+            [(ngModel)]="endDateModel"
+            [options]="endDateOptions"
+            (dateChanged)="onDateChanged('endDate', $event)"
+          />
+          <div
+            class="d-flex pointer align-items-center justify-content-center"
+            (click)="endDateCalender.toggleCalendar()"
+          >
+            <i class="far fa-calendar-alt fs-4"></i>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="generateReport"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="generateReportLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" id="generateReportPop">
+      <div class="generate-report-modal">
+        <div class="modal-header">
+          <div class="heading">
+            <h6 class="modal-title" id="modal-basic-title">
+              <i class="fas fa-file-alt" aria-hidden="true"></i>GENERATE REPORT
+            </h6>
+          </div>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+              <div class="date-format-class">
+                <div class="input-group date-format-class-element">
+                  <label> Start Date </label>
+                  <div class="fs-11px calendar" id="dateSelect">
+                    <mat-form-field>
+                      <input
+                        matInput
+                        id="startDate"
+                        name="startDate"
+                        [matDatepicker]="picker1"
+                        [(ngModel)]="selectedStartDate"
+                        placeholder="DD-MMM-YYYY"
+                        disabled
+                        (dateChange)="startDateChange($event)"
+                        [max]="startMaxDate"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker1"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker
+                        #picker1
+                        disabled="false"
+                      ></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+
+                  <div
+                    class="errors"
+                    *ngIf="generateReportForm.get('start_date').touched"
+                  >
+                    <div
+                      *ngIf="
+                        generateReportForm
+                          .get('start_date')
+                          .hasError('required')
+                      "
+                    >
+                      * This field is required
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group date-format-class-element">
+                  <label> End Date</label>
+                  <div class="fs-11px calendar" id="dateSelect">
+                    <mat-form-field>
+                      <input
+                        matInput
+                        name="endDate"
+                        id="endDate"
+                        [matDatepicker]="picker"
+                        [(ngModel)]="selectedEndDate"
+                        placeholder="DD-MMM-YYYY"
+                        disabled
+                        (dateChange)="endDateChange($event)"
+                        [min]="selectedStartDate"
+                        [max]="maxDate"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #picker disabled="false"></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div
+                    class="errors"
+                    *ngIf="generateReportForm.get('end_date').touched"
+                  >
+                    <div
+                      *ngIf="
+                        generateReportForm.get('end_date').hasError('required')
+                      "
+                    >
+                      * This field is required
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <label class="share-with-blue">Share With</label>
+              <div id="selectdPersons1" style="height: 30px">
+                <ng-select
+                  #select
+                  [items]="generateUserList"
+                  [bindLabel]="'email'"
+                  [bindValue]="'email'"
+                  [multiple]="true"
+                  [(ngModel)]="selectedUserList"
+                  [closeOnSelect]="false"
+                  placeholder="Select users"
+                  [clearable]="false"
+                  (change)="selectList($event)"
+                >
+                  <ng-template
+                    ng-multi-label-tmp
+                    let-items="items"
+                    let-clear="clear"
+                  >
+                    <div
+                      class="ng-value"
+                      *ngFor="let item of items | slice : 0 : 1"
+                    >
+                      <span class="ng-value-label">{{ item.email }}</span>
+                    </div>
+                    <div
+                      class="ng-value"
+                      *ngIf="
+                      selectedUserList.length > 1
+                      "
+                    >
+                      <span class="ng-value-label"
+                        >{{
+                          selectedUserList.length - 1
+                        }}
+                        more...</span
+                      >
+                    </div>
+                  </ng-template>
+                  <ng-template
+                    ng-option-tmp
+                    let-item="item"
+                    let-item$="item$"
+                    let-index="index"
+                  >
+                    <input
+                      id="item-{{ index }}"
+                      type="checkbox"
+                      [checked]="item$.selected"
+                    />
+                    {{ item.email }}
+                  </ng-template>
+                  <ng-template ng-footer-tmp>
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <button
+                          (click)="selectedAll()"
+                          class="btn btn-sm btn-basic fs-10px"
+                          [disabled]="
+                            selectedUserList.length ==
+                            generateUserList?.length
+                          "
+                        >
+                          Select all
+                        </button>
+                        <button
+                          (click)="unSelectAll()"
+                          class="btn btn-sm btn-basic ms-2 fs-10px"
+                          [disabled]="
+                            selectedUserList.length ==
+                            0
+                          "
+                        >
+                          Unselect all
+                        </button>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ng-select>
+              </div>
+              <!-- <div class="d-flex mt-3 pointer"  (click)="toggleCustomize()">
+                <span class="customize pt-1">Customize <i *ngIf="!showCustomize" class="fas fa-chevron-down ms-1 mt-1"></i> <i *ngIf="showCustomize" class="fas fa-chevron-up ms-1 mt-1"></i></span>
+              </div> -->
+              <div [ngClass]="showCustomize ? 'd-block' : 'd-none'">
+                <span class="primary-color fs-14">Report Configuration</span>
+                <!-- Input for Report Name -->
+                <div class="mt-2">
+                  <fieldset class="side-bar-fieldset">
+                    <legend class="side-bar-legend">Report Name</legend>
+                    <input type="text" class="form-control border-none ps-2" maxlength="50" id="role" (keydown)="Space($event)" [(ngModel)]="reportName"
+                    placeholder="Enter Report Name" >
+                  </fieldset>
+                </div>
+                <!-- Units Drop down  -->
+                <div class="select-dropDown" id="selectdPersons1">
+                  <fieldset class="side-bar-fieldset">
+                    <legend class="side-bar-legend">{{selectedPlantDetails?.[0]?.unit_nomenclature}}</legend>
+                    <ng-select #select [items]="unitsAndZones" [bindLabel]="'title'" [bindValue]="'uuid'" [groupBy]="'zones'" [searchFn]="testSearch" (search)="onSearch($event)"
+                    [multiple]="true" [selectableGroup]="true" [selectableGroupAsModel]="false" [closeOnSelect]="false"
+                    [(ngModel)]="selectedUnitsAndZones" [clearable]="false" (change)="multiSelectList($event)" class="auto-grow" [placeholder]="'0 '+ selectedPlantDetails?.[0]?.unit_nomenclature+', '+ '0 ' + selectedPlantDetails?.[0]?.zone_nomenclature+', '+'selected'">
+                    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                      <div class="ng-value">
+                        <span class="ng-value-label fs-12 pt-1">
+                          <span class="pe-1">{{countOfUnitZone.unit}} {{countOfUnitZone.unit > 1 ? selectedPlantDetails?.[0]?.unit_nomenclature+'s,' : selectedPlantDetails?.[0]?.unit_nomenclature+','}}</span>
+                          <span>{{countOfUnitZone.zone}} {{countOfUnitZone.zone > 1 ? selectedPlantDetails?.[0]?.zone_nomenclature+'s,' : selectedPlantDetails?.[0]?.zone_nomenclature+','}} selected</span>
+                        </span>
+                        <!-- <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span> -->
+                      </div>
+                      <!-- <div class="ng-value" *ngIf="selectedPeople.length > 1">
+                        <span class="ng-value-label">{{selectedPeople.length - 1}} more...</span>
+                      </div> -->
+                    </ng-template>
+                    <ng-template ng-header-tmp>
+                      <div class="px-1 fs-10px d-flex align-items-center pointer">
+                        <input type="checkbox" class="me-2" (change)="toggleCheckAll($event)"  [checked]="reportSelectedUnits.length == unitsId.length"/>All&nbsp;{{selectedPlantDetails?.[0]?.unit_nomenclature}}s
+                      </div>
+                    </ng-template>
+                    <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                      <div class="d-flex align-items-center">
+                        <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> <span
+                          class="fs-12 ps-1">{{item.title}}</span>
+                      </div>
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                      <div class="d-flex align-items-center">
+                        <input id="subitem-{{index}}" type="checkbox" [checked]="item$.selected" /> <span
+                          class="fs-12 ps-1">{{item.title}}</span>
+                      </div>
+                    </ng-template>
+                  </ng-select>
+                  </fieldset>
+                </div>
+                <!-- Categories Drop down  -->
+                <div class="select-dropDown" id="selectdPersons1">
+                  <fieldset class="side-bar-fieldset">
+                    <legend class="side-bar-legend">Categories</legend>
+                    <ng-select [items]="obsCategories" [multiple]="true" [bindLabel]="'name'" [bindValue]="'name'" [hoverEffect]="false" [searchable]="false" [dropdownPosition]="'bottom'"
+                       [closeOnSelect]="false" placeholder="Select categories"  [(ngModel)]="selectedObsCategory" [clearable]="false">
+                      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                          <span class="ng-value-label" [title]="item">{{item.name | hideInfo}}</span>
+                          <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                        </div>
+                        <div class="ng-value" *ngIf="items.length > 1">
+                          <span class="ng-value-label">{{items.length - 1}} more...</span>
+                        </div>
+                      </ng-template>
+                      <ng-template ng-header-tmp>
+                        <div class="px-1 fs-10px d-flex align-items-center pointer">
+                          <input type="checkbox" class="me-2" (change)="reportToggleCheckAll($event,'category')"  [checked]="selectedObsCategory.length == obsCategories.length"/>All Categories
+                        </div>
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                        {{item.name}}
+                      </ng-template>
+                    </ng-select>
+                  </fieldset>
+                </div>
+                <!-- permit Drop down  -->
+                <div *ngIf="isPermitEnabled" class="select-dropDown" id="selectdPersons1">
+                  <fieldset class="side-bar-fieldset">
+                    <legend class="side-bar-legend">Permit Number</legend>
+                    <ng-select [items]="permit_list" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedPermit"
+                      placeholder="Select permit number"  [closeOnSelect]="false" (ngModelChange)="addPermitData(selectedPermit , false,'permitNumber')">
+                      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                          <span class="ng-value-label" [title]="item">{{item | hideInfo}}</span>
+                          <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                        </div>
+                        <div class="ng-value" *ngIf="items.length > 1">
+                          <span class="ng-value-label">{{items.length - 1}} more...</span>
+                        </div>
+                      </ng-template>
+                      <ng-template ng-header-tmp>
+                        <div class="px-1 fs-10px d-flex align-items-center pointer">
+                          <input type="checkbox" class="me-2" (change)="reportToggleCheckAll($event,'permit')"  [checked]="selectedPermit.length == permit_list.length&&permit_list?.length > 0" [disabled]="permit_list?.length < 1" id="permits"/><label for="permits">All Permits</label>
+                        </div>
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                        {{item}}
+                      </ng-template>
+                    </ng-select>
+                  </fieldset>
+                </div>
+                <!-- Risk rating Drop down  -->
+                <div class="select-dropDown" id="selectdPersons1">
+                  <fieldset class="side-bar-fieldset">
+                    <legend class="side-bar-legend">Risk Rating</legend>
+                    <ng-select [items]="riskRatings" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedRiskRating"
+                      placeholder="Select Risk Rating"  [closeOnSelect]="false">
+                      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                          <span class="ng-value-label" [title]="item"><em class="fas fa-star-half-alt pe-2"></em>{{getRiskRatingName(item)}}</span>
+                          <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                        </div>
+                        <div class="ng-value" *ngIf="items.length > 1">
+                          <span class="ng-value-label">{{items.length - 1}} more...</span>
+                        </div>
+                      </ng-template>
+                      <ng-template ng-header-tmp>
+                        <div class="px-1 fs-10px d-flex align-items-center pointer">
+                          <input type="checkbox" class="me-2" (change)="reportToggleCheckAll($event,'rating')"  [checked]="selectedRiskRating.length == riskRatings.length"/>All Ratings
+                        </div>
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <!-- <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                        {{item}} -->
+                        <div class="d-flex align-items-center">
+                          <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>
+                          <div class="w-10px h-15px mx-2 rating-radius" [ngStyle]="{'background-color': returnBackGroundColor(item)}"></div>{{getRiskRatingName(item)}}
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </fieldset>
+                </div>
+                <!-- Status Drop down  -->
+                <div class="select-dropDown" id="selectdPersons1">
+                  <fieldset class="side-bar-fieldset">
+                    <legend class="side-bar-legend">Status</legend>
+                    <ng-select [items]="status" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedStatus"
+                      placeholder="Select Status"  [closeOnSelect]="false">
+                      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                          <span class="ng-value-label" [title]="item">{{item | hideInfo}}</span>
+                          <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                        </div>
+                        <div class="ng-value" *ngIf="items.length > 1">
+                          <span class="ng-value-label">{{items.length - 1}} more...</span>
+                        </div>
+                      </ng-template>
+                      <ng-template ng-header-tmp>
+                        <div class="px-1 fs-10px d-flex align-items-center pointer">
+                          <input type="checkbox" class="me-2" (change)="reportToggleCheckAll($event,'status')"  [checked]="selectedStatus.length == status.length"/>All Status
+                        </div>
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                        <em class="fas fa-clipboard-list mx-2"></em>{{item}}
+                      </ng-template>
+                    </ng-select>
+                  </fieldset>
+                </div>
+                <!-- start time and end time selection  -->
+                <div class="select-dropDown d-flex">
+                  <div class="w-50 me-1">
+                    <fieldset class="side-bar-fieldset">
+                      <legend class="side-bar-legend">Start time</legend>
+                      <div class="form-group d-flex buttons-container time-picker-container border-none">
+                        <input type="text" placeholder="HH:MM" [(ngModel)]="reportStartTime" onblur="this.type='text'; this.hidePicker();"
+                        onclick="this.type='time'; this.showPicker();"
+                          class="form-control time-picker" (change)="triggeringTime($event)">
+                          <!-- <i  class="fa-regular fa-clock icon-style"></i> -->
+                      </div>
+                    </fieldset>
+                  </div>
+                  <div class="w-50 ms-1">
+                    <fieldset class="side-bar-fieldset">
+                      <legend class="side-bar-legend">End time</legend>
+                      <div class="form-group d-flex buttons-container time-picker-container border-none">
+                        <input type="text" placeholder="HH:MM" [(ngModel)]="reportEndTime" onblur="this.type='text'; this.hidePicker();"
+                        onclick="this.type='time'; this.showPicker();"
+                          class="form-control time-picker" (change)="triggeringTime($event)">
+                        <!-- <i  class="fa-regular fa-clock icon-style"></i> -->
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+                <!-- Mode Drop down  -->
+                <div class="select-dropDown" id="selectdPersons1">
+                  <fieldset class="side-bar-fieldset">
+                    <legend class="side-bar-legend">Mode</legend>
+                    <ng-select [items]="obsModes" [multiple]="true" [closeOnSelect]="false" [bindLabel]="'label'" [bindValue]="'value'" [(ngModel)]="selectedObsMode"
+                      placeholder="Select Mode"  [closeOnSelect]="false">
+                      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                          <span class="ng-value-label" *ngIf="items.length > 1">{{item.label | hideInfo}}</span>
+                          <span class="ng-value-label" *ngIf="items.length == 1">{{item.label}}</span>
+                          <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                        </div>
+                        <div class="ng-value" *ngIf="items.length > 1">
+                          <span class="ng-value-label">{{items.length - 1}} more...</span>
+                        </div>
+                      </ng-template>
+                      <ng-template ng-header-tmp>
+                        <div class="px-1 fs-10px d-flex align-items-center pointer">
+                          <input type="checkbox" class="me-2" (change)="reportToggleCheckAll($event,'mode')"  [checked]="selectedObsMode.length == obsModes.length"/>All Modes
+                        </div>
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                        {{item.label}}
+                      </ng-template>
+                    </ng-select>
+                  </fieldset>
+                </div>
+                <!-- permit type dropdown -->
+                <div  *ngIf="isPermitEnabled" class="select-dropDown">
+                  <fieldset class="side-bar-fieldset">
+                    <legend class="side-bar-legend">Type of permit</legend>
+                    <!-- [disabled]="selectedDisplayType === 'Videos'" -->
+                    <ng-select [items]="permitTypeList" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedPermitType"
+                      placeholder="Filter by Type of permit" (change)="onFilterChange('typeOfPermit')"
+                      >
+                      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                          <span class="ng-value-label" *ngIf="items.length > 1"><em class="fas fa-clipboard-list pe-2"></em>{{item | hideInfo}}</span>
+                          <span class="ng-value-label" *ngIf="items.length == 1"><em class="fas fa-clipboard-list pe-2"></em>{{item}}</span>
+                          <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                        </div>
+                        <div class="ng-value" *ngIf="items.length > 1">
+                          <span class="ng-value-label">{{items.length - 1}} more...</span>
+                        </div>
+                      </ng-template>
+                      <ng-template ng-header-tmp>
+                        <div class="px-1 fs-10px d-flex align-items-center pointer">
+                          <input type="checkbox" class="me-2" (change)="reportToggleCheckAll($event,'permitType')"  [checked]="selectedPermitType.length == permitTypeList.length && permitTypeList.length > 0" [disabled]="permitTypeList.length < 1" id="permitType"/><label for="permitType">All Type of Permit</label>
+                        </div>
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                        <em class="fas fa-clipboard-list mx-2"></em>{{item}}
+                      </ng-template>
+                    </ng-select>
+                  </fieldset>
+                </div>
+                <!-- nature of work Drop down  -->
+                <div *ngIf="isPermitEnabled" class="select-dropDown">
+                  <fieldset class="side-bar-fieldset">
+                    <legend class="side-bar-legend">Nature of work</legend>
+                    <ng-select [items]="work" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedWork"
+                      placeholder="Select nature of work"  [closeOnSelect]="false" (change)="onFilterChange('natureOfWork')">
+                      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                          <span class="ng-value-label" [title]="item">{{item | hideInfo}}</span>
+                          <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                        </div>
+                        <div class="ng-value" *ngIf="items.length > 1">
+                          <span class="ng-value-label">{{items.length - 1}} more...</span>
+                        </div>
+                      </ng-template>
+                      <ng-template ng-header-tmp>
+                        <div class="px-1 fs-10px d-flex align-items-center pointer">
+                          <input type="checkbox" class="me-2" (change)="reportToggleCheckAll($event,'nature')"  [checked]="selectedWork.length == work.length && work.length > 0" [disabled]="work.length < 1" id="work"/><label for="work">All Nature of Work</label>
+                        </div>
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                        {{item}}
+                      </ng-template>
+                    </ng-select>
+                  </fieldset>
+                </div>
+                <!-- vendor name drop down  -->
+                <div *ngIf="isPermitEnabled" class="select-dropDown">
+                  <fieldset class="side-bar-fieldset">
+                    <legend class="side-bar-legend">Vendor name</legend>
+                    <ng-select [items]="vendorList" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedVendor"
+                      placeholder="Select vendor name"  [closeOnSelect]="false" (change)="onFilterChange('vendorName')">
+                      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                          <span class="ng-value-label" [title]="item">{{item | hideInfo}}</span>
+                          <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                        </div>
+                        <div class="ng-value" *ngIf="items.length > 1">
+                          <span class="ng-value-label">{{items.length - 1}} more...</span>
+                        </div>
+                      </ng-template>
+                      <ng-template ng-header-tmp>
+                        <div class="px-1 fs-10px d-flex align-items-center pointer">
+                          <input type="checkbox" class="me-2" (change)="reportToggleCheckAll($event,'vendor')"  [checked]="selectedVendor.length == vendorList.length && vendorList.length > 0" [disabled]="vendorList.length < 1" id="vendor"/><label for="vendor">All Vendors</label>
+                        </div>
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                        {{item}}
+                      </ng-template>
+                    </ng-select>
+                  </fieldset>
+                </div>
+                <!-- Issuer name drop down  -->
+                <div *ngIf="isPermitEnabled" class="select-dropDown">
+                  <fieldset class="side-bar-fieldset">
+                    <legend class="side-bar-legend">Issuer name</legend>
+                    <ng-select [items]="issuerList" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedIssuer"
+                      placeholder="Select issuer name"  [closeOnSelect]="false" (change)="onFilterChange('issuerName')">
+                      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                          <span class="ng-value-label" [title]="item">{{item | hideInfo}}</span>
+                          <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                        </div>
+                        <div class="ng-value" *ngIf="items.length > 1">
+                          <span class="ng-value-label">{{items.length - 1}} more...</span>
+                        </div>
+                      </ng-template>
+                      <ng-template ng-header-tmp>
+                        <div class="px-1 fs-10px d-flex align-items-center pointer">
+                          <input type="checkbox" class="me-2" (change)="reportToggleCheckAll($event,'issuer')"  [checked]="selectedIssuer.length == issuerList.length && issuerList.length > 0" [disabled]="issuerList.length < 1" id="issuer"/><label for="issuer">All Issuers</label>
+                        </div>
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                        {{item}}
+                      </ng-template>
+                    </ng-select>
+                  </fieldset>
+                </div>
+
+              </div>
+              <div class="selected-users">
+                <div class="btns btn-class">
+                  <button
+                    name="back"
+                    class="btn btn-outline-primary mr-3 btn-main back-btn"
+                    data-bs-dismiss="modal"
+                    (click)="reportFormReset()"
+                  >
+                    BACK
+                  </button>
+
+                  <button
+                    name="generate"
+                    [disabled]="!selectedStartDate || !selectedEndDate"
+                    class="btn btn-main generate-btn"
+                    (click)="generateReport()"
+                  >
+                    GENERATE
+                  </button>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

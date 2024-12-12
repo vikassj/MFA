@@ -1,0 +1,73 @@
+.commentsCss {
+  max-height: 150px;
+}
+
+.float-nav {
+  position: absolute;
+  bottom: 5%;
+  left: 2.3%;
+  z-index: 999;
+}
+
+.z-index {
+  z-index: 9999;
+}
+
+.close {
+  border: none;
+  float: right;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .5;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid #313a46;
+  outline: none;
+}
+
+.icon {
+  font-size: 15px !important;
+  padding: 10px;
+  text-align: center;
+}
+
+.text-blue {
+  color: #006699;
+}
+
+.btn-basic,
+.btn-basic :hover {
+  color: #fff !important;
+  background-color: #069 !important;
+  border-color: #069 !important;
+}
+
+.btn-outline-basic[_ngcontent-gli-c77] {
+  border: 1px solid #069;
+  color: #069;
+
+}
+
+
+.btn-outline-basic:hover,
+.btn-outline-basic:active,
+.btn-outline-basic:focus,
+.btn-outline-basic:visited,
+.btn-outline-basic:focus-visible,
+.btn-outline-basic:focus-within {
+  color: #fff !important;
+  background-color: #069 !important;
+  border-color: #069 !important;
+}
+
+
+.btn-outline-basic :hover .far {
+  color: #fff;
+}

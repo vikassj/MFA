@@ -1,0 +1,464 @@
+<div class="p-1">
+  <div class="fs-11 text-color fw-400">Activities</div>
+  <div class="d-flex justify-content-between align-items-center mt-2">
+    <div class="d-flex align-items-center fs-11">
+      <div>Show:</div>
+      <div class="com w-80px rounded text-center mx-2 fs-11 py-1 cursor-pointer"
+        [ngClass]="selectedCardName == 'comments' ? 'selectedCard text-white' : 'text-color'"
+        (click)="this.selectedCardName = 'comments'; selectCommentHistory('comments')">Comments</div>
+      <div *ngIf="currentId != 'fault_id'" class="com w-70px rounded text-center fs-11 py-1 cursor-pointer"
+        [ngClass]="selectedCardName == 'history' ? 'selectedCard text-white' : 'text-color'"
+        (click)="this.selectedCardName = 'history'; selectCommentHistory('history')">History</div>
+    </div>
+    <div class="fs-10px text-ash cursorPointer btn btn-sm btn-outline-basic fw-800" (click)="sortUsingTime()">
+      <ng-container *ngIf="sortByTime">
+        Newest first
+        <i class="fas fa-sort-amount-down fs-10px"></i>
+      </ng-container>
+      <ng-container *ngIf="!sortByTime">
+        Oldest first
+        <i class="fas fa-sort-amount-up-alt fs-10px"></i>
+      </ng-container>
+    </div>
+
+  </div>
+  <ng-container *ngIf="selectedCardName == 'comments'">
+    <div class="backs">
+      <div class="line m-h-30px mt-2 position-relative">
+        <div #container></div>
+        <div id="comment" contenteditable="true"
+          class="back form-control m-h-40px border-none fs-12px resizable-content" data-ph="Enter new comments here..."
+          [ngxTribute]="tributeOptions" [menuContainer]="container" [(ngModel)]="newComment" name="postData"
+          (onMentioned)="onMentioned($event)" (mentionItemSelected)="onMentioned($event)" (input)="getCommentText()"
+          #tributeElement>
+          </div>
+          <div *ngIf="newComment && !commonServices.alphaNumericWithoutSpaceValidator(newComment)"
+          class="text-danger fs-10px mt-1">
+          Comments cannot have spaces at the start and end of the text.
+          </div>
+      </div>
+      <div class="back d-flex justify-content-between align-items-center fs-10px">
+        <div>
+          <div class="btn-file">
+            <button class="att btn btn-sm attech-btn  fs-10px fw-800 cursor-pointer" style="padding: 6px 15px;
+            margin: 1px 5px;" title="Select document"><i
+                class="fas fa-paperclip pe-2 text-basic fw-800"></i>Attach</button>
+            <input type="file" accept="image/jpeg" multiple class="cursor-pointer" title="Select document"
+              (change)="selectImage($event)" (click)="$event.target.value=null">
+          </div>
+        </div>
+        <div class="d-flex">
+          
+          <button class="btn btn-sm snd-btn btn-basic me-2  fs-10px fw-800" style="padding: 5px 20px !important;"
+            [disabled]="!commonServices.alphaNumericWithoutSpaceValidator(newCommentValidation)" (click)="submitComment()">SEND</button>
+          <button class="btn btn-sm cncl-btn btn-outline-basic  fs-10px fw-800"
+            style="padding: 5px 11px !important; margin: 0px 6px;" (click)="cancelComment()">CANCEL</button>
+        </div>
+      </div>
+      <div class="d-flex flex-wrap">
+        <div class="d-flex flex-wrap m-1" *ngFor="let item of actionCommentImage;let i = index">
+          <div class="postImage position-relative w-125px">
+            <div class="pe-2 pb-2 w-125px">
+              <img [src]="item.actionImage" width="125px" height="70px">
+            </div>
+            <div class="delete-option">
+              <div class="d-flex justify-content-center align-items-center">
+                <div
+                  class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center cursor-pointer"
+                  (click)="deleteSlectedCommentImg(i)"><i class="fas fa-trash custom"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="py-2">
+
+    </div>
+    <div id="issueComment" class=" comments-height">
+      <div id="comment{{comment.id}}" class="back d-flex py-1" *ngFor="let comment of listOfComments">
+        <div class="w-35px h-35px d-flex align-items-center justify-content-center ">
+          <div class="d-flex align-items-center">
+            <ng-container *ngFor="let item of listOfUsers">
+              <ng-container *ngIf="item.id == comment.commented_by">
+                <div
+                  class="cust w-20px h-20px bg-danger rounded-circle d-flex align-items-center justify-content-center me-1 ">
+                  {{item.name.slice(0, 1) | uppercase}}</div>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+        <div class="width-comment ps-1 pt-1 bg-white px-1">
+          <div class="d-flex justify-content-between align-items-center fs-10px border-bottom pb-2 mb-2">
+            <div class="text-color">
+              <ng-container *ngFor="let item of listOfUsers">
+                <ng-container *ngIf="item.id == comment.commented_by">
+                  <div>{{item.email}}</div>
+                </ng-container>
+              </ng-container>
+            </div>
+            <div class="d-flex">
+              <div class="me-2 text-color fw-bold"><i class="far fa-calendar-alt pe-2"></i>{{comment.created_at | date :'dd-MMM-yyyy'}}
+              </div>
+              <div class="text-color fw-bold"><i class="far fa-clock pe-2"></i>{{comment.created_at | date :
+                'HH:mm:ss'}}
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center fs-12px">
+            <div class="commentWidth ">
+              <ng-container *ngFor="let item of comment.comment">
+                <span class="fw-800 text-color pe-1 fs-11px" *ngIf="containsSpecialChars(item)">{{returnUserMail(item) |
+                  titlecase }}</span>
+                <span class="" *ngIf="!containsSpecialChars(item) && item?.length >=1">{{item}}</span>
+              </ng-container>
+            </div>
+            <div>
+              <button class="btn btn-sm p-0 cursor-pointer" [disabled]="!(loginUserId == comment?.commented_by)">
+                <i class="fas fa-trash text-danger fs-14px" style="color: #F65150;" data-bs-toggle="modal" data-bs-target="#deleteModals"
+                  (click)="showConfirmationModals(comment)"></i>
+              </button>
+            </div>
+          </div>
+          <div class="pt-2 d-flex  flex-wrap">
+            <div class="d-flex p-1" *ngFor="let images of comment.comment_files">
+              <div class="imageComments position-relative w-133px">
+                <div class="img pe-2 pb-2 w-125px" id="modalImage">
+                  <img [src]="images.url" width="133px" height="70px" class="rounded-corners">
+                  <div class="h-35px rounded-bottom w-133px p-1" style="background-color: #1E3044; color: #DDDDDD;">
+                    <div class=" fs-8px">{{ displayImageFileName(images.filename) }}</div>
+                    <div class="d-flex fs-8px py-1">
+                      <div class="me-2 fw-bold"><i class="far fa-calendar-alt pe-2"></i>{{images.created_at | date :'dd-MMM-yyyy'}}
+                      </div>
+                      <div class=" fw-bold"><i class="far fa-clock pe-2"></i>{{images.created_at | date : 'HH:mm:ss'}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="download-option cursorPointer">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <div
+                      class="w-25px h-25px bg-white cursor-pointer rounded d-flex justify-content-center align-items-center me-1"
+                      (click)="downloadImg(images.url)">
+                      <i class="fas fa-download text-color"></i>
+                    </div>
+                    <div class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center">
+                      <button class="btn btn-sm p-0 cursor-pointer"
+                        [disabled]="!(loginUserId == comment?.commented_by)"
+                        data-bs-toggle="modal" data-bs-target="#deleteModal"
+                        (click)="showConfirmationModal(comment.id, images.id)"
+                        >
+                        <i class="fas fa-trash text-danger"></i>
+                      </button>
+                    </div>
+                    <div
+                      class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center cursor-pointer ms-1"
+                      (click)="selectImageToDisplay(images, comment.comment_files)"><i class="far fa-eye primary-color"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="selectedCardName == 'history'">
+    <div class="history-height rounded p-2">
+      <div *ngIf="selectedIssue?.status == 'Close'">
+        <div class="fw-700 fs-11 text-color">Completed by</div>
+        <div class="fs-11 fw-600">
+          <ng-container *ngFor="let item of listOfUsers">
+            <ng-container *ngIf="item?.id == closedStatusData.metadata.user_id">
+              <span [title]="item?.email">{{item?.email}}</span>
+            </ng-container>
+          </ng-container>
+        </div>
+        <div class="fs-11 fw-500">{{closedStatusData?.datetime | date :'dd-MMM-yyyy'}} / {{closedStatusData?.datetime | date : 'HH:mm:ss'}}</div>
+      </div>
+      <div class="fs-11 mt-3" *ngFor="let row of historyData">
+        <div class="d-flex align-items-center" *ngIf="row.log_type != 'tag' || row.log_type != 'assignor'">
+          <ng-container *ngFor="let item of listOfUsers">
+            <ng-container *ngIf="item?.id == row.metadata.user_id">
+              <div
+                class="m-w-20px w-20px h-20px selectedCard text-white rounded-circle d-flex align-items-center justify-content-center me-1 ">
+                {{item.name.slice(0, 1) | uppercase}}</div>
+              <div [title]="item.name" class="fw-700">{{item.name | titlecase}}</div>
+              <div class="">
+                <span class="ps-1 fw-600" *ngIf="row.log_type == 'status_change'"> Changed the status </span>
+                <span class="ps-1 fw-600" *ngIf="row.log_type == 'comment'"> Added a comment </span>
+                <span class="ps-1 fw-600" *ngIf="row.log_type == 'action_creation'"> Created this action </span>
+                <span class="ps-1 fw-600" *ngIf="row.log_type == 'issue_creation'"> Created this issue </span>
+                <span class="ps-1 fw-600" *ngIf="row.log_type == 'risk_rating'"> Changed the risk rating </span>
+                <span class="ps-1 fw-600" *ngIf="row.log_type == 'escalated'"> Escalated this issue </span>
+                <span class="ps-2 fw-500">
+                  {{row.datetime | date :'dd-MMM-yyyy'}} at {{row.datetime | date : 'HH:mm:ss'}}
+                </span>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+        <div class="d-flex align-items-center" *ngIf="row.log_type == 'tag'">
+          <ng-container *ngFor="let item of listOfUsers">
+            <ng-container *ngIf="item?.id == row.metadata.tagged_by">
+              <div
+                class="m-w-20px w-20px h-20px bg-danger rounded-circle d-flex align-items-center justify-content-center me-1 ">
+                {{item.name.slice(0, 1) | uppercase}}</div>
+              <div [title]="item.name" class="fw-700">{{item.name | titlecase}}</div>
+              <div><span class="fw-600 ps-2"> Assigned to </span>
+                <span class="fw-700">
+                  <ng-container *ngFor="let item of listOfUsers">
+                    <ng-container *ngIf="item?.id == row.metadata.who_was_tagged">
+                      <span [title]="item.name">{{item.name | titlecase}}</span>
+                    </ng-container>
+                  </ng-container>
+                </span>
+                <span class="fw-500 ps-1">
+                  {{row.datetime | date :'dd-MMM-yyyy'}} at {{row.datetime | date : 'HH:mm:ss'}}
+                </span>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+        <div class="d-flex align-items-center" *ngIf="row.log_type == 'assignor'">
+          <ng-container *ngFor="let item of listOfUsers">
+            <ng-container *ngIf="item?.id == row.metadata.assignor">
+              <div
+                class="m-w-20px w-20px h-20px bg-danger rounded-circle d-flex align-items-center justify-content-center me-1 ">
+                {{item.name.slice(0, 1) | uppercase}}</div>
+              <div [title]="item.name" class="fw-700">{{item.name | titlecase}}</div>
+              <div><span class="fw-600 ps-2"> Assignor to </span>
+                <span class="fw-700">
+                  <ng-container *ngFor="let item of listOfUsers">
+                    <ng-container *ngIf="item?.id == row.metadata.re_assignor">
+                      <span [title]="item.name">{{item.name | titlecase}}</span>
+                    </ng-container>
+                  </ng-container>
+                </span>
+                <span class="fw-500 ps-1">
+                  {{row.datetime | date :'dd-MMM-yyyy'}} at {{row.datetime | date : 'HH:mm:ss'}}
+                </span>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+        <div class="d-flex align-items-center mt-2" *ngIf="row.log_type == 'status_change'">
+          <div>
+            <button class="btn btn-sm fs-11 fw-600"
+              [ngClass]="row.metadata.from_status == 'Close' ? 'status-dropdown-close' : 'status-dropdown-open'">{{row.metadata.from_status}}</button>
+          </div>
+          <div class="mx-2 text-basic"> <i class="fas fa-arrow-right"></i> </div>
+          <div>
+            <button class="btn btn-sm fs-11 fw-600"
+              [ngClass]="row.metadata.to_status == 'Close' ? 'status-dropdown-close' : 'status-dropdown-open'">{{row.metadata.to_status}}</button>
+          </div>
+        </div>
+        <div class="d-flex align-items-center mt-2" *ngIf="row.log_type == 'risk_rating'">
+          <div>
+            <button class="btn btn-sm me-2 text-white fs-10px "
+              [ngClass]="{'veryLow' : row.metadata.old_rating == 1, 'low' : row.metadata.old_rating == 2, 'medium' : row.metadata.old_rating == 3, 'high' : row.metadata.old_rating == 4, 'veryHigh' : row.metadata.old_rating == 5}">{{returnRatingName(row.metadata.old_rating)}}</button>
+          </div>
+          <div class="mx-2 text-basic"> <i class="fas fa-arrow-right"></i> </div>
+          <div>
+            <button class="btn btn-sm me-2 text-white fs-10px"
+              [ngClass]="{'veryLow' : row.metadata.new_rating == 1, 'low' : row.metadata.new_rating == 2, 'medium' : row.metadata.new_rating == 3, 'high' : row.metadata.new_rating == 4, 'veryHigh' : row.metadata.new_rating == 5}">{{returnRatingName(row.metadata.new_rating)}}</button>
+          </div>
+        </div>
+        <div class="d-flex align-items-center opacity-75 mt-2" *ngIf="row.log_type == 'comment'">
+          <ng-container *ngFor="let item of row.metadata.comment">
+            <span class="fw-800 fs-11px" *ngIf="containsSpecialChars(item)">{{returnUserMail(item) | titlecase }}</span>
+            <span class="pe-1" *ngIf="!containsSpecialChars(item) && item?.length >=1">{{item}}</span>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<div class="modal fade" id="actionCommentImageViewer" data-bs-backdrop="static" data-bs-keyboard="false"
+  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div data-bs-dismiss="modal" aria-label="Close" class="mx-2 text-basic fs-11 cursorPointer"> <i
+            class="fas fa-arrow-left pe-1"></i> Back</div>
+        <div class="w-75 text-center">
+          <div class="att text-basic fs-11 fw-800">Attachments for {{currentId == 'action_id' ? 'action' : 'observation'}} comment</div>
+        </div>
+      </div>
+      <div class="modal-body h-400px">
+        <div class="d-flex">
+          <div class=" left-part scroll">
+            <div class="d-flex p-1"
+              *ngFor="let images of arrayOfImages">
+              <div class="imageComments position-relative mt-2" (click)="onImageSelect(images)">
+                <div class="img pe-2 pb-2" id="modalImage">
+                  <img
+                    *ngIf="images.url.includes('.jpg') || images.url.includes('.jpeg') || images.url.includes('.png')"
+                    [src]="images.url" width="125px" height="110px" class="rounded">
+                    <span *ngIf="images?.url?.includes('.pdf')" class="inline-block ms-2" style="width: 125px; height:110px">
+                      <i class="fas fa-file-pdf primary-color fs-72px"></i>
+                      </span>
+                </div>
+                <div class="download-option-action">
+                  <div class=" fs-8 issueImageName text-white px-2">{{images?.filename}}</div>
+                  <div class="d-flex justify-content-center align-items-center mt-2">
+                    <div
+                      class="w-25px h-25px bg-white cursorPointer rounded d-flex justify-content-center align-items-center me-1"
+                      (click)="downloadImg(images?.url, false)">
+                      <i class="fas fa-download text-color"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="fullImage pt-1 pe-1" style="width: 590px;">
+            <div class="fullHeight">
+              <div
+                class="px-2 fs-12px bg-image-popup h-30px rounded text-white d-flex align-items-center justify-content-between">
+                <div class="issueImageName">{{selectedImage?.['filename']}}</div>
+                <div class="d-flex align-items-center justify-content-end w-310px">
+                  <!-- <div class="pe-2">{{selectedImage?.['created_by']}}</div> -->
+                  <div>{{selectedImage?.['created_at'] | date :'dd-MMM-yyyy'}} | </div>
+                  <div class="ms-1">{{selectedImage?.['created_at'] | date :'HH:mm:ss'}}</div>
+                </div>
+              </div>
+              <div class="w-100 image-height pt-1">
+                <div
+                  *ngIf="selectedImage?.['url']?.includes('.jpg') || selectedImage?.['url']?.includes('.jpeg') || selectedImage?.['url']?.includes('.png')"
+                  id="popupMarkedImageDiv" class="fullHeight fullWidth"
+                  [ngClass]="selectedImage?.['url']?'img-zoom':''">
+                  <div class="h-100 d-flex" [ngClass]="{'scalize': selectedMode}">
+                    <img *ngIf="selectedImage?.['url']" id="popupModalImage" class="m-auto fullWidth"
+                      height="100%" [ngClass]="{'target': selectedMode}" src="{{selectedImage?.['url']}}"
+                      alt="Image">
+                  </div>
+                </div>
+                <ng-container *ngIf="selectedImage?.url?.includes('.pdf')">
+                  <app-support-doc-pdf></app-support-doc-pdf>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="commentImageViewer" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div data-bs-dismiss="modal" aria-label="Close" class="mx-2 text-basic fs-11 cursor-pointer"> <i
+                  class="fas fa-arrow-left pe-1"></i> Back</div>
+              <div class="w-75 text-center">
+                <div class="att text-basic fs-11 fw-800">Attachments for observations</div>
+              </div>
+            </div>
+            <div class="modal-body h-400px">
+              <div class="d-flex">
+                <div class="w-135px left-part scroll">
+                  <div class="d-flex p-1"
+                    *ngFor="let images of arrayOfImages">
+                    <div class="imageComments position-relative mt-2" (click)="onImageSelect(images)">
+                      <div class="img pe-2 pb-2" id="modalImage">
+                        <img
+                          *ngIf="images.url.includes('.jpg') || images.url.includes('.jpeg') || images.url.includes('.png')"
+                          [src]="images.url" width="125px" height="110px" class="rounded-corners">
+                          <span *ngIf="images?.url?.includes('.pdf')" class="inline-block ms-2" style="width: 125px; height:110px">
+                            <i class="fas fa-file-pdf primary-color fs-72px"></i>
+                            </span>
+                      </div>
+                      <div class="download-option">
+                        <div class=" fs-8 issueImageName text-white px-2">{{images?.url}}</div>
+                        <div class="d-flex justify-content-center align-items-center mt-2">
+                          <div
+                            class="w-25px h-25px bg-white cursor-pointer rounded d-flex justify-content-center align-items-center me-1"
+                            (click)="downloadImg(images?.url, false)">
+                            <i class="fas fa-download text-color"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="fullImage pt-1 pe-1">
+                  <div class="fullHeight">
+                    <div
+                      class="px-2 fs-12 bg-image-popup h-30px rounded text-white d-flex align-items-center justify-content-between">
+                      <div class="issueImageName">{{selectedImageName}}</div>
+                      <div class="d-flex align-items-center justify-content-end w-310px">
+                        <!-- <div class="pe-2">{{selectedImage?.['created_by']}}</div> -->
+                        <div>{{selectedImage?.['created_at'] | date :'dd-MMM-yyyy'}} | </div>
+                        <div class="ms-1">{{selectedImage?.['created_at'] | date : 'HH:mm:ss'}}</div>
+                      </div>
+                    </div>
+                    <div class="w-100 image-height pt-1">
+                      <div
+                        *ngIf="selectedImage?.['url']?.includes('.jpg') || selectedImage?.['url']?.includes('.jpeg') || selectedImage?.['url']?.includes('.png')"
+                        id="popupMarkedImageDiv" class="fullHeight fullWidth"
+                        [ngClass]="selectedImage?.['url']?'img-zoom':''">
+                        <div class="fitDivCss d-flex w-100 h-100" [ngClass]="{'scalize': selectedMode}">
+                          <img *ngIf="selectedImage?.['url']" id="popupModalImage" class="m-auto w-100 h-100" [ngClass]="{'target': selectedMode}" src="{{selectedImage?.['url']}}"
+                            alt="Image">
+                        </div>
+                      </div>
+                      <ngx-extended-pdf-viewer *ngIf="selectedImage?.url?.includes('.pdf')"
+                        [src]="selectedImage?.url" [useBrowserLocale]="true" [textLayer]="true" height="85%"
+                        [showHandToolButton]="true" [zoom]="'page-width'" [showOpenFileButton]="false"
+                        [showFindButton]="false" [showBookmarkButton]="false" [showPropertiesButton]="false"
+                        [showSpreadButton]="true">
+                      </ngx-extended-pdf-viewer>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Delete Pop-up -->
+      <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" id="deleteConfirmation">
+          <div class="modal-content">
+            <div class="text-center border-bottom">
+              <div class="modal-title text-danger p-2" id="exampleModalLabel">Confirmation</div>
+            </div>
+            <div class="modal-body text-center">
+
+            <div>Are you sure, delete the Action comment image?</div>
+            </div>
+            <div class="text-center p-1 mb-2">
+              <button type="button" class="btn btn-sm btn-basic text-color fw-700 fs-10px"
+                (click)="deleteObservation()">YES</button>
+              <button type="button" class="btn btn-sm btn-outline-basic text-color fw-700 ms-2 fs-10px "
+                data-bs-dismiss="modal">NO</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete Image Pop-up -->
+      <div class="modal fade" id="deleteModals" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" id="deleteConfirmation">
+          <div class="modal-content">
+            <div class="text-center border-bottom">
+              <div class="modal-title text-danger p-2" id="exampleModalLabel">Confirmation</div>
+            </div>
+            <div class="modal-body text-center">
+              <div>Are you sure, delete the Comment?
+              </div>
+            </div>
+            <div class="text-center p-1 mb-2">
+              <button type="button" class="btn btn-sm btn-basic text-color fw-700 fs-10px"
+                (click)="deleteObservations()">YES</button>
+              <button type="button" class="btn btn-sm btn-outline-basic text-color fw-700 ms-2 fs-10px "
+                data-bs-dismiss="modal">NO</button>
+            </div>
+          </div>
+        </div>
+      </div>

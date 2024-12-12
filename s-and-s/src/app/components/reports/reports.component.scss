@@ -1,0 +1,884 @@
+
+.selectedItem {
+  border-left: 3px solid #006699;
+  background-color: #cce6ff;
+  color: #006699;
+  font-weight: bolder;
+}
+
+.errors {
+  color: red;
+  opacity: 0.60;
+}
+
+.side-bar-height {
+  height: calc(100vh - 75px);
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.border-color-basic {
+  border: 1px solid #006699;
+}
+
+.selectedFilter{
+  font-size: 10px;
+  color: #006699;
+  font-weight: 600;
+  font-family: "Montserrat";
+  // width: 50px;
+}
+
+.w-90px {
+  width: 90px;
+}
+
+.w-110px {
+  width: 110px;
+}
+
+.unit-selection {
+  position: relative;
+}
+
+.filterHeight {
+  height: 100%;
+  max-height: 65px;
+  padding: 13px 21px 12px 47px;
+}
+
+.auto-grow {
+  min-width: 187px;
+  width: 100%;
+}
+
+//   .ng-dropdown-panel {
+//     width: auto;
+//   }
+// }
+
+// .filterHeight select {
+// position: relative;
+//   border: 1px solid #BEBEBE;
+//   width: 187px;
+//   height: 40px;
+//   border-radius: 4px;
+//   padding: 10px 13px 11px 18px;
+//   appearance: none;
+// }
+
+// i.fas.fa-angle-down {
+//   position: absolute;
+//   right: 18px;
+//   top: 50%;
+//   font-size: 17px;
+//   color: #313A46;
+//   line-height: 0;
+//   transform: translate(50%, -50%);
+// }
+.month {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.month>div {
+  position: relative;
+  margin-left: 15px;
+}
+
+.onBoarded-table-height {
+  height: calc(100vh - 120px);
+}
+
+::ng-deep datatable-header-cell-template-wrap {
+  font-size: 11px;
+}
+// ::ng-deep #selectdPersons1 .ng-select .ng-select-container{
+//   font-weight: 500 !important;
+// }
+::ng-deep #selectdPersons1 .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value{
+  font-size: 11px !important;
+}
+#selectdPersons2 ::ng-deep .ng-select .ng-select-container {
+  font-size: 12px !important;
+}
+#selectdPersons2 .ng-select ::ng-deep .ng-arrow {
+  display: none;
+}
+#selectdPersons2 .ng-select ::ng-deep .ng-arrow-wrapper {
+  height: 10px;
+  width: 14px;
+  background-image: url(/assets/icons/downArrow.png);
+  background-repeat: no-repeat;
+  background-size: 9px 6px;
+  margin-right: 13px;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+#selectdPersons2 .ng-select-opened ::ng-deep .ng-arrow-wrapper {
+  background-image: url(/assets/icons/upArrow.png);
+}
+#selectdPersons2 ::ng-deep .ng-select .ng-arrow-wrapper .ng-arrow {
+  pointer-events: none;
+  display: none !important;
+  height: 0;
+  width: 0;
+  position: relative;
+}
+#selectdPersons1 .ng-select ::ng-deep .ng-arrow {
+  display: none;
+}
+#selectdPersons1 .ng-select ::ng-deep .ng-arrow-wrapper {
+  height: 10px;
+  width: 14px;
+  background-image: url(/assets/icons/downArrow.png);
+  background-repeat: no-repeat;
+  background-size: 9px 6px;
+  margin-right: 13px;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+#selectdPersons1 .ng-select-opened ::ng-deep .ng-arrow-wrapper {
+  background-image: url(/assets/icons/upArrow.png);
+}
+#selectdPersons1 ::ng-deep .ng-select .ng-arrow-wrapper .ng-arrow {
+  pointer-events: none;
+  display: none !important;
+  height: 0;
+  width: 0;
+  position: relative;
+}
+
+::ng-deep .ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
+  background-color: #E2F5FF;
+  color: #006699;
+  font-size: 11px !important;
+}
+
+.input-border {
+  border: none;
+  // outline: none;
+}
+
+.form-control {
+  padding: 0px;
+}
+
+.route-nav #back-button {
+  border: none;
+  background-color: transparent;
+  color: #047fbd;
+  width: 30px;
+}
+
+.scroll {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.position {
+  position: fixed;
+  top: 60px;
+  left: 0;
+}
+
+.cancel-button {
+  width: 86px;
+  border: 0;
+  background-color: none;
+  border-radius: 5px;
+}
+
+.side-bar-fieldset {
+  padding-left: 2px;
+  border: 1px solid #cecece;
+  border-radius: 7px;
+  opacity: 1;
+  margin-bottom: 9px;
+  width: 100%;
+  min-height: 45px;
+}
+
+.side-bar-legend {
+  font-size: 11px;
+  font-weight: bolder;
+  float: none;
+  width: auto;
+  padding: 0;
+  margin-left: 10px;
+  margin-bottom: 0;
+  line-height: inherit;
+}
+
+.dropdown-bg-color {
+  background-color: #f8f9fa !important;
+}
+
+.modal.show .modal-dialog.modal-lg {
+  max-width: 900px !important;
+}
+
+.modal-dialog {
+  max-width: 929px !important;
+}
+
+.heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  color: #006699;
+  font-size: 30px;
+  width: 100%;
+  font-weight: 600;
+  font-family: "Montserrat";
+  text-transform: uppercase;
+  opacity: 1;
+}
+
+.date-format-class {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-around;
+  margin-top: 18px;
+}
+
+.input-group>.form-control:focus,
+.input-group>.form-select:focus {
+  box-shadow: unset;
+}
+
+.date-format-class-element {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Montserrat";
+  letter-spacing: 0px;
+  color: #1e3044;
+  opacity: 1;
+}
+
+.date-format-class-inside-element {
+  font-size: 14px;
+  font-weight: 600;
+  font-style: "Montserrat";
+  letter-spacing: 0px;
+  color: #1e3044;
+  opacity: 1;
+}
+
+.row-element {
+  display: flex;
+  flex-direction: row;
+}
+
+.customize{
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Montserrat";
+  letter-spacing: 0px;
+  line-height: 22px;
+  color: #006699;
+}
+::ng-deep .select-dropDown .ng-select .ng-select-container {
+  color: #333 !important;
+  background-color: #fff !important;
+  border-radius: 4px !important;
+  border: 0px solid #ccc !important;
+  /* max-height: 15px !important; */
+  min-height: 15px !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+.side-bar-fieldset {
+  padding-left: 2px;
+  border: 1px solid #cecece;
+  border-radius: 7px;
+  opacity: 1;
+  margin-bottom: 9px;
+  width: 100%;
+  min-height: 45px;
+}
+
+.side-bar-legend {
+  font-size: 12px;
+  font-weight: bolder;
+  float: none;
+  width: auto;
+  padding: 0;
+  margin-left: 10px;
+  margin-bottom: 0;
+  line-height: inherit;
+}
+
+.border-none{
+  border: none;
+}
+
+.rating-radius{
+  border-radius: 3px;
+}
+
+.w-10px{
+  width: 10px;
+}
+
+.h-15px{
+  height: 15px;
+}
+
+.share-with-blue {
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Montserrat";
+  letter-spacing: 0px;
+  line-height: 22px;
+  color: #006699;
+  display: block;
+  opacity: 1;
+  padding: 20px 0 10px;
+  position: relative;
+  margin: 0;
+}
+
+.selected-users-label {
+  font-family: "Montserrat";
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0px;
+  color: #006699;
+  opacity: 1;
+  margin: 0 0 15px 0;
+  line-height: 1.3;
+}
+
+.select-label {
+  position: relative;
+}
+
+.select-label-el {
+  font-family: "Montserrat";
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0px;
+  color: #1e3044;
+  opacity: 1;
+  display: unset;
+  position: absolute;
+  line-height: unset;
+  top: 0;
+  z-index: 9;
+  color: #1e3044;
+  left: 10px;
+  background: #ffff;
+  padding: 0 4px;
+}
+
+.select-box {
+  position: relative;
+  padding: 14px 0 0 0;
+}
+
+.btn-class {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  margin-top: 45px;
+}
+
+.btn-main {
+  width: 120px;
+}
+
+.generate-pop-up {
+  color: white;
+  width: 225px;
+  padding: 11px 0;
+  border-radius: 5px;
+  height: 40px;
+  background-color: #006699;
+  display: flex;
+  line-height: 1.3;
+  font-size: 13px;
+  font-weight: 400;
+  justify-content: center;
+  border-color: #006699;
+  align-items: center;
+  margin: 10px;
+}
+
+.generate {
+  color: white;
+  border-color: #006699;
+  background-color: #006699;
+}
+
+.generate-pop-up i.fa.fa-plus {
+  margin: 0 15px 0 0;
+}
+
+.modal-title i.fas.fa-file-alt::before {
+  margin: 0 15px 0 0;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.back-btn {
+  border: 1px solid #006699;
+  color: #006699;
+  padding: 11px 0;
+  border-radius: 5px;
+  background-color: #ffffff;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  width: 153px;
+  height: 40px;
+  display: flex;
+  padding: 10px 0;
+  font-weight: 600;
+}
+
+// .selected-users {
+//   margin-top: 20px;
+// }
+::ng-deep .ngx-datatable.material .datatable-row-wrapper {
+  border-top: none
+}
+
+
+
+.result-count {
+  color: #5D636A;
+  font-weight: 600;
+}
+
+::ng-deep .datatable-header {
+  border-bottom: unset !important;
+}
+
+.result {
+  width: 100%;
+  max-width: 8%;
+  font-size: 11px;
+  padding: 0px;
+  color: #5D636A;
+}
+
+.pagination-ngx {
+  width: 100%;
+  max-width: 95%;
+}
+
+::ng-deep .datatable-pager {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.generate-btn {
+  font-weight: 600;
+  color: white;
+  padding: 11px 0;
+  border-radius: 5px;
+  background-color: #006699;
+  justify-content: center;
+  border-color: #006699;
+  align-items: center;
+  margin: 10px;
+  display: flex;
+  width: 153px;
+  height: 40px;
+  padding: 10px 0;
+}
+
+.generate-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 0;
+  width: 100%;
+}
+
+.generateReport-btn {
+  width: 225px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  color: white;
+  border-radius: 5px;
+  background-color: #006699;
+  font-size: 12px !important;
+}
+
+.createSchedule-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  border-radius: 5px;
+  background-color: #E2F5FF;
+  color: #006699;
+  border-color: #006699;
+}
+
+
+.cal-img {
+  height: 18px;
+  width: 18px;
+}
+
+.generate-report-modal {
+  padding: 60px 119px 60px;
+}
+
+.generate-report-modal .modal-header {
+  border: unset;
+  padding: unset;
+}
+
+.generate-report-modal .modal-body {
+  padding: 25px 0 0 0;
+}
+
+.generate-report-modal .date-format-class-element {
+  margin: 0;
+}
+
+.generate-report-modal .date-format-class-element~.date-format-class-element {
+  margin: 0 0 0 40px;
+}
+
+.date-format-class .date-format-class-inside-element {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0px;
+  color: #1e3044;
+  opacity: 1;
+  border-right: unset;
+  border-radius: 3px 0px 0px 3px;
+}
+
+.generate-report-modal .input-group-append.border-class {
+  border: unset;
+}
+
+.generate-report-modal .calendar {
+  border: 1px solid #bebebe;
+  padding: 0 !important;
+  border-radius: 3px !important;
+}
+
+.generate-report-modal .calendar:hover {
+  background: unset;
+}
+
+.create-report-modal {
+  padding: 5px 0px 10px;
+}
+
+.create-report-modal .modal-header{
+  border-bottom: 2px solid #dee2e6;
+}
+
+.create-report-modal .modal-body{
+  padding: 0px 119px;
+}
+
+.fs-12{
+  font-size: 12px;
+}
+
+.w-25{
+  width: 25%;
+}
+
+.date-format-class-element label {
+  display: unset;
+  position: absolute;
+  line-height: unset;
+  top: -13px;
+  z-index: 9;
+  color: #1e3044;
+  left: 10px;
+  background: #ffff;
+  padding: 0 4px;
+}
+
+.custom-select {
+  position: relative;
+}
+
+.date-format-class-element .row-element {
+  padding: 14px 0 0 0;
+}
+
+.modal-list {
+  padding: 0;
+}
+
+.modal-list li {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+input[name="mydate"] {
+  background: transparent;
+  color: #1E3044;
+  font-weight: 600;
+  margin: 0px 16px;
+  height: 40px;
+  font-size: 16px;
+}
+
+.msg-generate {
+  color: #2196F3;
+  font-size: 14px;
+}
+
+.datatable-footer-inner {
+  flex-direction: column;
+}
+
+.view-file {
+  color: #006699;
+  border-color: #006699;
+  font-size: 10px;
+}
+
+.view-file:hover {
+  color: white;
+  background-color: #006699;
+}
+
+
+#dateSelect ::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label{
+  transform: translateY(-1.28125em) scale(0.75) perspective(100px) translateZ(0.001px);
+  -ms-transform: translateY(-1.28125em) scale(0.75);
+  width: 100%;
+  display: none;
+}
+#dateSelect ::ng-deep .mat-form-field {
+  display: inline-block;
+  position: relative;
+  text-align: left;
+  width: 100% !important;
+  padding: 0px 12px !important;
+  border-radius: 3px !important;
+  background-color: white !important;
+}
+#dateSelect ::ng-deep .mat-input-element:disabled {
+  color: rgba(0,0,0);
+  font-weight: 700;
+  padding-top: 4px;
+}
+#dateSelect ::ng-deep .mat-form-field-infix{
+  display: block;
+  position: relative;
+  flex: auto;
+  min-width: 0;
+  width: 100%;
+}
+#dateSelect ::ng-deep .mat-form-field-infix {
+  padding: 0px !important;
+  border-top: 0px solid transparent !important;
+}
+#dateSelect ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline{
+  height: 1px;
+  display: none !important;
+}
+#dateSelect ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  padding-bottom: 8px !important;
+  padding-top: 4px !important;
+}
+#dateSelect ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-suffix .mat-datepicker-toggle-default-icon {
+  width: 16px;
+}
+::ng-deep .ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell {
+  font-weight: 600 !important;
+  font-size: 11px !important;
+}
+::ng-deep .datatable-icon-left:before{
+  font-size: 10px !important;
+}
+::ng-deep .datatable-icon-right:before{
+  font-size: 10px !important;
+}
+::ng-deep .datatable-icon-skip:before {
+  font-size: 23px !important;
+}
+::ng-deep .datatable-icon-prev:before {
+  font-size: 23px !important;
+}
+::ng-deep .ngx-datatable .datatable-footer .datatable-footer-inner .datatable-pager .pager li > a {
+  font-size: 11px !important;
+}
+::ng-deep .fa-plus:before {
+  font-size: 11px !important;
+}
+::ng-deep .ng-dropdown-panel .scrollable-content{
+  font-size: 11px
+}
+#selectdPersons1 .ng-select ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items {
+
+  max-height: 115px !important;
+ 
+}
+
+.active {
+  border-bottom: 4px solid #FFBC00;
+  color: #006699 !important;
+  opacity: 1 !important;
+  font-size: 12px !important;
+}
+
+.nactive {
+  // border-bottom: 5px solid #FFBC00;
+  color: #006699 !important;
+  opacity: 0.5 !important;
+  font-size: 12px !important;
+}
+
+.border-none{
+  border: none;
+}
+
+input[id="role"]::placeholder {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #999;
+  margin-left: 5px !important;
+}
+
+ .noWrap {
+  white-space: nowrap;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
+
+::ng-deep .select-dropDown .ng-select .ng-select-container {
+  color: #333 !important;
+  background-color: #fff !important;
+  border-radius: 4px !important;
+  border: 0px solid #ccc !important;
+  // max-height: 15px !important;
+  min-height: 15px !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+.select-dropDown ::ng-deep .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-placeholder {
+  top: 2px; 
+  padding-bottom: 5px;
+  padding-left: 3px;
+  font-size:13px;
+}
+
+.time-picker {
+  border: none;
+  outline: none !important;
+  box-shadow: none;
+}
+
+.time-picker:focus {
+  outline: none !important;
+  border: none !important;
+}
+
+.time-picker::before {
+  outline: none !important;
+  border: none !important;
+}
+
+.time-picker-container {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 0 10px;
+  align-items: center;
+}
+
+.time-picker-container {
+  border: none;
+}
+
+//phase-2 css
+
+.page-bg-color{
+  background-color: #f4f7fc;
+}
+.bg-white{
+  background-color: white !important;
+}
+
+#table-container ::ng-deep.ngx-datatable.material .datatable-body {
+  position: relative;
+  height: calc(100vh - 200px) !important;
+  overflow-y: auto;
+  overflow-X: hidden;
+}
+
+#selectdPersons2 ::ng-deep .ng-select .ng-select-container {
+  color: #333;
+  background-color: #fff;
+  width: 130px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  min-height: 30px;
+  align-items: center;
+}
+
+#selectdPersons3 ::ng-deep .ng-select .ng-select-container {
+  color: #333;
+  background-color: #fff;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  min-height: 30px;
+  align-items: center;
+}
+
+#selectdPersons2 ::ng-deep .ng-select.ng-select-single .ng-select-container {
+  height: 30px; 
+}
+
+
+#selectdPersons3 ::ng-deep .ng-select.ng-select-single .ng-select-container {
+  height: 30px; 
+}
+
+.filterHeight {
+  height: 40px;
+ }
+
+ .ngx-datatable.material {
+  box-shadow: none !important;
+}
+
+#table-container ::ng-deep .ngx-datatable .datatable-footer .datatable-footer-inner {
+  display: flex;
+  align-items: center;
+  width: 70%;
+}
+

@@ -1,0 +1,304 @@
+<div [ngClass]="{'show':this.isRouteClicked,'hide':!this.isRouteClicked}"
+  class="route-nav border scroll side-bar-height position bg-body p-2">
+  <div class="d-flex mb-2">
+    <button id="back-button" (click)="onRouteClicked()" style="margin-right: auto">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <button class="btn btn-basic btn-sm me-2 w-60px fw-600"
+      [disabled]="!applyBtnDisabled"
+      (click)="applyFilters(true); safetyAndSurveillanceCommonService.sendMatomoEvent('Apply filter to view observations', 'Observations filter')">APPLY</button>
+    <button class="btn btn-outline-basic btn-sm w-60px fw-600"
+      (click)="onObsFilterReset(); safetyAndSurveillanceCommonService.sendMatomoEvent('Reset to view all observations', 'Observations filter')">RESET</button>
+  </div>
+  <div class="route-nav-blocks">
+    <div class="audit-checkbox mb-4">
+<input type="checkbox" [(ngModel)]="audit_based_observation" (ngModelChange)="this.applyBtnDisabled = true"> Show Audit Observations
+      
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">{{selectedPlantDetails?.[0]?.zone_nomenclature}} Name</legend>
+        <!-- <select id="zoneName" class="form-control form-control-sm" [(ngModel)]="selectedObsZone"
+          (ngModelChange)="onObsFilterChange(1, false)">
+          <option *ngFor="let zone of obsZones" value="{{zone}}">{{zone}}</option>
+        </select> -->
+        <ng-select [items]="obsZones" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedObsZone"
+          placeholder="Select zones" (ngModelChange)="onObsFilterChange(1, false); this.applyBtnDisabled = true" [closeOnSelect]="false">
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div class="ng-value" *ngFor="let item of items | slice:0:1">
+              <span class="ng-value-label" *ngIf="items.length > 1" [title]="item">{{item | hideInfo}}</span>
+              <span class="ng-value-label" *ngIf="items.length == 1" [title]="item">{{item}}</span>
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            </div>
+            <div class="ng-value" *ngIf="items.length > 1">
+              <span class="ng-value-label">{{items.length - 1}} more...</span>
+            </div>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+            {{item}}
+          </ng-template>
+          <ng-template ng-footer-tmp>
+            <div class="d-flex justify-content-between">
+              <button (click)="this.applyBtnDisabled = true; selectedAllZones()" class="btn btn-sm btn-basic fs-10px" [disabled]="obsZones?.length == selectedObsZone?.length">Select all</button>
+              <button (click)="this.applyBtnDisabled = true; unSelectAllZones()" class="btn btn-sm btn-basic ms-2 fs-10px" [disabled]="obsZones?.length !== selectedObsZone?.length">Unselect all</button>
+            </div>
+          </ng-template>
+        </ng-select>
+      </fieldset>
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Categories</legend>
+        <ng-select [items]="obsCategories" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedObsCategory"
+          placeholder="Select categories" (ngModelChange)="onObsFilterChange(2, false); this.applyBtnDisabled = true" [closeOnSelect]="false">
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div class="ng-value" *ngFor="let item of items | slice:0:1">
+              <span class="ng-value-label" [title]="item">{{item | hideInfo}}</span>
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            </div>
+            <div class="ng-value" *ngIf="items.length > 1">
+              <span class="ng-value-label">{{items.length - 1}} more...</span>
+            </div>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+            {{item}}
+          </ng-template>
+          <ng-template ng-footer-tmp>
+            <div class="d-flex justify-content-between">
+              <button (click)="this.applyBtnDisabled = true; selectedAllCategories()" class="btn btn-sm btn-basic fs-10px" [disabled]="obsCategories?.length == selectedObsCategory?.length">Select all</button>
+              <button (click)="this.applyBtnDisabled = true; unSelectAllCategories()" class="btn btn-sm btn-basic ms-2 fs-10px" [disabled]="obsCategories?.length !== selectedObsCategory?.length">Unselect all</button>
+            </div>
+          </ng-template>
+        </ng-select>
+      </fieldset>
+    </div>
+    <div class="select-vehicle d-flex justify-content-between">
+      <fieldset class="side-bar-fieldset1">
+        <legend class="side-bar-legend">Start Time</legend>
+        <input type="time" [(ngModel)]="selectedObsTime[0]" step="1" (change)="selectStartTime()">
+      </fieldset>
+      <fieldset class="side-bar-fieldset1">
+        <legend class="side-bar-legend">End Time</legend>
+        <input type="time" [(ngModel)]="selectedObsTime[1]" step="1"  (change)="selectEndTime()">
+      </fieldset>
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Mode</legend>
+        <ng-select [items]="obsModes" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedObsMode"
+          placeholder="Select mode" (ngModelChange)="fetchObsDates(false)" [closeOnSelect]="false">
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div class="ng-value" *ngFor="let item of items | slice:0:1">
+              <span class="ng-value-label" *ngIf="items.length > 1">{{item.label | hideInfo}}</span>
+              <span class="ng-value-label" *ngIf="items.length == 1">{{item.label}}</span>
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            </div>
+            <div class="ng-value" *ngIf="items.length > 1">
+              <span class="ng-value-label">{{items.length - 1}} more...</span>
+            </div>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+            {{item.label}}
+          </ng-template>
+          <ng-template ng-footer-tmp>
+            <div class="d-flex justify-content-between">
+              <button (click)="this.applyBtnDisabled = true; selectedAllModes()" class="btn btn-sm btn-basic fs-10px" [disabled]="obsModes?.length == selectedObsMode?.length">Select all</button>
+              <button (click)="this.applyBtnDisabled = true; unSelectAllModes()" class="btn btn-sm btn-basic ms-2 fs-10px" [disabled]="obsModes?.length !== selectedObsMode?.length">Unselect all</button>
+            </div>
+          </ng-template>
+        </ng-select>
+      </fieldset>
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Risk Rating</legend>
+        <ng-select [items]="riskRatings" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedRiskRating"
+          placeholder="Filter by Ratings" (ngModelChange)="fetchObsDates(false)" [closeOnSelect]="false"
+          >
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div class="ng-value" *ngFor="let item of items | slice:0:1">
+              <span class="ng-value-label"><em class="fas fa-star-half-alt pe-2"></em>{{getRiskRatingName(item)}}</span>
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            </div>
+            <div class="ng-value" *ngIf="items.length > 1">
+              <span class="ng-value-label">{{items.length - 1}} more...</span>
+            </div>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index" let-value="item$">
+            <div class="d-flex align-items-center">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>
+              <div class="w-10px h-15px mx-2 rating-radius" [ngStyle]="{'background-color': returnBackGroundColor(item)}"></div>{{getRiskRatingName(item)}}
+            </div>
+          </ng-template>
+        </ng-select>
+      </fieldset>
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Status</legend>
+        <ng-select [items]="faultsChoice" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedStatus"
+          placeholder="Filter by Status" (ngModelChange)="fetchObsDates(false)"
+          >
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div class="ng-value" *ngFor="let item of items | slice:0:1">
+              <span class="ng-value-label"><em class="fas fa-clipboard-list pe-2"></em>{{item == 'Archive' ? 'Archived' : (item == 'Snooze' ? 'Snoozed' : item)}}</span>
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            </div>
+            <div class="ng-value" *ngIf="items.length > 1">
+              <span class="ng-value-label">{{items.length - 1}} more...</span>
+            </div>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+            <em class="fas fa-clipboard-list mx-2"></em>
+            {{item == 'Archive' ? 'Archived' : (item == 'Snooze' ? 'Snoozed' : item)}}
+          </ng-template>
+        </ng-select>
+      </fieldset>
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Sort By</legend>
+        <select id="sortBy" class="form-control form-control-sm" [(ngModel)]="selectedSortBy"
+          (ngModelChange)="fetchObsDates(false)">
+          <option *ngFor="let sortBy of sortByList" value="{{sortBy.key}}">{{sortBy.value}}</option>
+        </select>
+      </fieldset>
+    </div>
+    <!-- <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Display Type</legend>
+        <select id="displayType" class="form-control form-control-sm" [(ngModel)]="selectedDisplayType"
+          (ngModelChange)="fetchObsDates()">
+          <option *ngFor="let type of displayTypes" value="{{type}}">{{type}}</option>
+        </select>
+      </fieldset>
+    </div> -->
+
+    <!-- The bellow Drop down will be shown to user based on the isPermitEnabled -->
+    <ng-container *ngIf="isPermitEnabled">
+      <!-- <div class="select-vehicle">
+        <fieldset class="side-bar-fieldset">
+          <legend class="side-bar-legend">Permit Number</legend>
+          <ng-select [items]="permitList" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedPermit"
+            placeholder="Filter by Permit Number" (ngModelChange)="fetchObsDates(false); addPermitData(selectedPermit, false, true)"
+            >
+            <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+              <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                <span class="ng-value-label" *ngIf="items.length > 1"><em class="fas fa-clipboard-list pe-2"></em>{{item | hideInfo}} </span>
+                <span class="ng-value-label" *ngIf="items.length == 1"><em class="fas fa-clipboard-list pe-2"></em>{{item}} </span>
+                <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+              </div>
+              <div class="ng-value" *ngIf="items.length > 1">
+                <span class="ng-value-label">{{items.length - 1}} more...</span>
+              </div>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+              <em class="fas fa-clipboard-list mx-2"></em>{{item}}
+            </ng-template>
+          </ng-select>
+        </fieldset>
+      </div> -->
+      <div class="select-vehicle">
+        <fieldset class="side-bar-fieldset">
+          <legend class="side-bar-legend">Type of permit</legend>
+          <!-- [disabled]="selectedDisplayType === 'Videos'" -->
+          <ng-select [items]="permitTypeList" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedPermitType"
+            placeholder="Filter by Type of permit" (ngModelChange)="fetchObsDates(false)"
+            >
+            <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+              <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                <span class="ng-value-label" *ngIf="items.length > 1"><em class="fas fa-clipboard-list pe-2"></em>{{item | hideInfo}}</span>
+                <span class="ng-value-label" *ngIf="items.length == 1"><em class="fas fa-clipboard-list pe-2"></em>{{item}}</span>
+                <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+              </div>
+              <div class="ng-value" *ngIf="items.length > 1">
+                <span class="ng-value-label">{{items.length - 1}} more...</span>
+              </div>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+              <em class="fas fa-clipboard-list mx-2"></em>{{item}}
+            </ng-template>
+          </ng-select>
+        </fieldset>
+      </div>
+      <div class="select-vehicle">
+        <fieldset class="side-bar-fieldset">
+          <legend class="side-bar-legend">Nature of work</legend>
+          <!-- [disabled]="selectedDisplayType === 'Videos'" -->
+          <ng-select [items]="natureWorkList" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedNature"
+            placeholder="Filter by Nature of work" (ngModelChange)="fetchObsDates(false)"
+            >
+            <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+              <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                <span class="ng-value-label" *ngIf="items.length > 1"><em class="fas fa-clipboard-list pe-2"></em>{{item | hideInfo}}</span>
+                <span class="ng-value-label" *ngIf="items.length == 1"><em class="fas fa-clipboard-list pe-2"></em>{{item}}</span>
+                <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+              </div>
+              <div class="ng-value" *ngIf="items.length > 1">
+                <span class="ng-value-label">{{items.length - 1}} more...</span>
+              </div>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+              <em class="fas fa-clipboard-list mx-2"></em>{{item}}
+            </ng-template>
+          </ng-select>
+        </fieldset>
+      </div>
+      <div class="select-vehicle">
+        <fieldset class="side-bar-fieldset">
+          <legend class="side-bar-legend">Vendor Name</legend>
+          <!-- [disabled]="selectedDisplayType === 'Videos'" -->
+          <ng-select [items]="vendorList" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedVendors"
+            placeholder="Filter by Vendor" (ngModelChange)="fetchObsDates(false)"
+            >
+            <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+              <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                <span class="ng-value-label" *ngIf="items.length > 1"><em class="fas fa-clipboard-list pe-2"></em>{{item | hideInfo}}</span>
+                <span class="ng-value-label" *ngIf="items.length == 1"><em class="fas fa-clipboard-list pe-2"></em>{{item}}</span>
+                <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+              </div>
+              <div class="ng-value" *ngIf="items.length > 1">
+                <span class="ng-value-label">{{items.length - 1}} more...</span>
+              </div>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+              <em class="fas fa-clipboard-list mx-2"></em>{{item}}
+            </ng-template>
+          </ng-select>
+        </fieldset>
+      </div>
+      <div class="select-vehicle">
+        <fieldset class="side-bar-fieldset">
+          <legend class="side-bar-legend">Issuer Name</legend>
+          <!-- [disabled]="selectedDisplayType === 'Videos'" -->
+          <ng-select [items]="issuerList" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedIssuers"
+            placeholder="Filter by Issuer" (ngModelChange)="fetchObsDates(false)"
+            >
+            <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+              <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                <span class="ng-value-label" *ngIf="items.length > 1"><em class="fas fa-clipboard-list pe-2"></em>{{item | hideInfo}}</span>
+                <span class="ng-value-label" *ngIf="items.length == 1"><em class="fas fa-clipboard-list pe-2"></em>{{item}}</span>
+                <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+              </div>
+              <div class="ng-value" *ngIf="items.length > 1">
+                <span class="ng-value-label">{{items.length - 1}} more...</span>
+              </div>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+              <em class="fas fa-clipboard-list mx-2"></em>{{item}}
+            </ng-template>
+          </ng-select>
+        </fieldset>
+      </div>
+    </ng-container>
+  </div>
+</div>

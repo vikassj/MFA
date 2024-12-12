@@ -1,0 +1,35 @@
+<div style="height: 25px; width: 40%; border: 1px solid black;" style="display: inline-flex;">
+  <div style="width: 100%; display: flex; align-items: center;">
+    <div *ngFor="let unit of selectedUnits  | slice:0:2; let i=index;" style="width: 75px; white-space: nowrap;">
+      <div class="unit" matTooltip={{unit.name}} matTooltipClass="custom-tooltip-units-filter">
+        <div style="margin-left: 5px; text-overflow: ellipsis; overflow: hidden;">
+          {{unit.name}}
+        </div>
+        <div (click)="removeFromFilters(unit.id)" class="remove-unit-button "> x </div>
+      </div>
+    </div>
+    <div class="ms-2 fs-8px" *ngIf="(selectedUnits.length - 2) > 0"> + {{selectedUnits.length - 2}} {{selectedUnits.length - 2 > 1 ? selectedPlantDetails?.[0]?.unit_nomenclature + 's' : selectedPlantDetails?.[0]?.unit_nomenclature}}</div>
+  </div>
+    <div class="view-all-container" (click)="toggleDropdown()">
+      <div class="view-all" for="down-arrow" role="button">
+        View all
+      </div>
+    <div class="dropdown-arrow" id="down-arrow"><i class="fas fa-chevron-down"></i></div>
+    </div>
+  </div>
+
+
+  <div  class="all-units-dropdown px-2" *ngIf="dropdown && selectedUnits.length > 0">
+  <div class="arrow-pointer"></div>
+    <div class="all-units-header">
+      All {{selectedPlantDetails?.[0]?.unit_nomenclature}}s
+    </div>
+    <div class="units-container">
+      <div *ngFor="let unit of selectedUnits; let i=index;" class="all-unit">
+          <div class="unit-name-container">
+            {{unit.name}}
+          </div>
+          <div class="remove-unit-button" (click)="removeFromFilters(unit.id)"> x </div>
+      </div>
+    </div>
+  </div>

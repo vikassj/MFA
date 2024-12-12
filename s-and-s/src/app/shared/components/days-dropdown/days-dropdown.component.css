@@ -1,0 +1,74 @@
+.days-dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border: 1px solid #BEBEBE;
+    border-radius: 4px;
+    opacity: 1;
+    height: 30px;
+    width: 120px;
+    margin-left: 40px;
+  }
+
+  option {
+    width: 150px;
+  }
+
+  
+/* .dropdown{
+    display: inline-block;
+  } */
+  .dropdown-style{
+    position: absolute;
+    z-index: 10 !important;
+    background-color: white !important;
+    margin-top: 145px;
+    max-height: 250px;
+    overflow-y: auto;
+  }
+  .dropdown-style::-webkit-scrollbar{
+    width: 2px;
+  }
+  .cursor-pointer{
+    cursor: pointer;
+  }
+  .options{
+    padding: 0px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+    margin-top: 10px;
+    height: 100%;
+  }
+  
+  .select-border-bottom {
+    width: 100%;
+    padding: 10px
+  }
+  .text-dark-blue{
+    color: #1E3044;
+  }
+
+  .fs-11{
+    font-size: 11px;
+  }
+  .fs-12{
+    font-size: 12px;
+  }
+  .fs-13{
+    font-size: 13px;
+  }
+  .fs-14{
+    font-size: 14px;
+  }
+
+  .w-150px{
+    width: 150px;
+  }
+  .fw-bold{
+    font-weight: 800 !important;
+  }
+  .opacity50{
+    opacity: 0.5;
+  }
+  
+  

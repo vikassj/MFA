@@ -1,0 +1,218 @@
+<!-- Sidebar -->
+<div class="main-heading">
+  <span>
+    <button
+      id="back-button"
+      [routerLink]="['/safety-and-surveillance/audit']"
+      routerLinkActive="router-link-active"
+    >
+      <i class="fas fa-arrow-left"></i>
+    </button>
+  </span>
+  <span class="heading">CONFIGURE CHECKLIST</span>
+</div>
+<div class="main-container">
+  <div class="sidebar">
+    <div class="title">Activity</div>
+
+    <div class="left px-2 w-30 fs-16">
+      <!-- <div class="d-flex justify-content-between my-2 py-2 add-activity">
+            <span class="px-3 text">Add New Activity</span>
+            <span class="px-3 add-btn">+ Add</span>
+        </div> -->
+      <div
+        class="activites-drop"
+        *ngFor="let item of activitiesandSubActivites; let i = index"
+      >
+        <div
+          class="d-flex justify-content-between my-2 py-2 b-radius cursor-pointer"
+          (click)="openActivity(i)"
+          [ngClass]="{ 'bg-blue': item.name == selectedActivity }"
+        >
+          <span class="px-3">{{ item.name }}</span>
+          <span
+            class="px-3"
+            role="button"
+            *ngIf="item.sub_activities && item.sub_activities.length > 0"
+            ><span *ngIf="!item.open"
+              ><i class="fa fa-angle-down" aria-hidden="true"></i></span
+            ><span *ngIf="item.open">
+              <i class="fa fa-angle-up" aria-hidden="true"></i></span
+          ></span>
+        </div>
+        <div
+          class="sub-activity"
+          *ngIf="
+            item.open && item.sub_activities && item.sub_activities.length > 0
+          "
+        >
+          <div
+            class="d-flex justify-content-between my-2 py-2"
+            *ngFor="let subActivity of item.sub_activities"
+            [ngClass]="{
+              'lightBlue-bg': subActivity.id == selectedSubActivityId
+            }"
+          >
+            <span
+              class="px-3 cursor-pointer"
+              (click)="selectSubActivity(subActivity, item)"
+              >{{ subActivity.name }}</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="title">Preventive Measures</div>
+    <div class="add-preventive-measures" *ngIf="!disableSubmit">
+      <div class="text">Add New Preventive Measures</div>
+      <div class="add" (click)="addPreventiveMeasure()" role="button">
+        + Add
+      </div>
+    </div>
+
+    <form [formGroup]="PreventiveMeasuresForm">
+      <div formArrayName="PreventiveMeasures">
+        <div
+          class="preventive-measure"
+          *ngFor="let measure of PreventiveMeasures().controls; let i = index"
+          [formGroupName]="i"
+        >
+          <div class="remove" *ngIf="!disableSubmit">
+            <button
+              class="btn btn-lg p-0 cursor-pointer onevw"
+              (click)="removePreventiveMeasure(i, measure)"
+            >
+              <i class="fas fa-trash text-danger"></i>
+            </button>
+          </div>
+          <div [id]="'save' + i" class="description">
+            <div class="text" *ngIf="!edit[i]">
+              {{ measure.value.description
+              }}<span
+                *ngIf="
+                  !measure.value.description ||
+                  measure.value.description?.length == 0
+                "
+                class="faded"
+                >Enter description here ...</span
+              >
+            </div>
+            <div class="text-input" *ngIf="edit[i]">
+              <input
+                type="text"
+                formControlName="description"
+                (keypress)="omit_special_char($event)"
+                placeholder="Enter description here ..."
+              />
+            </div>
+            <span class="point8vw" style="color: red"> *</span>
+            <div
+              class="edit cursor-pointer"
+              *ngIf="!edit[i] && !disableSubmit"
+              (click)="changeEdit(i)"
+            >
+              <img
+                class="edit-icon"
+                src="/assets/icons/Icon feather-edit-3.svg"
+              />
+              Edit
+            </div>
+          </div>
+          <div>
+            <div class="options" formArrayName="options">
+              <div
+                class="option"
+                *ngFor="let option of optionsArray(i).controls; let op = index"
+                [formGroupName]="op"
+              >
+                <div class="option-title">
+                  Option {{ op + 1 }}<span class="point8vw" style="color: red"> *</span>
+                </div>
+                <div class="option-value">
+                  <input
+                    type="text"
+                    formControlName="option_key"
+                    [readonly]="op < 3"
+                    (keypress)="omit_special_char($event)"
+                  />
+                  <div
+                    *ngIf="!disableSubmit && op > 2"
+                    class="me-2 cross-icon"
+                    (click)="removeOption(i, op)"
+                  >
+                    <i class="far fa-times-circle fs-14px"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="option-add"
+                (click)="addOption(i)"
+                *ngIf="!disableSubmit"
+              >
+                <button
+                  class="order btn btn-sm h-30px d-flex align-items-center px-2 remove-wb"
+                  type="button"
+                >
+                  <div class="me-2"><i class="fas fa-plus fs-14px"></i></div>
+                  <div class="line-h-12px fs-8px fw-700">ADD</div>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="preventive-remarks">
+            <textarea class="remarks" [readonly]="'true'"></textarea>
+          </div>
+
+          <div class="buttons point8vw" *ngIf="!disableSubmit">
+            <button
+              class="save-btn"
+              [ngClass]="{
+                'disable-btn': !this.PreventiveMeasures().at(i).valid
+              }"
+              (click)="saveChecklist(measure, i)"
+              [disabled]="!this.PreventiveMeasures().at(i).valid"
+            >
+              SAVE
+            </button>
+            <button class="cancel-btn" (click)="resetPreventiveMeasure(i)">
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!-- Buttons -->
+    <div class="buttons submit-btns point8vw" *ngIf="!disableSubmit">
+      <!-- {{ valid }} -->
+      <button
+        class="save-btn"
+        [ngClass]="{
+          'disable-btn':
+            !PreventiveMeasuresForm.valid ||
+            PreventiveMeasures().controls.length == 0 ||
+            valid
+        }"
+        (click)="submitChecklist()"
+        [disabled]="
+          !PreventiveMeasuresForm.valid ||
+          PreventiveMeasures().controls.length == 0 ||
+          valid
+        "
+      >
+        Submit
+      </button>
+      <button
+        class="cancel-btn"
+        [routerLink]="['/safety-and-surveillance/audit']"
+        routerLinkActive="router-link-active"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>

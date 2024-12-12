@@ -1,0 +1,70 @@
+
+
+<div class="bg-light-black right-sidebar-height">
+    <div class=" bg-blue text-white" id="right-insight-header" style="margin: 0px 0px 3px;"> 
+      <div class="d-flex justify-content-between align-items-center">
+
+      <div class="fs-11px text-center w-100">INSIGHTS</div>
+      <div style="cursor: pointer;">
+        <img src="assets/icons/close.svg" class="cross" width="20px" (click)="toggleInsights()">
+      </div>
+    </div>
+      <!-- <div>
+        <img src="assets/icons/close.svg" class="cross pointer" (click)="toggleInsights()">
+      </div> -->
+      <!-- <div class="history py-1">(Provides detailed insight history related to the Observation)</div> -->
+    </div>
+    <div class="w-100 p-2 overflow"  [ngStyle]="{'height': 'calc(100% - ' + getMostCriticalTableHeight() + 'px)'}" >
+      <ng-container *ngIf="insightsAvailable && insightsData?.length">
+        <div *ngFor="let item of insightsData;let i = index" >
+          <div class="bg-white rounded fs-11px mb-2 p-2">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                <!-- <div class="pe-2 text-color">{{item.pin? '': 'Recent '}}{{item.type}} {{item.pin? '#' +item.id : ' '}}</div> -->
+                <div class="pe-2 text-color fw-800">{{item.title}}</div>
+                <div class="pe-2" (click)="showAndHide(i)">
+                  <i  [ngClass]="item.view? 'd-none': 'd-block'" class="fas fa-angle-down  text-color" style="cursor:pointer"></i>
+                  <i  [ngClass]="!item.view? 'd-none': 'd-block'" class="fas fa-angle-up text-color" style="cursor : pointer"></i>
+                </div>
+                <!-- <div [ngClass]="true? 'd-block': 'd-none'" (click)="item.pin ? unPinInsight(item) : pinInsight(item)">
+                  <i class="fa-thumbtack text-color" [ngClass]="{'fas': item.pin, 'far': !item.pin}"></i>
+                  <img [src]="pinIcon" class="h-16px" *ngIf="item.pin" style="cursor: pointer;">
+                  <img [src]="unPinIcon" class="h-16px"  *ngIf="!item.pin" style="cursor: pointer;">
+                </div> -->
+              </div>
+              <!-- <div class="d-flex align-items-center fs-9px opacity-75">
+                <div class="pe-2">{{item.date}} at</div>
+                <div>{{item.time}}</div>
+              </div> -->
+            </div>
+            <!-- <div class="pt-2" [ngClass]="!item.view? 'd-none': 'd-block'">
+              <div class=" opacity-75">{{item.type}} #{{item.id}}</div>
+              <div class=" opacity-75">{{item.evidence}} #{{item.eidenceId}}</div>
+              <div class="text-dark fw-8oo">"{{item.evidence_text}}"</div>
+            </div> -->
+            <div class="pt-2" [ngClass]="!item.view? 'd-none': 'd-block'">
+              <!-- <div class=" opacity-75">{{item.title}}</div> -->
+              <div class=" opacity-75 fw-800">{{item.description}}</div>
+              <!-- <div class="text-dark fw-8oo">"{{item.recommendation}}"</div> -->
+              <div *ngFor="let incidentItem of item?.observation">
+                <div class=" opacity-75 fw-800">* {{incidentItem}}</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </ng-container>
+      <div class="h-100 d-flex justify-content-center align-items-center" *ngIf="!insightsAvailable">
+        <p class="w-55 text-center" style="font-size: 10px ; color: #6B6B6B ; font-style: italic;">Insights will
+          be available in the investigation phase.</p>
+      </div>
+      <div class="h-100 d-flex justify-content-center align-items-center" *ngIf="insightsLoading">
+        <p class="w-55 text-center" style="font-size: 10px ; color: #6B6B6B ; font-style: italic;">Fetching Insights.</p>
+      </div>
+      <div class="h-100 d-flex justify-content-center align-items-center"
+        *ngIf="!insightsData?.length && insightsAvailable && !pinnedInsights?.length && !this.insightsLoading ">
+        <p class="w-55 text-center" style="font-size: 10px ; color: #6B6B6B ; font-style: italic;">No insights
+          to show.</p>
+      </div>
+    </div>
+  </div>    

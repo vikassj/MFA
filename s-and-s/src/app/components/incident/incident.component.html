@@ -1,0 +1,221 @@
+<div *ngIf="!selectedIncidentView">
+  <ng-container *ngIf="!createIncident">
+    <div class="position-relative">
+      <div class="h-45px bg-white justify-content-between d-flex align-items-center px-2 ">
+        <div class="fs-12px text-color cursor-pointer ms-3" (click)="this.filterPopup = true">FILTER</div>
+        <div><button class="fs-11px px-3 btn btn-sm btn-basic"(click)="createNewIncident()" [disabled]="!this.units?.length" >CREATE NEW INCIDENT</button></div>
+        <div></div>
+      </div>
+      <div class="height p-2 ">
+        <div class="w-100 h-100 bg-white" id="incidentList">
+          <ngx-datatable class="material expandable dataTableHeight " [rows]="incidentData"
+            [columnMode]="'force'" [headerHeight]="40" [rowHeight]="'auto'" [messages]="{emptyMessage: 'No incidents recorded'}">
+            <ngx-datatable-column name="Incident Id" >
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <u class="cursor-pointer" (click)="selecteRow(row);">{{row.incident_id}}</u>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Plant">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row.plant}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [name]="selectedPlantDetails?.[0]?.unit_nomenclature">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row.unit_name}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Incident Type">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row.incident_type}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [name]="selectedPlantDetails?.[0]?.zone_nomenclature">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row.zone_name}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Incident Type" [width]="280">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div [innerHtml]="getFactoList(row.incident_factor)"></div>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Fatalities" [width]="135">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{getTotalcount(row.fatality)}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Serious Injuries" [width]="130">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{getTotalcount(row.serious_injury)}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Date of Incident" [width]="160">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <span class="p-1 bg-light-basic rounded px-2" *ngIf="row.incident_date">{{row.incident_date | date : 'dd MMM yyyy'}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Due date" [width]="160">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <span class="p-1 bg-light-basic rounded px-2" *ngIf="row.investigation_due_date">{{row.investigation_due_date | date : 'dd MMM yyyy'}}</span>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Reporter">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div class="d-flex align-items-center">
+                  <ng-container *ngFor="let item of allUserList">
+                    <ng-container *ngIf="item?.id == row.reporter">
+                      <div class="min-w-20px w-20px h-20px bg-danger rounded-circle d-flex align-items-center justify-content-center me-1 text-white ">{{item.name.slice(0, 1) | uppercase}}</div>
+                      <div [title]="item.name">{{item.name | titlecase}}</div>
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Status" [width]="250">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div class="p-1 px-2 rounded " *ngIf="row.status" [ngClass]="row.status == 'closed' ? 'status-btn-closed' : 'status-btn-inprogress'">
+                  {{row.status | incidentStatus}}
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+      </div>
+
+      <div class="filter-popup min-w-200px col-2 bg-body p-2" *ngIf="filterPopup">
+        <div class="d-flex mb-2">
+          <button id="back-button" (click)="this.filterPopup = false" style="margin-right: auto; color: #006699;">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <button class="btn btn-basic btn-sm me-2 w-60px fw-600 px-2 fs-11"(click)="applyFilters();this.filterPopup = false" [disabled]="disableApply">APPLY</button>
+          <button class="btn btn-outline-basic btn-sm w-60px fw-600 px-2 fs-11" (click)="onFilterReset();this.filterPopup = false">RESET</button>
+        </div>
+        <div>
+          <div class="select-vehicle">
+            <fieldset class="side-bar-fieldset">
+              <legend class="side-bar-legend">Due Date</legend>
+              <ng-select [items]="dueDates" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedDates"
+                placeholder="Select dates" (ngModelChange)="onFilterChange()" [closeOnSelect]="false">
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                    <span class="ng-value-label" [title]="item">{{item | hideInfo}}</span>
+                    <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                  </div>
+                  <div class="ng-value" *ngIf="items.length > 1">
+                    <span class="ng-value-label">{{items.length - 1}} more...</span>
+                  </div>
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                  <div class="d-flex align-items-center stakeholders">
+                    <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> <span class="fs-12 ps-1">{{item | date
+                      :'dd MMM yyyy'}}</span> 
+                  </div>
+                </ng-template>
+                <ng-template ng-footer-tmp>
+                  <div class="d-flex justify-content-between">
+                    <button (click)="selectedAllDates()" class="btn btn-sm btn-basic fs-10px">Select all</button>
+                    <button (click)="unSelectAllDates()" class="btn btn-sm btn-basic ms-2 fs-10px">Unselect all</button>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </fieldset>
+          </div>
+          <div class="select-vehicle">
+            <fieldset class="side-bar-fieldset">
+              <legend class="side-bar-legend">Reporter</legend>
+              <ng-select [items]="reporters" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedReporter"
+                placeholder="Select reporter" (ngModelChange)="onFilterChange()" [closeOnSelect]="false" bindLabel="name" dropdownPosition="hidden">
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                    <span class="ng-value-label" [title]="item.name">{{item.name | hideInfo}}</span>
+                    <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                  </div>
+                  <div class="ng-value" *ngIf="items.length > 1">
+                    <span class="ng-value-label">{{items.length - 1}} more...</span>
+                  </div>
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                  <div class="d-flex align-items-center stakeholders">
+                    <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> <span class="fs-12 ps-1">{{item.name | titlecase}}</span>
+                  </div>
+                </ng-template>
+                <ng-template ng-footer-tmp>
+                  <div class="d-flex justify-content-between">
+                    <button (click)="selectedAllReporters()" class="btn btn-sm btn-basic fs-10px">Select all</button>
+                    <button (click)="unSelectAllReporters()" class="btn btn-sm btn-basic ms-2 fs-10px">Unselect all</button>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </fieldset>
+          </div>
+          <div class="select-vehicle">
+            <fieldset class="side-bar-fieldset">
+              <legend class="side-bar-legend">Investigator</legend>
+                <ng-select [items]="investigators.length > 0 ? investigators : []" [multiple]="true"  [closeOnSelect]="false" #obsSearch bindLabel="name" dropdownPosition="hidden"
+                  [(ngModel)]="selectedInvestigators" (ngModelChange)="onFilterChange()" placeholder="Select investigators"
+                  [clearable]="false" class="custo" [disabled]="confirmSubmitUpdateIncident">
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                    <span class="ng-value-label" [title]="item.name">{{item.name | hideInfo}}</span>
+                    <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                  </div>
+                  <div class="ng-value" *ngIf="items.length > 1">
+                    <span class="ng-value-label">{{items.length - 1}} more...</span>
+                  </div>
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                  <div class="d-flex align-items-center stakeholders">
+                    <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> <span class="fs-12 ps-1">{{item.name | titlecase}}</span>
+                  </div>
+                </ng-template>
+                <ng-template ng-footer-tmp>
+                  <div class="d-flex justify-content-between">
+                    <button (click)="selectedAllInvestigators()" class="btn btn-sm btn-basic fs-10px">Select all</button>
+                    <button (click)="unSelectAllInvestigators()" class="btn btn-sm btn-basic ms-2 fs-10px">Unselect all</button>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </fieldset>
+          </div>
+          <div class="select-vehicle">
+            <fieldset class="side-bar-fieldset">
+              <legend class="side-bar-legend">Status</legend>
+              <ng-select [items]="status" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedStatus"
+                placeholder="Select status" (ngModelChange)="onFilterChange()" [closeOnSelect]="false">
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                    <span class="ng-value-label" [title]="item">{{item | incidentStatus}}</span>
+                    <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                  </div>
+                  <div class="ng-value" *ngIf="items.length > 1">
+                    <span class="ng-value-label">{{items.length - 1}} more...</span>
+                  </div>
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                  <div class="d-flex align-items-center stakeholders">
+                    <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> <span class="fs-12 ps-1">{{item | incidentStatus}}</span>
+                  </div>
+                </ng-template>
+                <ng-template ng-footer-tmp>
+                  <div class="d-flex justify-content-between">
+                    <button (click)="selectedAllStatus()" class="btn btn-sm btn-basic fs-10px">Select all</button>
+                    <button (click)="unSelectAllStatus()" class="btn btn-sm btn-basic ms-2 fs-10px">Unselect all</button>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="createIncident">
+   <app-incident-create [units]="units" [zonesList]="zonesList" [loginUserId]="loginUserId" (backToIncidentPage)="closeCreateIncident($event)"></app-incident-create>
+  </ng-container>
+</div>
+
+<div *ngIf="selectedIncidentView">
+  <app-incident-view [incidentData]="incidentData" [totalIncidentData]="tempIncidentData" [selectedIncidentObj]="selectedIncidentObj" [allUserList]="allUserList" [allPlantUsers]="allUserList" [loginUserId]="loginUserId" (backToOverViewTable)="backToOverViewTable($event)" (filterResetEvent)="onFilterReset()"></app-incident-view>
+</div>

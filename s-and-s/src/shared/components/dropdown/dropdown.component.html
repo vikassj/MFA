@@ -1,0 +1,14 @@
+<div class="border rounded dropdown" [style.width]="'155px'">
+  <div
+    class="text-dark-blue fs-14 ff-montserrat  d-flex justify-content-between align-items-center  cursor-pointer"
+    (click)="dropdownShow();preventCloseOnClick()">
+    <div class="fw-bold" [title]="dropdownSelect" style="margin-left: 10px;">{{dropdownSelect | dropdownFideInfo}}</div>
+    <div><img src="/assets/icons/obs-drop-down.svg" alt="" width="10px" style="margin: 7px;"></div>
+  </div>
+  <div class="dropdown-style shadow rounded w-100 py-2" [style.width]="'250px'" *ngIf="sCurveDropdown">
+    <div style="font-weight: 400 !important;" class="options text-dark-blue fs-13 ff-montserrat" *ngFor="let selectItem of dropdownList"
+      [ngClass]="selectItem == dropdownSelect ? 'selected-dropdown':''"
+      (click)="unitNameSelect(selectItem);preventCloseOnClick()">
+      {{selectItem}}</div>
+  </div>
+</div>

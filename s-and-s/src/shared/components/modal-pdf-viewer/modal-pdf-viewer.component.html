@@ -1,0 +1,35 @@
+<div class="modal" id="modalPdfViewer" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static"
+    data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content fullHeight">
+            <div class="modal-header p-2">
+                <h5 class="modal-title text-dark">
+                    <i class="far fa-file-pdf pe-1"></i>
+                    {{name}}
+                </h5>
+                <button class="btn btn-sm btn-light rounded-pill"  id="btn" (click)="downloadImg(url)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                          </svg>
+                        Download
+                  </button>
+
+                <button type="button" class="btn-close pe-3" data-bs-dismiss="modal" aria-label="Close">
+                    <!-- <span aria-hidden="true">&times;</span> -->
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <ngx-extended-pdf-viewer [src]="url" [useBrowserLocale]="true" [textLayer]="true" height="85%"
+                    [showHandToolButton]="true" [zoom]="'page-width'" [showOpenFileButton]="false"
+                    [showFindButton]="false" [showBookmarkButton]="false" [showPropertiesButton]="false" [showDownloadButton]="false"
+                    [showSpreadButton]="true">
+                </ngx-extended-pdf-viewer>
+
+            </div>
+            <div class="modal-footer p-2">
+                <button type="button" class="btn btn-sm btn-light rounded-pill" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

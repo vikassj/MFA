@@ -1,0 +1,47 @@
+.bg-light-black {
+  background-color: #ececec;
+}
+
+.bg-blue {
+  background-color: #006699;
+}
+
+.overflow {
+  overflow-y: auto;
+}
+
+.text-color {
+  color: #006699;
+}
+
+.w-55 {
+  width: 55%;
+}
+
+.right-sidebar-height {
+    height: calc(100vh - 112px);
+  }
+  
+.cross{
+    height: 8px;
+}
+.fs-10px{
+  font-size: 10px;
+}
+.fs-11px{
+  font-size: 11px;
+}
+.history{
+  font-weight: 200;
+  font-style: italic;
+  font-size: 6px;
+  text-align: center;
+  margin: -3px;
+  /* cursor: pointer !important; */
+}
+/* .close{
+  cursor: pointer;
+} */
+.fw-800{
+  font-weight: 800;
+}

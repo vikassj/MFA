@@ -1,0 +1,7 @@
+<ng-container *ngIf="noData">
+  <div echarts [options]="option"  id="chart"></div>
+</ng-container>
+
+<ng-container *ngIf="!noData">
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">No Observations Added to SIF</div>
+</ng-container>

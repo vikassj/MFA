@@ -1,0 +1,171 @@
+::ng-deep .custom-font-size .multiselect-dropdown .dropdown-btn {
+    display: flex !important;
+    height: 30px !important;
+    justify-content: space-around;
+    align-items: center;
+    gap: 8px;
+}
+
+::ng-deep .dropdown-list > ul > li:hover {
+    background-color: #E2F5FF;
+}
+
+::ng-deep .dropdown-list .item1 .multiselect-item-checkbox {
+    border: none !important;
+    padding: none !important;
+}
+
+::ng-deep .multiselect-dropdown .dropdown-btn .selected-item {
+    /* width: max-content; */
+    /* text-overflow: ellipsis; */
+    max-height: 20px;
+    /* width: inherit !important; */
+}
+
+::ng-deep .multiselect-dropdown .dropdown-btn .dropdown-down {
+    display: none !important;
+}
+
+::ng-deep .multiselect-dropdown .dropdown-btn .dropdown-up {
+    display: none !important;
+}
+
+::ng-deep .ng-select.ng-select-multiple .ng-select-container .ng-value-container {
+    padding-top: 0px;
+    flex-wrap: nowrap !important;
+    overflow: hidden !important;
+}
+
+:ng-deep .ng-select .ng-select-container .ng-value-container {
+    padding-left: 45px !important;
+}
+
+::ng-deep .ng-value{
+  background-color: #fff !important;
+}
+
+::ng-deep.ng-select .ng-arrow-wrapper {
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    -webkit-user-select: none;
+    user-select: none;
+    padding-top: 6px;
+    z-index: 1;
+}
+
+.ng-select .ng-select-container {
+    min-height: 20px !important;
+  }
+
+  .ng-select.ng-select-single .ng-select-container {
+    height: 20px !important;
+  }
+
+  ::ng-deep .unit-dropdown-page .ng-select .ng-select-container {
+    color: #333;
+    background-color: #fff;
+    border-radius: 0px;
+    border: none !important;
+    font-size: 10px !important;
+    border: 1px solid #ccc !important;
+    border: none;
+    min-height: 30px;
+    border-radius: 5px;
+    -webkit-box-align: center;
+    align-items: center !important;
+    min-width: 100px;
+  }
+
+.ng-select ::ng-deep .ng-arrow-wrapper {
+    height: 10px;
+    width: 14px;
+    background-image: url(/assets/icons/downArrow.png);
+    background-repeat: no-repeat;
+    background-size: 9px 6px;
+    margin-right: 5px;
+    margin-left: 10px;
+    margin-top: 5px;
+  }
+.ng-select-opened ::ng-deep .ng-arrow-wrapper {
+    background-image: url(/assets/icons/upArrow.png);
+  }
+
+  ::ng-deep .ng-select .ng-arrow-wrapper .ng-arrow {
+    pointer-events: none;
+    display: none !important;
+    height: 0;
+    width: 0;
+    position: relative;
+  }
+  ::ng-deep .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+    font-size: .9em;
+    margin-bottom: 0px !important;
+    color: #333;
+    background-color: #ebf5ff;
+    border-radius: 2px;
+    margin-right: 5px;
+  }
+
+.fs-11{
+  font-size: 11px;
+}
+.fs-12{
+  font-size: 12px;
+}
+.toggleView{
+  cursor: pointer;
+}
+
+
+
+.one-liner {
+  /* font-size: 12px; */
+  /* font-weight: 700; */
+  width:90%;
+  margin-right: 8px;
+  display: inline-block;
+  /* important */
+  white-space: nowrap;
+  overflow: hidden;
+
+  &:not(:hover) {
+    text-overflow: ellipsis;
+  }
+
+  /* animate on either hover or focus */
+  &:hover,
+  &:focus {
+    span {
+      display: inline-block;
+      animation-name: scroll-text;
+      animation-duration: 7s;
+      animation-timing-function: linear;
+      animation-delay: 0s;
+      animation-iteration-count: infinite;
+      animation-direction: normal;
+      /* FYI this would be the shorthand:
+        animation: scroll-text 5s ease 0s 2 normal;
+      */
+    }
+  }
+
+  /* define the animation */
+  @keyframes scroll-text {
+    0% {
+      transform: translateX(0%);
+    }
+
+    90% {
+      transform: translateX(-100%);
+    }
+
+    95% {
+      transform: translateX(0%);
+    }
+
+    100% {
+      transform: translateX(0%);
+    }
+  }
+}

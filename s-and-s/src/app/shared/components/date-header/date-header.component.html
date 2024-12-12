@@ -1,0 +1,56 @@
+<div class="date-picker-container">
+  <mat-form-field  appearance="outline" floatLabel='never'>
+    <mat-date-range-input [rangePicker]="rangePicker"
+     [dateFilter]="rangeFilter" [max]="currentDate">
+      <input
+        matStartDate
+        placeholder="Start date"
+        #dateRangeStart
+        [(ngModel)]="startingDate"
+        readonly
+      />
+      <input
+        matEndDate
+        placeholder="End date"
+        #dateRangeEnd
+        [(ngModel)]="endingDate"
+        (dateChange)="dateRangeChange(dateRangeStart, dateRangeEnd)"
+        readonly
+      />
+    </mat-date-range-input>
+    <mat-datepicker-toggle class="pe-3" matSuffix [for]="rangePicker" [disabled]="disableCalendar"></mat-datepicker-toggle>
+    <mat-date-range-picker #rangePicker>
+      <mat-date-range-picker-actions>
+        <div class="date-range">
+          <div class="w-40">
+            <fieldset class="side-bar-fieldset">
+              <legend class="side-bar-legend">From</legend>
+              <div class="input-group p-1 w-100">
+                {{dateFormating(startingDate)}}
+              </div>
+            </fieldset>
+          </div>
+          <i class="fas fa-solid fa-arrow-right" style="margin: auto auto;"></i>
+          <div class="w-40">
+            <fieldset class="side-bar-fieldset">
+              <legend class="side-bar-legend">To</legend>
+              <div class="input-group p-1 w-100">
+                {{dateFormating(endingDate)}}
+              </div>
+            </fieldset>
+          </div>
+        </div>
+        <div>
+          <mat-checkbox [(ngModel)]="isChecked" (change)="onCheckboxChange()" style="margin-right: 50px">All
+            dates</mat-checkbox>
+          <button mat-button matDateRangePickerCancel (click)="onCancelButtonClick()">Cancel</button>
+          <button mat-raised-button color="primary" matDateRangePickerApply
+            (click)="dateRangeChange(dateRangeStart, dateRangeEnd)">
+            Apply
+          </button>
+        </div>
+
+      </mat-date-range-picker-actions>
+    </mat-date-range-picker>
+  </mat-form-field>
+</div>

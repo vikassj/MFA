@@ -1,0 +1,113 @@
+<div class="navDiv" style="margin-left: 7px;" (click)="closeUnitFilter();closeFilterSection()">
+    <div class="innerDaysDiv">
+        <div class="d-flex align-items-center justify-content-between  col-12"
+        style="background-color: white; border: wheat;">
+        <div class="d-flex align-items-center">
+          <div class="border-end border-1 border-danger h-15px line-h-15px" id="button1">
+            <button type="button" 
+              [disabled]="disableBulkUpdate"
+              [ngClass]="disableBulkUpdate ? 'opacity-75' : ''" class="fs-12 fw-600 text-color bg-white border-0" style="padding: 0px 12px;"
+               data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@fat" (click)="getSelectedFlag( true, false, false, false )">BULK UPDATE
+            </button>
+          </div>
+
+          <div class="border-end border-1 border-danger h-15px line-h-15px" id="button2">
+            <button type="button" 
+              [disabled]="!((obsData| filterData: searchText: searchParams)?.length > 0)"
+              [ngClass]="!((obsData| filterData: searchText: searchParams)?.length > 0) ? 'opacity-75' : 'opacity-100'" style="padding: 0px 12px;"
+              (click)="getSelectedFlag( false, true, false, false )" class="fs-12 fw-600 text-color bg-white border-0">
+              EXPORT</button>
+          </div>
+
+          <div [ngClass]="disableBEV ? 'disableBEV' : '' " class=" border-end border-1 border-danger pointer fs-12 fw-600 text-color h-15px line-h-15px" id="button1" style="padding: 0px 12px;"
+            (click)="getSelectedFlag( false, false, true, false ); safetyAndSurveillanceCommonService.sendMatomoEvent('Viewing unit BEV', 'BEV' )">BIRDS EYE
+            VIEW
+          </div>
+
+          <div class=" pointer fs-12 fw-600 text-color" style="padding: 0px 12px;" id="button3"  (click)="getSelectedFlag( false, false, false, true )">
+            FILTER
+          </div>
+        </div>
+        <div [ngClass]="isPermitEnabled ? 'permit-dropDown-div' : 'units-dropDown-div'" class="permit-dropDown-div">
+          <app-units-dropdown></app-units-dropdown>
+        </div>
+        <div *ngIf="isPermitEnabled" class="permit-dropDown-div">
+          <div class="unit-dropdown-page">
+            <ng-select #select [items]="permitList" [bindLabel]="'name'" [bindValue]="'id'" [multiple]="true" [searchable]="false" [dropdownPosition]="'bottom'"
+            [closeOnSelect]="false" [virtualScroll]="true" placeholder="Select permits" [(ngModel)]="selectedPermitList" [clearable]="false" (open)="onOpenStatus('permit')" (close)="onCloseStatus('permit')"
+            (change)="selectPermit($event)" [disabled]="disableDropdown" [searchFn]="testSearch" (search)="onSearch($event)">
+            <ng-template ng-header-tmp>
+              <div class="form-group has-feedback py-1 px-1">
+                <input
+                     type="text" class="form-control permitSearch" id="inputValidation" placeholder="Enter Permit number" (input)="select.filter($event.target.value)"/>
+              </div>
+              <div class="py-1 fs-11 d-flex align-items-center pointer lh-3">
+                <input type="checkbox" class="me-2" (change)="toggleInProgress($event)" [checked]="checkProgress()" id="inProgress"/><label for="inProgress" class="toggleView">In-progress Permits</label>
+              </div>
+              <div class="py-1 fs-11 d-flex align-items-center pointer lh-3 ls">
+                <input type="checkbox" class="me-2" (change)="permitToggleCheckAll($event)"  [checked]="selectedPermitList.length == permitList?.length" id="allPermit"/><label for="allPermit" class="toggleView">All Permits</label>
+              </div>
+            </ng-template>
+        
+            <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+              <div class="ng-value">
+                <span class="ng-value-label fs-12">
+                  <span *ngIf="selectedPermitList?.length != permitList.length" class="pe-1">{{selectedPermitList?.length}} {{selectedPermitList?.length > 1 ? ' Permits' : ' Permit'}}</span>
+                  <span *ngIf="selectedPermitList?.length == permitList.length" class="pe-1">All Permits</span>
+                </span>
+              </div>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <div class="py-1 fs-11 d-flex align-items-center" [ngClass]="item?.name?.length > 17 ?'one-liner':''" title="{{item.name}}">
+                <input id="item-{{index}}" class="me-2 z-index-1" type="checkbox" [checked]="item$.selected" /><span>{{item.name}}</span>
+              </div>
+            </ng-template>
+            <ng-template ng-footer-tmp>
+              <div class="d-flex justify-content-center">
+                <div>
+                  <button class="btn btn-sm btn-basic fs-10px w-150px"  [disabled]="(selectedPermitList?.length) < 1"
+                    (click)="permitApplyBtn(select)">APPLY</button>
+                </div>
+              </div>
+            </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <!-- <div class="" style="padding: 4px; width: 25% !important; border: 1px solid gray; border-radius: 5px; background: white;">
+            <app-dropdown [dropdownList]="units" [selectedUnit]="selectedSideBarItem"
+              (selectedDropdown)="sideBarSelectedItem($event)">
+            </app-dropdown>
+        </div> -->
+
+
+
+      </div>
+    </div>
+    <div [ngClass]="isPermitEnabled ? 'innerNavDiv-permit' : 'innerNavDiv'">
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+              <a class="nav-link" [ngClass]="currentTab == 'observations' ? 'active-tab' : ''" aria-current="page" value="observations" (click)="navigateToTab('observations')">OBSERVATIONS</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [ngClass]="currentTab == 'sif' ? 'active-tab' : ''" value="sif" (click)="navigateToTab('sif')">SIF</a>
+            </li>
+        </ul>
+    </div>
+
+     <div class="d-flex align-items-center fs-11px fw-600 pe-3">
+        <div class="obsDropdownCss fw-600">
+          <ng-select [items]="observationList.length > 0 ? observationList : []" #obsSearch bindLabel="id"
+            [(ngModel)]="selectedObservation" [virtualScroll]="true" (open)="OnOpen()" (search)="OnSearch($event)" (blur)="OnBlue()"
+            dropdownPosition="hidden"
+            (change)="navigateFromSearch()"
+            placeholder="Global Search..." [clearable]="false">
+            <ng-template ng-option-tmp let-item="item">
+              <p class="mb-1 fs-10">Observation#{{item.id}}</p>
+              <span class="fs-10">{{item.unit}}</span>
+            </ng-template>
+          </ng-select>
+        </div>
+     </div>
+
+  </div>

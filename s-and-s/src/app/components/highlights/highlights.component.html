@@ -1,0 +1,483 @@
+<div class="dashboardContainer" [ngClass]="showMap ? 'd-none' : 'd-block'">
+    <div class="row col-12">
+        <div class="col-7 ps-4 bg-white right-sidebar-height">
+            <div class="m-2 d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <div class="fw-bold text-color">SIF Observations</div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="border-bottom border-2 me-3">
+                        <input class="input-border" type="search" [(ngModel)]="searchText" placeholder="Search..." /><i
+                            class="fas fa-search text-color"></i>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div id="obsContainer" class="w-100 card-height scroll">
+                    <ng-container *ngIf="(obsData| filterData: searchText: searchParams).length > 0" #totalObservation>
+                        <div id="obs{{item.faultId}}" class="card card-border-radius pointer observations"
+                            *ngFor="let item of obsData| filterData: searchText: searchParams"
+                            (click)="selectedData(item,true)"
+                            [ngClass]="imageModalData?.faultId == item.faultId ? 'card-select' : ''">
+                            <div class="card-body h-100">
+                                <div class="d-flex align-items-center">
+                                    <div class="content-width d-flex mx-2">
+                                        <div class="col-7 pe-3 border-end">
+                                            <div class="mb-2 d-flex justify-content-between">
+                                                <div class="fw-bold">Observation#{{item.faultId}}</div>
+                                                <div class="d-flex">
+                                                    <div class="me-2 text-color fw-bold"><i
+                                                            class="fas fa-calendar-alt pe-2"></i>{{item.date}}
+                                                    </div>
+                                                    <div class="text-color fw-bold"><i
+                                                            class="far fa-clock pe-2"></i>{{item.time}}</div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-2 overlayCss">
+                                                    <app-iogp-pills [category]="item.riskLevel" [imgHeight]="'50'">
+                                                    </app-iogp-pills>
+                                                    <br />
+                                                </div>
+                                                <div class="w-100">
+                                                    <div class="mb-2 d-flex justify-content-between">
+                                                        <div>
+                                                            <div class="text-color fw-bold">Zone</div>
+                                                            <div class="fw-bold">{{ item.zone }}</div>
+                                                        </div>
+                                                        <div>
+                                                            <div class="text-color fw-bold">Status</div>
+                                                            <div class="fw-bold" [ngClass]="
+                                    item.is_open == 'Open'
+                                      ? 'text-danger'
+                                      : 'text-success'
+                                  ">
+                                                                {{ item.is_open }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div
+                                                        class="d-flex justify-content-between align-items-center w-100">
+                                                        <app-risk-rating class="w-100"
+                                                            [riskRatingLevels]="riskRatingLevels"
+                                                            [selectedRating]="item.ratingDetails.rating"
+                                                            [disabled]="true"></app-risk-rating>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-5 ps-3">
+                                            <div class="text-color fw-bold">Observation</div>
+                                            <div *ngIf="!item.editFlag" class="fs-12px fw-bold"
+                                                title="{{item.observation}}">
+                                                {{item.observation}}</div>
+                                            <ng-container *ngIf="item.editFlag">
+                                                <textarea class="form-control textareaCss" title="{{item.observation}}"
+                                                    [ngModel]="item.observation"
+                                                    (ngModelChange)="editValueChange($event, 'observation', item.observation)"></textarea>
+                                                <p *ngIf="!commonService.alphaNumericWithoutSpaceValidator(item.editObservation)"
+                                                    class="font-italic text-danger mb-0">Observation cannot be empty and
+                                                    shouldn't have space
+                                                    characters</p>
+                                            </ng-container>
+                                            <div class="text-color fw-bold">Recommendations</div>
+                                            <div *ngIf="!item.editFlag" class="fs-12px fw-bold"
+                                                title="{{item.recommendation}}">
+                                                {{item.recommendation}}</div>
+                                            <ng-container *ngIf="item.editFlag">
+                                                <textarea class="form-control textareaCss"
+                                                    title="{{item.recommendation}}" [ngModel]="item.recommendation"
+                                                    (ngModelChange)="editValueChange($event, 'reselecteddatacommendation', item.recommendation)"></textarea>
+                                                <p *ngIf="!commonService.alphaNumericWithoutSpaceValidator(item.editRecommendation)"
+                                                    class="font-italic text-danger mb-0">Recommendation cannot be empty
+                                                    and shouldn't have space
+                                                    characters</p>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </ng-container>
+                    <ng-container *ngIf="(obsData| filterData: searchText: searchParams).length === 0">
+                        <div class="fullHeight fullWidth d-inline-flex">
+                            <h5 class="m-auto text-center">No data available</h5>
+                        </div>
+                    </ng-container>
+
+                </div>
+                <div class="d-flex align-items-center h-50px">
+                    <div class="d-flex align-items-center box-shadow w-100 h-100 px-2">
+                        <div class="min-w-20">
+                            Total: {{totalObservation?.nativeElement?.parentElement?.children.length}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-5 right-sidebar-height bg-body ">
+            <ng-container *ngIf="(obsData| filterData: searchText: searchParams).length > 0 else noObsTemplate">
+                <div class="parent-container h-50 pt-2  " id="image">
+                    <div class="w-100 observation-bar d-flex justify-content-between align-items-center">
+                        <div class=" text-white  ms-2">Observation#{{imageModalData?.faultId}}</div>
+                        <div class=" text-white me-2"><i class="fas fa-calendar-alt pe-2"></i> {{imageModalData?.date}}
+                            <i class="far fa-clock px-2"></i> {{imageModalData?.time}}
+                        </div>
+                    </div>
+
+                    <div class="scene-container image-height" oncontextmenu="return false;">
+                        <div id="markedImageDiv" *ngIf="selectedMediaType === 'markedImage'"
+                            class="me-1 img-zoom rounded h-100 w-100" (dblclick)="resetZoom()"
+                            [ngClass]="selectedImageVideoButton == 'Image' ? 'd-block' : 'd-none'">
+                            <div class="w-100 h-100" [ngClass]="{'scalize': selectedMode}">
+                                <div class="w-100 h-100">
+                                    <img class="w-100 h-100" id="modalImage" [ngClass]="{'target': selectedMode}"
+                                        [src]="imageModalData?.imageUrl"
+                                        (error)="fetchEncryptedImageData('modalImage', imageModalData?.imageUrl)"
+                                        (dblclick)="resetZoom()" crossorigin alt="Image" *ngIf="!noImageAvailble">
+                                    <div class="h-100 d-flex justify-content-center align-items-center"
+                                        *ngIf="noImageAvailble"><img src="no_image" alt="Image"></div>
+                                </div>
+
+                                <div *ngIf="selectedMode">
+                                    <ng-container *ngFor="let point of actionPoints">
+                                        <div class="item-point circle cursor"
+                                            [ngClass]="{'pulse2': sendObservationData.showAnimation}"
+                                            [ngStyle]="{top: point.top + 'px', left: point.left + 'px'}"
+                                            (click)="openAnnotationModal(point)">
+                                            <div>
+
+                                                <a href="#" class="toggle"></a>
+                                            </div>
+                                            <p>{{point.index}}</p>
+                                        </div>
+                                        <div id="content{{point.index}}" class="content right bottom">
+                                            <div class="head">
+                                                <span class="exit cursor">
+                                                    <img src="assets/icons/close.png" alt="Close"
+                                                        (click)="closeAnnotationModal(point.index)" /></span>
+                                                <h6 class="title">Annotation #{{point.index}}</h6>
+                                            </div>
+                                            <div class="body">
+                                                <p>{{point.comment}}</p>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                            <canvas id="canvas"></canvas>
+                        </div>
+
+                        <ng-container *ngIf="selectedMediaType === 'unmarkedImage' && checkboxValue == false">
+                            <img id="modalImage" class="img-zoom d-flex fullHeight fullWidth"
+                                src="{{imageModalData?.rawImageUrl}}"
+                                (error)="fetchEncryptedImageData('modalImage', imageModalData?.rawImageUrl)"
+                                (dblclick)="resetZoom()" crossorigin alt="Image">
+                        </ng-container>
+
+                        <ng-container *ngIf="selectedMediaType === 'markedImage' && checkboxValue == true">
+                            <img id="modalImage" class="img-zoom d-flex fullHeight fullWidth"
+                                src="{{imageModalData?.imageUrl}}"
+                                (error)="fetchEncryptedImageData('modalImage', imageModalData?.imageUrl)"
+                                (dblclick)="resetZoom()" crossorigin alt="Image">
+                        </ng-container>
+                        <ng-container *ngIf="selectedMediaType === 'markedVideo' && checkboxValue == true">
+                            <app-zoomable-video id="modalImage" [attr.src]="imageModalData?.videoUrl"
+                                class="fullHeight fullWidth d-flex w-100" [uuid]="imageModalData?.uuid"
+                                [url]="imageModalData?.videoUrl"></app-zoomable-video>
+                        </ng-container>
+
+                        <ng-container *ngIf="selectedMediaType === 'unmarkedVideo' && checkboxValue == false">
+                            <app-zoomable-video id="modalImage" [attr.src]="imageModalData?.rawVideoUrl"
+                                class="fullHeight fullWidth d-flex w-100" [uuid]="imageModalData?.uuid"
+                                [url]="imageModalData?.rawVideoUrl">
+                            </app-zoomable-video>
+                        </ng-container>
+
+                        <div *ngIf="selectedMediaType === ''"
+                            class="noVideosCss d-flex text-center image-height w-100 justify-content-center align-items-center">
+                            <em class="fas fa-2x fa-video-slash"></em>
+                            <h3>No videos available</h3>
+                        </div>
+                    </div>
+
+                    <div
+                        class="border fw-bold text-color min-w-30px mt-1 px-3 rounded mode-bg-color d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <ng-container *ngIf="selectedType">
+                                <div class="me-3 d-flex align-items-center">
+                                    <input type="checkbox" [(ngModel)]="checkboxValue"
+                                        (ngModelChange)="onSelectedTypeChange('image')" id="marked" name="marked"
+                                        value="Marked" class="me-1"
+                                        [disabled]="(!checkboxValue && !imageModalData?.imageUrl) || (checkboxValue && !imageModalData?.rawImageUrl)" />
+                                    <label for="marked">Marked</label>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="!selectedType">
+                                <div class="me-3 d-flex align-items-center">
+                                    <input type="checkbox" [(ngModel)]="checkboxValue"
+                                        (ngModelChange)="onSelectedTypeChange('video')" id="marked" name="marked"
+                                        value="Marked" class="me-1"
+                                        [disabled]="(!checkboxValue && !imageModalData?.videoUrl) || (checkboxValue && !imageModalData?.rawVideoUrl)" />
+                                    <label for="marked">Marked</label>
+                                </div>
+                            </ng-container>
+
+                            <div class="me-3" *ngIf="userGroup.indexOf('disable_observation_video') === -1">
+                                <div
+                                    class="radius p-1 my-1 all-btn-bg-color text-white icon-color d-flex align-items-center">
+                                    <div class="w-25px pointer h-15px  radius d-flex justify-content-center align-items-center"
+                                        (click)="changeMediaType()" [ngClass]="
+                    selectedType  ? 'btn-bg-color text-color' : ''
+                    ">
+                                        <i class="fas fa-image"></i>
+                                    </div>
+                                    <div class="w-25px pointer h-15px icon-color radius d-flex justify-content-center align-items-center"
+                                        (click)="changeMediaType()" [ngClass]="
+                  !selectedType  ? 'btn-bg-color text-color' : ''
+                    ">
+                                        <i class="fas fa-video"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="me-3 d-flex align-items-center"
+                                *ngIf="canDraw && selectedType && selectedMediaType === 'markedImage'">
+                                <input type="checkbox" id="annotation" name="annotation" class="me-1"
+                                    [ngModel]="selectedMode" (click)="changeMode()" />
+                                <label for="annotation">Annotation mode</label>
+                            </div>
+                        </div>
+                        <div>
+                            <span *ngIf="userGroup?.indexOf('download') > -1" class="mb-0  cursorPointer my-auto"
+                                [ngClass]="{'cursorDisabled': selectedMediaType === ''}" (click)="downloadImage()">
+                                <em class="fas fa-download me-3"></em>
+                            </span>
+                            <span
+                                *ngIf="userGroup?.indexOf('observations_email') > -1 && selectedMediaType === 'markedImage'"
+                                class="cursorPointer ms-3" (click)="openSendObservationModal()"
+                                [ngClass]="shareShows == true ? 'share-bgColor-select':'share-bgColor-noselect'">
+                                <em class="fas fa-share-alt pointer"></em>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 h-50 scroll py-2 parent-position">
+                    <div class="d-flex" *ngIf="!shareShows && !selectedMode">
+                        <div class="col-7 px-1">
+                            <div class="d-flex align-items-center">
+                                <div class="me-2">
+                                    <app-iogp-pills [category]="faultData[0]?.riskLevel" [imgHeight]="'50'">
+                                    </app-iogp-pills>
+                                </div>
+                                <div>
+                                    <div class="mb-2">
+                                        <div class="text-color fs-10px fw-bold">Zone</div>
+                                        <div class="line-height"><small>{{imageModalData?.zone}}</small></div>
+                                    </div>
+                                    <div class="text-color fw-bold">
+                                        {{imageModalData?.riskLevel | iogpName}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-color fs-10px fw-bold">Observations</div>
+                                <div class="fw-bold"><small>{{faultData[0]?.observation}}</small></div>
+                            </div>
+                            <div>
+                                <div class="text-color fs-10px fw-bold">Recommendations</div>
+                                <div class="fw-bold"><small>{{faultData[0]?.recommendation}}</small></div>
+                            </div>
+                            <div class="w-100">
+                                <div class="text-color fs-10px fw-bold">Risk Rating</div>
+                                <div class="d-flex align-items-center">
+
+                                    <app-risk-rating class="w-100" [riskRatingLevels]="riskRatingLevels"
+                                        [selectedRating]="faultData[0]?.ratingDetails.editRating"
+                                        (emitSelectedRating)="saveRiskRating($event, faultData[0]?.observationId)"
+                                        [disabled]="!(userGroup?.indexOf('rating') > -1)">
+                                    </app-risk-rating>
+                                    <div class="w-25px text-end p-1 text-success"><i class="far fa-check-circle fs-4"
+                                        [ngClass]="ratingChanges ? 'pointer':'opacity-50'"
+                                            (click)="updateRiskRating(faultData[0]?.observationId)"
+                                            [disabled]="!(userGroup?.indexOf('rating') > -1) || faultData[0]?.ratingDetails.editRating === 0"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div><small>Rated by</small></div>
+                                <div class="text-color fw-bold" *ngIf="faultData[0]?.ratingDetails.updated_by">
+                                    <small>{{faultData[0]?.ratingDetails.updated_by}}</small>
+                                </div>
+                                <div class="text-color fw-bold" *ngIf="faultData[0]?.ratingDetails.updated_by == ''">
+                                    <small>Not yet
+                                        rated</small></div>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div>
+                                <div class="text-color fs-10px fw-bold">Remarks</div>
+                                <div class="fw-bold">
+                                    <small *ngIf="selectedCardData.remarks">
+                                        {{selectedCardData.remarks}}
+                                    </small>
+                                    <small *ngIf="!selectedCardData.remarks">
+                                        No remarks
+                                    </small>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-color fs-10px fw-bold">Status</div>
+                                <div class="d-flex">
+                                    <div class="fw-bold w-75">
+                                        <small>
+                                            <select class="border-bottom border-dark fw-600 w-100"
+                                                [ngModel]="selectedCardData?.isOpen"
+                                                (ngModelChange)="clearTextArea($event, selectedCardData)"
+                                                [disabled]="(!(userGroup?.indexOf('close') > -1) || selectedCardData.disabled)"
+                                                [ngClass]="selectedCardData?.isOpen == 'Open' ? 'text-danger' : 'text-success'"
+                                                name="slectedItemDate"
+                                                [ngClass]="selectedCardData?.isOpen == 'Open' ? 'text-danger' : 'text-success'">
+                                                <option *ngFor="let selectItem of faultsChoice" [value]="selectItem"  [ngClass]="selectItem == 'Open' ? 'text-danger' : 'text-success'">
+                                                    {{selectItem}}
+                                                </option>
+                                            </select>
+                                        </small>
+                                    </div>
+                                    <div class="w-25px text-end p-1 text-success pointer" (click)="selectedVendor()">
+                                        <div class="d-flex text-color"><img src="assets/icons/edit.svg" width="12px">
+                                            Edit</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="shareShows">
+                        <div>Share Observation#{{imageModalData?.faultId}}</div>
+                        <div>
+                            <form action="/action_page.php">
+                                <fieldset class="overlayCss">
+                                    <legend>Email ID</legend>
+                                    <div class="d-flex justify-content-between align-items-center col-12">
+                                        <div class="pb-1 col-11">
+                                            <input class="border-none form-control h-100 w-100"
+                                                [(ngModel)]="sendObservationData.emailID" name="email"
+                                                placeholder="Enter Email Id" type="text" #chip
+                                                (keyup.enter)="addTag(chip.value);chip.value=''">
+                                        </div>
+                                        <div class="col-1 d-flex align-items-center h-100">
+                                            <i class="fas fa-plus-square btn-outline-basic plus-icon"
+                                                (click)="addTag(chip.value);chip.value=''"></i>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <p *ngIf="msg" class="text-danger font-italic"
+                                    [ngClass]="{'mb-0': sendObservationData.emailIDList.length === 0}">{{msg}}</p>
+                                <div class="text-color fs-10px fw-bold mt-2">Send To</div>
+                                <div class="d-flex flex-wrap mb-2 ">
+                                    <div class="border chip-style mx-2 px-2"
+                                        *ngFor="let item of sendObservationData.emailIDList">
+                                        {{item}}<i class="ms-3 fas fa-times" (click)="removeItem(item)"></i></div>
+                                </div>
+                                <div class="d-flex align-items-end submit-cancel-btn">
+                                    <button type="submit" class="btn btn-basic btn-sm me-2" (click)="sendObservation()"
+                                        [disabled]="sendObservationData.emailIDList.length === 0">SUBMIT</button>
+                                    <button type="reset" class="btn btn-outline-basic btn-sm"
+                                        (click)="resetSendObservationData(); safetyAndSurveillanceCommonService.sendMatomoEvent('Incomplete observation share', 'Share observation')">CANCEL</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div *ngIf="selectedMode">
+                        <app-safety-and-surveillance-annotation [imageModalData]="imageModalData" [trigger]="trigger"
+                            [canvasHeight]="canvasHeight" [canvasWidth]="canvasWidth" [canvasRatio]="canvasRatio"
+                            (selectedAnnotation)="openSelectedAnnotation($event)">
+                        </app-safety-and-surveillance-annotation>
+
+                    </div>
+                    <div *ngIf="confirmMailShow">
+                        <div class=" confirmMail w-100 h-75 shadow- bg-body">
+                            <div class="p-3 border-bottom fw-bold d-flex align-items-center fs-5">
+                                <i class="fas fa-info-circle fs-3 me-3"></i>{{modalHeading}}
+                            </div>
+                            <div class="parent-position">
+                                <div>
+                                    {{modalMessage}}
+                                </div>
+                                <div class="position">
+                                    <button type="submit" class="btn btn-basic btn-sm me-2"
+                                        (click)="onConfirmation()">CONFIRM</button>
+                                    <button type="reset" class="btn btn-outline-basic btn-sm"
+                                        (click)="showConfirmMail()">CANCEL</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+    tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="m-auto py-2">Change Status</div>
+            </div>
+            <div class="modal-body" #container>
+                <div class="w-75 m-auto">
+                    <div>
+                        <div class="text-color fs-10px fw-bold">Status</div>
+                        <div class="fw-bold w-100">
+                            <small>
+                                <select class="border-bottom border-dark  w-100" [ngModel]="selectedCardData?.isOpen"
+                                    (ngModelChange)="clearTextArea($event, selectedCardData)"
+                                    [disabled]="(!(userGroup?.indexOf('close') > -1) || selectedCardData.disabled)"
+                                    name="slectedItemDate"
+                                    [ngClass]="selectedCardData?.isOpen == 'Open' ? 'text-danger' : 'text-success'">
+                                    <option *ngFor="let selectItem of faultsChoice" [value]="selectItem"  [ngClass]="selectItem == 'Open' ? 'text-danger' : 'text-success'"
+                                    [disabled]="this.actionStatus && !(selectItem == 'Snooze' || selectItem == 'Open')">
+                                        {{selectItem}}
+                                    </option>
+                                </select>
+                                <ng-container *ngIf="selectedCardData?.isOpen === 'Snooze'">
+                                    <p class="font-italic mt-2 mb-1"><em class="far fa-clock me-2"></em>Snooze Until</p>
+                                    <kendo-datetimepicker [format]="'dd/MM/yyyy HH:mm'"
+                                        [popupSettings]="{ appendTo: containerRef }"
+                                        [(value)]="selectedCardData.editSnoozeDate" [min]="returnCurrentDateTime()"
+                                        [readOnlyInput]="readOnly">
+                                    </kendo-datetimepicker>
+                                </ng-container>
+                            </small>
+                        </div>
+                        <div class="text-color mt-2 fs-10px fw-bold">Remarks</div>
+                        <div class="fw-bold">
+                            <textarea class="w-100" rows="3" placeholder="Type your remarks here..."
+                                [(ngModel)]="selectedCardData.remarks"
+                                (ngModelChange)="textAreaChange($event, selectedCardData)"
+                                [disabled]="(!(userGroup.indexOf('close') > -1) || selectedCardData.disabled || selectedCardData?.isOpen === 'Open' || selectedCardData?.isOpen === 'Snooze')"
+                                name="remarks"></textarea>
+                        </div>
+
+                        <div class=" w-100 text-center">
+                            <button type="submit" class="btn btn-basic btn-sm me-2"
+                                (click)="submitStatus(selectedCardData)"
+                                [disabled]="(!(userGroup.indexOf('close') > -1) || selectedCardData.disabled || ((selectedCardData?.isOpen =='Close' || selectedCardData?.isOpen =='Closed-No Action' || selectedCardData?.isOpen =='Closed-Action Taken' || selectedCardData?.isOpen =='Closed-False Positive') && selectedCardData.remarks === '') || (selectedCardData?.isOpen === 'Snooze' && selectedCardData.editSnoozeDate === '') || (selectedCardData?.isOpen === 'Archive' && selectedCardData.remarks === ''))">SUBMIT</button>
+                            <button type="reset" class="btn btn-outline-basic btn-sm" data-bs-toggle="modal"
+                                href="#exampleModalToggle" (click)="onStatusCancel(selectedCardData)">CANCEL</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #noObsTemplate>
+    <div class="fullHeight fullWidth d-inline-flex">
+        <h5 class="m-auto text-center">Select a observation to view</h5>
+    </div>
+</ng-template>

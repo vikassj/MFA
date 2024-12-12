@@ -1,0 +1,586 @@
+.createIncidentHeight {
+  height: calc(100vh - 88px);
+  background-color: #f4f7fc;
+  font-family: "Montserrat"!important;
+  font-weight: 800!important;
+}
+
+.required-field{
+  border: 1px solid red !important;
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+
+.cursor-pointer{
+  cursor: pointer;
+}
+.w-65{
+  width: 65%;
+}
+.w-20px{
+  width: 20px;
+}
+.h-20px{
+  height: 20px;
+}
+.h-30px{
+  height: 30px;
+}
+.h-32px{
+  height: 32px;
+}
+.min-h-23px{
+  min-height: 23px;
+}
+.fs-11px{
+  font-size: 11px;
+}
+.fs-12px{
+  font-size: 12px;
+}
+.fs-13px{
+  font-size: 13px;
+}
+.text-color{
+  color: #006699;
+}
+.position-relative{
+  position: relative;
+}
+.filter-popup{
+  height: calc(100% - 5px);
+  /* background-color: red; */
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 10;
+}
+#back-button{
+  border:none;
+  background-color: transparent;
+  color:#047FBD;
+  width: 30px;
+
+  }
+  .w-60px{
+    width: 60px;
+  }
+  .fw-600{
+    font-weight: 600;
+  }
+  .fw-800{
+    font-weight: 800;
+  }
+  .bg-light-blue{
+    background-color: #E2F5FF;
+  }
+
+.triangle1{
+  width: 0; height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 20px solid #006699;
+}
+.triangle2{
+    width: 0;
+    height: 0;
+    border-top: 17px solid transparent;
+    border-bottom: 17px solid transparent;
+    border-left: 23px solid white;
+}
+.triangle-position1{
+  position: absolute;
+  top: -15px;
+  left: 0;
+  z-index: 10;
+}
+.triangle-position2{
+  position: absolute;
+    top: -17px;
+    left: 0px;
+}
+.bg-blue{
+  background-color: #006699;
+}
+.reportData{
+  height: calc(100vh - 142px);
+  overflow-y: auto;
+}
+.incident_date{
+  border: none;
+  outline: none;
+}
+.bg-ash{
+  background-color: #f9f9f9;
+}
+.line-h-10px{
+  line-height: 10px;
+}
+
+
+.script {
+  display: block;
+  position: relative;
+  padding-left: 20px;
+  cursor: pointer;
+  min-height: 13px;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+input[type=checkbox] {
+  visibility: hidden;
+}
+input[type=radio] {
+  visibility: hidden;
+}
+
+.w3docs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 13px;
+  width: 13px;
+  border:1px solid #006699;
+  /* border-radius:3px */
+}
+
+.w3docs-disabled {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 13px;
+  width: 13px;
+  border:1px solid #006699;;
+  /* border-radius:3px */
+}
+
+.script input:checked ~ .w3docs {
+  background-color: #006699;
+  /* border-radius: 3px; */
+}
+.w3docs:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.script input:checked ~ .w3docs:after {
+  display: block;
+}
+.script .w3docs:after {
+  /* // left: 6px;
+  // bottom: 5px;
+  // width: 6px;
+  // height: 6px;
+  // border: solid white;
+  // border-width: 4px 4px 4px 1px; */
+  background-image: url(/assets/Icon-checkbox.svg);
+  z-index: 99;
+  /* // background-size: cover; */
+  background-repeat: no-repeat;
+  background-position: left center;
+  height: 90%;
+  width: 90%;
+  margin-left: 0.8px;
+  color: white;
+}
+
+
+
+
+
+  ::ng-deep .select-vehicle .ng-select .ng-select-container {
+    color: #333;
+    background-color: #fff;
+    border-radius: 4px;
+   border: 0px solid #ccc;
+    min-height: 36px;
+    align-items: center;
+  }
+
+
+  ::ng-deep .select-vehicle .ng-select .ng-select-container {
+    color: #333;
+    background-color: #fff;
+    border-radius: 4px;
+    border: 0px solid #ccc;
+    min-height: 30px !important;
+    align-items: center;
+    font-size: 12px !important;
+  }
+  ::ng-deep .ng-select.ng-select-multiple .ng-select-container .ng-value-container {
+    padding-top: 5px;
+    padding-left: 0px;
+    padding-bottom: 0px;
+  }
+  :ng-deep .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-input {
+    padding: 0px !important;
+  }
+
+
+.side-bar-fieldset {
+  padding-left: 2px;
+  border: 1px solid #CECECE ;
+  border-radius: 7px;
+  opacity: 1;
+  margin-bottom: 9px;
+  width: 100%;
+  min-height: 45px;
+}
+.side-bar-legend {
+  font-size: 12px;
+  font-weight: bolder;
+  float: none;
+  width: auto;
+padding: 0;
+margin-left: 10px;
+margin-bottom: 0;
+line-height: inherit;
+}
+
+
+#incidentList ::ng-deep .ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
+  background-color: #E2F5FF;
+  color: #006699 !important;
+  font-size: 10px !important;
+  font-weight: 600;
+  display: flex;
+  white-space: break-spaces !important;
+  line-height: 12px !important;
+  flex-wrap: wrap;
+  align-items: center;
+}
+#incidentList ::ng-deep .ngx-datatable .datatable-header .datatable-header-cell .sort-btn {
+  line-height: 100%;
+  vertical-align: middle;
+  display: none !important;
+  cursor: pointer;
+}
+#incidentList ::ng-deep .ngx-datatable.material {
+  background: #fff;
+  box-shadow: none;
+}
+#incidentList ::ng-deep .ngx-datatable.material .datatable-body {
+  position: relative;
+  height: calc(100vh - 150px) !important;
+  overflow-y: auto;
+  overflow-x: none;
+}
+
+#incidentList ::ng-deep .ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell {
+  text-align: left;
+  padding: 0.9rem 0.2rem 0.9rem 1.2rem;
+  vertical-align: top;
+  display: flex;
+  align-items: center;
+  word-break: break-all;
+  line-height: 13px;
+  border-top: 0;
+  color: rgba(0, 0, 0, 0.87);
+  transition: width 0.3s ease;
+}
+#incidentList ::ng-deep .ngx-datatable.fixed-header .datatable-header .datatable-header-inner {
+  white-space: nowrap;
+  height: 100% !important;
+}
+#incidentList ::ng-deep .ngx-datatable.material .empty-row {
+  height: 100%;
+  text-align: left;
+  padding: 0.5rem 1.2rem;
+  vertical-align: top;
+  border-top: 0;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  font-size: 14px;
+}
+#incidentList ::ng-deep .ngx-datatable.material .datatable-body .datatable-body-row .actionIson {
+  text-align: left;
+  padding: 0.9rem 0.2rem 0.9rem 1.2rem;
+  vertical-align: top;
+  display: flex;
+  align-items: center;
+  border-top: 0;
+  width: 65px !important;
+  color: rgba(0, 0, 0, 0.87);
+  transition: width 0.3s ease;
+}
+
+
+
+.dropdown{
+  display: inline-block;
+}
+.dropdown-style{
+  position: absolute;
+  /* right: 0px; */
+  z-index: 10 !important;
+  background-color: white !important;
+  margin-top: 2px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+.dropdown-style::-webkit-scrollbar{
+  width: 2px;
+}
+.cursor-pointer{
+  cursor: pointer;
+}
+.options{
+  padding: 0px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.selected-dropdown{
+  background-color: #D2F0FF;
+}
+.options:hover{
+  background-color: #D2F0FF;
+}
+.select-border-bottom {
+  border-bottom: 1.5px solid #EEEEEE;
+}
+.text-dark-blue{
+  color: #1E3044;
+}
+.fs-13{
+  font-size: 13px;
+}
+.fs-14{
+  font-size: 14px;
+}
+.w-150px{
+  width: 150px;
+}
+.fw-bold{
+  font-weight: 800 !important;
+}
+.opacity50{
+  opacity: 0.5;
+}
+.inputTypeNumber{
+  width: calc(100% - 95px);
+  float: right;
+  border: none;
+  outline: none;
+}
+
+.cursor-menu{
+  cursor: context-menu !important;
+}
+
+
+textarea{
+  resize: none;
+  border: none;
+}
+textarea:focus{
+  /* border-color: #047FBD; */
+  outline-color:#C2DBFE;
+
+
+
+}
+.cancel{
+  padding-right: 7px;
+  margin-left: 7px;
+  height: 25px;
+}
+.submit{
+  margin-left: 175px;
+}
+.w-100px{
+  width: 100px;
+}
+.footer{
+  padding-top: 6px;
+}
+.w-120px{
+  width: 120px;
+}
+.start{
+  color: #006699;
+}
+.w-115px{
+  width: 115px;
+}
+.confirm{
+  margin-left: 200px;
+}
+.drop{
+  border-radius: 0.25rem;
+}
+#obsActionDateSelect ::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label{
+  transform: translateY(-1.28125em) scale(0.75) perspective(100px) translateZ(0.001px);
+  -ms-transform: translateY(-1.28125em) scale(0.75);
+  width: 100%;
+  display: none;
+}
+#obsActionDateSelect ::ng-deep .mat-form-field {
+  display: inline-block;
+  position: relative;
+  text-align: left;
+  width: 100% !important;
+  padding: 0px 2px !important;
+  border-radius: 3px !important;
+  height: 27px !important;
+  background-color: white !important;
+}
+#obsActionDateSelect ::ng-deep .mat-input-element:disabled {
+  color: rgba(0,0,0) !important;
+  font-weight: 700 !important;
+  padding-top: 4px !important;
+}
+#obsActionDateSelect ::ng-deep .mat-form-field-infix{
+  display: block;
+  position: relative;
+  flex: auto;
+  min-width: 0;
+  width: 100%;
+}
+#obsActionDateSelect ::ng-deep .mat-form-field-infix{
+  padding: 0px !important;
+  border-top: 0px solid transparent !important;
+  height: 20px !important;
+}
+#obsActionDateSelect ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline{
+  height: 1px;
+  display: none !important;
+}
+#obsActionDateSelect ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  padding-bottom: 7px !important;
+  padding-top: 1px !important;
+  height: 100% !important;
+}
+#obsActionDateSelect ::ng-deep input.mat-input-element {
+  margin-top: -0.0625em;
+  padding-top: 7px;
+}
+#obsActionDateSelect ::ng-deep .mat-form-field-label-wrapper {
+  position: absolute;
+  left: 0;
+  box-sizing: content-box;
+  width: 100%;
+  height: 30px !important;
+  overflow: hidden;
+  pointer-events: none;
+}
+#obsActionDateSelect ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-suffix .mat-datepicker-toggle-default-icon {
+  width: 16px;
+}
+#obsActionDateSelect ::ng-deep .mat-form-field-flex {
+  display: inline-flex;
+  box-sizing: border-box;
+  align-items: center !important;
+  height: 22px !important;
+  width: 100%;
+}
+#dateSelect ::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label,
+#createDateSelect ::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
+  transform: translateY(-1.28125em) scale(0.75) perspective(100px) translateZ(0.001px);
+  -ms-transform: translateY(-1.28125em) scale(0.75);
+  width: 100%;
+  display: none;
+}
+#dateSelect ::ng-deep .mat-form-field {
+  display: inline-block;
+  position: relative;
+  text-align: left;
+  width: 100% !important;
+  padding: 0px 1px !important;
+  border-radius: 3px !important;
+  background-color: #f9f9f9 !important;
+}
+#dateSelect ::ng-deep .mat-input-element:disabled {
+  /* color: rgba(0,0,0);
+  font-weight: 700;
+  padding-top: 4px; */
+  color: black;
+  font-weight: 600;
+  padding-top: 4px;
+  font-family: 'Montserrat';
+}
+#dateSelect ::ng-deep .mat-form-field-infix{
+  display: block;
+  position: relative;
+  flex: auto;
+  min-width: 0;
+  width: 100%;
+}
+#dateSelect ::ng-deep .mat-form-field-infix {
+  padding: 0px !important;
+  border-top: 0px solid transparent !important;
+}
+#dateSelect ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline{
+  height: 1px;
+  display: none !important;
+}
+#dateSelect ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  padding-bottom: 8px !important;
+  padding-top: 4px !important;
+}
+#dateSelect ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-suffix .mat-datepicker-toggle-default-icon {
+  width: 16px;
+}
+::ng-deep .category .ng-select .ng-select-container{
+  background-color: #f9f9f9 !important;
+  border: none !important;
+  min-height: 28px !important;
+  width: 100% !important;
+}
+
+/* ::ng-deep .category .ng-select .ng-arrow-wrapper {
+  width: 13px;
+  padding-right: 1px;
+  background-image: url(/assets/icons/dropDownArrow.png);
+  background-repeat: no-repeat;
+  background-size: 9px 6px;
+    margin-right: 0px;
+    margin-left: 9px;
+    margin-top: 10px;
+    display: flex !important;
+} */
+
+/* ::ng-deep .category .ng-select {
+  .ng-arrow {
+      border-width: 0 !important;
+      &:before {
+        
+          content: url(/assets/icons/dropDownArrow.png);
+        
+
+      }
+}
+} */
+
+::ng-deep .category .ng-select .ng-arrow-wrapper {
+  .ng-arrow {
+  display: none;
+  }
+  
+  height: 14px;
+  width: 14px;
+  background-image: url(/assets/icons/dropDownArrow.png);
+  background-repeat: no-repeat;
+  background-size: 10px 6px;
+  margin-right: 0px;
+  margin-left: 10px;
+  margin-top: 10px;
+  } 
+  .act::after {
+    content: " *";
+    color: red;
+  }
+
+  .blurred-checkbox {
+    border: 2px solid grey;
+    pointer-events: none;
+  }
+
+  .no-pointer {
+    color: grey !important;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  

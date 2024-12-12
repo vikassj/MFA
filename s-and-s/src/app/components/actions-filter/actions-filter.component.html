@@ -1,0 +1,66 @@
+<div *ngIf="this.isRouteClicked === 'no'">
+    <div class="d-flex mb-2">
+        <button id="back-button" style="margin-right: auto">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <button class="btn btn-basic btn-sm me-2 w-60px fw-600">APPLY</button>
+        <button class="btn btn-outline-basic btn-sm w-60px fw-600">RESET</button>
+    </div>
+    <div class="route-nav-blocks">
+        <div class="select-vehicle">
+            <fieldset class="side-bar-fieldset">
+              <legend class="side-bar-legend">Date</legend>
+               <ng-select  [multiple]="true" [closeOnSelect]="false" >
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                    <span class="ng-value-label" [title]="item">{{item | hideInfo}}</span>
+                    <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                  </div>
+                  <div class="ng-value" *ngIf="items.length > 1">
+                    <span class="ng-value-label">{{items.length - 1}} more...</span>
+                  </div>
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                  {{item}}
+                </ng-template>
+                <ng-template ng-footer-tmp>
+                  <div class="d-flex justify-content-between">
+                      <button  class="btn btn-sm btn-basic fs-10px">Select all</button>
+                      <button  class="btn btn-sm btn-basic ms-2 fs-10px">Unselect all</button>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </fieldset>
+          </div>
+          <div class="select-vehicle">
+            <fieldset class="side-bar-fieldset">
+              <legend class="side-bar-legend">Status</legend>
+              <ng-select [multiple]="true" 
+                placeholder="Filter by Status">
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                    <span class="ng-value-label"><em class="fas fa-clipboard-list pe-2"></em>{{item}}</span>
+                    <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                  </div>
+                  <div class="ng-value" *ngIf="items.length > 1">
+                    <span class="ng-value-label">{{items.length - 1}} more...</span>
+                  </div>
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                  <em class="fas fa-clipboard-list mx-2"></em>{{item}}
+                </ng-template>
+              </ng-select>
+            </fieldset>
+          </div>
+          <div class="select-vehicle">
+            <fieldset class="side-bar-fieldset">
+              <legend class="side-bar-legend">Sort By</legend>
+              <select id="sortBy" class="form-control form-control-sm">
+                <option></option>
+              </select>
+            </fieldset>
+          </div>
+    </div>
+</div>  

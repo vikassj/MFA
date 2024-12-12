@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-between">
+<div *ngIf="currentTab == 'home'" class="navDiv">
+  <div class="innerDaysDiv">
+   <app-days-dropdown [dropdownList]="intervalDropdownList" [selectedInterval]="selectedInterval" (selectedDropdown)="intervalSelected($event)"></app-days-dropdown>
+  </div>
+
+  <div *ngIf="selectedInterval === 'Custom'" class="ms-2 my-auto ">
+    <app-date-header></app-date-header>
+  </div>
+
+  <div *ngIf="selectedInterval === 'Yearly'" style="margin-left: -35px;">
+    <app-days-dropdown [dropdownList]="yearlyDropdownList" [selectedInterval]="yearlySelectedInterval" (selectedDropdown)="yearlyIntervalSelected($event)"></app-days-dropdown>
+  </div>
+
+  <div style="display: flex; flex-direction: row; margin-left: -35px;" *ngIf="selectedInterval === 'Monthly'">
+    <select class="ms-5 dropdown fw-600 fs-12" [(ngModel)]="selectMonth" [disabled]="disableDropdown"
+    (change)="monthchange()">
+    <option *ngFor="let month of months" [value]="month.key">
+      {{month.value}}
+    </option>
+  </select>
+    <app-days-dropdown style="margin-left: -35px" [dropdownList]="yearAndMonthDropdownList" [selectedInterval]="yearAndMonthSelectedInterval" (selectedDropdown)="yearAndMonthIntervalSelected($event)"></app-days-dropdown>
+  </div>
+
+  <div class="ms-2" style="width: 170px;">
+    <app-units-dropdown></app-units-dropdown>
+  </div>
+
+</div>
+
+<div class="innerNavDiv">
+  <ul class="nav justify-content-center">
+      <li class="nav-item">
+        <a class="nav-link" [ngClass]="currentTab == 'home' ? 'active' : ''" aria-current="page" value="home" (click)="navigateToTab('home')">HOME</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [ngClass]="currentTab == 'analytics' ? 'active' : ''" value="analytics" (click)="navigateToTab('analytics')">ANALYTICS</a>
+      </li>
+  </ul>
+</div>
+
+<div *ngIf="currentTab == 'home'" class="d-flex align-items-center  fs-11px fw-600 pe-3">
+ <div class="obsDropdownCss">
+  <ng-select #obsSearch [items]="observationList.length > 0 ? observationList : []"  bindLabel="id"
+    [(ngModel)]="selectedObservation" [virtualScroll]="true" (open)="OnOpen()" (search)="OnSearch($event)" (blur)="OnBlue()"
+    dropdownPosition="hidden"
+    (change)="navigateFromSearch(); safetyAndSurveillanceCommonService.sendMatomoEvent('Usage of search observation in home page', 'Search observation')"
+    placeholder="Global Search..." [clearable]="false">
+    <ng-template ng-option-tmp let-item="item">
+      <p class="mb-1 fs-10">Observation#{{item.id}}</p>
+      <span class="fs-10">{{item.unit}}</span>
+    </ng-template>
+  </ng-select>
+ </div>
+</div>
+</div>

@@ -1,0 +1,143 @@
+<div class="me-2">
+</div>
+<ng-container *ngIf="!annotate">
+    <div class="pt-2 px-4">
+        <div class="text-color fw-800">Annotate</div>
+        <div>
+            <div class="mt-2 d-flex justify-content-between" id="collapseAddNewComment">
+                <div id="collapseAddNewCommentDiv">
+                    <div class="text-color fs-10px fw-800">Shape</div>
+                    <div class="d-flex fs-11px mt-2">
+                        <label class="script d-flex align-items-center me-2" style="color:black;">
+                            Box
+                            <input type="radio" id="rectangle" name="createShape" class="me-2" value="rectangle"
+                                [(ngModel)]="canvasData.shape" [checked]="canvasData.shape == 'rectangle'"  (ngModelChange)="onShapeChange()" checked>
+                            <span class="w3docs"></span>
+                        </label>
+                        <label class="script d-flex align-items-center me-2" style="color:black;">
+                            Circle
+                            <input type="radio" id="circle" name="createShape" class="me-2" value="circle"
+                                [(ngModel)]="canvasData.shape" [checked]="canvasData.shape == 'circle'" (ngModelChange)="onShapeChange()" [disabled]="false">
+                            <span class="w3docs"></span>
+                        </label>
+                        <label class="script d-flex align-items-center me-2 cursor-none" style="color:#6c7072;">
+                            Polygon
+                            <input type="radio" id="polygon" name="createShape" class="me-2" value="polygon"
+                                style="border:1px solid #6c7072;" [checked]="canvasData.shape == 'polygon'" [(ngModel)]="canvasData.shape"
+                                (ngModelChange)="onShapeChange()" disabled>
+                            <span class="w3docs" style="border:1px solid #6c7072;"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="text-color fs-10px fw-800">Line Thickness</div>
+                    <div class="mt-1">
+                        <input type="range" class="custom-range" min="1" max="5" [(ngModel)]="canvasData.lineThickness"
+                            (ngModelChange)="onParametersChange()">
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="text-color fs-10px mt-3 fw-800">Line Color</div>
+                <input class="h-10px w-25px mt-2 p-0" type="color" [(ngModel)]="canvasData.lineColor"
+                    (ngModelChange)="onParametersChange()">
+            </div>
+            <div class="d-flex flex-wrap my-3">
+                <div class="w-50 pe-2" id="observationCategoryZone">
+                    <fieldset>
+                        <legend class="fw-800">{{selectedPlantDetails?.[0]?.unit_nomenclature}}</legend>
+                        <div class="dropdown  w-150px ">
+                          <div
+                            class="text-dark-blue w-150px cursorPointer fs-12px ff-montserrat  d-flex justify-content-between align-items-center w-100 cursor-pointer"
+                            (click)="disableUnit?'':unitDropdownShow()">
+                            <div class="fw-bold" *ngIf="selectedObservationUnit" [title]="selectedObservationUnit">{{selectedObservationUnit | textHide}}</div>
+                            <div class="fw-bold"  *ngIf="!selectedObservationUnit" >Select {{selectedPlantDetails?.[0]?.unit_nomenclature}}</div>
+                            <div *ngIf="!disableUnit"><i class="fas fa-chevron-down fs-12px ms-2 pe-1"></i></div>
+                          </div>
+                          <div class="dropdown-style shadow rounded w-100 py-2" *ngIf="unitDropdown">
+                            <div class="options text-dark-blue fs-12px ff-montserrat" (click)="this.selectedObservationUnit = ''; this.unitDropdown = fasle; selectObservationUnit();" >Select {{selectedPlantDetails?.[0]?.unit_nomenclature}}</div>
+                            <div class="options text-dark-blue fs-12px ff-montserrat"
+                              *ngFor="let selectItem of unitList"
+                              [ngClass]="selectItem == selectedObservationUnit ? 'selected-dropdown':''"
+                              (click)="this.selectedObservationUnit = selectItem; this.unitDropdown = fasle; selectObservationUnit(selectItem);">
+                              {{selectItem}}</div>
+                          </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="w-50 ps-2 " id="observationCategoryZone">
+                    <fieldset>
+                        <legend class="fw-800">Select {{selectedPlantDetails?.[0]?.zone_nomenclature}}</legend>
+                        <div class="dropdown  w-150px ">
+                          <div
+                            class="text-dark-blue w-150px cursorPointer fs-12px ff-montserrat  d-flex justify-content-between align-items-center w-100 cursor-pointer"
+                            (click)="disableUnit?'':zoneDropdownShow()">
+                            <div class="fw-bold" *ngIf="selectedObservationZone" [title]="selectedObservationZone">{{selectedObservationZone | textHide}}</div>
+                            <div class="fw-bold"  *ngIf="!selectedObservationZone" >Select {{selectedPlantDetails?.[0]?.zone_nomenclature}}</div>
+                            <div *ngIf="!disableUnit"><i class="fas fa-chevron-down fs-12px ms-2 pe-1"></i></div>
+                          </div>
+                          <div class="dropdown-style shadow rounded w-100 py-2" *ngIf="zoneDropdown">
+                            <div class="options text-dark-blue fs-12px ff-montserrat" (click)="this.selectedObservationZone = ''; this.zoneDropdown = fasle; selectObservationZone(); " >Select {{selectedPlantDetails?.[0]?.zone_nomenclature}}</div>
+                            <div class="options text-dark-blue fs-12px ff-montserrat"
+                              *ngFor="let selectItem of zonesList"
+                              [ngClass]="selectItem == selectedObservationZone ? 'selected-dropdown':''"
+                              (click)="this.selectedObservationZone = selectItem; this.zoneDropdown = fasle; selectObservationZone(); ">
+                              {{selectItem}}</div>
+                          </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="w-50 mt-2 pe-2" id="observationCategoryZoneDescription">
+                    <fieldset>
+                        <legend class="fw-800">Description</legend>
+                        <textarea class="fs-12px" placeholder="Description" [(ngModel)]="selectedObservationDescription"
+                            (keyup)="selectObservationDescription()"></textarea>
+                    </fieldset>
+                </div>
+                <div class="w-50 ps-2 mt-2 " id="observationCategoryZone">
+                    <fieldset>
+                        <legend class="fw-800">Select observation category</legend>
+                        <div class="dropdown  w-150px ">
+                          <div
+                            class="text-dark-blue w-150px cursorPointer fs-12px ff-montserrat  d-flex justify-content-between align-items-center w-100 cursor-pointer"
+                            (click)="categoryDropdownShow()">
+                            <div  *ngIf="selectedObservationCategory" [title]="selectedObservationCategory">{{selectedObservationCategory | textHide}}</div>
+                            <div  *ngIf="!selectedObservationCategory" >Select category</div>
+                            <div><i class="fas fa-chevron-down fs-12px ms-2 pe-1"></i></div>
+                          </div>
+                          <div class="dropdown-style shadow rounded w-100 py-2" *ngIf="categoryDropdown">
+                            <div class="options text-dark-blue fs-12px ff-montserrat" (click)="this.selectedObservationCategory = ''; this.categoryDropdown = fasle; selectObservationCategory(); " >Select category</div>
+                            <div class="options text-dark-blue fs-12px ff-montserrat"
+                              *ngFor="let selectItem of observationCategoryList"
+                              [ngClass]="selectItem == selectedObservationCategory ? 'selected-dropdown':''"
+                              (click)="this.selectedObservationCategory = selectItem[0]; this.categoryDropdown = fasle; selectObservationCategory(); ">
+                              {{selectItem[0]}}</div>
+                          </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <div>
+                <div class="text-color fw-800 fs-12px mt-3">Risk Rating</div>
+                <div class="d-flex mt-2">
+                    <div *ngFor="let item of riskLevels">
+                        <button class="btn btn-sm me-2 fs-10px" [style.color]="setRiskRatingColor(item)"
+                            [style.background-color]="setRiskRatingBackGroundColor(item)"
+                            [style.border-color]="item.colorCode"
+                            (click)="selectRiskRatingObservation(item)">{{item.ratingName}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center p-3  d-flex align-items-center justify-content-center  fs-10px">
+
+            <button type="button" class="btn btn-sm btn-outline-basic w-80px p-1px me-2"
+                (click)="backToAddObservation()">BACK</button>
+            <button type="button" class="btn btn-sm btn-basic w-80px p-1px"
+                [disabled]="!((selectedObservationCategory.length) && (selectedObservationDescription.length) && (selectedObservationZone.length) && (selectedObservationUnit.length) && (selectedRiskRating['rating'] > 0) && (canvasData.drawn))"
+                (click)="submitObservationDetails()">SUBMIT</button>
+        </div>
+    </div>
+</ng-container>

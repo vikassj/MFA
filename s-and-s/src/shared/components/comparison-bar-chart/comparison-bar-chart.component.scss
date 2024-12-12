@@ -1,0 +1,11 @@
+.barChart, .barChart div, .barChart div canvas {
+    height: 85% !important;
+    width: 100% !important;
+  }
+  
+  @media (max-width: 767px) {
+    .barChart, .barChart div, .barChart div canvas {
+        height: 70% !important;
+    }
+  }
+  

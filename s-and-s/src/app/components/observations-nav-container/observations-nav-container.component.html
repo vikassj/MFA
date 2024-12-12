@@ -1,0 +1,6 @@
+<div *ngIf="mapView">
+    <app-observations-navbar (selectTab)="selectTab($event)"></app-observations-navbar>
+</div>
+<div>
+    <app-observations [selectedTab]="selectedTab"></app-observations>
+</div>

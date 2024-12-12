@@ -1,0 +1,236 @@
+<div id="actionTable" *ngIf="linkedIssuesLoaded"
+  [ngClass]="selectedFormattedData.status != 'closed' ? 'cursor-pointer' : 'disabled'">
+  <ngx-datatable #actionDatatable class="material expandable dataTableHeight" [rows]="linkedIssueData"
+    [columnMode]="'force'" [headerHeight]="50" [rowHeight]="'auto'" [rowClass]="getSoonDelayedRow"
+    [messages]="{emptyMessage: 'No actions recorded'}" [groupRowsBy]="'object_type_id'" [groupExpansionDefault]="true">
+    <ngx-datatable-group-header [rowHeight]="70" #myGroupHeader>
+      <ng-template let-group="group" let-expanded="expanded" ngx-datatable-group-header-template>
+        <div class="p-2">
+          <b><span class="text-color pe-2 fw-800">RCA</span>{{ group.value[0].text }}</b>
+        </div>
+      </ng-template>
+    </ngx-datatable-group-header>
+    <ngx-datatable-column name="Action ID" [width]="100">
+      <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+        <div *ngIf="row.id" class="cursor-pointer enable-click-event text-color fw-800 lh-10px border-bottom-blue"
+          (click)="navigateToActions(row.id)">
+          {{row.id}}
+        </div>
+        <div class="fs-11px"
+          [ngClass]="(selectedFormattedData.status != 'closed' ) && loginUserId == selectedFormattedData?.investigators[0] && getUserHaveCloseAccess()? 'cursor-pointer' : 'disabled'"
+          *ngIf="!row.id && selectedObjectyptId != row.object_type_id" (click)="addNewAction(row)">
+          + Create
+        </div>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Action" [width]="180">
+      <ng-template let-row="row" let-rowIndex="rowIndex" let-expanded="expanded" ngx-datatable-cell-template>
+        <div class="sum" style="word-break: break-word;" *ngIf="row.summary">{{row.summary}}</div>
+        <div *ngIf="!row.summary && selectedObjectyptId == row.object_type_id">
+          <textarea type="text" id="actionSummary" class="mt-2 break-word px-2 w-100 h-25px fs-11px"
+            style=" border-radius: 3px;max-height:200px" [ngStyle]="{'height': getCauseTaskTextHeight()+'px'}"
+            placeholder="Action" [(ngModel)]="newSubTask.summary" name="summary"></textarea>
+            <div *ngIf="newSubTask.summary && !commonService.alphaNumericWithoutSpaceValidator(newSubTask.summary)" class="text-danger fs-10px mt-1">
+              Actions cannot have space at the start and end of the text.
+            </div>
+        </div>
+        <div *ngIf="!row.summary && selectedObjectyptId == row.object_type_id" class="w-20px h-20px"></div>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Approver" [width]="150">
+      <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+        <ng-container class="d-flex justify-content-between">
+          <div class="d-flex align-items-center fs-11px" *ngIf="row.assignor">
+            <div
+              class="name rounded-circle d-flex align-items-center justify-content-center me-1 cursor-pointer fs-11px"
+              [title]="row.assignor?.name" [ngbTooltip]="row.assignor?.name">{{row.assignor?.acronym| slice:0:2 |
+              uppercase}}</div>
+          </div>
+        </ng-container>
+        <ng-container class="d-flex justify-content-between">
+          <div class="d-flex align-items-center justify-content-between" *ngIf="!row.assignor && selectedObjectyptId == row.object_type_id">
+              <!-- <div class="name rounded-circle d-flex align-items-center justify-content-center me-1 cursor-pointer" [title]="loggedInUserDetails?.name" [ngbTooltip]="loggedInUserDetails?.name">{{loggedInUserDetails?.acronym| slice:0:2  | uppercase}}</div> -->
+              <div id="selectUser" *ngIf="!row.assignee && selectedObjectyptId == row.object_type_id">
+                <!-- <select class="w-60px h-25px border-blue"
+                [(ngModel)]="newSubTask.assignee.name" name="assignee" required>
+                      <option *ngFor="let equipment of listOfUsers" [value]="equipment" >{{equipment.name}}</option>
+                  </select> -->
+                  <ng-select class="w-100% h-25px border-blue fs-11px" [items]="allUserList.length > 0 ? allUserList : []" #obsSearch bindLabel="name"
+                    [(ngModel)]="newSubTask.assignor" bindValue="id"
+                    placeholder="Select user"  dropdownPosition="top" appendTo="body">
+                    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                      <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                        <span class="ng-value-label">{{item.name | slice:0:6}}</span>
+                        <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                      </div>
+                      <div class="ng-value" *ngIf="items.length > 1">
+                        <span class="ng-value-label">{{items.length - 1}} more...</span>
+                      </div>
+                    </ng-template>
+                    <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index" >
+                      {{item.name}}
+                    </ng-template>
+                  </ng-select>
+                  <!-- <select class="w-100% h-25px border-blue"
+                    [(ngModel)]="newSubTask.assignee" name="assignee" (change)="changesAssignee()" placeholder="Select assignee" required>
+                    <option value="" selected data-default>Select User</option>
+                      <option *ngFor="let equipment of allUserList" [value]="equipment.id">{{equipment?.name}}</option>
+                  </select> -->
+              </div>
+              <!-- <ng-select class="w-100% h-25px border-blue" [items]="allUserList.length > 0 ? allUserList : []" #obsSearch bindLabel="name" [multiple]="true"
+                [(ngModel)]="newSubTask.assignee"  (change)="changesAssignee()"
+                placeholder="Select user" [clearable]="false" appendTo="body">
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                    <span class="ng-value-label">{{item.name | slice:0:6}}</span>
+                    <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                  </div>
+                  <div class="ng-value" *ngIf="items.length > 1">
+                    <span class="ng-value-label">{{items.length - 1}} more...</span>
+                  </div>
+                </ng-template>
+                <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                  {{item.name}}
+                </ng-template>
+              </ng-select> -->
+          </div>
+        </ng-container>
+
+        <div *ngIf="!row.assignee && selectedObjectyptId == row.object_type_id" class="w-20px h-20px"></div>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Assignee" [width]="160">
+      <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+        <div class="d-flex align-items-center fs-11px" *ngIf="row.assigneeList?.length > 0">
+          <ng-container *ngFor="let item of row.assigneeList.slice(0,3);let i=index">
+            <!-- <ng-container *ngIf="row.assignee.includes(item.id)"> -->
+              <div
+                class="name rounded-circle d-flex align-items-center justify-content-center me-1 cursor-pointer fs-11px"
+                [title]="item?.name" [ngbTooltip]="item?.name">{{item?.acronym| slice:0:2 | uppercase}}</div>
+            <!-- </ng-container> -->
+          </ng-container>
+          <ng-container *ngIf="row.assignee.length > 3">
+            <div
+              class="name rounded-circle d-flex align-items-center justify-content-center me-1 cursor-pointer fs-11px"
+              [title]="getAssigneeTooltip(row.assigneeList.slice(3))"
+              [ngbTooltip]="getAssigneeTooltip(row.assigneeList.slice(3))">{{ row.assigneeList.length - 3 }}+</div>
+          </ng-container>
+        </div>
+        <div id="selectUser" *ngIf="!row.assignee && selectedObjectyptId == row.object_type_id">
+          <!-- <select class="w-60px h-25px border-blue"
+          [(ngModel)]="newSubTask.assignee.name" name="assignee" required>
+                <option *ngFor="let equipment of listOfUsers" [value]="equipment" >{{equipment.name}}</option>
+            </select> -->
+            <ng-select class="w-100% h-25px border-blue assi" [items]="allUserList.length > 0 ? allUserList : []" #obsSearch bindLabel="name" [multiple]="true"
+              [(ngModel)]="newSubTask.assignee"  (change)="changesAssignee()"
+              placeholder="Select user" [clearable]="false"  dropdownPosition="top"  appendTo="body" [closeOnSelect]="false">
+              <!-- <ng-template ng-header-tmp let-items="items">
+                <input type="checkbox" [ngModel]="checkAll" (change)="toggleCheckAll($event)"/>
+              </ng-template> -->
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                  <span class="ng-value-label">{{item.name | slice:0:6}}</span>
+                  <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                </div>
+                <div class="ng-value" *ngIf="items.length > 1">
+                  <span class="ng-value-label">{{items.length - 1}} more...</span>
+                </div>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                {{item.name}}
+              </ng-template>
+            </ng-select>
+            <!-- <select class="w-100% h-25px border-blue"
+              [(ngModel)]="newSubTask.assignee" name="assignee" (change)="changesAssignee()" placeholder="Select assignee" required>
+              <option value="" selected data-default>Select User</option>
+                <option *ngFor="let equipment of allUserList" [value]="equipment.id">{{equipment?.name}}</option>
+            </select> -->
+        </div>
+        <div *ngIf="!row.assignee && selectedObjectyptId == row.object_type_id" class="w-20px h-20px"></div>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Due date" [width]="140">
+      <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+        <span *ngIf="row.due_date" class="date bg-blue text-dark fs-11px" style="padding: 4px 7px;">{{row.due_date | date:'dd-MMM-yyyy'}}</span>
+        <div *ngIf="!row.due_date && selectedObjectyptId == row.object_type_id" id="dateSelect">
+          <mat-form-field>
+            <input matInput id="txtDate" [matDatepicker]="picker" [(ngModel)]="newSubTask.due_date"
+              placeholder="DD-MMM-YYYY" (click)="inputDisabled()" [min]="minDate" disabled>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker disabled="false"></mat-datepicker>
+          </mat-form-field>
+
+        </div>
+        <div *ngIf="!row.due_date && selectedObjectyptId == row.object_type_id" class="w-20px h-20px"></div>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Status" [width]="130">
+      <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+        <div class="d-flex align-items-center" *ngIf="row.status">
+          <div>
+            <select class=" border-red cursor-pointer"
+              (change)="updateAction(row.id, row.object_type_id, row.summary, row.description, row.assignee, row.due_date, $event.target.value)"
+              [ngClass]="{'border-red bg-text-red' : row.status == 'Open' , 'border-green bg-text-green' : row.status != 'Open', 'opacity-50' : loginUserId != row.created_by &&  (row.status != 'Open' && loginUserId == row.assignee || loginUserId != row.assignee) || selectedFormattedData?.status == 'closed'}"
+              [disabled]="(loginUserId != row.created_by &&  (row.status != 'Open' && loginUserId == row.assignee || loginUserId != row.assignee)) || selectedFormattedData?.status == 'closed'"
+              [(ngModel)]="row.status" name="equipment" required>
+              <option *ngFor="let equipment of dropdownList" [value]="equipment"
+                [ngClass]="equipment == 'Open' ? 'border-red bg-text-red' : 'border-green bg-text-green'">{{equipment}}
+              </option>
+            </select>
+          </div>
+          <div class="ms-2">
+            <button class="btn btn-sm p-0 cursor-pointer" [disabled]="!(loginUserId == row.created_by)">
+              <div class="cursor-pointer"><i class="fas fa-trash text-danger" (click)="removeAction(row.id)"></i></div>
+            </button>
+          </div>
+        </div>
+        <div *ngIf="!row.status && selectedObjectyptId == row.object_type_id">
+          <select class="w-60px border-red"
+            [ngClass]="newSubTask.status == 'Open' ? 'border-red bg-text-red' : 'border-green bg-text-green'"
+            [(ngModel)]="newSubTask.status" name="status" required>
+            <option *ngFor="let equipment of dropdownList" [value]="equipment"
+              [ngClass]="equipment == 'Open' ? 'border-red bg-text-red' : 'd-none'">{{equipment == 'Close' ? 'Closed' : equipment}}</option>
+          </select>
+          <div class="d-flex mt-2" *ngIf="!row.status && selectedObjectyptId == row.object_type_id">
+            <div>
+              <button class="btn btn-sm p-0"
+                [disabled]="!commonService.alphaNumericWithoutSpaceValidator(newSubTask.summary) || !(newSubTask?.summary && newSubTask.assignee && newSubTask.assignor && newSubTask?.due_date && newSubTask?.status)">
+                <div class="w-20px h-20px border rounded bg-basic me-1 d-flex align-items-center justify-content-center"
+                  (click)="creatingAction(row.object_type, row.object_type_id, newSubTask.summary, '', newSubTask.assignee, newSubTask.due_date, newSubTask.status)">
+                  <i class="fas fa-check text-white"></i></div>
+              </button>
+            </div>
+            <div>
+              <button class="btn btn-sm p-0">
+                <div class="w-20px h-20px border rounded d-flex align-items-center justify-content-center"
+                  (click)="cancelObs()"><i class="fas fa-times text-dark"></i></div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+</div>
+
+<!-- Delete Pop-up -->
+<div class="modal fade" id="deleteIncidentActionModel" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" id="deleteConfirmation">
+    <div class="modal-content">
+      <div class="text-center border-bottom">
+        <div class="modal-title text-danger p-2" id="exampleModalLabel">Confirmation</div>
+      </div>
+      <div class="modal-body text-center">
+        <!-- <div *ngIf="observationsRecommendationsToggle == false ">Are you sure, delete the Observation image/file?
+        </div> -->
+        <div>Are you sure, delete the Action?</div>
+      </div>
+      <div class="text-center p-1 mb-2">
+        <button type="button" class="yes btn btn-sm text-color fs-12" (click)="deleteAction()">YES</button>
+        <button type="button" class="no btn btn-sm text-danger ms-2 fs-12 " data-bs-dismiss="modal">NO</button>
+      </div>
+    </div>
+  </div>
+</div>

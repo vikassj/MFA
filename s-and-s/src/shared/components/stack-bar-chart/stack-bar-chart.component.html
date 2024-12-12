@@ -1,0 +1,7 @@
+<ng-container *ngIf="dataIsThere">
+    <div echarts id="chart" [options]="openChart" class="barChart" (chartInit)="onChartInit($event)"></div>
+</ng-container>
+  
+  <ng-container *ngIf="!dataIsThere">
+    <div class="w-100 h-100 d-flex justify-content-center align-items-center">No observations recorded</div>
+  </ng-container>

@@ -1,0 +1,773 @@
+<div (click)="showActionDescription()">
+  <div class="h-45px bg-white d-flex justify-content-between align-items-center px-2 ">
+    <div class="d-flex align-items-center-justify-content-between">
+
+      <div class="fw-800">
+        <!-- <span class="text-color p-1 fs-10px pe-2 border-end border-1 border-danger h-15px line-h-15px pointer"
+          (click)="createNewAction()">CREATE NEW ACTION</span> -->
+          <button class="fs-10px btn btn-sm btn-outline-basic fw-800" (click)="createNewAction()">CREATE NEW ACTION</button>
+        </div>
+        <!-- <div class="p-1 px-2 pointer fs-10px fw-800 text-color" (click)="onFilterClick()">
+          FILTER
+        </div> -->
+        <div class="ms-2">
+          <button class="fs-10px btn btn-sm btn-outline-basic fw-800" (click)="onFilterClick()">FILTER</button>
+        </div>
+    </div>
+  </div>
+  <div class="height p-2 px-3">
+    <div class="w-100 h-100 bg-white">
+
+      <!-------------------------------------------- Filter ---------------------------------------------------->
+      <div class="filter-actions-popup border col-2 bg-body p-2" *ngIf="filterActionsPopup">
+        <div class="d-flex mb-2">
+          <button id="back-button" (click)="onBackClicked()" style="margin-right: auto">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <button class="btn btn-basic btn-sm me-2 w-60px fw-600" (click)="filterActions()"
+            [disabled]="!(buttonDis)">APPLY</button>
+          <button class="btn btn-outline-basic btn-sm w-60px fw-600" (click)="resetSelectedActions()">RESET</button>
+        </div>
+
+        <div class="select-vehicle">
+          <fieldset class="side-bar-fieldset">
+            <legend class="side-bar-legend">From</legend>
+            <div class=" pb-1 w-100">
+
+                <div class="fs-11px" id="dateSelect" *ngIf="selectAction?.due_date">
+                    <mat-form-field>
+                      <input matInput id="startDate" [matDatepicker]="picker" [(ngModel)]="fromDateFliter" placeholder="DD-MMM-YYYY" disabled
+                      (click)="startInputDisabled()" (dateChange)="startDatechanges($event)" [max]="minDate">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker disabled="false"></mat-datepicker>
+                    </mat-form-field>
+
+                </div>
+            </div>
+          </fieldset>
+        </div>
+        <div class="select-vehicle">
+          <fieldset class="side-bar-fieldset">
+            <legend class="side-bar-legend">To</legend>
+            <div class="pb-1 w-100">
+
+                <div class="fs-11px" id="dateSelect" *ngIf="selectAction?.due_date">
+                    <mat-form-field>
+                      <input matInput id="endDate" [matDatepicker]="picker" [(ngModel)]="toDateFliter" placeholder="DD-MMM-YYYY" disabled
+                      (click)="endInputDisabled()" (dateChange)="endDatechanges($event)" [max]="minDate">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker disabled="false"></mat-datepicker>
+                    </mat-form-field>
+
+                </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="select-vehicle">
+          <fieldset class="side-bar-fieldset">
+            <legend class="side-bar-legend">Status</legend>
+
+            <ng-select [items]="status_types_list" [multiple]="true" [closeOnSelect]="false" bindLabel="id" bindLabel="name" [(ngModel)]="selectedStatus"
+              placeholder="Filter by Status" [closeOnSelect]="false" (change)="onItemSelect($event)">
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                  <span class="ng-value-label" [title]="item">{{item.name | hideInfo}}</span>
+                  <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                </div>
+                <div class="ng-value" *ngIf="items.length > 1">
+                  <span class="ng-value-label">{{items.length - 1}} more...</span>
+                </div>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                {{item.name}}
+              </ng-template>
+            </ng-select>
+          </fieldset>
+        </div>
+        <div class="select-vehicle">
+          <fieldset class="side-bar-fieldset">
+            <legend class="side-bar-legend">Assignee</legend>
+
+            <ng-select [items]="allAssignee" [multiple]="true" [closeOnSelect]="false" bindLabel="id" bindLabel="name" [(ngModel)]="selectedFilterAssignee"
+              placeholder="Filter by Assignee" [closeOnSelect]="false" (change)="onItemsSelect($event)">
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                  <span class="ng-value-label" [title]="item">{{item.name | hideInfo}}</span>
+                  <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                </div>
+                <div class="ng-value" *ngIf="items.length > 1">
+                  <span class="ng-value-label">{{items.length - 1}} more...</span>
+                </div>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                {{item.name}}
+              </ng-template>
+            </ng-select>
+          </fieldset>
+        </div>
+      </div>
+
+      <ng-container *ngIf="linkedIssueData?.length >= 1;else elseBlock">
+        <div class="d-flex">
+          <div id="actionContainer" class="col-4 overflow p-2">
+            <ng-container *ngIf="linkedIssueData?.length >= 1;else elseBlock">
+              <div class="height-left">
+                <div id="action{{item.id}}" *ngFor="let item of linkedIssueData;let i = index" class="actions">
+                  <div class="d-flex justify-content-between flex-wrap fs-13px h-100"
+                    [ngClass]="selectAction?.id == item.id ? 'card-selected' : 'card-no-selected'" (click)="selectActionItem(item)">
+                    <div style="width: calc(100% - 115px);">
+                      <div class="d-flex">
+                        <div class="w-70px fw-500 text-dark py-1 ps-3">{{item.id}}</div>
+                        <div class="d-flex flex-wrap text-color fw-600 lh-12px mb-1 py-1" style="word-break: break-word; line-height: 17px;">
+                          {{item.summary}}
+                        </div>
+                      </div>
+                      <div class="d-flex">
+                        <div class="w-70px fw-500 text-dark fs-10px ps-3">Due Date</div>
+                        <div class="pb-2">
+                          <div class="fs-10px fw-600 text-dark">{{item.due_date | dateFormat}}</div>
+                          <div class="fs-10px fw-600 text-color">{{item.zone_name}}</div>
+                        </div>
+                      </div>
+                      <div>
+                    </div>
+
+                    </div>
+                    <div class="actions w-100px fs-11px py-2 pe-3 me-3">
+                      <select class="w-90px border-red" style="padding: 3px 10px 3px 5px;"
+                        (change)="changingActionStatu(item.id, item.object_type_id, item.summary, item.description, item.assignee, item.due_date, $event.target.value, item.assignor); safetyAndSurveillanceCommonService.sendMatomoEvent('Closure of action', 'Close action')"
+                        [ngClass]="{'border-red bg-text-red' : item.status == 'Open' , 'border-green bg-text-green' : item.status != 'Open', 'opacity-50' : validateStatus(item)}"
+                        [disabled]="validateStatus(item)"
+                        [(ngModel)]="item.status" name="equipment" required>
+                        <option *ngFor="let equipment of dropdownList" [value]="equipment"
+                          [ngClass]="equipment == 'Open' ? 'border-red bg-text-red' : 'border-green bg-text-green'">
+                          {{equipment == 'Close' ? 'Closed' : equipment}}
+                          <!-- {{equipment}} -->
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+            <div class="page d-flex align-items-center justify-content-between h-40px w-100" style="padding-top: 5px;">
+                <div class="res fs-10px fw-100 me-2 h-100 d-flex">Result :
+                  <span class="ps-1 fw-700">
+                  {{offset + 1}} -
+                  {{(offset + linkedIssueData?.length)}} of {{totalLength}}
+                  </span>
+                </div>
+              <div *ngIf="totalLength > 0" class="pe-4 me-3 h-100 d-flex">
+                <app-pagination [totalRecords]="totalLength" [recordsPerPage]="noOfRows"
+                [activePage]="activePage" (onPageChange)="displayActivePage($event)"></app-pagination>
+              </div>
+            </div>
+          </div>
+          <div class="col-5 p-2 height-left overflow">
+            <ng-container *ngIf="selectAction?.id;else elseBlock">
+              <div class="py-2">
+                <div class="d-flex justify-content-between">
+                <div class=" text-color fs-12px fw-bold">Action</div>
+                <div>
+                  <button [disabled]="!(loginUserId == selectAction.assignor)" class="fs-12px border-red bg-white text-danger h-25px fw-600" [ngClass]="!(loginUserId == selectAction.assignor) ? 'opacity-50' : ''" (click)="removeAction(selectAction?.id)"><i class="fas fa-trash delete"></i>DELETE</button>
+                </div>
+              </div>
+                <div class="pt-1 fs-11px" id="action">
+                  <textarea type="text" class="actioned form-control fs-11px fw-600 w-100" rows="3"
+                    placeholder="type text" [ngModel]="selectedItemSummary" (click)="showAction()"
+                    (focus)="showAction()" (input)="getSummary($event.target.value)" name="action"
+                    [disabled]="loginUserId != selectAction?.assignor" id="mainActionHeight" [ngStyle]="{'height': getMainActionHeight()+'px'}"></textarea>
+                    <div *ngIf="selectedItemSummary && !commonServices.alphaNumericWithoutSpaceValidator(selectedItemSummary)"
+                      class="text-danger fs-10px mt-1">
+                      Action cannot have spaces at the start and end of the text.
+                    </div>
+                  <div *ngIf="sndAction" class="mt-2 btns_width" id="action_btns">
+                    <button *ngIf="selectedItemSummary?.length > 0" class="btn btn-sm btn-basic send me-2 fs-10px fw-800"
+                      style="padding: 2px 10px !important;" [disabled]="!commonServices.alphaNumericWithoutSpaceValidator(selectedItemSummary)"
+                      (click)="changingActionStatu(selectAction.id, selectAction.object_type_id, selectedItemSummary, selectAction.description, selectAction.assignee, selectAction.due_date, selectAction.status, selectAction.assignor)">SAVE</button>
+                    <button *ngIf="selectedItemSummary?.length > 0"
+                      class="btn btn-sm btn-outline-basic cancel fs-10px fw-800" style="padding: 2px 4px !important;"
+                      (click)="hideBtns('action_btns')">CANCEL</button>
+                  </div>
+                </div>
+              </div>
+              <div class="py-2">
+                <div class=" pt-2 text-color fs-12px fw-bold">Description</div>
+                <div class="pt-1 fs-11px" id="description">
+                  <textarea type="text" class="actioned form-control fs-11px fw-600 w-100" rows="3"
+                    placeholder="Add Description..." [ngModel]="selectedItemDescription" (click)="showDescription()"
+                    (focus)="showDescription()" (input)="getDescription($event.target.value)" name="description"
+                    [disabled]="loginUserId != selectAction?.assignor" id="mainDescriptionHeight" [ngStyle]="{'height': getMainDescriptionHeight()+'px'}"></textarea>
+                    <div *ngIf="selectedItemDescription && !commonServices.alphaNumericWithoutSpaceValidator(selectedItemDescription)"
+                      class="text-danger fs-10px mt-1">
+                      Action description cannot have spaces at the start and end of the text.
+                    </div>
+                  <div *ngIf="sndDescription" class="mt-2 btns_width " id="description_btn">
+                    <button *ngIf="selectedItemDescription?.length > 0"
+                      class="btn btn-sm btn-basic me-2  fs-10px fw-800" id="btn_send"
+                      style="padding: 2px 10px !important;"
+                      [disabled]="!commonServices.alphaNumericWithoutSpaceValidator(selectedItemDescription)"
+                      (click)="changingActionStatu(selectAction.id, selectAction.object_type_id, selectAction.summary, selectedItemDescription, selectAction.assignee, selectAction.due_date, selectAction.status, selectAction.assignor)">SAVE</button>
+                    <button *ngIf="selectedItemDescription?.length > 0"
+                      class="btn btn-sm btn-outline-basic  fs-10px fw-800" style="padding: 2px 4px !important;"
+                      (click)="hideBtns('description_btn')">CANCEL</button>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="w-100 bg-white" id="actionList">
+                <div class=" py-2 pt-2 fs-11px text-color fs-12px fw-800">Linked Items</div>
+                <div>
+                  <div class="d-flex align-items-center text-basic px-2 fs-10px h-25px table-header">
+                    <div class="w-25">ID</div>
+                    <div class="w-75 ps-2">Observation / Incident</div>
+                  </div>
+                  <div class="link py-2 d-flex align-items-center">
+                    <div *ngIf="selectAction?.fault_id" class="w-25 table-body pointer"
+                      (click)="navigateTo(selectAction); safetyAndSurveillanceCommonService.sendMatomoEvent('Observation navigation from actions page', 'Actions features')">
+                      <u style="padding: 3px 7px;">Observation#{{selectAction?.fault_id}}</u>
+                    </div>
+                    <div *ngIf="selectAction?.incident_id" class="w-25 table-body pointer"
+                      (click)="navigateToIncident(selectAction?.incident_id); safetyAndSurveillanceCommonService.sendMatomoEvent('Observation navigation from actions page', 'Actions features')">
+                      <u style="padding: 3px 7px;">Incident#{{selectAction?.incident_id}}</u>
+                    </div>
+                    <div class="w-75 table-body ps-2" style="margin: 4px 12px;">{{selectAction?.observation_text}}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="my-2 text-color fs-12px fw-700 d-flex align-items-center justify-content-between">
+                  <div>
+                    Action Document<span *ngIf="selectAction?.action_files?.length > 1">(s)</span>
+                  </div>
+                  <div class="btn-file w-70px" [ngClass]="loginUserId != selectAction?.assignor ? '' : 'cursor-pointer'">
+                    <button class="att btn btn-sm btn-basic fs-10px fw-800 cursor-pointer w-100" [disabled]="loginUserId != selectAction?.assignor" title="Select image">+ Add</button>
+                    <input type="file" accept="image/jpeg, .gif" [disabled]="loginUserId != selectAction?.assignor" class="cursor-pointer" multiple title="Select image"
+                        (change)="onAddSelectActionDocumentsFile($event)" (click)="$event.target.value=null">
+                  </div>
+                </div>
+                <div class="d-flex flex-wrap">
+                  <div class="d-flex m-1 w-200px" *ngFor="let item of selectAction?.action_files;let i = index">
+                    <div class="supportImageComments position-relative w-200px">
+                      <div class="d-flex align-items-center img pe-2 pb-2" id="modalImage">
+                        <div class="w-100px">
+                          <img class="bor"
+                            *ngIf="item?.url?.includes('.jpg') && (item.url != null || item.url != '') || item?.url?.includes('.jpeg')&& (item.url != null || item.url != '') || item?.url?.includes('.png') && (item.url != null || item.url != '') || item?.url?.includes('.gif') && (item.url != null || item.url != '')"
+                            [src]="item?.url" width="100px" height="50px">
+                          <span *ngIf="item?.url?.includes('.pdf')" class="inline-block ms-2" style="width: 100px; height:50px; padding-right: 5px">
+                            <i class="fas fa-file-pdf primary-color fs-72px" style="padding-top: 0.9px;"></i>
+                            </span>
+                        </div>
+                        <div class=" rounded-end position-relative w-100px p-1" [ngClass]="item?.url?.includes('.pdf') ? 'h-49px' : 'h-50px'" style="background-color: #1E3044; color: #DDDDDD;">
+                          <div class=" fs-8px fileName w-100px pe-2 issueImageName">{{item.filename}}</div>
+                          <div class="fs-8px py-1 position-button">
+                            <div class="me-2 fw-bold"><i class="far fa-calendar-alt pe-2"></i>{{item.created_at | dateFormat}}
+                            </div>
+                            <div class=" fw-bold"><i class="far fa-clock pe-2"></i>{{item.created_at | date : 'hh-mm-ss'}}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="" [ngClass]="item?.url?.includes('.pdf') ? 'download-option-pdf' : 'download-option'">
+                        <div class="d-flex justify-content-center align-items-center">
+                          <div class="w-25px h-25px bg-white cursor-pointer rounded d-flex justify-content-center align-items-center me-1"
+                            (click)="downloadImg(item.url);">
+                            <i class="fas fa-download text-color"></i>
+                          </div>
+                          <div class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center">
+                            <button class="btn btn-sm p-0 cursor-pointer"
+                            (click)="deleteActionImage(item?.action_id, item?.id)"
+                              [disabled]="!(loginUserId == selectAction?.assignor)">
+                              <i class="fas fa-trash text-danger"></i>
+                            </button>
+                          </div>
+                          <div
+                              class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center cursor-pointer ms-1"
+                              (click)="selectImageToDisplay(item, selectAction?.action_files)"><i class="far fa-eye primary-color"></i>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-2 bg-white" *ngIf="chatboxHide">
+                <app-chatbox [faultId]="selectAction?.id" [selectedUnit]="selectAction?.unit_name"
+                  [currentId]="'action_id'" [commentTagging]="commentTagging"
+                  [selectedIssue]="selectAction" [allListOfUsers]="allAssignee"></app-chatbox>
+              </div>
+            </ng-container>
+          </div>
+          <div class="col-3 p-2 height-left overflow">
+            <ng-container *ngIf="selectAction?.id;else elseBlock">
+              <div>
+                <div class="text-color fs-12px m-2 fw-800">Status</div>
+                <div class="w-100px m-2 fs-11px" *ngIf="selectAction">
+                  <select class="w-100px border-red fw-600"
+                    (change)="changingActionStatu(selectAction.id, selectAction.object_type_id, selectAction.summary, selectAction.description, selectAction.assignee, selectAction.due_date, $event.target.value, selectAction.assignor); safetyAndSurveillanceCommonService.sendMatomoEvent('Closure of action', 'Close action')"
+                    [ngClass]="{'border-red bg-text-red' : selectAction.status == 'Open' , 'border-green bg-text-green' : selectAction.status != 'Open', 'opacity-50' : validateStatus(selectAction)}"
+                    [disabled]="validateStatus(selectAction)"
+                    [(ngModel)]="selectAction.status" name="equipment" required>
+                    <option *ngFor="let equipment of dropdownList" [value]="equipment"
+                      [ngClass]="equipment == 'Open' ? 'border-red bg-text-red' : 'border-green bg-text-green'">
+                      {{equipment == 'Close' ? 'Closed' : equipment}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="py-2">
+                <div class="text-color m-2 fs-12px fw-800">Created By</div>
+                <div class="assigned m-2 fs-11px d-flex align-items-center fw-600">
+                  <ng-container *ngFor="let item of allUserList">
+                    <ng-container *ngIf="item?.id == selectAction?.created_by">
+                      <div *ngIf="item?.name"
+                        class=" assignby w-20px h-20px rounded-circle d-flex align-items-center justify-content-center me-1 ">
+                        {{returnAssigneeName(item?.name, selectAction?.created_by) | uppercase}}</div>
+                      <div class="ass" [title]="returnAssigneeFullName(item?.name, selectAction?.created_by)">
+                        {{returnAssigneeFullName(item?.name, selectAction?.created_by) | titlecase}}</div>
+                    </ng-container>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="py-2">
+                <div class="text-color m-2 fs-12px fw-800">Approver</div>
+                <div class="assigned m-2 fs-11px d-flex align-items-center fw-600">
+                  <div class="w-100 fs-11px" id="assignor">
+                    <ng-select [items]="assignorList"
+                      bindLabel="name" placeholder="Search to Assign..."
+                      bindValue="id" [disabled]="loginUserId != selectAction.assignor"
+                      (change)="changingActionAssignor(selectAction.id, selectAction.object_type_id, selectedItemSummary, selectAction.description, selectedAssignees, selectAction.due_date, selectAction.status, selectedItemAssignor)"
+                      [(ngModel)]="selectedItemAssignor">
+                      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                          <div class="ng-value-label d-flex align-items-center">
+                            <div *ngIf="item?.name"
+                            class=" assignor w-20px h-20px rounded-circle d-flex align-items-center justify-content-center me-1 fs-12px ">
+                            {{item.name | slice:0:1 | titlecase}}</div>{{item.name | titlecase}}
+                          </div>
+                        </div>
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <div  *ngIf="!(item?.id == selectAction.assignor && removeOption)" style="padding: 8px 10px !important;">{{item.name}}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+              <div class="py-2">
+                <div class="text-color m-2 fs-12px fw-800">Assigned To</div>
+                <div class="assi m-2 fs-11px d-flex align-items-center">
+                      <div class="w-100" id="assignee">
+                        <ng-select [items]="newAssignee" #obsSearch bindLabel="name" bindValue="id" [multiple]="true"
+                          [(ngModel)]="selectedAssignees" placeholder="Search to Assign...."
+                          [disabled]="(loginUserId != selectAction?.assignor || selectAction?.status == 'Close')" (change)="updateItemName($event)"
+                          [closeOnSelect]="true" class="custo">
+                          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                            <div class="ng-value">
+                              <span class="ng-value-label">{{items?.length}} selected</span>
+                            </div>
+                          </ng-template>
+                        </ng-select>
+                      </div>
+                      <div>
+                        <button
+                          class="btn text-basic fw-800 btn btn-sm  ms-2 border-none-outline-none d-flex align-items-center" [disabled]="!selectedAssignees?.length || selectedAssignees?.includes(this.selectAction?.assignee)"
+                          (click)="changingActionStatu(selectAction.id, selectAction.object_type_id, selectedItemSummary, selectAction.description, selectedAssignees, selectAction.due_date, selectAction.status, selectAction.assignor)">
+                          <span class="pluseIcon">+</span> Add</button>
+                      </div>
+                </div>
+              </div>
+              <div class="border mt-2 pb-2 rounded-3 users" *ngIf="selectAction?.assignee?.length > 0">
+                <div *ngFor="let email of this.selectAction?.assignee"
+                  class="fs-10px cursor-default d-flex align-items-center justify-content-between p-2" title="{{email.email}}"
+                  >
+                  <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+                    <div class="d-flex align-items-center">
+                      <div class="d-flex align-items-center justify-content-between fw-600">
+                        <div
+                        class="sel min-w-20px w-20px h-20px rounded-circle d-flex align-items-center justify-content-center me-1 ">
+                        {{getUserName(email, '') | uppercase}}
+                        </div>
+                        <div class="selected" [title]="getUserName(email, 'full')">{{getUserName(email, 'full') | titlecase}}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="cross text-dark ms-2" [ngClass]="loginUserId == selectAction.assignor ? 'cursor' : ''"
+                      (click)="removeTaggedEmail(email)">X
+                    </div>
+                </div>
+              </div>
+              </div>
+              <div>
+                <div class="text-color fs-12px m-2 fw-800">Due Date</div>
+                <div class="m-2 fs-11px" id="dateSelect" *ngIf="selectAction?.due_date">
+                    <mat-form-field>
+                      <input matInput id="txtDates" [matDatepicker]="picker" [(ngModel)]="actionDue_date" placeholder="DD-MMM-YYYY" disabled
+                      (click)="inputDisable()" (dateChange)="changeDate($event)" [min]="minDate">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker [disabled]="(loginUserId != selectAction?.assignor || selectAction?.status == 'Close')"></mat-datepicker>
+                    </mat-form-field>
+
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+
+
+      </ng-container>
+
+    </div>
+  </div>
+</div>
+
+<div id="bulkConfirmationModal" aria-labelledby="exampleModalLabel" aria-hidden="true" role="dialog"
+  data-bs-backdrop="static" data-bs-keyboard="false" class="modal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header m-auto p-2 fw-bold fs-20px " style="font-weight: bold;">
+        {{editActionData ? 'Update ' : 'Create New ' }} Action
+      </div>
+      <div class="border-bottom w-100"></div>
+      <ng-container *ngIf="!editActionData">
+        <div class="p-4" style="margin: 0px 0px 2px 10px;">
+          <div class="">
+            <div class="w-100 me-3">
+              <div class="fs-10px text-color fw-800 mb-1 act">Action</div>
+              <div class=" fs-10px text-dark">
+                <textarea type="text" class="form-control fs-10px fw-800" rows="1" placeholder="Action"
+                  [(ngModel)]="newSubTask.summary" id="actionHeight" [ngStyle]="{'height': getactionHeight()+'px'}" placeholder="Action"></textarea>
+              </div>
+              <div *ngIf="newSubTask.summary && !commonServices.alphaNumericWithoutSpaceValidator(newSubTask.summary)"
+                    class="text-danger fs-10px mt-1">
+                    Action cannot have spaces at the start and end of the text.
+                </div>
+            </div>
+            <div class="w-100 me-3">
+              <div class="fs-10px text-color fw-800 mb-1">Description</div>
+              <div class=" fs-10px text-dark">
+                <textarea type="text" class="form-control fs-10px fw-800" rows="1"
+                  [(ngModel)]="newSubTask.description" id="descriptionHeight" [ngStyle]="{'height': getDescriptionHeight()+'px'}" placeholder="Add Description"></textarea>
+              </div>
+              <div *ngIf="newSubTask.description && !commonServices.alphaNumericWithoutSpaceValidator (newSubTask.description)" class="text-danger fs-10px mt-1">
+                Action description cannot have spaces at the start and end of the text.
+              </div>
+            </div>
+
+          </div>
+          <div class="">
+            <div class="w-100 me-3">
+              <div class="fs-10px text-color fw-800 mt-2 mb-1 act">Due date</div>
+              <div class="fs-10px text-dark" id="createDateSelect">
+                  <mat-form-field id="disableRippleEffect">
+                    <input matInput id="txtDate" [matDatepicker]="picker" [(ngModel)]="newSubTask.due_date" placeholder="DD-MMM-YYYY"
+                    (click)="inputDisabled()" [min]="minDate"disabled >
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker disabled="false"></mat-datepicker>
+                  </mat-form-field>
+              </div>
+            </div>
+            <div class="w-100 me-3">
+              <div class="fs-10px text-color fw-800  mt-2 mb-1">Link issue</div>
+              <div class="fs-10px fw-800 text-dark">
+                <div class=" mb-2" id="linkedIssueList">
+                  <ng-select [items]="listOfObservations?.length > 0 ? listOfObservations : []" #obsSearch bindLabel="id"
+                    [(ngModel)]="selectedFaultId" (open)="OnOpen()" (search)="OnSearch()" (blur)="OnBlue()"
+                    dropdownPosition="hidden" [virtualScroll]="true" [disabled]="editActionData" (change)="changeSelectedLinked()"
+                    placeholder="Select" [clearable]="false">
+                    <ng-template ng-option-tmp let-item="item">
+                      <p class="mb-1"><strong>Observation#{{item.id}}</strong></p>
+                      <span>{{item.unit}}</span>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="">
+            <div class="w-100 me-3">
+              <div class="fs-10px text-color fw-800  mt-2 mb-1 act">Assignee</div>
+              <div class="fs-10px  text-dark" id="linkedIssueList">
+                <ng-select [items]="unitAssignee" #obsSearch bindLabel="name" [multiple]="true"
+                  [(ngModel)]="selectedAssigneeId" dropdownPosition="hidden" (change)="changesAssignee()"
+                  placeholder="Select user" [clearable]="false">
+
+                  <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                    <div class="ng-value" *ngFor="let item of items | slice:0:2">
+                      <span class="ng-value-label">{{item.name}}</span>
+                      <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                    </div>
+                    <div class="ng-value" *ngIf="items?.length > 2">
+                      <span class="ng-value-label">{{items?.length - 2}} more...</span>
+                    </div>
+                  </ng-template>
+                  <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                    {{item.name}}
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+            <div class="w-100 me-3">
+              <div class="fs-10px text-color fw-800  mt-2 mb-1 act">Approver</div>
+              <div class="fs-10px  text-dark" id="linkedIssueList">
+                <ng-select [items]="unitAssignee"
+                      bindLabel="name" bindValue="id" placeholder="Search to Assign..."
+                      autofocus
+                      [(ngModel)]="selectedAssignorId" name="Approver">
+                      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <!-- <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                          <div class="ng-value-label">
+                            {{item.name}}
+                          </div>
+                        </div> -->
+                        <ng-container *ngFor="let item of unitAssignee">
+                          <ng-container *ngIf="item?.id == selectedAssignorId">
+                            {{item.name}}
+                          </ng-container>
+                        </ng-container>
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <div >{{item.name}}</div>
+                      </ng-template>
+                    </ng-select>
+              </div>
+            </div>
+            <div class="w-100 me-3 d-none">
+              <div class="fs-10px text-color fw-800 mt-2 mb-1">Approver</div>
+              <div class=" fs-10px  text-dark d-flex align-items-center">
+                <div class="ps-3 w-100 border-0 bg-ash fw-800 h-25px d-flex align-items-center">{{newSubTask.approver}}</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="btn-file w-100 cursor-pointer mt-2">
+              <button class="att btn btn-sm btn-basic fs-10px fw-800 cursor-pointer" title="Select image">Add Attachment</button>
+              <input type="file" accept="image/jpeg, .gif" class="cursor-pointer" multiple title="Select image"
+                  (change)="onSelectFile($event)" (click)="$event.target.value=null">
+            </div>
+            <div class="d-flex flex-wrap mt-2">
+              <div class="d-flex flex-wrap m-1" *ngFor="let item of actionCommentImage;let i = index">
+                <div class="postImage position-relative w-125px">
+                  <div class="pe-2 pb-2 w-125px">
+                    <img [src]="item.actionImage" width="125px" height="70px">
+                  </div>
+                  <div class="delete-option">
+                    <div class="d-flex justify-content-center align-items-center">
+                      <div
+                        class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center cursor-pointer"
+                        (click)="deleteSlectedCommentImg(i)"><i class="fas fa-trash custom"></i></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="editActionData">
+        <div class="p-4">
+          <div class="d-flex1">
+            <div class="w-50 me-2">
+              <div class="fs-10px text-color fw-800 mb-1">Action</div>
+              <div class=" fs-10px text-dark">
+                <textarea type="text" class="form-control fs-10px fw-800" rows="1" placeholder="Action Description"
+                  [(ngModel)]="newSubTask.summary"></textarea>
+              </div>
+
+            </div>
+            <div class="w-50 ms-1">
+              <div class="fs-10px text-color fw-800 mb-1">Due date</div>
+              <div class="fs-10px text-dark" id="createDateSelect">
+
+                  <mat-form-field id="disableRippleEffect">
+                    <input matInput id="txtDate" [matDatepicker]="picker" [(ngModel)]="newSubTask.due_date" placeholder="DD-MMM-YYYY"
+                    (click)="inputDisabled()" [min]="minDate" disabled>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker disabled="false"></mat-datepicker>
+                  </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex1">
+            <div class="w-50 me-2">
+              <div class="fs-10px text-color fw-800  mt-2 mb-1">Link issue</div>
+              <div class="fs-10px text-dark">
+                <div class=" mb-2" id="linkedIssueList">
+                  <ng-select [items]="listOfObservations?.length > 0 ? listOfObservations : []" #obsSearch bindLabel="id"
+                    [(ngModel)]="selectedFaultId" (open)="OnOpen()" (search)="OnSearch()" (blur)="OnBlue()"
+                    dropdownPosition="hidden" [disabled]="editActionData" (change)="changeSelectedLinked()"
+                    placeholder="Select" [clearable]="false">
+                    <ng-template ng-option-tmp let-item="item">
+                      <p class="mb-1"><strong>Observation#{{item.id}}</strong></p>
+                      <span>{{item.unit}}</span>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+            <div class="w-50 ms-1">
+              <div class="fs-10px text-color fw-800  mt-2 mb-1">Approver</div>
+              <div class="fs-10px  text-dark" id="linkedIssueList">
+                <ng-select class="custom" [items]="assignee?.length > 0 ? assignee : []" #obsSearch bindLabel="name"
+                  [closeOnSelect]="false" [(ngModel)]="selectedAssigneeId" dropdownPosition="hidden"
+                  (change)="changesAssignee()" placeholder="Select user" [clearable]="false">
+                  <ng-template ng-option-tmp let-item="item">
+                    <p class="mb-1"><strong>{{item.name}}</strong></p>
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex1">
+            <div class="w-50 me-2 d-none">
+              <div class="fs-10px text-color fw-800 mt-2 mb-1">Approver</div>
+              <div class=" fs-10px  text-dark">
+                <div class="ps-2 w-100 border-0 bg-ash fw-800 h-25px d-flex align-items-center">{{newSubTask.approver}}</div>
+              </div>
+            </div>
+            <div class="w-50 me-2"></div>
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="modal-footer pb-0 pt-0">
+        <div class="modal-footer  m-auto">
+          <button type="button" class="btn btn-sm btn-basic fw-bold ps-2 pe-2 pt-1 pb-1 fs-11px"
+            [disabled]="!(newSubTask.summary && selectedAssigneeId.length > 0 && selectedAssignorId && newSubTask.due_date && newSubTask.approver) || (!commonServices.alphaNumericWithoutSpaceValidator(newSubTask.summary))"
+            (click)="submitAction()">{{editActionData ? 'UPDATE' : 'CREATE' }}</button>
+          <button type="button" class="btn btn-sm btn-outline-basic text-color fw-bold ps-2 pe-2 pt-1 pb-1 fs-11px"
+            data-bs-dismiss="modal"
+            (click)="cancelAction(); safetyAndSurveillanceCommonService.sendMatomoEvent('Incomplete action creation/ updation', 'Create/ update action')">CANCEL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #elseBlock>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    No Actions Recorded
+  </div>
+</ng-template>
+
+<div class="modal fade" id="actionImageViewer" data-bs-backdrop="static" data-bs-keyboard="false"
+  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div data-bs-dismiss="modal" aria-label="Close" class="mx-2 text-basic fs-11px cursorPointer"> <i
+            class="fas fa-arrow-left pe-1"></i> Back</div>
+        <div class="w-75 text-center">
+          <div class="att text-basic fs-11px fw-800">Attachments for action</div>
+        </div>
+      </div>
+      <div class="modal-body h-400px">
+        <div class="d-flex">
+          <div class=" left-part scroll">
+            <div class="d-flex p-1"
+              *ngFor="let images of arrayOfImages">
+              <div class="imageComments position-relative mt-2" (click)="onImageSelect(images)">
+                <div class="img pe-2 pb-2" id="modalImage">
+                  <img
+                    *ngIf="images.url.includes('.jpg') || images.url.includes('.jpeg') || images.url.includes('.png') || images.url.includes('.gif')"
+                    [src]="images.url" width="125px" height="110px" class="rounded">
+                    <span *ngIf="images?.url?.includes('.pdf')" class="inline-block ms-2" style="width: 125px; height:110px">
+                      <i class="fas fa-file-pdf primary-color fs-72px"></i>
+                      </span>
+                </div>
+                <div class="download-option-action">
+                  <div class=" fs-8 issueImageName text-white px-2">{{images?.filename}}</div>
+                  <div class="d-flex justify-content-center align-items-center mt-2">
+                    <div
+                      class="w-25px h-25px bg-white cursorPointer rounded d-flex justify-content-center align-items-center me-1"
+                      (click)="downloadImg(images?.url, false)">
+                      <i class="fas fa-download text-color"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="fullImage pt-1 pe-1" style="width: 590px;height: 390px;">
+            <div class="fullHeight">
+              <div
+                class="px-2 fs-12px bg-image-popup h-30px rounded text-white d-flex align-items-center justify-content-between">
+                <div class="issueImageName">{{selectedImage?.['filename']}}</div>
+                <div class="d-flex align-items-center">
+                  <div class="pe-2">{{selectedImage?.['created_by']}}</div>
+                  <div>{{selectedImage?.['created_at'] | dateFormat}} | </div>
+                  <div class="ms-1">{{selectedImage?.['created_at'] | date :'hh-mm-ss'}}</div>
+                </div>
+              </div>
+              <div class="w-100 image-height pt-1">
+                <div
+                  *ngIf="selectedImage?.['url']?.includes('.jpg') || selectedImage?.['url']?.includes('.jpeg') || selectedImage?.['url']?.includes('.png') || selectedImage?.['url']?.includes('.gif')"
+                  id="popupMarkedImageDiv" class="fullHeight fullWidth"
+                  [ngClass]="selectedImage?.['url']?'img-zoom':''">
+                  <div class="h-100 d-flex" [ngClass]="{'scalize': selectedMode}">
+                    <img *ngIf="selectedImage?.['url']" id="popupModalImage" class="m-auto fullWidth"
+                      height="100%" [ngClass]="{'target': selectedMode}" src="{{selectedImage?.['url']}}"
+                      alt="Image">
+                  </div>
+                </div>
+                <ng-container *ngIf="selectedImage?.url?.includes('.pdf')">
+                  <app-support-doc-pdf></app-support-doc-pdf>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Delete Pop-up -->
+<div class="modal fade" id="deleteActionDocument" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" id="deleteConfirmation">
+    <div class="modal-content">
+      <div class="text-center border-bottom">
+        <div class="modal-title text-danger p-2" id="exampleModalLabel">Confirmation</div>
+      </div>
+      <div class="modal-body text-center">
+        <!-- <div *ngIf="observationsRecommendationsToggle == false ">Are you sure, delete the Observation image/file?
+        </div> -->
+        <div>Are you sure, delete the Action Document?</div>
+      </div>
+      <div class="text-center p-1 mb-2">
+        <button type="button" class="yes btn btn-sm text-color fs-10px"
+          (click)="deleteObservation()">YES</button>
+        <button type="button" class="no btn btn-sm text-danger ms-2 fs-10px "
+          data-bs-dismiss="modal">NO</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Pop-up -->
+<div class="modal fade" id="deleteAction" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" id="deleteAction">
+    <div class="modal-content">
+      <div class="text-center border-bottom">
+        <div class="modal-title text-danger p-2" id="exampleModalLabel">Confirmation</div>
+      </div>
+      <div class="modal-body text-center">
+        <!-- <div *ngIf="observationsRecommendationsToggle == false ">Are you sure, delete the Observation image/file?
+        </div> -->
+        <div>Are you sure, delete the Action?</div>
+      </div>
+      <div class="d-flex justify-content-center align-items-center mb-10px">
+        <button type="button" class="btn btn-sm snd-btn btn-basic fs-10px fw-800"
+          (click)="deleteAction()">YES</button>
+        <button type="button" class="ms-2 btn btn-sm snd-btn btn-outline-basic fs-10px fw-800"
+          data-bs-dismiss="modal">NO</button>
+      </div>
+    </div>
+  </div>
+</div>

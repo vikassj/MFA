@@ -1,0 +1,158 @@
+<div class="me-2">
+  <div class="border-bottom d-flex">
+    <div class="text-color fs-12px px-3 pointer" (click)="initiateDrawing()"
+      [ngClass]="annotationMode ? 'selecte-item-border fw-bold': ''">Add New</div>
+    <div class="text-color fs-12px px-3 pointer"
+      (click)="changeDrawMode(); safetyAndSurveillanceCommonService.sendMatomoEvent('View annotations', 'Annotate observation')"
+      [ngClass]="!annotationMode ? 'selecte-item-border fw-bold': ''">View All</div>
+  </div>
+</div>
+<div *ngIf="annotationMode">
+  <div class="mt-2 d-flex pt-8px" id="collapseAddNewComment">
+    <div id="collapseAddNewCommentDiv">
+      <div class="text-color fs-12px pb-2 mt-1">Shape</div>
+      <div class="d-flex ">
+        <div class="me-4 d-flex align-items-center">
+
+          <input type="radio" id="rectangle" name="createShape" class="me-2" value="rectangle"
+            [(ngModel)]="canvasData.shape" [checked]="canvasData.shape == 'rectangle'" (ngModelChange)="onShapeChange()">
+          <label class="fs-12px " for="rectangle">Box</label>
+        </div>
+        <div class="me-4 d-flex align-items-center">
+          <input type="radio" id="circle" name="createShape" class="me-2" value="circle" [(ngModel)]="canvasData.shape"
+            (ngModelChange)="onShapeChange()" [checked]="canvasData.shape == 'circle'" [disabled]="false">
+          <label class="fs-12px " for="circle">Circle</label>
+
+        </div>
+        <div class="me-4 d-flex align-items-center opacity-75 cursorDisabled">
+          <input type="radio" id="polygon" name="createShape" class="me-2 cursorDisabled" value="polygon"
+            [(ngModel)]="canvasData.shape" [checked]="canvasData.shape == 'polygon'" (ngModelChange)="onShapeChange()" [disabled]="true">
+          <label class="fs-12px  cursorDisabled" for="polygon">Polygon</label>
+        </div>
+      </div>
+    </div>
+    <div class="ms-2 pe-3 mt-1">
+      <div class="text-color fs-12px  pb-2">Line Color</div>
+      <input class="form-control" type="color" [(ngModel)]="canvasData.lineColor"
+        (ngModelChange)="onParametersChange()">
+    </div>
+    <div class="ms-4 mt-1">
+      <div class="text-color fs-12px  pb-2">Line Thickness</div>
+      <div>
+        <input type="range" class="custom-range" min="1" max="5" [(ngModel)]="canvasData.lineThickness"
+          (ngModelChange)="onParametersChange()">
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="d-flex pb-1 mt-3">
+      <div class="text-color fs-12px me-2 ">Comments</div>
+      <div *ngIf="!canvasData.drawn" class="red-basic fs-12px"><i>(Please annotate to add Comments)</i></div>
+    </div>
+    <div>
+      <textarea class="form-control textareaCss" title="{{canvasData.comments}}" [(ngModel)]="canvasData.comments" placeholder="Type your comments here..."
+        [disabled]="!canvasData.drawn"></textarea>
+    </div>
+  </div>
+  <div *ngIf="!commonService.alphaNumericWithoutSpaceValidator(canvasData.comments)" class="red-basic fs-12px mt-1"><i> Comments cannot
+    be empty and shouldn't have space characters at start and end</i>
+  </div>
+  <div class="d-flex align-items-end mt-3">
+    <button type="button" class="btn btn-basic btn-sm me-2" (click)="onSave()"
+      [disabled]="!commonService.alphaNumericWithoutSpaceValidator(canvasData.comments)">Save</button>
+    <button type="button" class="btn btn-outline-basic btn-sm"
+      (click)="onClear(); safetyAndSurveillanceCommonService.sendMatomoEvent('Incomplete observation annotation', 'Annotate observation')">Clear</button>
+  </div>
+</div>
+
+<div *ngIf="!annotationMode">
+  <div>
+    <div class="border-bottom" *ngFor="let annotation of imageModalData.annotations">
+      <div *ngIf="annotation.createdIn != 'system'" class="commentCard" (click)="sendSelectedAnnotation(annotation)">
+        <div class="d-flex justify-content-between">
+          <div class=" pt-2 fw-bold pointer" type="button"
+            (click)="annotationSelect(annotation.index); safetyAndSurveillanceCommonService.sendMatomoEvent('Viewing annotation comments', 'Annotation comments')">
+            Annotation #{{annotation.index}}
+          </div>
+          <span *ngIf="userGroup.indexOf('delete_annotations') > -1" class="float-right deleteAnnotation"
+            title="Delete annotation" (click)="onDeleteAnnotation(annotation.annotationId, annotation.index)"><i
+              class="fas fa-trash"></i></span>
+        </div>
+        <div [ngClass]="annotationNumber == annotation.index ? 'd-block' : 'd-none'">
+          <div class="mt-2">
+            <div class="fw-bold fs-10px">Annotated by</div>
+            <div class="fw-bold fs-10px text-color">{{annotation.drawnBy}}</div>
+          </div>
+          <div class="mt-2">
+            <div class="fw-bold fs-10px text-color">Comments</div>
+            <div class="d-flex w-100">
+              <div>
+                <img class=" border rounded-circle margin-left" src="assets/images/auth-panel.png" width="30px"
+                  height="30px" />
+              </div>
+              <div class="w-75 mx-2">
+                <input type="text" title="{{newComment}}" [(ngModel)]="newComment"
+                  class="form-control input-border border-bottom border-2" placeholder="Add new Comments here..">
+                <p *ngIf="!commonService.alphaNumericWithoutSpaceValidator(newComment)"
+                  class="font-italic text-danger mb-0">Comment cannot be empty and shouldn't have
+                  space characters at start and end</p>
+              </div>
+              <div>
+                <button type="button" class="btn btn-sm btn-basic" (click)="addComment(annotation)"
+                  [disabled]="!commonService.alphaNumericWithoutSpaceValidator(newComment)">COMMENT</button>
+              </div>
+            </div>
+          </div>
+          <div>
+
+            <div class="border-bottom pb-2" *ngFor="let c of annotation.comments">
+              <div class="d-flex  justify-content-between w-100">
+                <div class="d-flex align-items-center">
+                  <div class="w-15px h-15px me-2 d-flex  justify-content-center align-items-center  btn-outline-basic">
+                    {{c.index}}</div>
+                  <div>
+                    <img class=" border rounded-circle margin-left" src="assets/images/auth-panel.png" width="30px"
+                      height="30px" />
+                  </div>
+                  <div class="ms-2">
+                    <div class="fw-bold fs-10px">{{c.comment}}</div>
+                    <div class="fw-bold fs-10px text-color">{{c.commentedBy}}</div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="returnDataStatus()" class="noDataCss text-center">
+      <img src="assets/gif/pencil.gif" height="100" alt="Comments">
+      <h4>No annotations available</h4>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header p-2">
+        <h5 class="modal-title text-primary">
+          <em class="fas fa-exclamation-circle pe-1"></em>
+          Confirmation
+        </h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeConfirmationModal()">
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete the annotation?
+      </div>
+      <div class="modal-footer p-2">
+        <button type="button" class="btn btn-basic btn-sm" (click)="deleteAnnotation()">Confirm</button>
+        <button type="button" class="btn btn-basic btn-sm" (click)="closeConfirmationModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

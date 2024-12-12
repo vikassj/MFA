@@ -1,0 +1,200 @@
+<div>
+<app-audit-navbar (selectedFilters)="selectedFilters($event)" [selectedKey]="selectedKey"></app-audit-navbar>
+</div>
+<div class="container pt-1">
+    <div class="d-flex justify-content-between bg-white w-100 py-3">
+        <div class="card ps-3 pt-2 pb-2 pe-3 bg-red">
+            <span class="fs-16">AUDITS DUE TODAY</span>
+            <span class="mt-2 fs-24 fw-700">{{audits_due_today}}</span>
+        </div>
+        <div class="card ps-3 pt-2 pb-2 pe-3 bg-red">
+            <span class="fs-16">AUDITS OVER DUE</span>
+            <span class="mt-2 fs-24 fw-700">{{audits_overdue}}</span>
+        </div>
+        <div class="card ps-3 pt-2 pb-2 pe-3 bg-red">
+            <span class="fs-16">MISSED AUDITS</span>
+            <span class="mt-2 fs-24 fw-700">{{missed_audits}}</span>
+        </div>
+        <div class="card ps-3 pt-2 pb-2 pe-3 bg-red">
+            <span class="fs-16">INCOMPLETE AUDITS</span>
+            <span class="mt-2 fs-24 fw-700">{{incomplete_audits}}</span>
+        </div>
+        <div class="card ps-3 pt-2 pb-2 pe-3 bg-green">
+            <span class="fs-16">COMPLETED</span>
+            <span class="mt-2 fs-24 fw-700">{{completed_audits}}</span>
+        </div>
+        <div class="card ps-3 pt-2 pb-2 pe-3 bg-blue">
+            <span class="fs-16">NO. OF OBSERVATIONS</span>
+            <span class="mt-2 fs-24 fw-700">{{observation_count}}</span>
+        </div>
+        <div class="card ps-3 pt-2 pb-2 pe-3 bg-red">
+            <span class="fs-16">COMPLIANCE PERCENTAGE</span>
+            <span class="mt-2 fs-24 fw-700">{{compliance_percentage}}%</span>
+        </div>
+    </div>
+    <div class="d-flex main-container pt-2">
+        <div class="left px-2 w-30 fs-15">
+            <div class="d-flex justify-content-between my-2 py-2 pointer"  [ngClass]="{'bg-blue': selectedKey === 'audits_due_today' , 'b-radius': selectedKey === 'audits_due_today'}"
+            (click)="toggleActivities('audits_due_today')">
+                <span class="px-3">Audits Due Today</span>
+                <span class="px-3">{{audits_due_today}}</span>
+            </div>
+            <div class="d-flex justify-content-between my-2 py-2 pointer" [ngClass]="{'bg-blue': selectedKey === 'audits_overdue' , 'b-radius': selectedKey === 'audits_overdue'}"
+            (click)="toggleActivities('audits_overdue')">
+                <span class="px-3">Audits Over Due</span>
+                <span class="px-3">{{audits_overdue}}</span>
+            </div>
+            <div class="d-flex justify-content-between my-2 py-2 pointer" [ngClass]="{'bg-blue': selectedKey === 'upcoming_audits' , 'b-radius': selectedKey === 'upcoming_audits'}"
+            (click)="toggleActivities('upcoming_audits')">
+                <span class="px-3">Upcoming Audits</span>
+                <span class="px-3">{{upcoming_audits}}</span>
+            </div>
+            <div class="d-flex justify-content-between my-2 py-2 pointer" [ngClass]="{'bg-blue': selectedKey === 'missed_audits' , 'b-radius': selectedKey === 'missed_audits'}"
+            (click)="toggleActivities('missed_audits')">
+                <span class="px-3">Missed Audits</span>
+                <span class="px-3">{{missed_audits}}</span>
+            </div>
+            <div class="d-flex justify-content-between my-2 py-2 pointer" [ngClass]="{'bg-blue': selectedKey === 'incomplete_audits' , 'b-radius': selectedKey === 'incomplete_audits'}"
+            (click)="toggleActivities('incomplete_audits')">
+                <span class="px-3">Incomplete Audits</span>
+                <span class="px-3">{{incomplete_audits}}</span>
+            </div>
+            <div class="d-flex justify-content-between my-2 py-2 pointer" [ngClass]="{'bg-blue': selectedKey === 'completed_audits' , 'b-radius': selectedKey === 'completed_audits'}"
+            (click)="toggleActivities('completed_audits')">
+                <span class="px-3">Completed Audits</span>
+                <span class="px-3">{{completed_audits}}</span>
+            </div>
+            <!-- <div class="d-flex justify-content-between my-2 py-2 pointer" [ngClass]="{'bg-blue': selectedKey === 'surprise_audits' , 'b-radius': selectedKey === 'surprise_audits'}"
+            (click)="toggleActivities('surprise_audits')">
+                <span class="px-3">Surprise Audits</span>
+                <span class="px-3">{{surprise_audits}}</span>
+            </div> -->
+        </div>
+        <div class="right">
+            <div class="tableHeight" id="table1">
+                <ngx-datatable #table class="material expandable tableHeight" [columnMode]="ColumnMode.force" [headerHeight]="45"
+                  [footerHeight]="0" [rowHeight]="'auto'" [scrollbarH]="true" [rows]="auditData"
+                  [selected]="selected?selected:[]"  (select)="onSelect($event)">
+                  <ngx-datatable-column name="Activity Audit ID" [sortable]="false" [width]="100">
+                    <ng-template ngx-datatable-header-template let-column="column">
+                      <span title="Activity Audit ID">Activity Audit ID</span>
+                    </ng-template>
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      <div class="text-align-left" title="{{row.name}}">{{row.name}}</div>
+                      <div class="audit-id text-align-left fs-15" title="{{row.audit_id}}">ID{{row.audit_id}}</div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Unit" [sortable]="false" [width]="50">
+                    <ng-template ngx-datatable-header-template let-column="column">
+                      <span title="Unit">Unit</span>
+                    </ng-template>
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      <div title="{{row.unit_name}}">{{row.unit_name || '- - -'}}</div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Zone" [sortable]="false" [width]="50">
+                    <ng-template ngx-datatable-header-template let-column="column">
+                      <span title="Zone">Zone</span>
+                    </ng-template>
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      <div title="{{row.zone_name}}">{{row.zone_name || '- - -'}}</div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Vendor" [sortable]="false" [width]="60">
+                    <ng-template ngx-datatable-header-template let-column="column">
+                      <span title="Vendor">Vendor</span>
+                    </ng-template>
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      <div title="{{row.vendor}}">{{row.vendor || '- - -'}}</div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Start Date & Time" [sortable]="false" [width]="85">
+                    <ng-template ngx-datatable-header-template let-column="column">
+                      <span title="Start Date & Time">Start Date & Time</span>
+                    </ng-template>
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      <div title="{{row.start_date}}">{{row.start_date}}</div>
+                      <div title="{{row.start_time}}">{{row.start_time}}</div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="End Date & Time" [sortable]="false" [width]="85">
+                    <ng-template ngx-datatable-header-template let-column="column">
+                      <span title="End Date & Time">End Date & Time</span>
+                    </ng-template>
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      <div title="{{row.end_date}}">{{row.end_date}}</div>
+                      <div title="{{row.end_time}}">{{row.end_time}}</div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Done by" [sortable]="false" [width]="100">
+                    <ng-template ngx-datatable-header-template let-column="column">
+                      <span title="Done by">Done by</span>
+                    </ng-template>
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      <div title="{{row.done_by}}">{{row.done_by[0] || '- - -'}}</div>
+                      <div *ngIf="row.done_by.length > 1" title="{{row.done_by}}">+ {{row.done_by.length -1 }} more..</div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="No of Observations" [sortable]="false" [width]="30">
+                    <ng-template ngx-datatable-header-template let-column="column">
+                      <span title="No of Observations">No of Observations</span>
+                    </ng-template>
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      <div title="{{row.no_of_observations}}">{{row.no_of_observations || 0}}</div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="compliance %" [sortable]="false" [width]="130">
+                    <ng-template ngx-datatable-header-template let-column="column">
+                      <span title="compliance %">compliance %</span>
+                    </ng-template>
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      <div class="d-flex">
+                        <div class="bar-container">
+                          <div class="bar-fill" [ngStyle]="{'width': row.compliance_percentage + '%'}"></div>
+                        </div>
+                        <div class="ms-1 mt-1 primary-color" title="{{row.compliance_percentage}}">{{row.compliance_percentage | number}}%</div>
+                      </div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                  <ngx-datatable-column name="Checklist" [sortable]="false" [width]="120">
+                    <ng-template ngx-datatable-header-template let-column="column">
+                      <span title="Checklist">Checklist</span>
+                    </ng-template>
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      <div *ngIf="selectedKey != 'upcoming_audits'">
+                        <div *ngIf="selectedKey == 'audits_due_today' || selectedKey == 'audits_overdue' || selectedKey == 'incomplete_audits'">
+                          <button *ngIf="selectedKey != 'incomplete_audits'" class="btn btn-sm btn-start-audit fw-600"  (click)="routeAudit('/safety-and-surveillance/start-audit',{key:'activityId',value:row.id})" [disabled]="!safetyPlannerAcess">
+                            {{row.audit_status === 'Pending'?'START':'RESUME'}} AUDIT
+                          </button>
+                          <button *ngIf="selectedKey == 'incomplete_audits' && row.audit_status != 'view_only'" class="btn btn-sm btn-start-audit fw-600"  (click)="routeAudit('/safety-and-surveillance/start-audit',{key:'activityId',value:row.id})" [disabled]="!safetyPlannerAcess">
+                            RESUME AUDIT
+                          </button>
+                         </div>
+                         <div *ngIf="selectedKey != 'audits_due_today' && selectedKey != 'audits_overdue'" class="d-flex justify-content-around" >
+                          <button *ngIf="selectedKey != 'incomplete_audits'" class="btn btn-sm btn-start-audit fw-600" (click)="routeAudit('/safety-and-surveillance/start-audit',{key:'activityId',value:row.id})" [disabled]="!plannerAccess">
+                            VIEW
+                          </button>
+                          <button *ngIf="selectedKey == 'incomplete_audits' && row.audit_status === 'view_only'" class="btn btn-sm btn-start-audit fw-600" (click)="routeAudit('/safety-and-surveillance/start-audit',{key:'activityId',value:row.id})" [disabled]="!plannerAccess">
+                            VIEW
+                          </button>
+                          <button class="btn btn-sm bg-blue fw-600" *ngIf="selectedKey == 'completed_audits'"  (click)="openPdf(row)" [disabled]="!plannerAccess">
+                            PRINT
+                          </button>
+                         </div>
+                      </div>
+                    </ng-template>
+                  </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+            <!-- pagination  -->
+              <div class="m-0 position-absolute h-40px shadow audit-pagination">
+                <div class="h-100 bg-white d-flex align-items-center justify-content-center">
+                  <div class="">
+                    <app-pagination [totalRecords]="totalLength" [recordsPerPage]="noOfRows" [activePage]="activePage"
+                      (onPageChange)="displayActivePage($event)"></app-pagination>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,129 @@
+.unit {
+    height: 25px;
+    background-color: #2196f3;
+    color: white;
+    font-style: "Montserrat";
+    border-radius: 8px;
+    padding: 2px;
+    margin: 1px;
+    cursor: pointer;
+    font-size: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .all-unit {
+    width: max-content;
+    height: 25px;
+    background-color: #2196f3;
+    color: white;
+    font-style: "Montserrat";
+    border-radius: 8px;
+    padding: 2px;
+    margin: 1px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+  }
+
+  .arrow-pointer {
+    height: 10px;
+    width: 10px;
+    border: 1px solid #a2a2a26b;
+    box-shadow: 0px 1px 6px #00000029;
+    clip-path: inset(-5px 0px 0px -5px);
+    float: right;
+    /* right: 0; */
+    margin-left: 45%;
+    /* position: relative; */
+    margin-top: -6px;
+    background-color: white;
+    transform: rotate(45deg);
+    border-right: none;
+    border-bottom: none;
+  }
+
+  @media screen and (max-width: 1024px) {
+    .arrow-pointer {
+      display: none !important;
+    }
+  }
+
+  .all-units-dropdown {
+    border: 1px solid black;
+    /* width: 50%; */
+    display: flex;
+    flex-direction: column;
+    background: #ffffff 0% 0% no-repeat padding-box;
+    box-shadow: 0px 1px 6px #00000029;
+    border: 1px solid #a2a2a26b;
+    opacity: 1;
+    border-radius: 8px;
+    z-index: 1;
+    position: absolute;
+    width: 30%;
+    margin-top: 0.5%;
+    margin-left: -2px;
+  }
+.fs-8px{
+  font-size: 10px;
+}
+  .all-units-header {
+    font-size: 11px;
+    margin: 5px;
+    font-weight: 600;
+    font-family: "Montserrat";
+  }
+
+  .units-container {
+    display: inline-flex;
+    flex-wrap: wrap;
+  }
+
+  .unit-name-container {
+    margin-left: 5px;
+    font-size: 9px;
+  }
+
+  .remove-unit-button {
+    cursor: pointer;
+    color: white;
+    float: right;
+    margin-right: 5px;
+    margin-left: 10px;
+    margin-bottom: 2px;
+  }
+
+  .display-units-container {
+    height: 25px;
+    width: 40%;
+    align-items: center;
+    border: 1px solid black;
+    display: inline-flex;
+  }
+
+  .view-all-container {
+    width: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .view-all {
+    font-size: 12px;
+    color: #006699;
+    font-weight: 600;
+    font-family: "Montserrat";
+    margin-left: 20px;
+    width: 50px;
+  }
+
+  .dropdown-arrow {
+    color: #006699;
+    float: right;
+    margin-left: 10px;
+    cursor: pointer;
+  }

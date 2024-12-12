@@ -1,0 +1,134 @@
+.container{
+    margin: 0%;
+    max-width: 100% !important;
+    height: calc(100vh - 5.002vw);
+    background-color: #f4f7fc !important;
+}
+
+.card{
+    border: none;
+}
+
+.bg-white{
+    background-color: white !important;
+}
+
+.bg-red{
+    color: #F65150;
+    background-color: #FFF7F7 ;
+}
+
+.bg-green{
+    color: #33A438;
+    background-color: #EEFFEE  ;
+}
+
+.bg-blue{
+    color: white;
+    background-color: #006699  ;
+}
+
+.main-container{
+    background-color: white;
+    height: calc(100vh - 10.212vw);
+}
+
+.left{
+    width: 15%;
+    border-right: 0.052vw solid #ebebeb;
+    color: #748ba4 ;
+}
+
+.right{
+   width: 85%;
+}
+
+.b-radius{
+    border-radius: 0.261vw;
+}
+
+.position-absolute {
+    position: absolute;
+    bottom: 0.000vw;
+  }
+
+  .h-40px {
+    height: 2.084vw;
+  }
+
+  ::ng-deep .ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
+    font-size: 0.65vw !important  ; /* Decrease font size as needed */
+    /* font-weight: bold;  */
+}
+
+ ::ng-deep .ngx-datatable.scroll-horz .datatable-body{
+    height: 21.6vw !important;
+ }
+
+ ::ng-deep .ngx-datatable.material{
+    box-shadow: none !important;
+ }
+
+ .btn-start-audit{
+    border: 0.052vw solid;
+    color: #006699;
+ }
+
+ .audit-id{
+    color: white;
+    background-color: #006699  ;
+    border-radius: 5%;
+    width: fit-content;
+    padding: 0px 9px;
+ }
+
+ .bar-container {
+    border: 0.052vw solid #006699;
+    width: 100%;          /* Full width */
+    background-color: #ffffff;  /* Background color of the bar */
+    border-radius: 0.208vw;    /* Optional: rounded corners */
+    height: 1.563vw;          /* Height of the bar */
+    overflow: hidden;      /* Ensures overflow doesn't spill */
+    position: relative;
+}
+
+.bar-fill {
+    height: 100%;             /* Fills the height of the container */
+    background-color: #006699; /* Bar color */
+    line-height: 1.563vw;         /* Center text vertically */
+    color: white;              /* Text color */
+    border-radius: 0.208vw 0 0 0.000vw; /* Matches container's rounding on the left */
+}
+.ps-3 {
+    padding-left: 1.3vw!important;
+}
+
+.pb-2 {
+    padding-bottom: 0.417vw!important;
+}
+.pe-3 {
+    padding-right: 3.493vw!important;
+}
+.pt-2 {
+    padding-top: 0.417vw!important;
+}
+.fs-16{
+    font-size: 0.834vw !important;
+}
+.fs-15{
+    font-size: 0.734vw !important;
+}
+.mt-2 {
+    margin-top: 0.417vw!important;
+}
+.audit-pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    box-shadow: none !important;
+}
+
+.pointer{
+    cursor: pointer;
+}

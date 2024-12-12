@@ -1,0 +1,1651 @@
+<div class="dashboardContainer" style="padding: 10px;" [ngClass]="showMap ? 'd-none' : 'd-block'">
+  <div class="row col-12" style="margin: -2px;">
+    <div class="col-4 pe-0 bg-white right-sidebar-height" (click)="closeFilterSection()">
+      <div class="my-2 d-flex justify-content-between align-items-center">
+        <div class="w-100">
+          <div class="h-100 w-60 mb-2">
+            <app-units-filter appClickOutside (clickOutside)="onOutsideClick('units')" [displayUnits]="6" [units]="unitsList"
+              ></app-units-filter>
+          </div>
+          <div *ngIf="isPermitEnabled" class="h-100 w-60 mb-2">
+              <app-permit-filter appClickOutside (clickOutside)="onOutsideClick('permits')" [displayUnits]="6"
+              ></app-permit-filter>
+          </div>
+          <div class="w-100 mb-2 d-flex align-items-center justify-content-between" (click)="closeUnitFilter()">
+            <div class="width-calender-search">
+              <app-date-header></app-date-header>
+            </div>
+              <div class="observe" *ngIf="manualObservationFound && selectedTab == 'observations'">
+                <button
+                  class="order btn btn-sm h-30px d-flex align-items-center px-2 remove-wb" type="button"
+                  data-bs-toggle="modal" data-bs-target="#addObservation"
+                  (click)="observationImage = '';markedImageUrl = '';">
+                  <div class="me-2"><i class="fas fa-plus fs-14px"></i></div>
+                  <div class="line-h-12px fs-8px fw-700">ADD OBSERVATION
+                  </div>
+                </button>
+              </div>
+            </div>
+          <div class="w-100 d-flex align-items-center justify-content-between" (click)="closeUnitFilter()">
+            <div class="fw-800 fs-12px">Observations</div>
+            <div class="d-flex fs-11px fw-600">
+              <div class="opn text-open">OPEN</div>
+              <div
+                class="rounded border-open fs-12px text-open mx-2 px-2 open-close-count d-flex align-items-center justify-content-center"
+                [title]="openCloseCount?.open">
+                {{openCloseCount.open | numberHideInfo}}
+              </div>
+              <div class="opn text-close">CLOSED</div>
+              <div
+                class="rounded border-close fs-12px text-close ms-2 px-2 open-close-count d-flex align-items-center justify-content-center"
+                [title]="openCloseCount?.close">
+                {{openCloseCount?.close | numberHideInfo}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div (click)="closeUnitFilter()">
+        <div id="obsContainer" class="w-100 card-height scroll">
+          <ng-container
+            *ngIf="selectedObsStatus == 'openClose' && (obsData| filterData: searchText: searchParams | riskFilter: [] | statusFilter: [])?.length > 0"
+            #totalObservation>
+            <div id="obs{{item.faultId}}" class="card card-border-radius pointer observations"
+              *ngFor="let item of this.obsData| filterData: searchText: searchParams | riskFilter: [] | statusFilter: []"
+              (click)="selectedData(item,true); safetyAndSurveillanceCommonService.sendMatomoEvent('View open/ close observation', 'View observation')">
+              <ng-container>
+                <div class="card-body h-100"
+                  [ngClass]="imageModalData?.faultId == item.faultId ? 'card-selected' : 'obs-border-bottom'">
+                  <div class="w-100 d-flex align-items-center">
+                    <div class="content-width d-flex justify-content-between">
+                      <div class="d-flex align-items-center">
+                        <div class="pe-2">
+                          <div class="mb-2 d-flex justify-content-between">
+                            <div class="me-2 overlayCss">
+                              <app-iogp-pills [category]="item.riskLevel" [imgHeight]="'52'"></app-iogp-pills>
+                              <br />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="item">
+                          <div *ngIf="!item.editFlag" class="text-color fw-700 fs-12" title="{{item.observation}}">
+                            {{item.observation}}
+                          </div>
+                          <div class="text-dark fs-11 fw-lighter" >
+                            {{item.date |dateFormat }} | {{item.time}}
+                          </div>
+                          <div>
+                            <div class="text-color fs-11 fw-600">{{ item.unit }} > {{ item.zone }}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="d-flex" style="width: 140px;">
+                        <div>
+                          <div class="mb-2" style="width: 140px;">
+                            <span class="fs-11px rounded" style="padding: 2px 5px;"
+                              [ngClass]="{'status-open': item.is_open == 'Open','status-snooze': item.is_open == 'Snooze','status-archive': item.is_open == 'Archive','status-closed-no-action': item.is_open == 'Closed-No Action','status-closed-action-taken': item.is_open == 'Closed-Action Taken','status-closed-false-positive': item.is_open == 'Closed-False Positive'}">
+                              {{ item.is_open == 'Archive' ? 'Archived' : (item.is_open == 'Snooze' ? 'Snoozed' : item.is_open) }}
+                            </span>
+                          </div>
+                          <div class="row p-0">
+                            <app-risk-rating class="w-100" [riskRatingLevels]="riskRatingLevels"
+                              [selectedRating]="item.ratingDetails.rating" [disabled]="true"></app-risk-rating>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+            </div>
+
+          </ng-container>
+          <ng-container
+            *ngIf="selectedObsStatus != 'openClose' && (obsData| filterData: searchText: searchParams | riskFilter: [] | statusFilter: [] )?.length > 0"
+            #totalObservation>
+            <div id="obs{{item.faultId}}" class="card card-border-radius pointer observations"
+              *ngFor="let item of this.obsData| filterData: searchText: searchParams | riskFilter: [] "
+              (click)="selectedData(item,true); safetyAndSurveillanceCommonService.sendMatomoEvent('View snooze/ archive observation', 'View observation')">
+              <ng-container>
+                <div class="card-body h-100"
+                  [ngClass]="imageModalData?.faultId == item.faultId ? 'card-selected' : 'obs-border-bottom'">
+                  <div class="w-100 d-flex align-items-center">
+                    <div class="content-width d-flex justify-content-between">
+                      <div class="d-flex align-items-center">
+                        <div class="pe-2">
+                          <div class="mb-2 d-flex justify-content-between">
+                            <div class="me-2 overlayCss">
+                              <app-iogp-pills [category]="item.riskLevel" [imgHeight]="'52'"></app-iogp-pills>
+                              <br />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="item">
+                          <div *ngIf="!item.editFlag" class="text-color fw-700 fs-12" title="{{item.observation}}">
+                            {{item.observation}}
+                          </div>
+                          <div class="text-dark fs-11 fw-lighter">
+                            {{item.date | date
+                            :'dd.MM.yyyy'}} | {{item.time}}
+                          </div>
+                          <div>
+                            <div class="text-color fs-11 fw-600">{{ item.unit }} > {{ item.zone }}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class=" d-flex" style="width: 140px;">
+                        <div>
+                          <div class="mb-2" style="width: 140px;">
+                            <span class="fs-11px rounded" style="padding: 2px 5px;"
+                              [ngClass]="{'status-open': item.is_open == 'Open','status-snooze': item.is_open == 'Snooze','status-archive': item.is_open == 'Archive','status-closed-no-action': item.is_open == 'Closed-No Action','status-closed-action-taken': item.is_open == 'Closed-Action Taken','status-closed-false-positive': item.is_open == 'Closed-False Positive'}">
+                              {{ item.is_open == 'Archive' ? 'Archived' : (item.is_open == 'Snooze' ? 'Snoozed' : item.is_open) }}
+                            </span>
+                          </div>
+                          <div class="row p-0">
+                            <app-risk-rating class="w-100" [riskRatingLevels]="riskRatingLevels"
+                              [selectedRating]="item.ratingDetails.rating" [disabled]="true"></app-risk-rating>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              
+                </div>
+              </ng-container>
+
+
+            </div>
+          </ng-container>
+          <ng-container
+            *ngIf="(selectedObsStatus == 'openClose' && (obsData| filterData: searchText: searchParams | riskFilter: [] | statusFilter: [] )?.length === 0 || selectedObsStatus != 'openClose' && (obsData| filterData: searchText: searchParams | riskFilter: [] | statusFilter: [] )?.length === 0)">
+            <div class="fullHeight fullWidth d-inline-flex">
+              <h5 class="m-auto text-center">No data available</h5>
+            </div>
+          </ng-container>
+
+        </div>
+
+        <div class="d-flex align-items-center h-50px">
+          <div class="d-flex align-items-center justify-content-between border-top-pagi w-100 h-100 px-2">
+            <div>
+              <div class="fs-10px fs-600 me-2" *ngIf="obsData?.length > 0">Result:
+                <ng-container *ngIf="configureStatusCount?.length > 0; else noTooltip">
+                  <span class="fw-700 pointer w-100px d-inline-block" id="tooltip" data-toggle="tooltip" data-placement="top"  [attr.title]="observationStatement">&nbsp;{{startWith}} -
+                    &nbsp;{{(startWith + obsData?.length) - 1}} of &nbsp;{{arrayLenght}}
+                  </span>
+                </ng-container>
+                <ng-template #noTooltip>
+                  {{startWith}} - {{(startWith + obsData?.length) - 1}} of {{arrayLenght}}
+                </ng-template>
+                </div>
+            </div>
+            <app-pagination [totalRecords]="arrayLenght" [recordsPerPage]="noOfRows" *ngIf="arrayLenght"
+              [activePage]="activePage" (onPageChange)="displayActivePage($event)"></app-pagination>
+          </div>
+        </div>
+      </div>
+      <!-- <div>
+        insights tab
+      </div> -->
+    </div>
+    <div class="right-sidebar-height scroll py-2 bg-body "   [ngClass]="showInsights? 'col-6' : 'col-8'" (click)="closeUnitFilter(); closeFilterSection()">
+      <ng-container
+        *ngIf="((selectedObsStatus != 'openClose' || selectedObsStatus == 'openClose') && (obsData| filterData: searchText: searchParams | riskFilter: [] | statusFilter: [] )?.length > 0)">
+        <ng-container
+          *ngIf="!(selectedObsStatus == 'openClose' && (obsData| filterData: searchText: searchParams | riskFilter: [] | statusFilter: [] )?.length === 0 || selectedObsStatus != 'openClose' && (obsData| filterData: searchText: searchParams | riskFilter: [] | statusFilter: [] )?.length === 0) else noObsTemplate">
+          <div class="parent-container h-75 pt-2 fs-12px " id="image" *ngIf="imageHide">
+            <div class="w-100 observation-bar d-flex justify-content-between align-items-center mode-bg-color">
+            <div class="is_mobile_buttons">
+             <div class="ms-2 image-header">{{imageModalData?.unit}} > {{ imageModalData?.zone }}  <span *ngIf="isPermitEnabled && imageModalData?.permit_number && imageModalData.nature_of_work"> > {{imageModalData?.permit_number}} > {{ imageModalData?.nature_of_work }}  </span></div>
+              <div class="btn-basic is_mobile" *ngIf="isPermitEnabled && (imageModalData?.mode=='is_mobile' || imageModalData?.mode=='ptz'  || imageModalData?.mode=='cctv')">{{ imageModalData?.mode=='is_mobile'?'IS Mobile':''}}
+                 {{ imageModalData?.mode=='ptz'?('ptz'| uppercase):''}} {{ imageModalData?.mode=='cctv'?('cctv'| uppercase):''}}</div>
+            </div> 
+            <div class="image-header">Observation#{{imageModalData?.faultId}}
+              <span *ngIf="isPermitEnabled">| Camera#{{imageModalData?.camera_id}}</span>
+            </div>
+              <div class=" me-2 image-header" ><i class="far fa-calendar-alt pe-2"></i>
+                {{imageModalData?.date | dateFormat}}
+                <i class="far fa-clock px-2"></i> {{imageModalData?.time}}
+              </div>
+              <!-- <div class="me-2 insights pointer" *ngIf="!showInsights" (click)="toggleInsights(true)"><img src="assets/icons/bulb.svg" alt="">
+                Insights
+              </div> -->
+            </div>
+            <ng-container *ngIf="!evidenceMode">
+              <div class="scene-container image-height" oncontextmenu="return false;">
+                <div id="markedImageDiv" *ngIf="selectedMediaType === 'markedImage'"
+                  class="me-1 img-zoom rounded h-100 w-100" (dblclick)="resetZoom()"
+                  [ngClass]="selectedImageVideoButton == 'Image' ? 'd-block' : 'd-none'">
+                  <div class="w-100 h-100" [ngClass]="{'scalize': selectedMode}">
+                    <div class="w-100 h-100">
+                      <img class="w-100 h-100 pt-30px" id="modalImage" [ngClass]="{'target': selectedMode, 'modalImageBlackBg' : imageModalData?.imageUrl}"
+                        [src]="imageModalData?.imageUrl"
+                        (error)="fetchEncryptedImageData('modalImage', imageModalData?.imageUrl)"
+                        (dblclick)="resetZoom()" crossorigin alt="Image" *ngIf="!noImageAvailble">
+                      <div class="h-100 d-flex justify-content-center align-items-center" *ngIf="noImageAvailble"><img
+                          src="no_image" alt="Image"></div>
+                    </div>
+
+                    <div *ngIf="selectedMode">
+                      <ng-container *ngFor="let point of actionPoints">
+                        <div class="item-point circle cursorPointer"
+                          [ngClass]="{'pulse2': sendObservationData.showAnimation}"
+                          [ngStyle]="{top: point.top + 'px', left: point.left + 'px'}"
+                          (click)="openAnnotationModal(point)">
+                          <div>
+
+                            <a href="#" class="toggle"></a>
+                          </div>
+                          <p>{{point.index}}</p>
+                        </div>
+                        <div id="content{{point.index}}" class="content right bottom">
+                          <div class="head">
+                            <span class="exit cursorPointer">
+                              <img src="assets/icons/close.png" alt="Close"
+                                (click)="closeAnnotationModal(point.index)" /></span>
+                            <h6 class="title">Annotation #{{point.index}}</h6>
+                          </div>
+                          <div class="body">
+                            <p>{{point.comment}}</p>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <canvas class="" [ngClass]="selectedMode && editSymbol.tab && !editSymbol.annotation ? 'cursor-crosshair' : ''" id="canvas"></canvas>
+                </div>
+
+                <ng-container *ngIf="selectedMediaType === 'unmarkedImage' && checkboxValue == false">
+                  <img id="modalImage" class="img-zoom d-flex fullHeight fullWidth" [ngClass]="{'modalImageBlackBg' : imageModalData?.rawImageUrl}"
+                    src="{{imageModalData?.rawImageUrl}}"
+                    (error)="fetchEncryptedImageData('modalImage', imageModalData?.rawImageUrl)"
+                    (dblclick)="resetZoom()" crossorigin alt="Image">
+                </ng-container>
+                <div *ngIf="!selectedType && ((selectedMediaType=='markedVideo' && imageModalData.videoUrl=='') || (selectedMediaType=='unmarkedVideo' && imageModalData.rawVideoUrl==''))"
+                class="noVideosCss d-flex text-center image-height w-100 justify-content-center align-items-center">
+                <em class="far fa-2x fa-video-slash"></em>
+                <h3>No video available</h3>
+              </div>
+                <ng-container *ngIf="selectedMediaType === 'markedImage' && checkboxValue == true">
+                  <img id="modalImage" [ngClass]="{'modalImageBlackBg' : imageModalData?.imageUrl}" class="img-zoom d-flex fullHeight fullWidth" src="{{imageModalData?.imageUrl}}"
+                    (error)="fetchEncryptedImageData('modalImage', imageModalData?.imageUrl)" (dblclick)="resetZoom()"
+                    crossorigin alt="Image">
+                </ng-container>
+                <ng-container *ngIf="selectedMediaType === 'markedVideo' && checkboxValue == true">
+                  <app-zoomable-video id="modalImage" [ngClass]="{'modalImageBlackBg' : imageModalData?.videoUrl}" [attr.src]="imageModalData?.videoUrl"
+                    class="fullHeight fullWidth d-flex w-100" [uuid]="imageModalData?.uuid"
+                    [url]="imageModalData?.videoUrl"></app-zoomable-video>
+                </ng-container>
+
+                <ng-container *ngIf="selectedMediaType === 'unmarkedVideo' && checkboxValue == false">
+                  <app-zoomable-video id="modalImage" [ngClass]="{'modalImageBlackBg' : imageModalData?.rawVideoUrl}" [attr.src]="imageModalData?.rawVideoUrl"
+                    class="fullHeight fullWidth d-flex w-100" [uuid]="imageModalData?.uuid"
+                    [url]="imageModalData?.rawVideoUrl">
+                  </app-zoomable-video>
+                </ng-container>
+
+                <div *ngIf="selectedMediaType == ''"
+                  class="fullHeight fullWidth d-inline-flex">
+                  <em class="far fa-2x fa-video-slash m-auto text-center"></em>
+                  <h3>No videos available</h3>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="evidenceMode">
+              <div class="scene-container image-height" oncontextmenu="return false;">
+                <div id="markedImageDiv" class="me-1 img-zoom rounded h-100 w-100" (dblclick)="resetZoom()">
+                  <div class="w-100 h-100" [ngClass]="{'scalize': selectedMode}">
+                    <div class="w-100 h-100">
+                      <img class="w-100 h-100" id="modalImage" [ngClass]="{'target': selectedMode, 'modalImageBlackBg' : evidenceImageModalData?.file}"
+                        [src]="evidenceImageModalData?.file" (dblclick)="resetZoom()" crossorigin alt="Image">
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+            </ng-container>
+
+            <div
+              class="col-12 fs-11 border fw-bold text-color min-w-30px mt-1 px-3  mode-bg-color d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center" style="color: black;">
+                <ng-container *ngIf="selectedType">
+                  <div class="me-3 d-flex align-items-center">
+                    <input type="checkbox" [(ngModel)]="checkboxValue" (ngModelChange)="onSelectedTypeChange('image')"
+                      id="marked" name="marked" value="Marked" class="me-1"
+                      [disabled]="(!checkboxValue && !imageModalData?.imageUrl) || (checkboxValue && !imageModalData?.rawImageUrl)" />
+                    <label for="marked">Marked</label>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="!selectedType">
+                  <div class="me-3 d-flex align-items-center">
+                    <input type="checkbox" [(ngModel)]="checkboxValue" (ngModelChange)="onSelectedTypeChange('video')"
+                      id="marked" name="marked" value="Marked" class="me-1"
+                      [disabled]="(!checkboxValue && !imageModalData?.videoUrl) || (checkboxValue && !imageModalData?.rawVideoUrl)" />
+                    <label for="marked">Marked</label>
+                  </div>
+                </ng-container>
+
+                <div class="me-3" *ngIf="userGroup.indexOf('disable_observation_video') === -1">
+                  <div class="rad radiuses p-1 my-1 all-btn-bg-color text-white icon-color d-flex align-items-center">
+                    <div class="vid w-25px pointer h-18px  radiuses d-flex justify-content-center align-items-center"
+                      (click)="changeMediaType()" [ngClass]="
+                  selectedType  ? 'btn-bg-color text-color' : ''
+                  ">
+                      <i class="fas fa-image" style="padding: 4px 6px;"></i>
+                    </div>
+                    <div
+                      class="vid w-50px pointer h-18px icon-color radius d-flex justify-content-center align-items-center"
+                      (click)="changeMediaType()" [ngClass]="
+                !selectedType  ? 'btn-bg-color text-color' : ''
+                  ">
+                      <i class="fas fa-video" style="padding-left: 3px;"></i>
+                    </div>
+                  </div>
+                  <!-- <div *ngIf="selectedType == ''"
+                  class="noVideosCss d-flex text-center image-height w-100 justify-content-center align-items-center">
+                  <em class="far fa-2x fa-video-slash"></em>
+                  <h3>No videos available</h3>
+                </div> -->
+                </div>
+
+
+                <div class="me-3 d-flex align-items-center"
+                  *ngIf="canDraw && selectedType && selectedMediaType === 'markedImage'">
+                  <input type="checkbox" id="annotation" name="annotation" class="me-1" [ngModel]="selectedMode"
+                    (click)="changeMode()" />
+                  <label class="w-110px text-color" for="annotation">Annotation mode</label>
+                </div>
+              </div>
+              <div *ngIf="userGroup.indexOf('highlight') > -1" class="mt-2">
+                <div *ngIf="!(selectedCardData?.isHighlight == true)"
+                  class="cursorPointer text-color fs-12px fw-bold d-inline-flex"
+                  (click)="updateHighlightObservations(); safetyAndSurveillanceCommonService.sendMatomoEvent('Add to SIF', 'SIF')">
+                  <img src="assets/icons/not_highlighted.png" class="highlightCss" style="margin-right: 4px;">
+                  <p class="mb-0 fs-11px" style="margin-top: 1px;">Add to SIF</p>
+                </div>
+                <div *ngIf="selectedCardData?.isHighlight == true"
+                  class="cursorPointer text-color fs-12px fw-bold d-inline-flex"
+                  (click)="updateHighlightObservations(); safetyAndSurveillanceCommonService.sendMatomoEvent('Remove from SIF', 'SIF')">
+                  <img src="assets/icons/highlighted.png" class="highlightCss" style="margin-right: 4px;">
+                  <p class="mb-0  fs-11px" style="margin-top: 1px;">Remove from SIF</p>
+                </div>
+              </div>
+              <div class="">
+                <div class="fw-bold w-140px">
+                  <small>
+                    <div id="unitsDropdown" *ngIf="selectedMediaType === 'markedImage'" class="dropdown fw-600 w-100">
+                      <div class="ff-montserrat  d-flex justify-content-between align-items-center rounded"
+                        (click)="dropdownShow()"
+                        [ngClass]="{'border-1 status-open rounded' : selectedCardData?.isOpen == 'Open', 'border-1 status-closed-action-taken rounded': selectedCardData?.isOpen != 'Open', 'opacity-75': (!(userGroup?.indexOf('close') > -1) || selectedCardData.disabled), 'cursor-pointer': !(!(userGroup?.indexOf('close') > -1) || selectedCardData.disabled)}"
+                        style="padding: 3px 8px 3px 6px; border-radius: 3px !important;">
+                        <div class="fw-bold" [title]="selectedCardData?.isOpen">
+                          <!-- {{selectedCardData?.isOpen}} -->
+                          {{selectedCardData?.isOpen == 'Archive' ? 'Archived' : (selectedCardData?.isOpen == 'Snooze' ? 'Snoozed' : selectedCardData?.isOpen)}}</div>
+                        <div>
+                          <img src="/assets/icons/downArrow.png" *ngIf="!observationStatusDropdown" alt="" width="10px">
+                          <img src="/assets/icons/upArrow.png" *ngIf="observationStatusDropdown" alt="" width="10px">
+                        </div>
+                      </div>
+                      <div class="dropdown-style shadow rounded w-100 py-2" *ngIf="observationStatusDropdown">
+                        <div style="font-weight: 600 !important; padding: 2px 0px;"
+                          class="options text-dark-blue ff-montserrat px-2" *ngFor="let selectItem of faultsChoice"
+                          [ngClass]="{'selected-dropdown' : selectItem == selectedCardData?.isOpen, 'text-danger': selectItem == 'Open', 'text-success': selectItem != 'Open'}"
+                          (click)="this.selectedCardData.isOpen = selectItem; this.observationStatusDropdown = false; clearTextArea(selectItem, selectedCardData); selectedVendor()">
+                          {{selectItem}}
+                          <!-- {{selectItem == 'Archive' ? 'Archived' : (selectItem == 'Snooze' ? 'Snoozed' : selectItem)}} -->
+                        </div>
+                      </div>
+                    </div>
+                  </small>
+                </div>
+              </div>
+              <div class="d-flex w-70px" *ngIf="evidenceDocuments">
+                <input type="checkbox" id="evidence" name="evidence" class="me-1" [ngModel]="evidenceMode"
+                  (click)="changeEvidenceMode()" />
+                <label class="w-100px" for="evidence">Evidence</label>
+              </div>
+              <div class=""
+                style="height: 34px; display: flex; align-items: center; justify-content: space-between; gap: 0.8rem;">
+                <span style="background-color: #006699; height: 35px; width :33px; border-radius: 0px;"
+                  *ngIf="userGroup?.indexOf('observations_email') > -1 && selectedMediaType === 'markedImage'"
+                  class="cursorPointer ms-3" (click)="openSendObservationModal()"
+                  [ngClass]="shareShows == true ? 'share-bgColor-select':'share-bgColor-noselect'">
+                  <img src="assets/icons/share.svg" alt="share" height="18px" style="padding: 3px 2px 0px 3px;
+                  margin: 2px 2px 6px 2px;">
+                </span>
+                <span
+                  *ngIf="(userGroup?.indexOf('download') > -1) && ((selectedMediaType === 'unmarkedImage' && imageModalData?.rawImageUrl != '') || (selectedMediaType === 'markedImage' && imageModalData?.imageUrl != '') || (selectedMediaType === 'markedVideo' && imageModalData?.videoUrl != '') || (selectedMediaType === 'unmarkedVideo' && imageModalData?.rawVideoUrl != ''))"
+                  class="mb-0  cursorPointer" [ngClass]="{'cursorDisabled': selectedMediaType === ''}"
+                  (click)="downloadImage()">
+                  <img src="assets/icons/DownloadIcon.svg" alt="download" height="16px" style="margin-bottom: 0px;">
+                </span>
+
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="isPermitEnabled" class="d-flex col-12 permit  py-2">
+            <div class="d-flex row ms-2">
+              <span class="text-color fs-12 fw-700 line-h-14px w-180px pb-1">Permit Number</span>
+              <span class="fs-12 fw-600">{{imageModalData?.permit_number}}</span>
+            </div>
+            <div class="d-flex row ms-2">
+              <span class="text-color fs-12 fw-700 line-h-14px w-180px pb-1">Permit valid from</span>
+              <div class="d-flex">
+                <div class="fs-12 fw-600  me-1 ">{{ (imageModalData?.permit_start_date ? imageModalData?.permit_start_date : "---- --, ----") | dateFormat}}|</div>
+                <div class="fs-12 fw-600 ">{{imageModalData?.permit_start_time ? imageModalData?.permit_start_time : "-- : -- : --"}}</div>
+              </div>
+            </div>
+            <div class="d-flex row ms-2">
+              <span class="text-color fs-12 fw-700 line-h-14px w-180px pb-1">Permit valid to</span>
+              <div class="d-flex">
+                <div class="fs-12  fw-600  me-1 ">{{ (imageModalData?.permit_end_date ? imageModalData?.permit_end_date : "---- --, ----") | dateFormat}}|</div>
+                <div class="fs-12 fw-600 ">{{imageModalData?.permit_end_time ? imageModalData?.permit_end_time : "-- : -- : --"}}</div>
+              </div>
+            </div>
+            <div class="d-flex row ms-2">
+              <span class="text-color fs-12 fw-700 line-h-14px w-180px pb-1">Job Description</span>
+              <span *ngIf="imageModalData?.permit_work_detail" class="fs-12 fw-600">{{imageModalData?.permit_work_detail}}</span>
+              <span *ngIf="!imageModalData?.permit_work_detail" class="fs-12 fw-600">NA</span>
+            </div>
+          </div>
+
+          <div class="col-12 parent-position" id="overviewSection" *ngIf="!selectedMode">
+            <div class="h-25">
+              <div class="grid-container-columns" *ngIf="!shareShows && !selectedMode && !confirmMailShow">
+                <div class="grid-container-rows-1">
+                  <div class="d-flex align-items-center py-3 me-2">
+                    <div class="ces text-color fs-12 fw-700 line-h-14px w-180px">Number of similar observation in last
+                      30 days</div>
+                    <div class="num">
+                      <span class=" text-dark fw-bold ps-2">{{sim}}</span>
+                    </div>
+
+                  </div>
+                  <div *ngIf="shareShows">
+                    <div>Share Observation#{{imageModalData?.faultId}}</div>
+                    <div>
+                      <form action="/action_page.php">
+                        <fieldset class="overlayCss">
+                          <legend>Email ID</legend>
+                          <div class="d-flex justify-content-between align-items-center col-12">
+                            <div class="pb-1 col-11">
+                              <input class="border-none form-control h-100 w-100"
+                                [(ngModel)]="sendObservationData.emailID" name="email" placeholder="Enter Email Id"
+                                type="text" #chip (keyup.enter)="addTag(chip.value);chip.value=''">
+                            </div>
+                            <div class="col-1 d-flex align-items-center h-100">
+                              <i class="far fa-plus-square btn-outline-basic plus-icon"
+                                (click)="addTag(chip.value);chip.value=''"></i>
+                            </div>
+                          </div>
+                        </fieldset>
+                        <p *ngIf="msg" class="text-danger font-italic"
+                          [ngClass]="{'mb-0': sendObservationData.emailIDList?.length === 0}">{{msg}}</p>
+                        <div class="text-color fs-10px fw-bold mt-2">Send To</div>
+                        <div class="d-flex flex-wrap mb-2 ">
+                          <div class="border chip-style mx-2 px-2" *ngFor="let item of sendObservationData.emailIDList">
+                            {{item}}<i class="ms-3 fas fa-times" (click)="removeItem(item)"></i></div>
+                        </div>
+                        <div class="d-flex align-items-end submit-cancel-btn">
+                          <button type="submit" class="btn btn-basic btn-sm me-2" (click)="sendObservation()"
+                            [disabled]="sendObservationData.emailIDList?.length === 0">SUBMIT</button>
+                          <button type="reset" class="btn btn-outline-basic btn-sm"
+                            (click)="resetSendObservationData(); safetyAndSurveillanceCommonService.sendMatomoEvent('Incomplete observation share', 'Share observation')">CANCEL</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="py-3">
+                    <div class="text-color fs-12 fw-700">Observations</div>
+                    <div class="fs-12 fw-600" style="width: 140px; min-height: 24px;">{{faultData?.[0]?.observation}}
+                    </div>
+                  </div>
+                  <div class="py-3">
+                    <div class="text-color fs-12 fw-700">Recommendations</div>
+                    <div class="fw-600 fs-12 text-wrap" style="width: 140px; min-height: 24px;">{{faultData?.[0]?.recommendation}}</div>
+                  </div>
+                  <div class="py-3" *ngIf="isPermitEnabled">
+                    <div class="text-color fs-12 fw-700">Issuer Name</div>
+
+                    <div class="fs-12 fw-600">
+                      <span *ngIf="imageModalData?.issuer_name">
+                        {{imageModalData?.issuer_name}}
+                      </span>
+                      <span *ngIf="!imageModalData?.issuer_name">
+                        No data available
+                      </span>
+                    </div>
+                  </div>
+                  <div class="py-3" *ngIf="isPermitEnabled">
+                    <div class="text-color fs-12 fw-700">Receiver Name</div>
+
+                    <div class="fs-12 fw-600">
+                      <span *ngIf="imageModalData?.permit_receiver_name">
+                        {{imageModalData?.permit_receiver_name}}
+                      </span>
+                      <span *ngIf="!imageModalData?.permit_receiver_name">
+                        No data available
+                      </span>
+                    </div>
+                  </div>
+                  <div class="py-3">
+                    <div class="my-2 text-color fs-12 fw-700">Supporting Documents(s)</div>
+                    <div *ngIf="!noSupportingDocsFound" class="d-flex flex-wrap">
+                      <div class="d-flex m-1 w-200px" *ngFor="let item of supportingDocuments;let i = index">
+                        <div class="supportImageComments position-relative w-200px">
+                          <div class="d-flex align-items-center img pe-2 pb-2" id="modalImage" [ngClass]="{'modalImageBlackBg' : item?.file}">
+                            <div class=" w-100px">
+                              <img
+                                *ngIf="item?.file?.includes('.jpg') && (item.file != null || item.file != '') || item?.file?.includes('.jpeg')&& (item.file != null || item.file != '') || item?.file?.includes('.png') && (item.file != null || item.file != '')"
+                                [src]="item?.file" width="100px" height="70px">
+                              <span *ngIf="item?.file?.includes('.pdf')" class="inline-block ms-2"
+                                style="width: 100px; height:65px; padding-right: 5px">
+                                <i class="fas fa-file-pdf primary-color fs-67px" style="padding-top: 0.9px;"></i>
+                              </span>
+                            </div>
+                            <div class=" rounded-end position-relative w-100px p-1"
+                              [ngClass]="item?.file?.includes('.pdf') ? 'h-69px' : 'h-70px'"
+                              style="background-color: #1E3044; color: #DDDDDD;">
+                              <div class=" fs-8px fileName w-100px pe-2">{{returnFileName(item.file)}}</div>
+                              <div class="fs-8px py-1 position-button">
+                                <div class="me-2 fw-bold"><i class="far fa-calendar-alt pe-2"></i>{{item.date | dateFormat}}
+                                </div>
+                                <div class=" fw-bold"><i class="far fa-clock pe-2"></i>{{item.time}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class=""
+                            [ngClass]="item?.file?.includes('.pdf') ? 'download-option-pdf' : 'download-option'">
+                            <div class="d-flex justify-content-center align-items-center">
+                              <div
+                                class="w-25px h-25px bg-white cursor-pointer rounded d-flex justify-content-center align-items-center me-1"
+                                (click)="downloadImg(item.file); SafetyAndSurveillanceCommonService.sendMatomoEvent('Download media in comments', 'Comments');">
+                                <i class="fas fa-download text-color"></i>
+                              </div>
+                              <div
+                                class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center">
+                                <button class="btn btn-sm p-0 cursor-pointer" [disabled]="!(userMail == item?.updated_by)"
+                                  (click)="getEvidenceId(item.id)" data-bs-toggle="modal"
+                                  data-bs-target="#deleteEvidencePopup">
+                                  <i class="fas fa-trash text-danger"></i>
+                                </button>
+                              </div>
+                              <div
+                                class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center cursor-pointer ms-1"
+                                (click)="selectImageToDisplay(item, supportingDocuments)"><img
+                                  src="assets/icons/Icon awesome-eye.svg" width="18px" height="18px">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="noSupportingDocsFound" style="font-size: 12px;
+                    margin-top: -5px;
+                    margin-bottom: 15px;">
+                      No data available
+                    </div>
+                  </div>
+                </div>
+                <div class="grid-container-rows-2">
+                  <div class="d-flex  py-3">
+                    <div class="same text-color fs-12 fw-700 d-sm-inline-flex line-h-14px w-180px">Number of similar
+                      Category observation in last 30 days</div>
+                    <div *ngIf="cat != ''|| cat != 0" class="col-2 ps-2" style="margin-left: 30px;">
+                      <div class="text-dark fw-bold" style="margin-left: 12px;
+                      font-size: 16px; line-height: 12px;">{{cat}}</div>
+                      <div class="text-color fs-9px" style="margin-left: 12px; line-height: 9px;">{{c}}</div>
+                    </div>
+                    <div *ngIf="cat === ''|| cat === 0" class="col-2 ps-2" style="margin-left: 30px;">
+                      <div class="text-dark fw-bold" style="margin-left: 12px;
+                      font-size: 16px; line-height: 12px;">NA</div>
+                    </div>
+                  </div>
+                  <div class="same d-flex align-items-center">
+                    <div class="me-3">
+                      <div class="text-color fs-12 fw-700 mb-1">Risk Rating</div>
+
+                      <div class="d-flex align-items-center">
+                        <app-risk-rating class="w-100" [riskRatingLevels]="riskRatingLevels"
+                          [selectedRating]="faultData?.[0]?.ratingDetails.editRating"
+                          (emitSelectedRating)="saveRiskRating($event, faultData?.[0]?.observationId)"
+                          [disabled]="!(userGroup?.indexOf('rating') > -1)">
+                        </app-risk-rating>
+                        <div class="w-20px text-end text-success" style="margin-bottom: 10px;margin-left: 6px;">
+                          <i class="far fa-check-circle" style="font-size: 18px !important;"
+                            [ngClass]="ratingChanges ? 'pointer':'opacity-50'"
+                            (click)="updateRiskRating(faultData?.[0]?.observationId)"
+                            [disabled]="!(userGroup?.indexOf('rating') > -1)"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="same mt-2">
+                    <div class="rate text-dark fs-12 fw-600 fs-italic">Rated by</div>
+                    <div class="text-color fw-700" *ngIf="faultData?.[0]?.ratingDetails.updated_by">
+                      <small>{{faultData?.[0]?.ratingDetails.updated_by}}</small>
+                    </div>
+                    <div class="text-color fw-700" *ngIf="!faultData?.[0]?.ratingDetails.updated_by"><small>Not yet
+                        rated</small></div>
+                  </div>
+                  <div class="same mt-2" *ngIf="userGroup.indexOf('vendor_access') > -1 && isPermitEnabled">
+                    <div class="text-color fs-12 fw-700">Vendor Name</div>
+                    <div class="fs-12 fw-600">
+                      <span *ngIf="selectedCardData.vendor">
+                        {{selectedCardData.vendor}}
+                      </span>
+                      <span *ngIf="!selectedCardData.vendor">
+                        Not available
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="grid-container-rows-3">
+                  <div class="py-3">
+                    <div class="text-color fs-12 fw-700 line-h-14px" style="margin-bottom: 4px;">{{selectedPlantDetails?.[0]?.zone_nomenclature}}s with similar
+                      observations </div>
+                    <div *ngIf="mapped?.length > 0">
+                      <div class="d-flex align-items-center" *ngFor="let obj of mapped">
+                        <div class="w-50 pe-3 parent-container">
+                          <div class="bg-blue-zone h-20px w-25px scroll"
+                            [style.width]="((obj?.count) / mapped[0]?.count) * 115+ '%'"></div>
+                          <div class="observation-zones one-liner" style="font-size: xx-small; font-weight: 600;">
+                            <span>{{obj.name}}</span>
+                          </div>
+                        </div>
+                        <div class="w-50 py-1" style="font-size: 12px; font-weight: 600; padding: 6px;">Total - <span
+                            style="font-size: 12px;font-weight: 700;">{{obj?.count}}</span></div>
+                      </div>
+                    </div>
+                    <div *ngIf="mapped?.length == 0" class="w-50 pe-3 parent-container">
+                      <div class="text-dark fw-bold" style="margin-left: 12px;
+                         font-size: 16px; line-height: 12px;">NA</div>
+                    </div>
+                  </div>
+                  <div class="mt-2">
+                    <div class="text-color fs-12 fw-700">Remarks</div>
+                    <div class="fs-12 fw-600">
+                      <span *ngIf="imageModalData?.remarks">
+                        {{imageModalData?.remarks}}
+                      </span>
+                      <span *ngIf="!imageModalData?.remarks">
+                        No remarks
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="px-1" *ngIf="!shareShows && !selectedMode && !confirmMailShow">
+                <div class="" *ngIf="actionFound">
+                  <div class="text-color fs-12px fw-bold my-2">Linked Items</div>
+                  <div id="actionTable" style="border-spacing: 10px;">
+                    <ngx-datatable class="material expandable dataTableHeight" [rows]="linkedIssueData"
+                      [columnMode]="'force'" [headerHeight]="35" [rowHeight]="'auto'" [rowClass]="getSoonDelayedRow"
+                      [messages]="{emptyMessage: 'No actions recorded'}">
+                      <ngx-datatable-column name="Action ID" [width]="60">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                          <div class="cursor-pointer text-color fw-700 lh-10px w-10px" style="word-break: normal;"
+                            (click)="navigateToActions(row.id)">
+                            {{row.id}}
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Action">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                          <div class="d-flex flex-wrap" *ngIf="addingSubObs != rowIndex"> {{row.summary}}</div>
+                          <div style="width: 100%;" *ngIf="addingSubObs == rowIndex">
+                            <textarea type="text" id="actionSummary" class="px-2 mt-2 fs-11" style="height: 23px; width: 100%; border-radius: 3px;" placeholder="Action" [ngStyle]="{'height': getCauseTaskTextHeight()+'px'}"
+                              [(ngModel)]="newSubTask.summary"></textarea>
+                            <!-- <input type="text" class="h-20px" [(ngModel)]="newSubTask.summary" placeholder="Action"
+                              name="summary"> -->
+                              <div *ngIf="newSubTask.summary && !commonService.alphaNumericWithoutSpaceValidator(newSubTask.summary)" class="text-danger fs-10px mt-1">
+                                Actions cannot have space at the start and end of the text.
+                              </div>
+                          </div>
+                          <div *ngIf="addingSubObs == rowIndex" class="w-20px h-20px"></div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Approver"  [width]="100">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                          <div class="d-flex align-items-center" *ngIf="addingSubObs != rowIndex">
+                            <ng-container *ngFor="let item of allListOfUsers">
+                                <ng-container *ngIf="item.id == row.assignor">
+                                  <div
+                                    class="asign w-20px h-20px bg-danger rounded-circle d-flex align-items-center justify-content-center me-1 "
+                                    [title]="item.name">
+                                    {{item.name.slice(0, 1) | uppercase}}</div>
+                                  <div [title]="item.name">{{item.name | titlecase}}</div>
+                                </ng-container>
+                            </ng-container>
+                          </div>
+                          <div id="selectUser" *ngIf="addingSubObs == rowIndex">
+                            <ng-select class="w-100%  border-blue" [items]="closeAccessUsers?.length > 0 ? closeAccessUsers : []"
+                              #obsSearch bindLabel="name" bindValue="id"
+                              [(ngModel)]="newSubTask.assignor"
+                              placeholder="Select user" dropdownPosition="top"  appendTo="body">
+                              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                                <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                                  <span class="ng-value-label fs-11">{{item.name | slice:0:7}}</span>
+                                  <span class="ng-value-icon right fs-14px" (click)="clear(item)" aria-hidden="true">×</span>
+                                </div>
+                                <div class="ng-value" *ngIf="items?.length > 1">
+                                  <span class="ng-value-label">{{items?.length - 1}} more...</span>
+                                </div>
+                              </ng-template>
+                              <!-- <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                <div id="ng_select" class="d-flex align-items-center stakeholders">
+                                  <input id="item-{{index}}"  [checked]="item$.selected" /> <span
+                                    class="fs-11 ps-1">{{item.name | titlecase}}</span>
+                                </div>
+                              </ng-template> -->
+                              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                {{item.name | titlecase}}
+                              </ng-template>
+                            </ng-select>
+                          </div>
+                          <div *ngIf="addingSubObs == rowIndex" class="w-20px h-20px"></div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Assignee"  [width]="100">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                          <div class="d-flex align-items-center" *ngIf="addingSubObs != rowIndex">
+                            <ng-container *ngFor="let item of allListOfUsers">
+                              <ng-container *ngFor="let itemAssignee of row.assignee.slice(0,2);let i=index">
+                                <ng-container *ngIf="item.id == itemAssignee">
+                                  <div
+                                    class="asign w-20px h-20px bg-danger rounded-circle d-flex align-items-center justify-content-center me-1 "
+                                    [title]="item.name">
+                                    {{item.name.slice(0, 1) | uppercase}}</div>
+                                </ng-container>
+                              </ng-container>
+                            </ng-container>
+                            <ng-container *ngIf="row.assignee?.length > 2">
+                              <div
+                                class="name w-20px h-20px rounded-circle d-flex align-items-center justify-content-center me-1 cursor-pointer"
+                                [title]="getAssigneeTooltip(row.assignee)"
+                                [ngbTooltip]="getAssigneeTooltip(row.assignee)">{{ row.assignee?.length - 2 }}+</div>
+                            </ng-container>
+                          </div>
+                          <div id="selectUser" *ngIf="addingSubObs == rowIndex">
+                            <ng-select class="w-100%  border-blue" [items]="closeAccessUsers.length > 0 ? closeAccessUsers : []"
+                              #obsSearch bindLabel="name" bindValue="id" [multiple]="true"
+                              [(ngModel)]="newSubTask.assignee" [closeOnSelect]="false" (change)="changesAssignee()"
+                              placeholder="Select user" [clearable]="false" dropdownPosition="top" appendTo="body">
+                              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                                <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                                  <span class="ng-value-label fs-11">{{item.name | slice:0:7}}</span>
+                                  <span class="ng-value-icon right fs-11" (click)="clear(item)" aria-hidden="true">×</span>
+                                </div>
+                                <div class="ng-value" *ngIf="items?.length > 1">
+                                  <span class="ng-value-label">{{items?.length - 1}} more...</span>
+                                </div>
+                              </ng-template>
+                              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                <div id="ng_select" class="d-flex align-items-center stakeholders">
+                                  <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> <span
+                                    class="fs-11 ps-1">{{item.name | titlecase}}</span>
+                                </div>
+                              </ng-template>
+                            </ng-select>
+                          </div>
+                          <div *ngIf="addingSubObs == rowIndex" class="w-20px h-20px"></div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Due date" [width]="80">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                          <span *ngIf="addingSubObs != rowIndex" class="bg-blue text-dark"  style="padding: 4px 7px;">{{row.due_date | dateFormat}}</span>
+                          <div *ngIf="addingSubObs == rowIndex">
+                              <div class="m-2 fs-11px border-blue text-dark" id="obsActionDateSelect">
+                                  <mat-form-field>
+                                    <input matInput id="txtDate" [matDatepicker]="picker" [(ngModel)]="newSubTask.due_date" placeholder="dd-mmm-yyy"
+                                    (click)="inputDisabled()" readonly [min]="newDate">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                  </mat-form-field>
+
+                              </div>
+                          </div>
+                          <div *ngIf="addingSubObs == rowIndex" class="w-20px h-20px"></div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column id="status" name="Status" [width]="80">
+                        <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                          <div class="d-flex align-items-center" *ngIf="addingSubObs != rowIndex">
+                            <div style="width: 90px; height: 23px;" [ngClass]="row.status == 'Open' ? 'border-red' : 'border-green'">
+                              <select class="w-88px border-none  h-20px" style="padding: 0px 6px;"
+                                (change)="changingActionStatu( row.id, row.object_type_id, row.summary, '', row.assignee, row.due_date, $event.target.value, row.assignor)"
+                                [ngClass]="row.status == 'Open' ? 'bg-text-red' : 'bg-text-green'"
+                                [disabled]="!((row.assignee?.indexOf(loginUserId) > -1) || loginUserId == row.assignor) || (row?.fault_status == 'closed')"
+                                [(ngModel)]="row.status" name="equipment" required>
+                                <option *ngFor="let equipment of dropdownList" [value]="equipment"
+                                  [ngClass]="equipment == 'Open' ? 'border-red bg-text-red' : 'border-green bg-text-green'">
+                                  {{equipment == 'Close' ? 'Closed' : equipment}}</option>
+                              </select>
+                            </div>
+                            <div class="">
+                              <button class="ms-2 btn btn-sm p-0 cursor-pointer"
+                                [disabled]="!(loginUserId == row.assignor)">
+                                <div class="cursor-pointer" *ngIf="addingSubObs != rowIndex"><i
+                                    class="fas fa-trash text-danger" (click)="removeAction(row.id)"></i></div>
+                              </button>
+                            </div>
+                          </div>
+                          <div *ngIf="addingSubObs == rowIndex" style="margin-bottom: -10px;">
+                            <div class="d-flex align-items-center" style="width: 90px; height: 27px;" [ngClass]="newSubTask.status == 'Open' ? 'border-red bg-text-red' : 'border-green bg-text-green'">
+                              <select class="w-88px border-none fs-11 h-20px" style="padding: 0px 6px;"
+                              [ngClass]="newSubTask.status == 'Open' ? 'bg-text-red' : 'bg-text-green'"
+                                [(ngModel)]="newSubTask.status == 'Close' ? 'Closed' : newSubTask.status" name="status" required>
+                                <option *ngFor="let equipment of dropdownList" [value]="equipment"
+                                  [ngClass]="equipment == 'Open' ? 'border-red bg-text-red' : 'd-none'">{{equipment}}
+                                </option>
+                              </select>
+                            </div>
+                            <div class="d-flex mt-2 create" *ngIf="addingSubObs == rowIndex">
+                              <div>
+                                <button class="btn btn-sm p-0"
+                                  [disabled]="!commonService.alphaNumericWithoutSpaceValidator(newSubTask.summary) || !(newSubTask?.summary && selectedAssigneeId && newSubTask?.due_date && newSubTask?.status && newSubTask['assignor'])">
+                                  <div
+                                    class="w-20px h-20px border rounded bg-basic me-1 d-flex align-items-center justify-content-center"
+                                    (click)="submitObs(rowIndex,newSubTask)"><i class="fas fa-check text-white"></i>
+                                  </div>
+                                </button>
+                              </div>
+                              <div>
+                                <button class="btn btn-sm p-0">
+                                  <div class="w-20px h-20px rounded d-flex align-items-center justify-content-center"
+                                    style="border: 1px solid #BEBEBE;"
+                                    (click)="cancelObs(); safetyAndSurveillanceCommonService.sendMatomoEvent('Incomplete action creation', 'Action')">
+                                    <i class="fas fa-times text-dark"></i>
+                                  </div>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+                  <div *ngIf="addingSubObs == -1">
+                    <button class="btn btn-sm btn-basic px-2 py-1 fw-600 p-0 mt-2 md-4" [disabled]="!(userGroup?.indexOf('close') > -1)">
+                      <span class="pointer fs-12px d-flex align-items-center fw-600" (click)="addSubObs()"><span
+                          class="pe-1" style="font-size: 17px; line-height: 8px;padding-bottom: 1px;">+</span>
+                        Create</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="linked-audit">
+                  <div class="text-color fs-12px fw-bold my-2">Linked Audits</div>
+                  <div class="tableHeight" id="table1">
+                    <ngx-datatable #table1 class="material expandable tableHeight" [columnMode]="'force'" [headerHeight]="45"
+                      [footerHeight]="0" [rowHeight]="'auto'" [scrollbarH]="true" [rows]="auditData"
+                     >
+                      <ngx-datatable-column name="Activity Audit ID" [sortable]="false" [width]="100">
+                        <ng-template ngx-datatable-header-template let-column="column">
+                          <span title="Activity Audit ID">Activity Audit ID</span>
+                        </ng-template>
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                          <div class="text-center">Excavation</div>
+                          <div class="audit-id text-center fs-16 pointer" (click)="routeAudit('/safety-and-surveillance/start-audit',{key:'activityId',value:row.id})" title="{{row.audit_id}}">ID{{row.audit_id}}</div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Unit" [sortable]="false" [width]="50">
+                        <ng-template ngx-datatable-header-template let-column="column">
+                          <span title="Unit">Unit</span>
+                        </ng-template>
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                          <div title="{{row.unit_name}}">{{row.unit_name}}</div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Zone" [sortable]="false" [width]="50">
+                        <ng-template ngx-datatable-header-template let-column="column">
+                          <span title="Zone">Zone</span>
+                        </ng-template>
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                          <div title="{{row.zone_name}}">{{row.zone_name}}</div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Vendor" [sortable]="false" [width]="60">
+                        <ng-template ngx-datatable-header-template let-column="column">
+                          <span title="Vendor">Vendor</span>
+                        </ng-template>
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                          <div title="{{row.vendor}}">{{row.vendor}}</div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Start Date & Time" [sortable]="false" [width]="100">
+                        <ng-template ngx-datatable-header-template let-column="column">
+                          <span title="Start Date & Time">Start Date & Time</span>
+                        </ng-template>
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                          <div title="{{row.start_date}}">{{row.start_date}}</div>
+                          <div title="{{row.start_time}}">{{row.start_time}}</div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="End Date & Time" [sortable]="false" [width]="100">
+                        <ng-template ngx-datatable-header-template let-column="column">
+                          <span title="End Date & Time">End Date & Time</span>
+                        </ng-template>
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                          <div title="{{row.end_date}}">{{row.end_date}}</div>
+                          <div title="{{row.end_time}}">{{row.end_time}}</div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                      <ngx-datatable-column name="Done by" [sortable]="false" [width]="50">
+                        <ng-template ngx-datatable-header-template let-column="column">
+                          <span title="Done by">Done by</span>
+                        </ng-template>
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                          <div title="{{row.done_by}}">{{row.done_by[0] || '- - -'}}</div>
+                          <div *ngIf="row.done_by.length > 1" title="{{row.done_by}}">+ {{row.done_by.length -1 }} more..</div>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                </div>
+                </div>
+
+                <div class="bg-white" *ngIf="commentFound">
+                  <app-chatbox [faultId]="imageModalData?.faultId" [listOfUsers]="listOfUsers"
+                    [selectedUnit]="selectedSideBarItem" [commentTagging]="commentTagging" [currentId]="'fault_id'"
+                    [loginUserId]="loginUserId" [allListOfUsers]="allListOfUsers"></app-chatbox>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="shareShows" class="shared">
+            <div>Share Observation#{{imageModalData?.faultId}}</div>
+            <div>
+              <form action="/action_page.php">
+                <fieldset class="overlayCss">
+                  <legend>Email ID</legend>
+                  <div class="d-flex justify-content-between align-items-center col-12">
+                    <div class="pb-1 col-11">
+                      <input class="border-none form-control h-100 w-100" [(ngModel)]="sendObservationData.emailID"
+                        name="email" placeholder="Enter Email Id" type="text" #chip
+                        (keyup.enter)="addTag(chip.value);chip.value=''">
+                    </div>
+                    <div class="col-1 d-flex align-items-center h-100">
+                      <i class="far fa-plus-square btn-outline-basic plus-icon"
+                        (click)="addTag(chip.value);chip.value=''"></i>
+                    </div>
+                  </div>
+                </fieldset>
+                <p *ngIf="msg" class="text-danger font-italic"
+                  [ngClass]="{'mb-0': sendObservationData?.emailIDList?.length === 0}">{{msg}}</p>
+                <div class="my-2 ">
+                  <div class="text-color fs-12px mb-1" *ngIf="sendObservationData?.emailIDList?.length > 0">Send To
+                  </div>
+                  <div class="d-flex flex-wrap ">
+                    <div class="border chip-style mx-2 px-2" *ngFor="let item of sendObservationData.emailIDList">
+                      {{item}}<i class="ms-3 fas fa-times" (click)="removeItem(item)"></i></div>
+                  </div>
+                </div>
+                <div class="d-flex align-items-end ">
+                  <button type="submit" class="btn btn-basic btn-sm me-2"
+                    [disabled]="sendObservationData?.emailIDList?.length == 0"
+                    (click)="sendObservation()">SUBMIT</button>
+                  <button type="reset" class="btn btn-outline-basic btn-sm"
+                    (click)="resetSendObservationData(); safetyAndSurveillanceCommonService.sendMatomoEvent('Incomplete observation share', 'Share observation')">CANCEL</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="mt-3" *ngIf="selectedMode">
+            <app-safety-and-surveillance-annotation [imageModalData]="imageModalData" [trigger]="trigger"
+              [canvasHeight]="canvasHeight" [canvasWidth]="canvasWidth" [canvasRatio]="canvasRatio"
+              (selectedAnnotation)="openSelectedAnnotation($event)" (showEditSymbol)="showEditSymbol($event)">
+            </app-safety-and-surveillance-annotation>
+
+          </div>
+          <div *ngIf="confirmMailShow">
+            <div class=" w-100 h-75 shadow bg-body">
+              <div class="p-3 border-bottom fw-bold d-flex align-items-center fs-5">
+                <i class="fas fa-info-circle fs-3 me-3"></i>{{modalHeading}}
+              </div>
+              <div class="parent-position p-2">
+                <div>
+                  {{modalMessage}}
+                </div>
+                <div class="mt-4">
+                  <button type="submit" class="btn btn-basic btn-sm me-2" (click)="onConfirmation()">CONFIRM</button>
+                  <button type="reset" class="btn btn-outline-basic btn-sm"
+                    (click)="showConfirmMail(false)">CANCEL</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+      <ng-container
+        *ngIf="(selectedObsStatus == 'openClose' && (obsData| filterData: searchText: searchParams | riskFilter: [] | statusFilter: [] )?.length === 0 || selectedObsStatus != 'openClose' && (obsData| filterData: searchText: searchParams | riskFilter: [] | statusFilter: [] )?.length === 0)">
+        <div class="fullHeight fullWidth d-inline-flex">
+          <h5 class="m-auto text-center">No data available</h5>
+        </div>
+      </ng-container>
+    </div>
+    <div class="col-2 p-0" [ngClass]="showInsights? 'd-block' : 'd-none'">
+      <ng-container *ngIf="insightBody && insightsFound">
+        <app-insights-tab (toggleInsightsEvent)="toggleInsights($event)" [insightBody]="insightBody"></app-insights-tab>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+
+<div class="insightPopUpButton pointer" *ngIf="!showInsights && insightsFound" (click)="toggleInsights(true)">
+  <img src="assets/icons/bulb.svg" class="insights" alt="">
+  INSIGHTS
+</div>
+
+
+<div [ngClass]="showMap ? 'd-block': 'd-none'" class="w-100 h-100 bevContainerCss">
+  <div>
+    <div class="pointer" (click)="mapShow(false)">
+      <i class="fas fa-arrow-left"></i>
+    </div>
+  </div>
+  <div class="w-100 h-100 bevCss">
+    <app-birds-eye-view [img]="obsImageDetails?.imageUrl" [locations]="obsImageDetails?.locationMap"
+      [modalHeading]="obsImageDetails?.unitName" [modalType]="obsImageDetails?.moduleType" [isModal]="false"
+      (emitSelectedLocation)="onZoneSelect($event)">
+    </app-birds-eye-view>
+  </div>
+</div>
+
+
+<app-sidebar-observation [selectedSideBarItem]="selectedSideBarItem" [riskRatingLevels]="riskRatingLevels"
+  (listOfZones)="listOfAllZones($event)">
+</app-sidebar-observation>
+
+
+
+<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+  tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div id="statusChange" class="modal-content">
+      <div class="modal-header">
+        <div class="m-auto py-2">Change Status</div>
+      </div>
+      <div class="modal-body" #container>
+        <div class="w-75 m-auto">
+          <div>
+            <div class="text-color fs-10px fw-bold">Status</div>
+            <div class="fw-bold w-100">
+              <small>
+                <select class="border-bottom border-dark  w-100" [ngModel]="selectedCardData?.isOpen"
+                  (ngModelChange)="clearTextArea($event, selectedCardData); selectedCardData.vendor = ''"
+                  [disabled]="(!(userGroup?.indexOf('close') > -1) || selectedCardData?.disabled)"
+                  name="slectedItemDate"
+                  [ngClass]="selectedCardData?.isOpen == 'Open' ? 'text-danger' : 'text-success'">
+                  <option *ngFor="let selectItem of faultsChoice" [value]="selectItem"
+                    [ngClass]="selectItem == 'Open' ? 'text-danger' : 'text-success'"
+                    [disabled]="this.actionStatus && !(selectItem == 'Snooze' || selectItem == 'Open')">
+                    {{selectItem}}
+                    <!-- {{selectItem == 'Archive' ? 'Archived' : (selectItem == 'Snooze' ? 'Snoozed' : selectItem)}} -->
+                  </option>
+                </select>
+                <ng-container *ngIf="selectedCardData?.isOpen === 'Snooze'">
+                  <p class="font-italic mt-2 mb-1"><em class="fas fa-clock me-2"></em>Snooze Until</p>
+                  <kendo-datetimepicker [format]="'dd/MM/yyyy HH:mm'" [popupSettings]="{ appendTo: containerRef }"
+                    [(value)]="selectedCardData.editSnoozeDate" [min]="returnCurrentDateTime()">
+                  </kendo-datetimepicker>
+                </ng-container>
+              </small>
+            </div>
+            <div class="mt-2" *ngIf="userGroup.indexOf('vendor_access') > -1">
+              <div class="text-color fs-10px fw-bold">Vendor Name</div>
+              <select class="border-bottom border-dark fw-600 w-100" title="{{selectedCardData?.vendor}}"
+                [(ngModel)]="selectedCardData.vendor" [ngModelOptions]="{standalone: true}"
+                [disabled]="!(selectedCardData?.isOpen?.includes('Close') || selectedCardData?.isOpen === 'Archive') || selectedCardData?.disabled">
+                <option value="" disabled>--Select--</option>
+                <option *ngFor="let vendor of vendors" value="{{vendor}}">{{vendor}}</option>
+              </select>
+            </div>
+            <div class="text-color mt-2 fs-10px fw-bold">Remarks</div>
+            <div class="fw-bold">
+              <textarea class="w-100" rows="3" placeholder="Type your remarks here..."
+                [(ngModel)]="selectedCardData.remarks" (ngModelChange)="textAreaChange($event, selectedCardData)"
+                [disabled]="(!(userGroup.indexOf('close') > -1) || selectedCardData?.disabled || selectedCardData?.isOpen === 'Open' || selectedCardData?.isOpen === 'Snooze')"
+                name="remarks"></textarea>
+            </div>
+            <div>
+              <div class="text-color mt-2 fs-10px fw-bold">Supporting Documents(s)</div>
+              <div class="d-flex flex-wrap">
+                <div class="d-flex flex-wrap m-1 w-100" *ngFor="let item of uploadStatusFilesList;let i = index">
+                  <div class="d-flex align-items-center justify-content-between w-100">
+                    <div
+                      class="w-65 browse-btn d-flex justify-content-between radius-uploadfile text-color mt-2 fs-10px fw-bold p-2">
+                      <div class="uploadfileCss" [title]="item.actionImageName">{{item.actionImageName}}</div>
+                      <div><i class="fas fa-times pointer ms-2" (click)="deleteSlectedUploadFiles(i)"></i></div>
+                    </div>
+                    <div id="evidenceInput" class="evidence-input ps-2" *ngIf="checkImageOrPdf(item)">
+                      <input type="radio" [id]="item.actionImageName" name="evidence" [value]="item.evidence"
+                        (change)="onEvidenceSelected(i)" [checked]="item.evidence">
+                      <label [for]="item.actionImageName" class="ps-2">Evidence</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="my-2  btn-file">
+                  <button class="btn btn-sm browse-btn px-2  fs-10px fw-800 d-flex align-items-center">Upload <i
+                      class="fas fa-cloud-upload-alt ms-2 fs-13"></i></button>
+                  <input type="file" class="cursorPointer" accept="image/jpeg, .pdf" multiple
+                    (change)="selectUploadFiles($event)">
+                </div>
+              </div>
+            </div>
+            <div class=" w-100 text-center">
+              <button type="submit" class="btn btn-basic btn-sm me-2" (click)="submitStatus(selectedCardData)"
+                [disabled]="(!(userGroup.indexOf('close') > -1) || selectedCardData?.disabled || ((selectedCardData?.isOpen =='Close' || selectedCardData?.isOpen =='Closed-No Action' || selectedCardData?.isOpen =='Closed-Action Taken' || selectedCardData?.isOpen =='Closed-False Positive') && selectedCardData?.remarks === '') || (selectedCardData?.isOpen === 'Snooze' && selectedCardData?.editSnoozeDate === '') || (selectedCardData?.isOpen === 'Archive' && selectedCardData?.remarks === '') || (imageModalData?.is_open == selectedCardData?.isOpen))">SUBMIT</button>
+              <button type="reset" class="btn btn-outline-basic btn-sm" data-bs-toggle="modal"
+                href="#exampleModalToggle" (click)="onStatusCancel(selectedCardData)">CANCEL</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<ng-template #noObsTemplate>
+  <div class="fullHeight fullWidth d-inline-flex">
+    <h5 class="m-auto text-center">Select a observation to view</h5>
+  </div>
+</ng-template>
+
+
+
+
+<div [ngClass]="{'d-none': submitObservation == true}" class="modal" id="exampleModal" tabindex="-1"
+  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div id="bulkUpdate" class="modal-content">
+      <div class="modal-header m-auto p-2 fw-bold">
+        Bulk Update Observations
+      </div>
+      <div class="border-bottom w-100">
+      </div>
+      <div class="modal-body ps-5 pe-5 pt-0 pb-0" #bulkContainer>
+        <form>
+          <div id="bulkUpdateContainer" class="mt-3">
+            <label class="text-color fw-bold">Date</label>
+            <ng-select [multiple]="true" [items]="uniqueDates" [(ngModel)]="selectedMultipleDate" class="mb-3 fullWidth"
+              [closeOnSelect]="false" (ngModelChange)="dateChange()" [ngModelOptions]="{standalone: true}">
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                <div class="ng-value" *ngFor="let item of items | slice:0:2">
+                  <span class="ng-value-label">{{item | date: 'dd-MMM-yyyy'}}</span>
+                  <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                </div>
+                <div class="ng-value" *ngIf="items?.length > 2">
+                  <span class="ng-value-label">{{items?.length - 2}} more...</span>
+                </div>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                {{item | date: 'dd-MMM-yyyy'}}
+              </ng-template>
+            </ng-select>
+          </div>
+          <div id="bulkUpdateContainer" class="mt-3">
+            <label class="text-color fw-bold">Observation</label>
+            <ng-select class="fullWidth" [items]="filteredObs" [multiple]="true" [closeOnSelect]="false"
+              bindLabel="faultId" bindValue="faultId" [searchable]="false" [(ngModel)]="multipleIssuesData.ids"
+              [ngModelOptions]="{standalone: true}">
+              <ng-template ng-header-tmp>
+                <div class="text-right">
+                  <button class="btn btn-link" (click)="onSelectAll()">Select All</button>
+                  <button class="btn btn-link" (click)="onClearAll()">Clear All</button>
+                </div>
+              </ng-template>
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                <div class="ng-value" *ngFor="let item of items | slice:0:4">
+                  <span class="ng-value-label">{{item.faultId}}</span>
+                  <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                </div>
+                <div class="ng-value" *ngIf="items?.length > 4">
+                  <span class="ng-value-label">{{items?.length - 4}} more...</span>
+                </div>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                <strong> Observation#{{item.faultId}}</strong>
+                <div class="ml-1">
+                  {{item.riskLevel}} | {{item.date}}
+                </div>
+              </ng-template>
+            </ng-select>
+          </div>
+          <div class="mt-3">
+            <label class="text-color fw-bold">Status</label>
+            <select title="{{multipleIssuesData.status}}" class="form-control border rounded form-select mb-2"
+              [(ngModel)]="multipleIssuesData.status" (ngModelChange)="onMultipleStatusChange()"
+              [ngModelOptions]="{standalone: true}"
+              [ngClass]="multipleIssuesData.status == 'Open' ? 'text-danger' : 'text-success'">
+              <option *ngFor="let fault of faultsChoice" [ngClass]="
+              fault == 'Open'? 'text-danger': 'text-success'" value="{{fault}}">
+              {{fault}}
+              <!-- {{fault == 'Archive' ? 'Archived' : (fault == 'Snooze' ? 'Snoozed' : fault)}} -->
+              </option>
+            </select>
+            <ng-container *ngIf="multipleIssuesData.status === 'Snooze'">
+              <label class="text-color fw-bold mt-3">Snooze Until</label>
+              <kendo-datetimepicker class="fullWidth" [format]="'dd-MMM-yyyy HH:mm'" [(value)]="snoozeDate"
+                [min]="returnCurrentDateTime()" [popupSettings]="{ appendTo: bulkContainerRef }">
+              </kendo-datetimepicker>
+            </ng-container>
+            <ng-container *ngIf="userGroup.indexOf('vendor_access') > -1">
+              <label class="text-color fw-bold mt-3">Vendor Name</label>
+              <select class="form-control border rounded form-select mb-1" title="{{multipleIssuesData.vendor}}"
+                [(ngModel)]="multipleIssuesData.vendor" [ngModelOptions]="{standalone: true}"
+                [disabled]="!(multipleIssuesData.status.includes('Close') || multipleIssuesData.status === 'Archive')">
+                <option value="" disabled>--Select--</option>
+                <option *ngFor="let vendor of vendors" value="{{vendor}}">{{vendor}}</option>
+              </select>
+            </ng-container>
+          </div>
+          <div class="mt-3">
+            <label class="text-color fw-bold">Remarks</label>
+            <textarea class="form-control textareaCss" title="{{multipleIssuesData?.remarks}}"
+              [(ngModel)]="multipleIssuesData.remarks" [ngModelOptions]="{standalone: true}"
+              [disabled]="!(multipleIssuesData.status.includes('Close') || multipleIssuesData.status === 'Archive')">
+            </textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer m-auto">
+        <button type="button" class="btn btn-sm snd-btn btn-basic fs-12px fw-500 activeDate ps-2 pe-2 pt-1 pb-1 fs-12px"
+          (click)="submitObservationsData()"
+          [disabled]="multipleIssuesData?.ids?.length === 0 || (multipleIssuesData?.status === 'Open' && selectedObsStatus === 'openClose') || (multipleIssuesData?.status?.includes('Close') && multipleIssuesData?.remarks === '') || (multipleIssuesData?.status === 'Snooze' && !snoozeDate) || (multipleIssuesData?.status === 'Archive' && multipleIssuesData?.remarks === '')">SUBMIT</button>
+        <button type="button" class="btn border-color-basic text-color ps-2 pe-2 pt-1 pb-1 fs-12px"
+          data-bs-dismiss="modal" (click)="onBulkStatusCancel(); resetMultipleIssuesData()">CANCEL</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div [ngClass]="{'d-block': submitObservation == true}" id="bulkConfirmationModal" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" class="modal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header m-auto p-2 fw-600 ">
+        <i class="far fa-info-circle fs-3 text-color me-3"></i>Close Observation
+      </div>
+      <div class="border-bottom w-100"></div>
+      <div class="modal-body m-auto p-0 mt-4">
+        <p>Are you sure you want to proceed?</p>
+      </div>
+      <div class="modal-footer pb-0 pt-0">
+        <div class="modal-footer  m-auto">
+          <button type="button" class="btn btn-secondary activeDate ps-2 pe-2 pt-1 pb-1 fs-12px"
+            (click)="updateMultipleFaults()">CONFIRM</button>
+          <button type="button" class="btn border-color-basic text-color ps-4 pe-4 pt-1 pb-1 fs-12px"
+            data-bs-dismiss="modal" (click)="onBulkStatusCancel(); closeConfirmationModal()">CLOSE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addObservation" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="addObservationLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" id="addObservationPop">
+      <div class="modal-header p-2">
+        <div class="d-flex w-100">
+          <div class="w-100 text-center fw-800">Add Observation</div>
+        </div>
+      </div>
+      <div class="">
+        <div class=" px-5 pt-4" *ngIf="!observationImage">
+          <div class="observation-body text-center p-3 px-4">
+            <div><img src="assets/images/observation-img.svg" width="40px"></div>
+            <div class="mt-2 fs-11px">Drag and drop an Observation images (Max 5 MB Each images)</div>
+            <div class="mt-2  btn-file" title="Browse Image">
+              <button class="btn btn-sm browse-btn px-2  fs-10px fw-800">Browse Image</button>
+              <input title="Browse Image" type="file" class="cursorPointer" accept="image/jpeg" (change)="selectImage($event)">
+            </div>
+          </div>
+        </div>
+        <div class=" w-400px h-250px" *ngIf="observationImage" id="rawImagePath">
+          <img id="selectedObservationImage" [src]="observationImage" width="100%" height="100%">
+        </div>
+      </div>
+      <div class="text-center p-3 d-flex align-items-center justify-content-center fs-10px">
+
+        <button type="button" class="btn btn-sm btn-outline-basic w-80px p-1px me-2 h-20px" data-bs-dismiss="modal"
+          (click)="safetyAndSurveillanceCommonService.sendMatomoEvent('Incomplete manual observation creation', 'Manual observation')">BACK</button>
+        <button type="button" class="btn btn-sm btn-basic w-80px p-1px h-20px" [disabled]="!observationImage"
+          (click)="observationPicSelected()">NEXT</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addObservationAnnotate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="addObservationLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" id="addObservationPop">
+      <div class="modal-header p-2">
+        <div class="d-flex w-100">
+          <div class="w-100 text-center fw-800">Add Observation</div>
+        </div>
+      </div>
+      <div class="">
+        <div class="position-relative w-400px h-250px scalize" id="observationMarked">
+          <img class="w-100 h-100" id="observationImage" [ngClass]="{'target': selectedMode}" [src]="observationImage"
+            (error)="fetchEncryptedImageData('observationImage', imageModalData?.imageUrl)" (dblclick)="resetZoom()"
+            crossorigin alt="Image">
+          <ng-container *ngIf="annotation">
+            <ng-container *ngFor="let point of manualActionPoints;let i = index">
+              <div class="item-point circle cursorPointer pulse3 d-flex justify-content-center align-items-center"
+                [ngStyle]="{top: point.top + 'px', left: point.left + 'px'}">
+                <p>{{i + 1}}</p>
+              </div>
+            </ng-container>
+          </ng-container>
+          <canvas id="observationCanvas"></canvas>
+        </div>
+        <ng-container *ngIf="!annotation">
+
+          <div *ngIf="observationImgHeight">
+            <app-manual-observation-annotation [imageModalData]="manualActionPoints"
+              [manulaObservationSelectedDetails]="manulaObservationSelectedDetails" [trigger]="trigger"
+              [unitList]="units" [selectedManualAnnotation]="selectedAnnotation" [canvasHeight]="observationImgHeight"
+              [canvasWidth]="observationImgWidth" [observationCategoryList]="observationCategoryList"
+              [annotate]="annotation" [canvasRatio]="observationImgRatio"
+              (selectedAnnotation)="openObservationSelectedAnnotation($event)"
+              (selectUnits)="unitsSelectedManualObs($event)"
+              (selectRiskRating)="selectRiskRating($event)" (backToAddObservationData)="backToAddObservation($event)">
+            </app-manual-observation-annotation>
+          </div>
+
+        </ng-container>
+        <ng-container *ngIf="annotation">
+          <app-manual-observation-annotation [imageModalData]="manualActionPoints"
+            [manulaObservationSelectedDetails]="manulaObservationSelectedDetails" [trigger]="trigger" [unitList]="units"
+            [selectedManualAnnotation]="selectedAnnotation" [canvasHeight]="observationImgHeight"
+            [canvasWidth]="observationImgWidth" [observationCategoryList]="observationCategoryList"
+            [annotate]="annotation" [canvasRatio]="observationImgRatio"
+            (selectedAnnotation)="openObservationSelectedAnnotation($event)"
+            (selectUnits)="unitsSelectedManualObs($event)"
+            (selectRiskRating)="selectRiskRating($event)" (backToAddObservationData)="backToAddObservation($event)">
+          </app-manual-observation-annotation>
+          <div class="pb-2 h-250px overflow">
+            <div class="px-2 pt-2" id="observation" *ngFor="let item of multiObservations; let i = index">
+              <div class="card shadow" (click)="selectManualObservationImage(item)">
+                <div class="card-body px-2 pt-2 pb-0">
+                  <div class=" mb-2 d-flex justify-content-between">
+                    <div class="fw-bold fs-12px">Observation {{i + 1}}</div>
+                    <div class="d-flex fs-10px">
+                      <div class="me-2 text-color fw-bold"><i class="fas fa-calendar-alt pe-2"></i>{{item.date | dateFormat}}
+                      </div>
+                      <div class="text-color fw-bold"><i class="far fa-clock pe-2"></i> {{item.time}}</div>
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <div class="me-2 overlayCss">
+                      <app-iogp-pills [category]="item.job" [imgHeight]="'53'"></app-iogp-pills>
+                    </div>
+                    <div class="w-100">
+                      <div class="mb-1 d-flex justify-content-between">
+                        <div>
+                          <div class="text-color fw-bold fs-10px">{{selectedPlantDetails?.[0]?.zone_nomenclature}}</div>
+                          <div class="fw-bold fs-10px">{{item.zone}}</div>
+                          <div>
+                            <button class="btn btn-sm me-2 text-white dg-danger fs-10px p-0 px-1"
+                              [style.background-color]="riskRatingLevels[0].colorCode" class="cursor-auto" *ngIf="item.rating == 1">Very Low</button>
+                            <button class="btn btn-sm me-2 text-white dg-danger fs-10px p-0 px-1"
+                              [style.background-color]="riskRatingLevels[1].colorCode" class="cursor-auto" *ngIf="item.rating == 2">Low</button>
+                            <button class="btn btn-sm me-2 text-white dg-danger fs-10px p-0 px-1"
+                              [style.background-color]="riskRatingLevels[2].colorCode" class="cursor-auto" *ngIf="item.rating == 3">Medium</button>
+                            <button class="btn btn-sm me-2 text-white dg-danger fs-10px p-0 px-1"
+                              [style.background-color]="riskRatingLevels[3].colorCode" class="cursor-auto" *ngIf="item.rating == 4">High</button>
+                            <button class="btn btn-sm me-2 text-white dg-danger fs-10px p-0 px-1"
+                              [style.background-color]="riskRatingLevels[4].colorCode" class="cursor-auto" *ngIf="item.rating == 5">Very
+                              High</button>
+                          </div>
+                        </div>
+                        <div class="text-danger">
+                          Open
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="fw-800 text-color  mt-2 fs-9px">Observation</div>
+                    <div>{{item.observation}}</div>
+                  </div>
+                  <div class="border-top mt-2">
+                    <div class="py-2  d-flex align-items-center justify-content-end fs-10px ">
+                      <button class="me-2 btn btn-sm btn-outline-secondary w-100px  p-1px"
+                        (click)="editManualObservation(item, i)"> <img src="assets/icons/observationEdit.svg"
+                          width="18px" class="pe-2">EDIT</button>
+                      <button
+                        class="btn btn-sm btn-outline-warn w-100px  p-1px  d-flex align-items-center justify-content-center"
+                        (click)="deleteObservation(i)"> <img src="assets/icons/observationDelete.svg" width="17px"
+                          class="pe-2">DELETE</button>
+                    </div>
+                  </div>
+                </div>
+                  
+              </div>
+              <div class="w-100 ps-2 mt-4" id="workPermitZone" *ngIf="isPermitEnabled">
+                <div class="text-color fw-800 workPermitLabel">Work Permit System</div>
+                <div class="d-flex flex-wrap my-3">
+                  <div class="w-50 pe-2" >
+                      <fieldset>
+                          <legend class="fw-800">Permit Number</legend>
+                    
+                        <div class="dropdown  w-150px ">
+                            <div
+                              class="text-dark-blue w-150px cursorPointer fs-13 ff-montserrat  d-flex justify-content-between align-items-center w-100 cursor-pointer"
+                              (click)="PermitDropdownShow()">
+                              <div class="fw-bold" *ngIf="selectedPermitDetails.permit_number" [title]="selectedPermitDetails.permit_number">{{selectedPermitDetails.permit_number | textHide}}</div>
+                              <div class="fw-bold"  *ngIf="!selectedPermitDetails.permit_number" >Select permit</div>
+                              <div><i class="fas fa-chevron-down fs-13 ms-2 pe-1"></i></div>
+                            </div>
+                            <div class="dropdown-style shadow rounded w-100 py-2" *ngIf="permitNumberDropdown">
+                              <div class="options text-dark-blue fs-13 ff-montserrat" (click)="this.selectedPermitDetails.permit_number = ''; this.permitNumberDropdown = false;" >Select permit</div>
+                              <div class="options text-dark-blue fs-13 ff-montserrat" [title]="selectItem"
+                                *ngFor="let selectItem of newPermitList"
+                                [ngClass]="selectItem== selectedPermitDetails.permit_number ? 'selected-dropdown':''"
+                                (click)="selectPermitDetails(selectItem);">
+                                {{selectItem | textHide}}</div>
+                            </div>
+                          </div>
+                      </fieldset>
+                  </div>
+                  <div class="w-50 ps-2">
+                      <fieldset>
+                          <legend class="fw-800">Type of permit</legend>
+                          <input type="text" disabled [(ngModel)]="selectedPermitDetails.type_of_permit" name="Type of permit" class="permit-controls"/>
+                       
+                      </fieldset>
+                  </div>
+  
+                  <div class="w-50 mt-2 pe-2">
+                      <fieldset>
+                          <legend class="fw-800">Nature of work</legend>
+                    
+                  <input type="text" disabled [(ngModel)]="selectedPermitDetails.nature_of_work" name="Nature of work" class="permit-controls"/>
+                      </fieldset>
+                  </div>
+                  <div class="w-50 ps-2 mt-2 " >
+                      <fieldset>
+                          <legend class="fw-800">Vendor Name</legend>
+                          <input type="text" disabled [(ngModel)]="selectedPermitDetails.vendor_name" name="Vendor Name" class="permit-controls"/>
+                         
+                      </fieldset>
+                  </div>
+                  <div class="w-50 pe-2 mt-2">
+                    <fieldset>
+                        <legend class="fw-800">Issuer Name</legend>
+                        <input type="text" disabled [(ngModel)]="selectedPermitDetails.issuer_name" name="Issuer Name" class="permit-controls"/>
+                       
+                    </fieldset>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+          <div class="text-center p-3 d-flex align-items-end justify-content-center fs-10px">
+
+            <button type="button" class="btn btn-sm btn-outline-basic w-80px p-1px me-2" (click)="backToAnnotate()">ADD
+              NEW</button>
+            <button type="button" class="btn btn-sm btn-basic w-80px p-1px" [disabled]="isPermitEnabled && (!selectedPermitDetails.permit_number || !selectedPermitDetails.type_of_permit || !selectedPermitDetails.nature_of_work)"
+              (click)="submitMultiObservation()">SUBMIT</button>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade blur_background" id="confirmDeleteObservation" data-bs-backdrop="static" data-bs-keyboard="false"
+  tabindex="-1" aria-labelledby="addObservationLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" id="addObservationPop">
+      <div class="modal-header p-2">
+        <div class="d-flex w-100" id="delete">
+          <div class="back text-color fs-12px" data-bs-dismiss="modal"><i
+              class="fas fa-arrow-left pe-2 fs-12px"></i>Back</div>
+          <div class="w-100 text-center text-color fs-12px fw-800">Confirm Delete</div>
+        </div>
+      </div>
+      <div class="px-3 pt-2 text-center">
+        <div class="fs-10px">
+          your Deleting <b>'last observation',</b> click <b>'YES'</b> to upload new picture, Click <b>'NO'</b> to create
+          new observation using same image
+        </div>
+      </div>
+      <div class="text-center p-3  d-flex align-items-center justify-content-center  fs-10px">
+
+        <button type="button" class="btn btn-sm btn-outline-basic w-60px p-1px me-2" data-bs-dismiss="modal"
+          (click)="deleteIndex = -1">No</button>
+        <button type="button" class="btn btn-sm btn-basic w-60px p-1px" (click)="delteObservation()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="inspectionImageViewer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div data-bs-dismiss="modal" aria-label="Close" class="mx-2 text-basic fs-11 cursorPointer"> <i
+            class="fas fa-arrow-left pe-1"></i> Back</div>
+        <div class="w-75 text-center">
+          <div class="att text-basic fs-11 fw-800">Attachments for observations</div>
+        </div>
+      </div>
+      <div class="modal-body h-400px">
+        <div class="d-flex">
+          <div class="w-135px left-part scroll">
+            <div class="d-flex p-1" *ngFor="let images of arrayOfImages">
+              <div class="imageComments position-relative mt-2" (click)="onImageSelect(images)">
+                <div class="img pe-2 pb-2" id="modalImage" [ngClass]="{'modalImageBlackBg' : images?.file}">
+                  <img
+                    *ngIf="images.file.includes('.jpg') || images.file.includes('.jpeg') || images.file.includes('.png')"
+                    [src]="images.file" width="125px" height="110px" class="rounded-corners">
+                  <span *ngIf="images?.file?.includes('.pdf')" class="inline-block ms-2"
+                    style="width: 125px; height:110px">
+                    <i class="fas fa-file-pdf primary-color fs-72px"></i>
+                  </span>
+                </div>
+                <div class="download-option">
+                  <div class=" fs-8 issueImageName text-white px-2">{{images?.file}}</div>
+                  <div class="d-flex justify-content-center align-items-center mt-2">
+                    <div
+                      class="w-25px h-25px bg-white cursorPointer rounded d-flex justify-content-center align-items-center me-1"
+                      (click)="downloadImg(images?.file, false)">
+                      <i class="fas fa-download text-color"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="fullImage pt-1 pe-1">
+            <div class="fullHeight">
+              <div
+                class="px-2 fs-12 bg-image-popup h-30px rounded text-white d-flex align-items-center justify-content-between">
+                <div class="issueImageName">{{selectedImageName}}</div>
+                <div class="d-flex align-items-center justify-content-end w-310px">
+                  <!-- <div class="pe-2">{{selectedImage?.['created_by']}}</div> -->
+                  <div>{{selectedImage?.['date'] | date :'yyyy-MM-dd'}} | </div>
+                  <div class="ms-1">{{selectedImage?.['time']}}</div>
+                </div>
+              </div>
+              <div class="w-100 image-height pt-1">
+                <div
+                  *ngIf="selectedImage?.['file']?.includes('.jpg') || selectedImage?.['file']?.includes('.jpeg') || selectedImage?.['file']?.includes('.png')"
+                  id="popupMarkedImageDiv" class="fullHeight fullWidth"
+                  [ngClass]="selectedImage?.['file']?'img-zoom':''">
+                  <div class="fitDivCss d-flex" [ngClass]="{'scalize': selectedMode}">
+                    <img *ngIf="selectedImage?.['file']" id="popupModalImage" class="m-auto fullWidth" height="auto"
+                      [ngClass]="{'target': selectedMode}" src="{{selectedImage?.['file']}}" alt="Image">
+                  </div>
+                </div>
+                <ng-container *ngIf="selectedImage?.file?.includes('.pdf')">
+                  <app-support-doc-pdf></app-support-doc-pdf>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Delete supporting evidence confirmation popup  -->
+<div class="modal fade" id="deleteEvidencePopup" tabindex="-1" role="dialog" aria-hidden="true">
+  <div id="deleteEvidencePopup" class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header text-center" style="border-bottom: 1px solid gray !important; width: 100%;">
+        <div class="d-flex align-items-center p-2 mr-auto ml-auto" style="color: #F65150;">
+          Delete
+        </div>
+      </div>
+      <div class="modal-body p-2 mr-auto ml-auto">
+        Are you sure, you need to delete this document?
+      </div>
+      <div class="modal-footer mr-auto ml-auto">
+        <button type="button" class="btn btn-basic btn-sm" (click)="deleteEvidenceImage()">Yes</button>
+        <button type="button" class="btn btn-outline-basic btn-sm" data-bs-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Delete Pop-up -->
+<div class="modal fade" id="deleteAction" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" id="deleteAction">
+    <div class="modal-content">
+      <div class="text-center border-bottom">
+        <div class="modal-title text-danger p-2" id="exampleModalLabel">Confirmation</div>
+      </div>
+      <div class="modal-body text-center">
+        <!-- <div *ngIf="observationsRecommendationsToggle == false ">Are you sure, delete the Observation image/file?
+        </div> -->
+        <div>Are you sure, delete the Action?</div>
+      </div>
+      <div class="d-flex justify-content-center align-items-center mb-10px">
+        <button type="button" class="btn btn-sm snd-btn btn-basic fs-10px fw-800"
+          (click)="deleteAction()">YES</button>
+        <button type="button" class="ms-2 btn btn-sm snd-btn btn-outline-basic fs-10px fw-800"
+          data-bs-dismiss="modal">NO</button>
+      </div>
+    </div>
+  </div>
+</div>

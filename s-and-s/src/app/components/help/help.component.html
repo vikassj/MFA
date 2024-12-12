@@ -1,0 +1,229 @@
+<div class="dashboardContainer">
+  <div class="row col-12 p-2">
+    <div class="col-2 pe-2">
+      <div class="scroll side-bar-height shadow-sm bg-body rounded">
+        <div class="py-2 pointer" *ngIf="videoHelpFeature"
+          (click)="sideBarSelectedItem('Getting Started');  safetyAndSurveillanceCommonService.sendMatomoEvent('Viewing getting started', 'Help features')"
+          data-bs-toggle="collapse" data-bs-target="#sidebarChild" aria-expanded="true" aria-controls="sidebarChild"
+          [ngClass]="selectedChildSideBarItem ? 'selectedItem' : 'pl-18px'">
+          <div class="saidBar-icon">
+            <i class="fa fa-play-circle pe-3 m-auto fs-5"></i>
+          </div>Getting Started
+        </div>
+        <div class="collapse childItem" id="sidebarChild">
+          <ul class="flex-column nav pl-4">
+            <li class="nav-item">
+              <span class="p-2" (click)="sideBarSelectedItem('Getting Started')"
+                [ngClass]="selectedSideBarItem == 'Getting Started' ? 'child-active' : 'font-weight-normal'">Login Page
+              </span>
+            </li>
+            <li class="nav-item">
+              <span class="p-2" (click)="sideBarSelectedItem('Home Page')"
+                [ngClass]="selectedSideBarItem == 'Home Page' ? 'child-active' : 'font-weight-normal'">Home Page </span>
+            </li>
+            <li class="nav-item">
+              <span class="p-2" (click)="sideBarSelectedItem('Analytics Page')"
+                [ngClass]="selectedSideBarItem == 'Analytics Page' ? 'child-active' : 'font-weight-normal'">Analytics
+                Page </span>
+            </li>
+            <li class="nav-item">
+              <span class="p-2" (click)="sideBarSelectedItem('Observation, SIF & action')"
+                [ngClass]="selectedSideBarItem == 'Observation, SIF & action' ? 'child-active' : 'font-weight-normal'">Observation,
+                SIF & action
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div class=" py-2 pointer"
+          (click)="sideBarSelectedItem('Categorization'); safetyAndSurveillanceCommonService.sendMatomoEvent('Viewing categorization', 'Help features')"
+          [ngClass]="selectedSideBarItem == 'Categorization' ? 'selectedItem' : 'pl-18px'">
+          <div class="saidBar-icon">
+            <i class="fa fa-code-branch pe-3 m-auto fs-5"></i>
+          </div>Categorization
+        </div>
+        <div class=" py-2 pointer"
+          (click)="sideBarSelectedItem('Category Mapping'); safetyAndSurveillanceCommonService.sendMatomoEvent('Viewing category mapping', 'Help features')"
+          [ngClass]="selectedSideBarItem == 'Category Mapping' ? 'selectedItem' : 'pl-18px'">
+          <div class="saidBar-icon">
+            <i class="fas fa-tags pe-3 m-auto fs-5"></i>
+          </div>Category Mapping
+        </div>
+        <div class=" py-2 pointer"
+          (click)="sideBarSelectedItem('Zone Mapping'); safetyAndSurveillanceCommonService.sendMatomoEvent('Viewing zone mapping', 'Help features')"
+          [ngClass]="selectedSideBarItem == 'Zone Mapping' ? 'selectedItem' : 'pl-18px'">
+          <div class="saidBar-icon">
+            <i class="fas fa-map-pin pe-3 m-auto fs-5"></i>
+          </div>Zone Mapping
+        </div>
+        <div class=" py-2 pointer"
+          (click)="sideBarSelectedItem('User Manual');safetyAndSurveillanceCommonService.sendMatomoEvent('Viewing user manual', 'Help features')"
+          [ngClass]="selectedSideBarItem == 'User Manual' ? 'selectedItem' : 'pl-18px'">
+          <div class="saidBar-icon">
+            <i class="fa fa-book pe-3 m-auto fs-5"></i>
+          </div>User Manual
+        </div>
+      </div>
+    </div>
+    <div class="col-10 side-bar-height shadow-sm bg-body">
+      <div class="side-bar-height pad-80 videoContent"
+        [ngClass]="selectedSideBarItem == 'Getting Started'? 'd-block':'d-none'">
+        <ng-container *ngIf="videoTutorialFound else noVideoTutorialTemplate">
+          <div class="fw-bold mt-2 p-2 text-highlight">
+            Login Page
+          </div>
+          <p *ngIf="gettingStartedDetails[0]?.description?.length > 0" class="p-2">
+            {{gettingStartedDetails[0].description}}
+          </p>
+          <p *ngIf="gettingStartedDetails[0]?.description?.length == 0" class="p-2 text-center">
+            No data available
+          </p>
+          <video (play)="onVideoPlay()" (pause)="onVideoPause()"
+            *ngIf="gettingStartedDetails[0]?.video_url?.length > 0 else noVideoTutorialTemplate" width="100%"
+            height="100%" controls disablepictureinpicture controlslist="nodownload noplaybackrate" class="videoBox">
+            <source src="{{gettingStartedDetails[0].video_url}}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </ng-container>
+      </div>
+      <div class="side-bar-height pad-80 videoContent"
+        [ngClass]="selectedSideBarItem == 'Home Page' ? 'd-block':'d-none'">
+        <ng-container *ngIf="videoTutorialFound else noVideoTutorialTemplate">
+          <div class="fw-bold mt-2 p-2 text-highlight">
+            Home Page
+          </div>
+          <p *ngIf="gettingStartedDetails[1]?.description?.length > 0" class="p-2">
+            {{gettingStartedDetails[1].description}}
+          </p>
+          <p *ngIf="gettingStartedDetails[1]?.description?.length == 0" class="p-2 text-center">
+            No data available
+          </p>
+          <video (play)="onVideoPlay()" (pause)="onVideoPause()"
+            *ngIf="gettingStartedDetails[1]?.video_url?.length > 0 else noVideoTutorialTemplate" width="100%"
+            height="100%" controls disablepictureinpicture controlslist="nodownload noplaybackrate" class="videoBox">
+            <source src="{{gettingStartedDetails[1].video_url}}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </ng-container>
+      </div>
+      <div class="side-bar-height pad-80 videoContent"
+        [ngClass]="selectedSideBarItem == 'Analytics Page' ? 'd-block':'d-none'">
+        <ng-container *ngIf="videoTutorialFound else noVideoTutorialTemplate">
+          <div class="fw-bold mt-2 p-2 text-highlight">
+            Analytics Page
+          </div>
+          <p *ngIf="gettingStartedDetails[2]?.description?.length > 0" class="p-2">
+            {{gettingStartedDetails[2].description}}
+          </p>
+          <p *ngIf="gettingStartedDetails[2]?.description?.length == 0" class="p-2 text-center">
+            No data available
+          </p>
+          <video (play)="onVideoPlay()" (pause)="onVideoPause()"
+            *ngIf="gettingStartedDetails[2]?.video_url?.length > 0 else noVideoTutorialTemplate" width="100%"
+            height="100%" controls disablepictureinpicture controlslist="nodownload noplaybackrate" class="videoBox">
+            <source src="{{gettingStartedDetails[2].video_url}}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </ng-container>
+      </div>
+      <div class="side-bar-height pad-80 videoContent"
+        [ngClass]="selectedSideBarItem == 'Observation, SIF & action' ? 'd-block':'d-none'">
+        <ng-container *ngIf="videoTutorialFound else noVideoTutorialTemplate">
+          <div class="fw-bold mt-2 p-2 text-highlight">
+            Observation, SIF & Action
+          </div>
+          <p *ngIf="gettingStartedDetails[3]?.description?.length > 0" class="p-2">
+            {{gettingStartedDetails[3].description}}
+          </p>
+          <p *ngIf="gettingStartedDetails[3]?.description?.length == 0" class="p-2 text-center">
+            No data available
+          </p>
+          <video (play)="onVideoPlay()" (pause)="onVideoPause()"
+            *ngIf="gettingStartedDetails[3]?.video_url?.length > 0 else noVideoTutorialTemplate" width="100%"
+            height="100%" controls disablepictureinpicture controlslist="nodownload noplaybackrate" class="videoBox">
+            <source src="{{gettingStartedDetails[3].video_url}}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </ng-container>
+      </div>
+      <div class="side-bar-height pad-80 videoContent"
+        [ngClass]="selectedSideBarItem == 'Reports & Help Page' ? 'd-block':'d-none'">
+        <ng-container *ngIf="videoTutorialFound else noVideoTutorialTemplate">
+          <div class="fw-bold mt-2 p-2 text-highlight">
+            Reports & Help Page
+          </div>
+          <p *ngIf="gettingStartedDetails[4]?.description?.length > 0" class="p-2">
+            {{gettingStartedDetails[4].description}}
+          </p>
+          <p *ngIf="gettingStartedDetails[4]?.description?.length == 0" class="p-2 text-center">
+            No data available
+          </p>
+          <video (play)="onVideoPlay()" (pause)="onVideoPause()"
+            *ngIf="gettingStartedDetails[4]?.video_url?.length > 0 else noVideoTutorialTemplate" width="100%"
+            height="100%" controls disablepictureinpicture controlslist="nodownload noplaybackrate" class="videoBox">
+            <source src="{{gettingStartedDetails[4].video_url}}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </ng-container>
+      </div>
+      <div class="" id="tableHelp" [ngClass]="selectedSideBarItem == 'Categorization' ? 'd-block':'d-none'">
+        <ngx-datatable class="material expandable text-wrap w-100" [rows]="categoryRows"
+          [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [scrollbarH]="true">
+          <ngx-datatable-column [draggable]="false" [resizeable]="false" name="Category" prop="name"
+            [width]="5"></ngx-datatable-column>
+          <ngx-datatable-column [draggable]="false" [resizeable]="false" name="Indicator" [width]="10">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <span>
+                <img [src]="row.cardPath" width="40px">
+              </span>
+              <span class="ms-2">{{row.acronym}}</span>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column [draggable]="false" [resizeable]="false" name="Description" prop="description"
+            [width]="0"></ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+      <div [ngClass]="selectedSideBarItem == 'Category Mapping' ? 'd-block':'d-none'">
+        <ngx-datatable class="material expandable side-bar-height w-100" [rowHeight]="50" [scrollbarV]="true"
+          [rows]="mappingRows" [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50">
+          <ngx-datatable-column [draggable]="false" [resizeable]="false" name="Given Category"
+            prop="givenCategory"></ngx-datatable-column>
+          <ngx-datatable-column [draggable]="false" [resizeable]="false" name="Closest IOGP category"
+            prop="closestIogpCategory"></ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+      <div [ngClass]="selectedSideBarItem == 'Zone Mapping' ? 'd-block':'d-none'">
+        <ngx-datatable class="material expandable side-bar-height w-100" [rowHeight]="50" [scrollbarV]="true"
+          [rows]="zoneMappingRows" [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50">
+          <ngx-datatable-column [draggable]="false" [resizeable]="false" [name]="selectedPlantDetails?.[0]?.unit_nomenclature" prop="unit"></ngx-datatable-column>
+          <ngx-datatable-column [draggable]="false" [resizeable]="false" [name]="selectedPlantDetails?.[0]?.zone_nomenclature" prop="zone"></ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+      <div class="side-bar-height" *ngIf="userManuals">
+        <div class="fw-bold p-3">
+          Safety Assistant
+        </div>
+        <ng-container >
+         <embed [src] = "cleanUrl(safeUserManuals)" type="application/pdf" width="100%" class="ps-3 pe-3 pb-3 pdfHeight" />
+         <!-- <embed src="./assets/pdf/Safety and Surveillance - User Manual.pdf" width="100%" height="93%"
+            class="ps-2 pe-2 pb-2" /> -->
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<ng-template #noUserManualTemplate>
+  <div class="fullWidth categoryHeight d-flex">
+    <h2 class="m-auto">User manual coming soon.</h2>
+  </div>
+</ng-template>
+
+
+<ng-template #noVideoTutorialTemplate>
+  <div class="fullWidth categoryHeight d-flex">
+    <h2 class="m-auto">Video manual coming soon.</h2>
+  </div>
+</ng-template>

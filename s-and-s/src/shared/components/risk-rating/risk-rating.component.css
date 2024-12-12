@@ -1,0 +1,49 @@
+/* .squareCss {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    border: 1px solid #a2a0a0;
+    background-color: white;
+}
+
+.bar-width{
+  width: calc(100% - 25px);
+}
+
+.w-20{
+  width: 20%;
+}
+
+.h-5px{
+  height: 5px;
+} */
+
+
+.squareCss {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  border: 1px solid #a2a0a0;
+  background-color: white;
+}
+
+.bar-width{
+width: calc(100% - 25px);
+}
+
+.w-20{
+width: 10px;
+}
+
+.h-5px{
+height: 15px;
+}
+.radius{
+border-radius: 3px;
+}
+.fs-10px{
+font-size: 10px;
+}
+.fw-800{
+font-weight: 800;
+}

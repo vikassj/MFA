@@ -1,0 +1,322 @@
+#actionTable ::ng-deep .ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
+  background-color: #E2F5FF;
+  color: #006699 !important;
+  font-size: 10px !important;
+  font-weight: 600;
+  display: flex;
+  padding: .9rem .4rem .9rem .7rem !important;
+  white-space: break-spaces !important;
+  line-height: 12px !important;
+  flex-wrap: wrap;
+  align-items: center;
+  }
+  .fs-10px{
+    font-size: 10px;
+  }
+#actionTable ::ng-deep .ngx-datatable .datatable-header .datatable-header-cell .sort-btn {
+  line-height: 100%;
+  vertical-align: middle;
+  display: none !important;
+  cursor: pointer;
+}
+#actionTable ::ng-deep .ngx-datatable .datatable-body .datatable-scroll {
+  width: 662px;
+}
+ #actionTable ::ng-deep .ngx-datatable.material {
+  background: #fff;
+  box-shadow: none;
+  }
+:host ::ng-deep .open {
+  background-color: rgba(255, 230, 230,0.6);
+}
+
+:host ::ng-deep .close {
+  background-color: rgba(230, 255, 230,0.6);
+}
+
+#actionTable ::ng-deep .ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell {
+  text-align: left;
+  padding: .9rem .4rem .9rem .7rem !important;
+  vertical-align: top;
+  display: flex;
+  align-items: center;
+  border-top: 0;
+  color: rgba(0, 0, 0, 0.87);
+  transition: width 0.3s ease;
+  }
+#actionTable ::ng-deep .ngx-datatable.fixed-header .datatable-header .datatable-header-inner {
+  white-space: nowrap;
+  height: 100%;
+}
+#actionTable ::ng-deep .ngx-datatable *, .ngx-datatable :after, .ngx-datatable :before {
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+}
+#actionTable ::ng-deep .ngx-datatable.material .empty-row {
+  height: 100%;
+  text-align: left;
+  padding: 0.5rem 1.2rem;
+  vertical-align: top;
+  border-top: 0;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  font-size: 14px;
+}
+.fs-11px{
+  font-size: 11px;
+}
+#actionTable ::ng-deep .ng-select .ng-select-container {
+  min-height: 25px;
+  border: 1px solid black
+}
+#actionTable ::ng-deep .ng-dropdown-panel .scroll-host  {
+  position: fixed;
+  z-index: 99;
+}
+#actionTable ::ng-deep .ng-select .ng-clear-wrapper{
+  cursor: pointer;
+    position: relative;
+    width: 15px;
+    height: 18px;
+    /* -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none; */
+    user-select: none;
+}
+#actionTable ::ng-deep .ng-select.ng-select-single .ng-select-container{
+height: 28px;
+}
+.border-red{
+  border: 1px red solid;
+  border-radius: 3px;
+}
+
+.border-green{
+  border: 1px green solid;
+  border-radius: 3px;
+}
+.bg-text-red{
+  background-color: rgba(255, 230, 230,0.6);
+  font-weight: 800;
+  color: red;
+}
+.bg-text-green{
+  background-color: rgba(230, 255, 230,0.6);
+  font-weight: 800;
+  color: green;
+}
+.text-color{
+  color: #006699;
+}
+.w-20px{
+  width: 20px;
+}
+.w-22px{
+  width: 22px;
+}
+.w-60px{
+  width: 60px;
+}
+.h-20px{
+  height: 20px;
+}
+.h-25px{
+  height: 25px;
+}
+.bg-basic{
+  background-color: #006699;
+}
+.cursor-pointer{
+  cursor: pointer;
+}
+.name{
+  background-color: #940707;
+  color: white;
+  width: 22px;
+  height: 22px;
+}
+.date{
+  background-color: #E2F5FF;
+}
+.w-85px{
+  width: 85px;
+}
+.sum{
+  max-height: fit-content;
+
+}
+.fs-11px{
+  font-size: 11px;
+}
+.fs-12px{
+  font-size: 12px;
+}
+
+.w-85{
+  width: 85%;
+}
+
+.disabled{
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.enable-click-event{
+  pointer-events: all;
+}
+
+.break-word{
+  word-break: break-word;
+}
+#dateSelect ::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label,
+#createDateSelect ::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
+  transform: translateY(-1.28125em) scale(0.75) perspective(100px) translateZ(0.001px);
+  -ms-transform: translateY(-1.28125em) scale(0.75);
+  width: 100%;
+  display: none;
+}
+#dateSelect ::ng-deep .mat-form-field {
+  display: inline-block;
+  position: relative;
+  text-align: left;
+  width: 100% !important;
+  padding: 0px 12px !important;
+  border-radius: 3px !important;
+  background-color: rgb(250, 250, 250) !important;
+}
+#createDateSelect ::ng-deep .mat-form-field {
+  display: inline-block;
+  position: relative;
+  text-align: left;
+  width: 100% !important;
+  height: 27px !important;
+  padding: 0px 8px !important;
+  border-radius: 3px !important;
+  background-color: rgb(250, 250, 250) !important;
+}
+#createDateSelect ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  padding-bottom: 0px !important;
+}
+#createDateSelect ::ng-deep .mat-input-element:disabled,
+#dateSelect ::ng-deep .mat-input-element:disabled {
+  color: rgba(0,0,0);
+  font-weight: 700;
+  padding-top: 4px;
+  font-size: 11px;
+  margin-left: -6px;
+}
+#createDateSelect ::ng-deep .mat-form-field-flex {
+  display: inline-flex;
+  align-items: center !important;
+  box-sizing: border-box;
+  padding-top: 2px !important;
+  width: 100%;
+}
+#createDateSelect ::ng-deep .mat-form-field-suffix {
+  white-space: nowrap;
+  flex: none;
+  position: relative;
+  height: 22px !important;
+}
+#dateSelect ::ng-deep .mat-form-field-infix{
+  display: block;
+  position: relative;
+  flex: auto;
+  min-width: 0;
+  width: 100%;
+}
+#createDateSelect ::ng-deep .mat-form-field-infix {
+  display: block;
+  position: relative;
+  flex: auto;
+  min-width: 0;
+  height: 18px !important;
+  width: 100%;
+}
+#dateSelect ::ng-deep .mat-form-field-infix ,
+#createDateSelect ::ng-deep .mat-form-field-infix {
+  padding: 0px !important;
+  border-top: 0px solid transparent !important;
+  width: 65px !important;
+}
+#dateSelect ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline,
+#createDateSelect ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+  height: 1px;
+  display: none !important;
+}
+#dateSelect ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  padding-bottom: 8px !important;
+  padding-top: 4px !important;
+}
+#dateSelect ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-suffix .mat-datepicker-toggle-default-icon {
+  width: 16px;
+}
+/* ::ng-deep .assi .ng-select .ng-select-container .ng-has-value {
+  height: inherit;
+} */
+::ng-deep .assi.ng-select.ng-select-multiple .ng-select-container .ng-value-container {
+  flex-wrap: nowrap;
+  width: 116px;
+}
+::ng--deep .assi .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-label{
+  display: inline-block;
+    padding: 1px 0px;
+}
+
+::ng-deep .assi .ng-arrow-wrapper{
+  display: none !important;
+}
+::ng-deep .assi.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+  font-size: .9em;
+  margin-bottom: 5px;
+  color: #333;
+  background-color: #ebf5ff;
+  border-radius: 2px;
+  margin-right: 0px;
+  margin-left: -4px;
+}
+
+::ng-deep .assi .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-label {
+  display: inline-block;
+  padding: 0px 0px !important;
+}
+::ng-deep .assi.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon {
+  display: inline-block;
+  padding: 1px 3px !important;
+}
+::ng-deep .assi .ng-select.ng-select-multiple .ng-select-container .ng-value-container {
+  padding-top: 0px;
+  padding-left: 0px;
+  padding-bottom: 0px;
+}
+::ng-deep .assi .ng-select-container{
+  width: 116px !important;
+}
+::ng-deep .assi .ng-select-container .ng-has-value{
+  height: 28px !important;
+}
+.yes{
+  color: #2196F3;
+  font-weight: 700;
+}
+.no{
+  font-weight: 700;
+  color: red;
+}
+::ng-deep .ng-dropdown-panel{
+  position: absolute !important;
+  z-index: 1000;
+  max-height: 240px !important;
+  height: 240px !important;
+  overflow-y: auto;
+}
+
+
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items {
+  /* display: block; */
+  height: auto;
+  box-sizing: border-box;
+  max-height: 195px !important;
+  /* overflow-y: auto; */
+}

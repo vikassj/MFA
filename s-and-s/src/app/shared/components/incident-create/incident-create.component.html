@@ -1,0 +1,275 @@
+<div class="createIncidentHeight p-2">
+  <div class="w-100 h-100 bg-white">
+    <div class="w-75 m-auto">
+      <div class="d-flex h-30px fs-12px align-items-center bg-light-blue rounded w-100 fw-600">
+        <div class="w-50 text-white d-flex align-items-center justify-content-center h-100 bg-blue rounded-start">1. First Information Report</div>
+        <div class="d-flex position-relative">
+          <div class="triangle1 triangle-position1"></div>
+          <div class="triangle2 triangle-position2"></div>
+        </div>
+        <div class="w-50 fd-12px fw-600 d-flex align-items-center justify-content-center h-100 rounded-end" [ngClass]="confirmSubmitCreateIncident ? 'bg-blue text-white' : 'start'" >2. Preview & Submit</div>
+      </div>
+      <div class="mt-2 reportData" [ngClass]="confirmSubmitCreateIncident ? 'opacity-75' : 'opacity-100'">
+        <div class="fs-11px mt-1 w-65">
+          <div class="text-color fw-800 act">Plant</div>
+          <div class="drop px-2 h-32px d-flex align-items-center fs-11px fw-600 bg-ash">{{plantName}}</div>
+        </div>
+        <div class="fs-11px mt-2 w-65">
+          <div class="text-color fw-800 act">{{selectedPlantDetails?.[0]?.unit_nomenclature}}</div>
+          <div class="drop px-2 h-32px d-flex align-items-center fs-11px bg-ash w-100">
+            <div class="dropdown w-100">
+              <div
+                class=" text-dark-blue fs-11px ff-montserrat w-100 fw-600 d-flex justify-content-between align-items-center  cursor-pointer" [ngClass]="confirmSubmitCreateIncident? 'cursor-menu' : ''"
+                (click)="unitDropdownShow()">
+                <div class="fw-600" [title]="newFormattedData.unit">{{newFormattedData.unit}}</div>
+                <div><img src="/assets/icons/dropDownArrow.png" alt="" width="10px"></div>
+              </div>
+              <div class="dropdown-style shadow rounded w-100 py-2" *ngIf="unitDropdown">
+                <div style="font-weight: 800 !important;" class="options text-dark-blue fs-12px ff-montserrat" *ngFor="let selectItem of units"
+                  [ngClass]="selectItem == selectedUnitName ? 'selected-dropdown':''"
+                  (click)="selectedUnit(selectItem); this.newFormattedData.unit = selectItem">
+                  {{selectItem}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fs-11px mt-2 w-65">
+          <div class="text-color fw-800 act">{{selectedPlantDetails?.[0]?.zone_nomenclature}}</div>
+          <div class="drop px-2 h-32px d-flex align-items-center fs-11px bg-ash">
+            <div class="dropdown w-100">
+              <div
+                class=" text-dark-blue fs-11px ff-montserrat w-100 d-flex justify-content-between align-items-center  cursor-pointer" [ngClass]="confirmSubmitCreateIncident? 'cursor-menu' : ''"
+                (click)="zoneDropdownShow()">
+                <div class="fw-600" [title]="newFormattedData.zone">{{newFormattedData.zone}}</div>
+                <div><img src="/assets/icons/dropDownArrow.png" alt="" width="10px"></div>
+              </div>
+              <div class="dropdown-style shadow rounded w-100 py-2" *ngIf="zoneDropdown">
+                <div style="font-weight: 800 !important;" class="options text-dark-blue fs-12px ff-montserrat" *ngFor="let selectItem of zonesList"
+                  [ngClass]="selectItem == selectedUnitName ? 'selected-dropdown':''"
+                  (click)="selectedZone(selectItem); this.newFormattedData.zone = selectItem">
+                  {{selectItem}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fs-11px mt-2 w-65">
+          <div class="text-color fw-800 act">Date of Incident</div>
+          <div class="h-32px fw-600 d-flex align-items-center fs-11px">
+            <div class="px-2 fs-11px w-100  bg-ash" id="dateSelect">
+                <mat-form-field>
+                  <input matInput id="txtDates" [matDatepicker]="picker" [ngClass]="validateField('incident_date') ? 'required-field' : ''" placeholder="DD-MMM-YYYY" disabled required
+                   (dateChange)="this.newFormattedData.incident_date = $event.target.value; DateChange($event)" [max]="todaysDate">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker  [disabled]="confirmSubmitCreateIncident"></mat-datepicker>
+                </mat-form-field>
+
+            </div>
+          </div>
+        </div>
+        <div class="fs-11px mt-2 w-65">
+          <div class="text-color fw-800 act">Time of Incident</div>
+          <div class="h-32px d-flex align-items-center fs-11px fw-600">
+            <input type="time" class="px-2 h-32px fw-600 fs-11px p-1 form-control bg-ash incident_date" [ngClass]="validateField('incident_time') ? 'required-field' : ''" [disabled]="confirmSubmitCreateIncident" [(ngModel)]="this.newFormattedData.incident_time" (change)="this.newFormattedData.incident_time = $event.target.value" (change)="timeChange($event)" >
+          </div>
+        </div>
+        <div class="fs-11px mt-2 w-65">
+          <div class="text-color fw-800">Number of Serious injuries</div>
+          <div class="fs-11px fw-600">
+            <div class="bg-white h-32px d-flex justify-content-between align-items-center cursor-pointer">a) Employee <input type="number" min="0" class="drop p-0 px-2 h-100 bg-ash inputTypeNumber bg-ash" [disabled]="confirmSubmitCreateIncident" [(ngModel)]="newFormattedData.serious_injury['employee']" oninput="this.value =
+              !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : 0"></div>
+            <div class="bg-white h-32px d-flex justify-content-between align-items-center my-2 cursor-pointer">b) Contractor <input type="number" min="0" class="drop  p-0 px-2 h-100 inputTypeNumber bg-ash" [disabled]="confirmSubmitCreateIncident" [(ngModel)]="newFormattedData.serious_injury['contractor']" oninput="this.value =
+              !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : 0"></div>
+            <div class="bg-white h-32px d-flex justify-content-between align-items-center cursor-pointer">c) Others <input type="number" min="0" class="drop p-0 px-2 h-100 inputTypeNumber bg-ash" [disabled]="confirmSubmitCreateIncident" [(ngModel)]="newFormattedData.serious_injury['others']" oninput="this.value =
+              !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : 0"></div>
+          </div>
+          <div class="drop px-2 h-32px d-flex align-items-center fw-600 fs-11px d-flex">
+              <label class="mt-2 script d-flex align-items-center me-2" [ngClass]="{ 'no-pointer': lostTimeDisabled() }" style="color:black;" >
+                Declare lost time injury
+                <input type="checkbox" name="Lost time" [(ngModel)]="lostTimeInjury" [disabled]="lostTimeDisabled()"   [ngClass]="{ 'no-pointer': lostTimeDisabled() }" >
+                <span class="w3docs" [ngClass]="{ 'blurred-checkbox': lostTimeDisabled() }"></span>
+              </label>
+          </div>
+        </div>
+        <div class="fs-11px mt-2 w-65">
+          <div class="text-color fw-800">Number of fatalities</div>
+          <div class="fs-11px fw-600">
+            <div class="bg-white h-32px d-flex justify-content-between align-items-center cursor-pointer">a) Employee <input type="number" min="0" class="drop px-2 p-0 h-100 inputTypeNumber bg-ash" [disabled]="confirmSubmitCreateIncident" [(ngModel)]="newFormattedData.fatality['employee']" oninput="this.value =
+              !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : 0"></div>
+            <div class="bg-white h-32px d-flex justify-content-between align-items-center my-2 cursor-pointer">b) Contractor <input type="number" min="0" class="drop px-2 p-0 h-100 inputTypeNumber bg-ash" [disabled]="confirmSubmitCreateIncident" [(ngModel)]="newFormattedData.fatality['contractor']" oninput="this.value =
+              !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : 0"></div>
+            <div class="bg-white h-32px d-flex justify-content-between align-items-center cursor-pointer">c) Others <input type="number" min="0" class="drop px-2 p-0 h-100 inputTypeNumber bg-ash" [disabled]="confirmSubmitCreateIncident" [(ngModel)]="newFormattedData.fatality['others']" oninput="this.value =
+              !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : 0"></div>
+          </div>
+        </div>
+        <div class="fs-11px mt-2 w-65">
+          <div class="text-color fw-800">Safety Category (leave blank if no relevant category found)</div>
+          <div class="category" >
+            <ng-select [items]="allCategory"  class="fw-600 drop px-2 h-32px d-flex align-items-center fs-11px bg-ash w-100"   [multiple]="true" [closeOnSelect]="false" dropdownPosition="hidden"
+            [(ngModel)]="this.newFormattedData.iogpcategories" (change)="changeCategories()"
+            placeholder="Select Safety Category" [clearable]="false" [bindLabel]="'name'" [bindValue]="'acronym'" [disabled]="confirmSubmitCreateIncident">
+            <ng-template ng-multi-label-tmp let-items="items" let-clear="clear" [disabled]="confirmSubmitCreateIncident">
+              <div class="ng-value" *ngFor="let item of items | slice:0:2" >
+                <span class="ng-value-label">{{item.name}}</span>
+                <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true" [disabled]="confirmSubmitCreateIncident">×</span>
+              </div>
+              <div class="ng-value" *ngIf="items?.length > 2">
+                <span class="ng-value-label">{{items?.length - 2}} more...</span>
+              </div>
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index" [disabled]="confirmSubmitCreateIncident">
+              {{item.name}}
+            </ng-template>
+          </ng-select>
+          </div>
+        </div>
+        <div class="fs-11px mt-2 w-65">
+          <div class="text-color fw-800 act">Did the incident cause shutdown or outage of the facility?</div>
+          <div class="drop px-2 h-32px d-flex align-items-center fw-600 fs-11px bg-ash d-flex">
+            <label class="script d-flex align-items-center me-2" style="color:black;"  [ngClass]="confirmSubmitCreateIncident? 'cursor-menu' : ''">
+              Yes
+              <input type="radio" name="sms" [disabled]="confirmSubmitCreateIncident" (change)="this.newFormattedData.is_shutdown = true">
+              <span class="w3docs"></span>
+            </label>
+            <label class="script d-flex align-items-center me-2" style="color:black;" [ngClass]="confirmSubmitCreateIncident? 'cursor-menu' : ''">
+              No
+              <input type="radio" name="sms" [disabled]="confirmSubmitCreateIncident"  (change)="this.newFormattedData.is_shutdown = false">
+              <span class="w3docs"></span>
+            </label>
+          </div>
+        </div>
+        <div class="fs-11px mt-2 w-65">
+          <div class="text-color fw-800 act">Sector</div>
+          <div class="drop p-2 fs-11px fw-600 bg-ash ">
+            <ng-container *ngFor="let item of newIncidentFormObj?.['sector'];let i = index">
+              <div class="mb-2 min-h-23px line-h-10px">
+                <label class="mt-2 script d-flex align-items-center me-2" style="color:black;" [ngClass]="confirmSubmitCreateIncident? 'cursor-menu' : ''">
+                  {{item.name}}
+                  <input type="checkbox" name="sector"  [disabled]="confirmSubmitCreateIncident" [checked]="item.checked "  (change)="selectCheckList('sector', item, i)">
+                  <span class="w3docs" [ngClass]="[item.checked ? '' : 'w3docs-disabled',validateField('sector') ? 'required-field' : '']"></span>
+                </label>
+              </div>
+            </ng-container>
+            <div class="p-2 fs-12px bg-ash" *ngIf="newFormattedData['sector']['others']"  >
+              <textarea name="Immediate" id="" class="w-100  bg-ash p-2" [ngClass]="validateField('sector_description') ? 'required-field' : ''" rows="5" placeholder="Enter Sector" [disabled]="confirmSubmitCreateIncident" [(ngModel)]="newFormattedData.sector_description"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="fs-11px mt-2 w-65">
+          <div class="text-color fw-800 act">Incident type</div>
+          <div class="drop p-2 fs-11px fw-600 bg-ash">
+            <ng-container *ngFor="let item of newIncidentFormObj?.['incident_factor'];let i = index">
+              <div class="mb-2 min-h-23px line-h-10px">
+                <label class="mt-2 script d-flex align-items-center me-2" style="color:black;" [ngClass]="confirmSubmitCreateIncident? 'cursor-menu' : ''">
+                  {{item.name}}
+                  <input type="checkbox" name="type"  [disabled]="confirmSubmitCreateIncident" [checked]="item.checked " (change)="selectCheckList('incident_factor', item, i)">
+                  <span class="w3docs"[ngClass]="[item.checked ? '' : 'w3docs-disabled', validateField('incident_factor') ? 'required-field' : '']"></span>
+                </label>
+              </div>
+            </ng-container>
+            <div class="p-2 fs-12px bg-ash" *ngIf="newFormattedData['incident_factor']['others']"  >
+              <textarea name="incident_factor_description" id="" class="w-100 bg-ash p-2" [ngClass]="validateField('incident_factor_description') ? 'required-field' : ''" rows="5" placeholder="Enter incident type" [disabled]="confirmSubmitCreateIncident" [(ngModel)]="newFormattedData.incident_factor_description"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="fs-11px mt-2 w-65" >
+          <div class="text-color fw-800">Duration of fire - hrs/min</div>
+          <div class="drop px-2 h-32px d-flex align-items-center fw-600 fs-11px bg-ash" style="width: 50%;">
+            <input type="number" min="0" class="drop p-0 form-control bg-ash incident_date"  [disabled]="confirmSubmitCreateIncident" [(ngModel)]="newFormattedData.duration_of_fire" name="duration_of_fire"  >
+          </div>
+        </div>
+        <div class="fs-11px mt-2 w-65">
+          <div class="text-color fw-800 act">Damages</div>
+          <div class="drop p-2 fs-11px fw-600 bg-ash" >
+            <ng-container *ngFor="let item of newIncidentFormObj?.['damage'];let i = index">
+              <div class="mb-2 min-h-23px line-h-10px">
+                <label class="mt-2 script d-flex align-items-center me-2" style="color:black;" [ngClass]="confirmSubmitCreateIncident? 'cursor-menu' : ''">
+                  {{item.name}}
+                  <input type="checkbox" name="damage" [disabled]="confirmSubmitCreateIncident" [checked]="item.checked " (change)="selectCheckList('damage', item, i)">
+                  <span class="w3docs" [ngClass]="[item.checked ? '' : 'w3docs-disabled', validateField('damage') ? 'required-field' : '']"   ></span>
+                </label>
+              </div>
+            </ng-container>
+            <div class="p-2 fs-12px bg-ash" *ngIf="newFormattedData['damage']['others']"  >
+              <textarea name="damage_description" id="" class="w-100  bg-ash p-2" [ngClass]="validateField('damage_description') ? 'required-field' : ''" rows="5" placeholder="Enter damage description" [disabled]="confirmSubmitCreateIncident" [(ngModel)]="newFormattedData.damage_description"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="fs-11px mt-2">
+          <div class="text-color fw-800 act">Summary</div>
+          <div class="drop p-2 fs-11px fw-600 bg-ash">
+            <textarea name="Description" id=""  minlength="0" [disabled]="confirmSubmitCreateIncident" class="drop w-100 bg-ash p-2 summary" [ngClass]="validateField('summary') ? 'required-field' : ''" [style.height]="getTextareaHeight('summary')"  rows="3" placeholder="Enter a brief summary of the incident (e.g., 'Power outage in Building A', 'Data breach detected in system XYZ')." [(ngModel)]="newFormattedData.summary" (change)="this.newFormattedData.summary = $event.target.value" ></textarea>
+          </div>
+          <div *ngIf="newFormattedData.summary && !commonService.alphaNumericWithoutSpaceValidator(newFormattedData.summary)" class="text-danger fs-10px mt-1">
+            Summary cannot have spaces at the start and end of the text.
+          </div>
+        </div>
+        <div class="fs-11px mt-2">
+          <div class="text-color fw-800 act">Description of incident</div>
+          <div class="drop p-2 fs-11px fw-600 bg-ash">
+            <textarea name="Description" id="" class="drop w-100 bg-ash p-2 description" [ngClass]="validateField('description') ? 'required-field' : ''" [style.height]="getTextareaHeight('description')" rows="5" placeholder="Enter a detailed description of the incident, including relevant times, locations, and any affected systems or personnel." [disabled]="confirmSubmitCreateIncident" [(ngModel)]="newFormattedData.description"></textarea>
+          </div>
+          <div *ngIf="newFormattedData.description && !commonService.alphaNumericWithoutSpaceValidator(newFormattedData.description)" class="text-danger fs-10px mt-1">
+            Incident description cannot have spaces at the start and end of the text.
+          </div>
+        </div>
+        <div class="fs-11px mt-2 mb-4">
+          <div class="text-color fw-800 act">Immediate Response</div>
+          <div class="drop p-2 fs-11px fw-600 bg-ash">
+            <textarea name="Immediate" id="" class="drop w-100 border-0 bg-ash p-2 immediate-response" [ngClass]="validateField('immediate_response') ? 'required-field' : ''" [style.height]="getTextareaHeight('immediate-response')" rows="5" placeholder="List any immediate actions taken in response to the incident (e.g., 'Evacuated Building A', 'Isolated affected network’)." [disabled]="confirmSubmitCreateIncident" [(ngModel)]="newFormattedData.immediate_response"></textarea>
+          </div>
+          <div *ngIf="newFormattedData.immediate_response && !commonService.alphaNumericWithoutSpaceValidator(newFormattedData.immediate_response)" class="text-danger fs-10px mt-1">
+            Immediate response cannot have spaces at the start and end of the text.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer d-flex my-2">
+    <div *ngIf="!confirmSubmitCreateIncident">
+
+     <button class="submit btn btn-sm btn-basic me-2 fs-11px w-120px fw-600"  (click)="submitNewIncidentData();">SUBMIT</button>
+
+     <button class="cancel btn btn-sm btn-outline-basic fs-11px fw-600" (click)="backToIncident()">CANCEL</button>
+    </div>
+    <div *ngIf="confirmSubmitCreateIncident">
+     <button class="confirm btn btn-sm btn-basic me-2 w-115px fw-600" (click)="confirmToSubmit()">CONFIRM</button>
+     <button class="btn btn-sm btn-outline-basic fw-600"  (click)="this.confirmSubmitCreateIncident = false">BACK</button>
+    </div>
+   </div>
+</div>
+
+<div class="modal fade blur_background" id="confirmSubmit" data-bs-backdrop="static" data-bs-keyboard="false"
+  tabindex="-1" aria-labelledby="addObservationLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header p-2">
+          <div class="w-100 text-center text-success fs-13px fw-600"> <img src="/assets/icons/input_check.png" width="21px" alt=""> Success</div>
+      </div>
+      <div class="px-3 pt-2 text-center">
+        <div class="fs-12px">
+          You have successfully submitted the initial report.
+        </div>
+      </div>
+      <div class="text-center p-3  d-flex align-items-center justify-content-center  fs-12px">
+        <button type="button" class="btn btn-sm btn-basic w-60px p-1px" (click)="submittedInitialReport()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade blur_background" id="validateField" data-bs-backdrop="static" data-bs-keyboard="false"
+  tabindex="-1" aria-labelledby="addObservationLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="px-3 pt-2 text-center">
+        <div class="fs-12px">
+          Please provide valid data for all required fields.
+        </div>
+      </div>
+      <div class="text-center p-3  d-flex align-items-center justify-content-center  fs-12px">
+        <button type="button" class="btn btn-sm btn-basic w-60px p-1px" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>

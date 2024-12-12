@@ -1,0 +1,35 @@
+<div style="height: 25px; width: 40%; border: 1px solid black;" style="display: inline-flex;">
+  <div class="inner-container">
+    <div *ngFor="let id of selectedPermits  | slice:0:2; let i=index;" style="width: 75px; white-space: nowrap;">
+      <div class="unit" matTooltip={{id}} matTooltipClass="custom-tooltip-units-filter">
+        <div class="permit-element">
+          {{id}}
+        </div>
+        <div (click)="removeFromFilters(id)" class="remove-unit-button "> x </div>
+      </div>
+    </div>
+    <div class="ms-2 fs-8px nowrap" *ngIf="(selectedPermits.length - 2) > 0"> + {{selectedPermits.length - 2}} {{selectedPermits.length - 2 > 1 ? 'Permits' :'Permit'}}</div>
+  </div>
+    <div class="view-all-container" (click)="toggleDropdown()">
+      <div class="view-all" for="down-arrow" role="button">
+        View all
+      </div>
+    <div class="dropdown-arrow" id="down-arrow"><i class="fas fa-chevron-down"></i></div>
+    </div>
+  </div>
+
+
+  <div  class="all-units-dropdown px-2" *ngIf="dropdown && selectedPermits.length > 0">
+    <div class="arrow-pointer"></div>
+    <div class="all-units-header">
+      All Permits
+    </div>
+    <div class="units-container" style="overflow-y: auto;" [ngStyle]="{'height': getPermitHeight()+'px'}">
+      <div *ngFor="let id of selectedPermits; let i=index;" class="all-unit">
+          <div class="unit-name-container">
+            {{id}}
+          </div>
+          <div class="remove-unit-button" (click)="removeFromFilters(id)"> x </div>
+      </div>
+    </div>
+  </div>

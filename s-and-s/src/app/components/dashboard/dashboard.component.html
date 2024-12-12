@@ -1,0 +1,219 @@
+<div class="dashboard-page-height m-0 p-2 d-flex" >
+  <div class="d-flex w-100 h-100" [ngClass]="isShow ? 'd-none': 'd-block'">
+    <!-- main div -->
+    <div class="w-40  bg-white me-1 of-auto">
+        <!-- left-side-div -->
+       <div class="w-100 d-flex align-items-center" >
+        <!-- units filter and total open and close count -->
+        <div class="h-100 w-60 ps-2 selected-unit">
+          <app-units-filter appClickOutside (clickOutside)="onOutsideClick()" [units]="unitsList" style="width: 100%;"></app-units-filter>
+        </div>
+
+        <div class="h-100 w-40 fw-600 d-flex ps-2 me-2 selected-unit-counts">
+          <!-- total open and close count -->
+          <div class="open-red my-auto ms-2 "><small>OPEN</small></div>
+          <div
+            class="border rounded border-danger open-red mx-1 px-1  my-2  open-close-count d-flex align-items-center justify-content-center"
+            [ngClass]="(dailyOpenCount >= 1 ) ? 'pointer': ''"
+            [title]="dailyOpenCount" (click)="(dailyOpenCount >= 1 ) && navigateToOpenCloseObs('open');">
+             {{dailyOpenCount}}</div>
+          <div class="close-green my-auto ms-2"><small>CLOSED</small></div>
+          <div
+            class="border rounded border-success close-green mx-1 px-1  my-2  open-close-count d-flex align-items-center justify-content-center me-0"
+            [ngClass]="(dailyCloseCount >= 1 ) ? 'pointer': ''"
+            [title]="dailyCloseCount" (click)="(dailyCloseCount >= 1 ) && navigateToOpenCloseObs('close');">
+            {{dailyCloseCount}}</div>
+        </div>
+       </div>
+       <div class="w-100 insights-bg-color pb-3">
+          <!-- Insights  -->
+          <div class="w-100  pt-1 px-2 ">
+            <!-- insights -->
+            <div class="d-flex py-2 w-100 justify-content-center align-items-center">
+              <img src="./assets/icons/Insights.svg" alt='Insight' class="responsive-img" width="20px" height="20px">
+              <div class="fw-600 fs-16 ps-1 pt-1">INSIGHTS</div>
+            </div>
+            <div class="d-flex">
+              <div class="w-40 fs-10 radius bg-white ms-1 me-3 box1">
+                <div class="border-bottom px-2 py-2  justify-content-center">
+                  <p class="m-0">Number of</p>
+                  <p class="open-red m-0">High Risk observations</p>
+                </div>
+                <div class="d-flex justify-content-between pt-1 ps-2 pe-3 pb-1">
+                  <div class="primary-color pt-1">
+                    <p class="fs-18 m-0">{{insights_critical_count}}</p>
+                    <p class="pointer m-0" (click)="(insights_critical_count !== 0 && insights_critical_count !== 'NA') && navigateToCriticalObs(insights_critical_count); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with insights cards', 'Overall statistics')"><span class="underline">Observations</span></p>
+                  </div>
+                  <!-- <div class="d-flex pt-3">
+                    <img src="./assets/icons/Observation.svg" alt='Insight' class="responsive-img" width="30px" height="30px">
+                  </div> -->
+                </div>
+              </div>
+              <div class="w-40 fs-10 radius bg-white">
+                <div class="d-flex border-bottom px-2 py-2 justify-content-center align-items-center ">
+                  Most repeated observation
+                </div>
+                <div class="d-flex pt-1 ps-1 pe-1 pb-1">
+                  <div class="d-flex pt-1">
+                    <img *ngIf="insights_category != 'NA'" src="./assets/icons/{{insights_category}}.svg" alt='Insight' class="responsive-img" width="35px" height="40px">
+                    <i   *ngIf="insights_category == 'NA'" class="fa fa-ban responsive-img" alt='Insight' style="width: 35px; height: 40px; font-size: 25px; padding-top: 10px;"></i>
+                  </div>
+                  <div class="primary-color">
+                    <p class="ps-2 pt-3 pointer m-0 me-0" (click)="(insights_category != 'NA') && navigateToCategoryObs(insights_category); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with insights cards', 'Overall statistics')"><span class="underline">{{insights_category}}</span></p>
+                  </div>
+                </div>
+              </div>
+              <div class="w-40 fs-10 radius bg-white ms-3 me-1">
+                <div class="d-flex border-bottom px-2 py-2 justify-content-center align-items-center ">
+                 Most Viewed Observation
+                </div>
+                <div class="d-flex justify-content-between pt-1 ps-2 pe-2">
+                  <div class="primary-color pt-1">
+                    <span class="fs-18">#{{insights_most_viewed}}</span>
+                    <p class="pointer underline" (click)="(insights_most_viewed != 'NA' && insights_most_viewed != '0') && getObservationsDetails(insights_most_viewed); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with insights cards', 'Overall statistics')"><span>Observation</span></p>
+                  </div>
+                  <div class="d-flex pt-3">
+                    <img src="./assets/icons/Observation.svg" alt='Insight' class="responsive-img" width="30px" height="30px">
+                  </div>
+                </div>
+              </div>
+
+              <!-- number of ongoing critical jobs  -->
+              <div *ngIf="isPermitEnabled" class="w-40 fs-10 radius bg-white ms-3 me-1 box1">
+                <div class="border-bottom px-2 py-2 justify-content-center">
+                 Number of ongoing Critical jobs
+                </div>
+                <div class="d-flex justify-content-between pt-1 ps-2 pe-2">
+                  <div class="primary-color pt-1 pointer" (click)="(num_of_ongoing_critical_jobs !== 0 && num_of_ongoing_critical_jobs !== null && num_of_ongoing_critical_jobs !== undefined) && navigateToCriticalJobs()">
+                    <span class="fs-18 color-class pointer fs-18 ms-2 mt-2 underline">{{ num_of_ongoing_critical_jobs !== null && num_of_ongoing_critical_jobs !== undefined ? num_of_ongoing_critical_jobs : 'NA' }}</span>
+                    </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="d-flex fs-10 radius bg-white mt-2 p-1 me-2 w-100 justify-content-center">
+              <div class="d-flex justify-content-center primary-color border-yellow ms-1 py-1 pe-2 w-50 ">
+                <div class="d-flex my-auto fw-600">Total Observations till date </div>
+                <div> <span class="fs-18 ms-2 mt-2">{{insights_total_obs}}</span></div>
+              </div>
+              <div class="d-flex justify-content-center primary-color me-1  py-1 w-50" >
+                <div class="d-flex my-auto fw-600 ">Total Observations by date range </div>
+                <div [ngClass]="(insights_range_obs_count >= 1 ) ? 'pointer': ''" (click)="(insights_range_obs_count >= 1 ) && navigateToObsPage()" >
+                  <span class="fs-18 ms-2 mt-3"><u>{{insights_range_obs_count}}</u></span></div>
+              </div>
+            </div>
+          </div>
+      </div>
+       <div class="w-100 h-45">
+          <!-- safety trend graph -->
+          <div class="pt-1 ps-2 w-100 h-100">
+            <div class=" d-flex flex-column">
+                <div class="d-flex w-100 justify-content-between">
+                  <div class="fw-600 fs-12 pt-2">Safety trend</div>
+                </div>
+              </div>
+          <ng-container *ngIf="xDataST.length >0 && yDataST.length>0">
+            <app-line-chart [xData]="xDataST" [xLabel]="" [yLabel]="" [yData]="yDataST"></app-line-chart>
+          </ng-container>
+          <ng-container *ngIf="xDataST.length <= 0 || yDataST.length <= 0">
+            <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+              <b>No observations recorded</b>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="w-40 h-100 bg-white me-1">
+        <!-- middle-side-div -->
+        <div class="card-bar-height h-100 shadow-sm bg-body rounded pe-1">
+          <app-unit-ss-dashboard [checkMapView]="checkMapView" (reportData)="getReportData($event)" (mapView)="toggleMapView($event)"
+          [categoryMapStatus]="categoryMapStatus" [categoryMap]="categoryMap"></app-unit-ss-dashboard>
+        </div>
+    </div>
+    <div class="w-20 h-100 bg-white card1-page-height">
+        <!-- right-side-div -->
+       <!-- Iogp Categories -->
+       <div class="m-2 w-100  pe-3">
+        <div class="radius all-btn-bg-color text-white d-flex w-100">
+          <div class="w-60 m-1 fs-12 px-2 pointer h-20px radius d-flex justify-content-center align-items-center"
+            (click)="toggleDateSelector('selected')" [ngClass]="selectedDateSelector == 'selected' ? 'btn-bg-color text-dark': ''" [ngClass]="disableToggle ?'noEvent btn-bg-color text-dark': 'btn-bg-color text-dark'">Selected Date(s)
+          </div>
+          <div class="w-40 m-1 fs-12 px-2 pointer h-20px radius d-flex justify-content-center align-items-center"
+           (click)="toggleDateSelector('custom')" [ngClass]="selectedDateSelector == 'custom' ? 'btn-bg-color text-dark': ''" [ngClass]="disableToggle ?'noEvent': ''">Custom
+          </div>
+        </div>
+       </div>
+       <div *ngIf="selectedDateSelector == 'custom'" >
+        <div class=" d-flex justify-content-center align-items-center">
+          <app-category-date-picker (iogp_custom_date)="getIogpDates($event)"></app-category-date-picker>
+        </div>
+
+        <div class="h-100 w-100 fw-600 d-flex justify-content-around align-items-center ">
+          <!-- total open and close count -->
+          <div class="d-flex">
+          <div class="open-red py-2"><small>OPEN</small></div>
+          <div
+            class="border rounded border-danger open-red m-2 p-1  open-close-count d-flex align-items-center justify-content-center"
+            [title]="dailyOpenCount">
+             {{iogp_dailyOpenCount}}</div>
+            </div>
+          <div class="d-flex">
+          <div class="close-green py-2"><small>CLOSED</small></div>
+          <div
+            class="border rounded border-success close-green m-2 p-1  open-close-count d-flex align-items-center justify-content-center me-0"
+            [title]="dailyCloseCount">
+            {{iogp_dailyCloseCount}}</div>
+          </div>
+        </div>
+       </div>
+       <div *ngIf="iogpCategories.length > 0">
+        <ng-container *ngFor="let category of iogpCategories">
+          <div class="d-flex  w-100  pb-2 mb-2 pt-1" [ngClass]="[iogpData[category.acronym]?.open == 0 ? 'border-close-bottom' : 'border-open-bottom' , iogpData[category.acronym]?.open >= 1 || iogpData[category.acronym]?.close ? 'pointer': 'nopointer']"
+          (click)="(iogpData[category.acronym]?.open >= 1 || iogpData[category.acronym]?.close ) && navigateSelectedCategoryObs(category.acronym); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with date-wise risk rating observation statistics', 'Unitwise statistics'); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with date-wise category-wise observation statistics', 'Unitwise statistics')">
+            <div
+              class="h-70px text-white d-flex justify-content-center align-items-center ps-2" [ngClass]="iogpData[category.acronym]?.open == 0 ? 'border-close' : 'border-open' ">
+              <img src={{category.imagePath}} alt={{category.name}} class="responsive-img" width="40px" height="50px">
+            </div>
+            <div class="ms-2 w-100  justify-content-between align-items-center">
+                <div><span class="fs-12 pe-2">{{category.name}}</span></div>
+                <div class="w-100 d-flex flex-row text-total fs-12 mt-1 justify-content-between">
+                  <div class="">Total -
+                    {{iogpData[category.acronym]?.open + iogpData[category.acronym]?.close }}</div>
+                  <div class="pe-2">
+                    <span *ngIf="iogpData[category.acronym]?.open > 0" class="open-red fw-600 ms-4 fs-12">Open -&nbsp;{{iogpData[category.acronym]?.open}}</span>
+                    <span *ngIf="iogpData[category.acronym]?.open == 0" class="close-green fw-600 ms-4 fs-12">Closed -&nbsp;{{iogpData[category.acronym]?.close}}</span>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </ng-container>
+       </div>
+       <div *ngIf="iogpCategories.length == 0" class="no-data-class">
+        <ng-container>
+          No Observations recorded
+        </ng-container>
+       </div>
+      </div>
+
+  </div>
+
+  <!-- Map View -->
+  <div class="w-100 h-100" [ngClass]="isShow ? 'd-block': 'd-none'">
+    <div class="d-flex justify-content-between">
+      <div><p class="f-10 primary-color">OVERALL  STATISTICS</p></div>
+      <div class="d-flex">
+          <div class="d-flex primary-color me-2">
+              <b class="my-auto fs-12">Stats View</b>
+            </div>
+          <div class="d-flex form-check form-switch my-auto pe-2">
+              <input class="form-check-input" type="checkbox" id="mapView1" (click)="toggleMapView($event)" [checked]="mapView">
+              <label class="form-check-label primary-color ms-2 fs-12" for="mapView1"><b>Map View</b></label>
+          </div>
+      </div>
+    </div>
+    <app-birds-eye-view [img]="plantImageDetails?.imageUrl" [locations]="plantImageDetails?.locationMap"
+      [modalHeading]="plantImageDetails?.unitName" [modalType]="plantImageDetails?.moduleType" [isModal]="false"
+      (emitSelectedLocation)="navigateToUnitDashboard($event.location)">
+    </app-birds-eye-view>
+  </div>
+</div>

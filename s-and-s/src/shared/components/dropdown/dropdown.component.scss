@@ -1,0 +1,55 @@
+
+.dropdown{
+  display: inline-block;
+}
+.dropdown-style{
+  position: absolute;
+  // right: 0px;
+  z-index: 20 !important;
+  background-color: white !important;
+  margin-top: 2px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+.dropdown-style::-webkit-scrollbar{
+  width: 2px;
+}
+.cursor-pointer{
+  cursor: pointer;
+}
+.options{
+  padding: 0px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.selected-dropdown{
+  background-color: #D2F0FF;
+}
+.options:hover{
+  background-color: #D2F0FF;
+}
+.select-border-bottom {
+  border-bottom: 1.5px solid #EEEEEE;
+}
+.text-dark-blue{
+  color: #1E3044;
+}
+.fs-13{
+  font-size: 13px;
+}
+.fs-14{
+  font-size: 14px;
+}
+// .ff-montserrat{
+  // font-family: 'am-Montserrat';
+  /* font-weight: 800; */
+// }
+.w-150px{
+  // width: 150px;
+}
+.fw-bold{
+  font-weight: 800 !important;
+}
+.opacity50{
+  opacity: 0.5;
+}

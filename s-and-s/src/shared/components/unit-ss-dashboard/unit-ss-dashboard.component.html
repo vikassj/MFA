@@ -1,0 +1,266 @@
+<div class="d-flex h-100 w-100">
+  <div class="h-100 w-100">
+    <!-- ss-dashboard-container -->
+    <div class="w-100">
+      <div class="fs-12 w-100">
+        <div class="d-flex w-100">
+          <div class="p-3  w-40 fw-500">
+            <div class="radius justify-content-around all-btn-bg-color text-white d-flex">
+              <div class="w-35px m-1 px-2 pointer h-20px radius d-flex justify-content-center align-items-center"
+                (click)="toggleObsBarChart('all')" [ngClass]="selectedButton == 'all' ? 'btn-bg-color text-dark': ''"
+                [ngClass]="disableToggle ?'noEvent btn-bg-color text-dark': 'btn-bg-color text-dark'">All
+              </div>
+              <div class="w-45px m-1 px-2 pointer h-20px radius d-flex justify-content-center align-items-center"
+                (click)="toggleObsBarChart('open')" [ngClass]="selectedButton == 'open' ? 'btn-bg-color text-dark': ''"
+                [ngClass]="disableToggle ?'noEvent': ''">Open
+              </div>
+              <div class="w-50px m-1 px-2 pointer h-20px radius d-flex justify-content-center align-items-center"
+                (click)="toggleObsBarChart('closed')"
+                [ngClass]="selectedButton == 'closed' ? 'btn-bg-color text-dark': ''"
+                [ngClass]="disableToggle ?'noEvent': ''">
+                Closed</div>
+            </div>
+          </div>
+          <div class="w-20"></div>
+          <div class="d-flex justify-content-end w-40 fw-600">
+            <div class="d-flex mapview-color me-2">
+              <p class="my-auto fs-12 pt-1">Stats View</p>
+            </div>
+            <div class="d-flex form-check form-switch align-items-center pe-2">
+              <input class="form-check-input" type="checkbox" id="mapView2" (click)="toggleMapView()"
+                [checked]="checkMapView">
+              <label class="form-check-label mapview-color ms-2 mt-3 pt-1 fs-12" for="mapView2">
+                <p>Map View</p>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-100 mt-1 ms-2 pe-2">
+      <!-- Unit Wise Comparison -->
+      <div class=" d-flex h-100 flex-column w-100 mt-4">
+        <div class="d-flex w-100  mt-1">
+          <div class="fw-600 fs-12 ps-1">{{selectedPlantDetails?.[0]?.unit_nomenclature}} Wise Comparison</div>
+          <div class="ms-3 all-btn-bg-color text-white btn-radius ">
+            <div
+              class="fw-500 w-50px fs-11 pad-1 py-auto mx-1 px-1 pointer h-20px align-items-center justify-content-center"
+              (click)="toggleUnitStackChart()">
+              <span>{{expand_collapse_unit}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex bargraph1 mt-2">
+          <app-stack-bar-chart [riskRatio]="riskRatio" class="w-100 h-100">
+          </app-stack-bar-chart>
+        </div>
+        <div class="graph1 w-100" *ngIf="showUnitwiseGraph">
+          <ng-container *ngFor="let item of observationsByUnitAndRiskRating">
+            <div class="d-flex h-5 w-100 mt-2">
+              <div class="d-flex me-1 fs-12 w-20 ps-2 one-liner">
+                <span>{{item.unitName}}</span>
+              </div>
+              <div class="d-flex pdtop me-1" style="width: calc(80% - 100px);">
+                <app-risk-rating-bar [open]="item.open" [close]="item.close" class="w-100 h-100"
+                  [observationsByUnitAndRiskRating]="item.ratingValue"></app-risk-rating-bar>
+              </div>
+              <div *ngIf="selectedButton == 'open' || selectedButton == 'all'"
+                class="border rounded border-danger open-red ms-2 mx-1 px-2 open-close-count d-flex align-items-center justify-content-center"
+                [ngClass]="(item.open >= 1 ) ? 'pointer': ''"
+                (click)="(item.open >= 1 ) && navigateToUnitOpenCloseObs('open' , item.unitName)"
+                matTooltip="Open Count - {{item.open}}" matTooltipClass="custom-tooltip-open">{{item.open}}</div>
+              <div *ngIf="selectedButton == 'closed' || selectedButton == 'all'"
+                class="border rounded border-success close-green mx-1 px-2 open-close-count d-flex align-items-center justify-content-center me-0"
+                [ngClass]="(item.close >= 1 ) ? 'pointer': ''"
+                (click)="(item.close >= 1 ) && navigateToUnitOpenCloseObs('close' , item.unitName)"
+                matTooltip="Closed Count - {{item.close}}" matTooltipClass="custom-tooltip-close">{{item.close}}</div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-100 mt-1 ms-2 pe-3">
+      <!-- Riskwise Attribution -->
+      <div class=" d-flex h-100 flex-column w-100 mt-4">
+        <div class="d-flex w-100 mt-1 ">
+          <div class="fw-600 fs-12 ps-1 me-1">Riskwise Attribution</div>
+          <div class="ms-4 all-btn-bg-color text-white btn-radius">
+            <div
+              class="fw-500 w-50px fs-11 pad-1 py-auto mx-1 px-1 pointer h-20px align-items-center justify-content-center"
+              (click)="toggleRiskStackChart()">
+              <span>{{expand_collapse_risk}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex hit w-100 pt-2 mt-2 ms-1 pe-1">
+          <app-riskwise-horizontal-chart [riskWiseData]="riskWiseData"
+            class="w-100 h-100"></app-riskwise-horizontal-chart>
+        </div>
+        <div class="h-100 w-100" *ngIf="showRiskwiseGraph">
+          <ng-container *ngIf="dataIsThere">
+            <ng-container *ngFor="let riskLevel of riskLevels; let i = index">
+              <div class="d-flex align-items-center h-5 w-100 mt-2">
+                <div class="d-flex me-1 fs-12 w-20 ps-2">{{riskLevel.ratingName}}</div>
+                <div class="d-flex w-100 h-20px me-1">
+                  <app-open-close-graph [open]="riskwiseAttribution[i + 1]['open']"
+                    [close]="riskwiseAttribution[i + 1]['close']" class="w-100 h-100"></app-open-close-graph>
+                </div>
+                <div *ngIf="selectedButton == 'open' || selectedButton == 'all'"
+                  [ngClass]="(riskwiseAttribution[i + 1]['open'] >= 1 ) ? 'pointer': ''"
+                  class="w-100 border rounded border-danger open-red ms-2 mx-1 px-2 open-close-count d-flex align-items-center justify-content-center"
+                  [title]="dailyOpenCount"
+                  (click)="(riskwiseAttribution[i + 1]['open'] >= 1 ) && navigateToOpenCloseObs('open' , (i + 1)); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with date-wise risk rating observation statistics', 'Unitwise statistics')"
+                  matTooltip="Open Count - {{ riskwiseAttribution[i + 1]['open'] }}"
+                  matTooltipClass="custom-tooltip-open">
+                  {{riskwiseAttribution[i + 1]['open']}}</div>
+                <div *ngIf="selectedButton == 'closed' || selectedButton == 'all'"
+                  [ngClass]="(riskwiseAttribution[i + 1]['close'] >= 1 ) ? 'pointer': ''"
+                  class="w-100 border rounded border-success close-green mx-1 px-2 open-close-count d-flex align-items-center justify-content-center me-0"
+                  [title]="dailyCloseCount"
+                  (click)="(riskwiseAttribution[i + 1]['close'] >= 1 ) && navigateToOpenCloseObs('close' , (i + 1)); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with date-wise risk rating observation statistics', 'Unitwise statistics')"
+                  matTooltip="Closed Count - {{ riskwiseAttribution[i + 1]['close'] }}"
+                  matTooltipClass="custom-tooltip-close">
+                  {{riskwiseAttribution[i + 1]['close']}}</div>
+              </div>
+            </ng-container>
+            <!-- <div class="d-flex h-5 w-100 mt-2">
+              <div class="d-flex me-1 fs-12 w-20 ps-2">{{riskLevels[0].ratingName}}</div>
+              <div class="d-flex w-100 pdtop me-1">
+                <app-open-close-graph [open]="riskwiseAttribution[1]['open']" [close]="riskwiseAttribution[1]['close']"
+                  class="w-100 h-100"></app-open-close-graph>
+              </div>
+              <div *ngIf="selectedButton == 'open' || selectedButton == 'all'"
+                [ngClass]="(riskwiseAttribution[1]['open'] >= 1 ) ? 'pointer': ''"
+                class="w-100 border rounded border-danger open-red ms-2 mx-1 px-2 open-close-count d-flex align-items-center justify-content-center"
+                [title]="dailyOpenCount"
+                (click)="(riskwiseAttribution[1]['open'] >= 1 ) && navigateToOpenCloseObs('open' , 1); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with date-wise risk rating observation statistics', 'Unitwise statistics')"
+                matTooltip="Open Count - {{ riskwiseAttribution[1]['open'] }}" matTooltipClass="custom-tooltip-open">
+                {{riskwiseAttribution[1]['open']}}</div>
+              <div *ngIf="selectedButton == 'closed' || selectedButton == 'all'"
+                [ngClass]="(riskwiseAttribution[1]['close'] >= 1 ) ? 'pointer': ''"
+                class="w-100 border rounded border-success close-green mx-1 px-2 open-close-count d-flex align-items-center justify-content-center me-0"
+                [title]="dailyCloseCount"
+                (click)="(riskwiseAttribution[1]['close'] >= 1 ) && navigateToOpenCloseObs('close' , 1); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with date-wise risk rating observation statistics', 'Unitwise statistics')"
+                matTooltip="Closed Count - {{ riskwiseAttribution[1]['close'] }}" matTooltipClass="custom-tooltip-close">
+                {{riskwiseAttribution[1]['close']}}</div>
+            </div>
+            <div class="d-flex h-5 w-100 mt-2">
+              <div class="d-flex me-1 fs-12 w-20 ps-2">{{riskLevels[1].ratingName}}</div>
+              <div class="d-flex w-100 pdtop me-1">
+                <app-open-close-graph [open]="riskwiseAttribution[2]['open']" [close]="riskwiseAttribution[2]['close']"
+                  class="w-100 h-100"></app-open-close-graph>
+              </div>
+              <div *ngIf="selectedButton == 'open' || selectedButton == 'all'"
+                [ngClass]="(riskwiseAttribution[2]['open'] >= 1 ) ? 'pointer': ''"
+                class="w-100 border rounded border-danger open-red ms-2 mx-1 px-2 open-close-count d-flex align-items-center justify-content-center"
+                [title]="dailyOpenCount"
+                (click)="(riskwiseAttribution[2]['open'] >= 1 ) && navigateToOpenCloseObs('open' , 2); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with date-wise risk rating observation statistics', 'Unitwise statistics')"
+                matTooltip="Open Count - {{ riskwiseAttribution[2]['open'] }}" matTooltipClass="custom-tooltip-open">
+                {{riskwiseAttribution[2]['open']}}</div>
+              <div *ngIf="selectedButton == 'closed' || selectedButton == 'all'"
+                [ngClass]="(riskwiseAttribution[2]['close'] >= 1 ) ? 'pointer': ''"
+                class="w-100 border rounded border-success close-green mx-1 px-2 open-close-count d-flex align-items-center justify-content-center me-0"
+                [title]="dailyCloseCount"
+                (click)="(riskwiseAttribution[2]['close'] >= 1 ) && navigateToOpenCloseObs('close' , 2); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with date-wise risk rating observation statistics', 'Unitwise statistics')"
+                matTooltip="Closed Count - {{ riskwiseAttribution[2]['close'] }}" matTooltipClass="custom-tooltip-close">
+                {{riskwiseAttribution[2]['close']}}</div>
+            </div>
+            <div class="d-flex h-5 w-100 mt-2">
+              <div class="d-flex me-1 fs-12 w-20 ps-2">{{riskLevels[2].ratingName}}</div>
+              <div class="d-flex w-100 pdtop me-1">
+                <app-open-close-graph [open]="riskwiseAttribution[3]['open']" [close]="riskwiseAttribution[3]['close']"
+                  class="w-100 h-100"></app-open-close-graph>
+              </div>
+              <div *ngIf="selectedButton == 'open' || selectedButton == 'all'"
+                [ngClass]="(riskwiseAttribution[3]['open'] >= 1 ) ? 'pointer': ''"
+                class="w-100 border rounded border-danger open-red ms-2 mx-1 px-2 open-close-count d-flex align-items-center justify-content-center"
+                (click)="(riskwiseAttribution[3]['open'] >= 1 ) && navigateToOpenCloseObs('open' , 3); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with date-wise risk rating observation statistics', 'Unitwise statistics')"
+                matTooltip="Open Count - {{ riskwiseAttribution[3]['open'] }}" matTooltipClass="custom-tooltip-open">
+                {{riskwiseAttribution[3]['open']}}</div>
+              <div *ngIf="selectedButton == 'closed' || selectedButton == 'all'"
+                [ngClass]="(riskwiseAttribution[3]['close'] >= 1 ) ? 'pointer': ''"
+                class="w-100 border rounded border-success close-green mx-1 px-2 open-close-count d-flex align-items-center justify-content-center me-0"
+                (click)="(riskwiseAttribution[3]['close'] >= 1 ) && navigateToOpenCloseObs('close' , 3); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with date-wise risk rating observation statistics', 'Unitwise statistics')"
+                matTooltip="Closed Count - {{ riskwiseAttribution[3]['close'] }}" matTooltipClass="custom-tooltip-close">
+                {{riskwiseAttribution[3]['close']}}</div>
+            </div>
+            <div class="d-flex h-5 w-100 mt-2">
+              <div class="d-flex me-1 fs-12 w-20 ps-2">{{riskLevels[3].ratingName}}</div>
+              <div class="d-flex w-100 pdtop me-1">
+                <app-open-close-graph [open]="riskwiseAttribution[4]['open']" [close]="riskwiseAttribution[4]['close']"
+                  class="w-100 h-100"></app-open-close-graph>
+              </div>
+              <div *ngIf="selectedButton == 'open' || selectedButton == 'all'"
+                [ngClass]="(riskwiseAttribution[4]['open'] >= 1 ) ? 'pointer': ''"
+                class="w-100 border rounded border-danger open-red ms-2 mx-1 px-2 open-close-count d-flex align-items-center justify-content-center"
+                (click)="(riskwiseAttribution[4]['open'] >= 1 ) && navigateToOpenCloseObs('open' , 4); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with date-wise risk rating observation statistics', 'Unitwise statistics')"
+                matTooltip="Open Count - {{ riskwiseAttribution[4]['open'] }}" matTooltipClass="custom-tooltip-open">
+                {{riskwiseAttribution[4]['open']}}</div>
+              <div *ngIf="selectedButton == 'closed' || selectedButton == 'all'"
+                [ngClass]="(riskwiseAttribution[5]['close'] >= 1 ) ? 'pointer': ''"
+                class="w-100 border rounded border-success close-green mx-1 px-2 open-close-count d-flex align-items-center justify-content-center me-0"
+                (click)="(riskwiseAttribution[4]['close'] >= 1 ) && navigateToOpenCloseObs('close' , 4); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with date-wise risk rating observation statistics', 'Unitwise statistics')"
+                matTooltip="Closed Count - {{ riskwiseAttribution[4]['close'] }}" matTooltipClass="custom-tooltip-close">
+                {{riskwiseAttribution[4]['close']}}</div>
+            </div>
+            <div class="d-flex h-5 w-100 mt-2">
+              <div class="d-flex me-1 fs-12 w-20 ps-2">{{riskLevels[4].ratingName}}</div>
+              <div class="d-flex w-100 pdtop me-1">
+                <app-open-close-graph [open]="riskwiseAttribution[5]['open']" [close]="riskwiseAttribution[5]['close']"
+                  class="w-100 h-100"></app-open-close-graph>
+              </div>
+              <div *ngIf="selectedButton == 'open' || selectedButton == 'all'"
+                [ngClass]="(riskwiseAttribution[5]['open'] >= 1 ) ? 'pointer': ''"
+                class="w-100 border rounded border-danger open-red ms-2 mx-1 px-2 open-close-count d-flex align-items-center justify-content-center"
+                (click)="(riskwiseAttribution[5]['open'] >= 1 ) && navigateToOpenCloseObs('open' , 5); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with date-wise risk rating observation statistics', 'Unitwise statistics')"
+                matTooltip="Open Count - {{ riskwiseAttribution[5]['open'] }}" matTooltipClass="custom-tooltip-open">
+                {{riskwiseAttribution[5]['open']}}</div>
+              <div *ngIf="selectedButton == 'closed' || selectedButton == 'all'"
+                [ngClass]="(riskwiseAttribution[5]['close'] >= 1 ) ? 'pointer': ''"
+                class="w-100 border rounded border-success close-green mx-1 px-2 open-close-count d-flex align-items-center justify-content-center me-0"
+                (click)="(riskwiseAttribution[5]['close'] >= 1 ) && navigateToOpenCloseObs('close' , 5); safetyAndSurveillanceCommonService.sendMatomoEvent('Interaction with date-wise risk rating observation statistics', 'Unitwise statistics')"
+                matTooltip="Closed Count - {{ riskwiseAttribution[5]['close'] }}" matTooltipClass="custom-tooltip-close">
+                {{riskwiseAttribution[5]['close']}}</div>
+            </div> -->
+
+
+
+
+
+
+          </ng-container>
+          <ng-container *ngIf="!dataIsThere">
+            <div class="w-100 h-100 d-flex justify-content-center align-items-center">No observations recorded</div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-100 h-50">
+      <div class="card-overFlow h-100">
+        <div class="h-100 ps-2 pe-2 pt-2">
+          <ng-container *ngIf="selectedMode">
+            <app-bar-chart [xAxisData]="obsBarData.xAxisData" [barData]="obsBarData.barData"
+              (emitEvent)="onDateChanged($event)" class="chartOption px-2" [categoryMapStatus]="categoryMapStatus"
+              [categoryMap]="categoryMap">
+            </app-bar-chart>
+          </ng-container>
+          <ng-container *ngIf="!selectedMode">
+            <ng-template
+              *ngIf="sessionBarData?.series?.length > 0 && sessionBarData?.series?.data?.length > 0;else elseBlock">
+              <div echarts [options]="sessionBarData" class="barChart"></div>
+            </ng-template>
+            <ng-template #elseBlock>
+              <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+                No data available
+              </div>
+            </ng-template>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,676 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@swimlane/ngx-datatable/index.css';
+// @import '~@swimlane/ngx-datatable/themes/material.scss';
+@import '~@swimlane/ngx-datatable/assets/icons.css';
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+$primary-color: #006699;
+$success-color: #33a437;
+$warning-color: #f76665;
+$secondary-color: #FFBC00;
+
+html,
+body {
+  font-family: 'Montserrat';
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-size: 14px;
+}
+
+//common colors
+
+
+.primary-color {
+  color: #006699;
+}
+
+.primary-bg-color {
+  background-color: #E2F5FF;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.fullHeight {
+  height: 100%;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.fontSize12px {
+  font-size: 12px !important;
+}
+
+.fontSize14px {
+  font-size: 14px !important;
+}
+
+.fontSize16px {
+  font-size: 16px !important;
+}
+
+.autoOverflowX {
+  overflow-x: auto;
+}
+
+.autoOverflowY {
+  overflow-y: auto;
+}
+
+.componentCss {
+  width: 70%;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid #313a46;
+  outline: none;
+}
+
+.primaryButton {
+  background-color: #313a46 !important;
+  color: white !important;
+  border: none !important;
+  cursor: pointer !important;
+  width: auto !important;
+  margin: auto !important;
+  border-radius: 30px !important;
+  font-size: 1em !important;
+  padding: 0.4em 1em !important;
+}
+
+.textWhite {
+  color: white;
+}
+
+input[type='checkbox'] {
+  accent-color: #0075FF;
+}
+
+.ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
+  background-color: #E2F5FF;
+  color: #006699 !important;
+  font-size: 13px !important;
+  font-weight: 600;
+  display: flex;
+  white-space: break-spaces !important;
+  line-height: 12px !important;
+  flex-wrap: wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ngx-datatable.material .datatable-footer .datatable-pager li.active a {
+  background-color: #006699 !important;
+  align-items: center !important;
+  color: white !important;
+  font-weight: bold;
+}
+.ngx-datatable .datatable-body .datatable-body-row>div {
+  display: flex !important;
+  align-items: center !important;
+}
+.ngx-datatable.material .datatable-footer .datatable-pager {
+  color: #006699 !important;
+  align-items: center !important;
+  background-color: transparent !important;
+  font-family: 'am-Montserrat' !important;
+}
+
+.ngx-datatable.material .datatable-footer .datatable-pager a {
+  color: #006699 !important;
+  margin: auto !important;
+  min-width: 22px !important;
+  height: 22px !important;
+  border-radius: 50% !important;
+  // border: none !important;
+  // align-items: center;
+  // display: flex;
+  // justify-content: center;
+}
+
+.ngx-datatable.material .datatable-footer .datatable-pager a:hover {
+  // background-color: #006699 !important;
+  background-color: white !important;
+  color: #006699 !important;
+  font-weight: bold;
+}
+
+.ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell {
+  font-weight: 600 !important;
+  font-size: 13px !important;
+}
+
+.datatable-icon-right:before {
+  content: "N E X T" !important;
+  font-family: 'am-Montserrat', sans-serif !important;
+  font-size: 12px !important;
+  color: black !important;
+}
+
+.datatable-icon-skip:before {
+  content: "⭢" !important;
+  font-size: 30px !important;
+  line-height: 14px !important;
+  font-style: normal !important;
+  // font-style: none !important;
+}
+
+.datatable-icon-left:before {
+  content: "P R E V" !important;
+  font-style: normal !important;
+  font-size: 12px !important;
+  color: black !important;
+}
+
+
+
+.datatable-icon-prev:before {
+  content: "⭠" !important;
+  font-size: 30px !important;
+  font-style: normal !important;
+  line-height: 14px !important;
+}
+
+// .datatable-icon-sort-unset::before {
+//   content: '\63' !important;
+//   opacity: 0.5;
+// }
+.ngx-datatable.material .datatable-footer .datatable-pager ul li a .datatable-icon-left::before{
+ font-family: 'am-Montserrat' !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-feature-settings: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.ngx-datatable.material .datatable-footer .datatable-pager ul li a .datatable-icon-right::before{
+  font-family: 'am-Montserrat' !important;
+   font-style: normal !important;
+   font-weight: 600 !important;
+   font-feature-settings: normal !important;
+   font-variant: normal !important;
+   text-transform: none !important;
+   speak: none;
+   line-height: 1;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+ }
+
+
+@mixin btn-warmup($color, $bg-color, $bd-color) {
+  color: $color  !important;
+  background-color: $bg-color  !important;
+  border-color: $bd-color  !important;
+}
+
+@mixin text-warmup($color) {
+  color: $color  !important;
+}
+
+.btn-basic,
+.btn-basic :hover {
+  @include btn-warmup(white, $primary-color, $primary-color)
+}
+
+.btn-warn,
+.btn-warn :hover {
+  @include btn-warmup(white, $warning-color, $warning-color)
+}
+
+.btn-safe,
+.btn-safe :hover {
+  @include btn-warmup(white, $success-color, $success-color)
+}
+
+.btn-outline-basic,
+.btn-outline-basic :hover {
+  @include btn-warmup($primary-color, white, $primary-color)
+}
+
+.btn-outline-warn,
+.btn-outline-warn :hover {
+  @include btn-warmup($warning-color, white, $warning-color)
+}
+
+.btn-outline-safe,
+.btn-outline-safe :hover {
+  @include btn-warmup($success-color, white, $success-color)
+}
+
+.text-warn {
+  @include text-warmup($warning-color);
+}
+
+.text-basic {
+  @include text-warmup($primary-color);
+}
+
+.text-safe {
+  @include text-warmup($success-color);
+}
+
+@font-face {
+  font-family: "am-Montserrat";
+  font-weight: 600;
+  src: local("am-Montserrat"), url('/src/assets/fonts/montserrat/Montserrat-VariableFont_wght.ttf') format("truetype");
+}
+
+
+.cursorDisabled {
+  cursor: not-allowed !important;
+}
+
+.d-flow-root {
+  display: flow-root !important;
+}
+
+.verticalDivider {
+  border-right: 1px solid grey;
+}
+
+.bbox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  border: 1px solid red;
+}
+
+.cursorPointer {
+  cursor: pointer !important;
+}
+
+.cursorDisabled {
+  cursor: not-allowed !important;
+}
+
+.ngx-datatable.material .datatable-footer .page-count {
+  flex: none !important;
+  width: 38% !important;
+}
+
+
+.ngx-datatable .datatable-footer .datatable-pager .pager,
+.ngx-datatable .datatable-footer .datatable-pager .pager li {
+  display: flex !important;
+  align-items: center !important;
+  font-family: 'am-Montserrat', 'Font Awesome\ 5 Free' !important;
+}
+
+.ngx-datatable.material .datatable-footer .datatable-pager .datatable-icon-left,
+.ngx-datatable.material .datatable-footer .datatable-pager .datatable-icon-skip,
+.ngx-datatable.material .datatable-footer .datatable-pager .datatable-icon-right,
+.ngx-datatable.material .datatable-footer .datatable-pager .datatable-icon-prev {
+  line-height: 14px !important;
+  font-family: 'am-Montserrat', 'Font Awesome\ 5 Free' !important;
+}
+
+.datatable-icon-skip,
+.datatable-icon-prev {
+  vertical-align: middle !important;
+}
+
+
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  margin: 8px;
+  border: 4px solid #047FBD;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #047FBD transparent transparent transparent;
+}
+
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+.cdk-global-overlay-wrapper,
+.cdk-overlay-container {
+  z-index: 99999 !important;
+}
+
+
+// .ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
+//   background-color: #E2F5FF;
+//   color: #006699 !important;
+//   font-size: 12px !important;
+//   font-weight: 600;
+//   font-size: 14px;
+// }
+
+.ngx-datatable.material .datatable-footer .datatable-pager li.active a {
+  background-color: #006699 !important;
+  align-items: center !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+.ngx-datatable.material .datatable-footer .datatable-pager {
+  color: #006699 !important;
+  align-items: center !important;
+  background-color: transparent !important;
+  font-family: 'Montserrat' !important;
+}
+
+.ngx-datatable.material .datatable-footer .datatable-pager a {
+  color: #006699 !important;
+  margin: auto !important;
+  // width: 25px !important;
+  // height: 25px !important;
+  border-radius: 50% !important;
+  // border: none !important;
+  // align-items: center;
+  // display: flex;
+  // justify-content: center;
+}
+
+.ngx-datatable.material .datatable-footer .datatable-pager a:hover {
+  // background-color: #006699 !important;
+  background-color: white !important;
+  color: #006699 !important;
+  font-weight: bold;
+}
+
+.ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell {
+  font-weight: 600 !important;
+  font-size: 13px !important;
+}
+
+.datatable-icon-right:before {
+  content: "N E X T" !important;
+  // font-family: 'am-Montserrat', sans-serif !important;
+  font-size: 12px !important;
+  color: black !important;
+}
+
+.datatable-icon-skip:before {
+  content: "⭢" !important;
+  font-size: 30px !important;
+  line-height: 14px !important;
+  font-style: normal !important;
+  // font-style: none !important;
+}
+
+.datatable-icon-left:before {
+  content: "P R E V" !important;
+  font-style: normal !important;
+  font-size: 12px !important;
+  color: black !important;
+}
+
+
+
+.datatable-icon-prev:before {
+  content: "⭠" !important;
+  font-size: 30px !important;
+  font-style: normal !important;
+  line-height: 14px !important;
+}
+
+
+.ngx-datatable.material .datatable-footer .datatable-pager ul li a .datatable-icon-left::before{
+  font-family: 'Montserrat' !important;
+   font-style: normal !important;
+   font-weight: 600 !important;
+   font-feature-settings: normal !important;
+   font-variant: normal !important;
+   text-transform: none !important;
+   speak: none;
+   line-height: 1;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+ }
+ .ngx-datatable.material .datatable-footer .datatable-pager ul li a .datatable-icon-right::before{
+   font-family: 'Montserrat' !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    font-feature-settings: normal !important;
+    font-variant: normal !important;
+    text-transform: none !important;
+    speak: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+
+
+
+@mixin btn-warmup($color, $bg-color, $bd-color) {
+  color: $color  !important;
+  background-color: $bg-color  !important;
+  border-color: $bd-color  !important;
+}
+
+@mixin text-warmup($color) {
+  color: $color  !important;
+}
+
+.btn-basic,
+.btn-basic :hover {
+  @include btn-warmup(white, $primary-color, $primary-color)
+}
+
+.btn-warn,
+.btn-warn :hover {
+  @include btn-warmup(white, $warning-color, $warning-color)
+}
+
+.btn-safe,
+.btn-safe :hover {
+  @include btn-warmup(white, $success-color, $success-color)
+}
+
+.btn-outline-basic,
+.btn-outline-basic :hover {
+  @include btn-warmup($primary-color, white, $primary-color)
+}
+.btn-outline-secondary,
+.btn-outline-secondary :hover {
+  @include btn-warmup($secondary-color, white, $secondary-color)
+}
+.btn-outline-warn,
+.btn-outline-warn :hover {
+  @include btn-warmup($warning-color, white, $warning-color)
+}
+
+.btn-outline-safe,
+.btn-outline-safe :hover {
+  @include btn-warmup($success-color, white, $success-color)
+}
+
+.text-warn {
+  @include text-warmup($warning-color);
+}
+
+.text-basic {
+  @include text-warmup($primary-color);
+}
+
+.text-safe {
+  @include text-warmup($success-color);
+}
+
+@font-face {
+  font-family: "am-Montserrat";
+  font-weight: 500 !important;
+  src: local("am-Montserrat"), url(./assets/fonts/montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
+}
+
+
+.cursorDisabled {
+  cursor: not-allowed !important;
+}
+
+.d-flow-root {
+  display: flow-root !important;
+}
+
+.verticalDivider {
+  border-right: 1px solid grey;
+}
+
+.bbox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  border: 1px solid red;
+}
+
+.cursorPointer {
+  cursor: pointer !important;
+}
+
+.cursorDisabled {
+  cursor: not-allowed !important;
+}
+
+.ngx-datatable.material .datatable-footer .page-count {
+  flex: none !important;
+  width: 38% !important;
+}
+
+
+.ngx-datatable .datatable-footer .datatable-pager .pager,
+.ngx-datatable .datatable-footer .datatable-pager .pager li {
+  display: flex !important;
+  align-items: center !important;
+  font-family: 'am-Montserrat', 'Font Awesome\ 5 Free' !important;
+}
+
+.ngx-datatable.material .datatable-footer .datatable-pager .datatable-icon-left,
+.ngx-datatable.material .datatable-footer .datatable-pager .datatable-icon-skip,
+.ngx-datatable.material .datatable-footer .datatable-pager .datatable-icon-right,
+.ngx-datatable.material .datatable-footer .datatable-pager .datatable-icon-prev {
+  line-height: 14px !important;
+  font-family: 'am-Montserrat', 'Font Awesome\ 5 Free' !important;
+}
+
+.datatable-icon-skip,
+.datatable-icon-prev {
+  vertical-align: middle !important;
+}
+
+
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  margin: 8px;
+  border: 4px solid #047FBD;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #047FBD transparent transparent transparent;
+}
+
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+.cdk-global-overlay-wrapper,
+.cdk-overlay-container {
+  z-index: 99999 !important;
+}
+
+.ngx-datatable .datatable-footer .datatable-footer-inner .datatable-pager .pager li>a {
+  border: none !important;
+  font-size: 12px !important;
+  font-family: 'Montserrat';
+  font-weight: 800;
+}
+
+
+.custom-tooltip-open {
+  background: #FFFFFF; /* Custom background color */
+  color: #F65251 !important; /* Custom text color */
+  font-size: 14px; /* Custom font size */
+  border: 1px solid #F65251;
+  /* Add any other custom styles you need */
+}
+
+
+.custom-tooltip-close {
+  background: #FFFFFF; /* Custom background color */
+  color: #44AB48 !important; /* Custom text color */
+  font-size: 14px; /* Custom font size */
+  border: 1px solid #44AB48;
+  /* Add any other custom styles you need */
+}
+
+.custom-tooltip-units-filter {
+  background: #FFFFFF; /* Custom background color */
+  color: #2196f3 !important; /* Custom text color */
+  font-size: 10px; /* Custom font size */
+  border: 1px solid #2196f3;
+  /* Add any other custom styles you need */
+}
