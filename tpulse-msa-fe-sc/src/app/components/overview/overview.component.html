@@ -1,0 +1,104 @@
+<div class="shadow-sm primary-color p-2 d-flex align-items-center justify-content-between" style="height:50px;">
+    <!-- <div style="margin-left: 40%;">
+        Status for <span class="fw-bold fs-5 ms-2">{{equipmentCount?.active_equipment_count}} Equipment</span><span
+            class="ms-2">tasks only</span>
+    </div> -->
+    <!-- <div>
+        <button class="border-none-outline-none btn btn-sm btn-border primary-color">SORT</button>
+    </div> -->
+</div>
+
+<div class="row over-view-page-height m-0 pt-2 pe-0" style="width:100%;" *ngIf="!show_hide">
+    <div class="shadow-sm bg-white p-0 border-radius ms-2 mb-2 border" style="width: 24.4%;height:30vh;"
+        *ngFor="let unit of unitData">
+        <!-- *****************Unit & Exception report row****************** -->
+        <div class="d-flex justify-content-between border-radius-top pe-2 ps-2 secodary-bg-color align-items-center"
+            style="height:6vh;">
+            <div class="fs-5 fw-bold" id="bold">{{unit.unit_name}}
+                <i class="fas fa-angle-double-right ms-3"></i>
+            </div>
+            <div style="padding-top: 1px;padding-bottom: 1px;"
+                class="btn btn-sm cursor text-light secondary-bg-color fs-10 ps-3 pe-3" (click)="toggleShow(unit)">
+                EXPAND</div>
+        </div>
+        <!-- *****************Planned VS  Actual percentages row****************** -->
+        <div class="d-flex justify-content-between rounded-3 pe-2 ps-2  align-items-center w-100" style="height:4vh;">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="rounded-0 bg-planned" style="width:7px;height:7px;"></div>
+                <div class="ps-2 fs-12 planned-color">Planned</div>
+                <div class="ps-2 fs-12 planned-color">{{unit.planned_percentage_completed}}%</div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <hr style="width:35px;height:1px;">
+                <div class="mx-2 fs-9">VS</div>
+                <hr style="width:35px;height:1px;">
+            </div>
+            <div class=" d-flex justify-content-between align-items-center">
+                <div class="rounded-0"
+                    [ngClass]="unit.critical_path_delay[0] == '-' || unit.critical_path_delay[0] == '0'?'bg-green':'bg-red'"
+                    style="width:7px;height:7px;"></div>
+                <div class="ps-2 fs-12"
+                    [ngClass]="unit.critical_path_delay[0] == '-' || unit.critical_path_delay[0] == '0'?'text-safe':'text-warn'">
+                    Actual</div>
+                <div class="ps-2 fs-12"
+                    [ngClass]="unit.critical_path_delay[0] == '-' || unit.critical_path_delay[0] == '0'?'text-safe':'text-warn'">
+                    {{unit.actual_percentage_completed}}%</div>
+            </div>
+        </div>
+        <!-- *****************Palnned Start date & End date Row****************** -->
+        <div style="height:4vh;"
+            class="ps-2 pe-2 d-flex justify-content-between align-items-center planned-date-bg-color border-radius">
+            <div class="fs-12">{{unit.start_date_time.planned_date_to_start}} |
+                {{unit.start_date_time.planned_time_to_start}}</div>
+            <div class="fs-12 text-center">Planned</div>
+            <div class="fs-12">{{unit.end_date_time.planned_date_to_complete}} |
+                {{unit.end_date_time.planned_time_to_complete}}</div>
+        </div>
+        <!-- *****************Actual Start date & End date Row************************* -->
+        <div style="height:4vh;"
+            [ngClass]="unit.critical_path_delay[0] == '-' || unit.critical_path_delay[0] == '0'?'bg-safe text-safe':'bg-warn text-warn'"
+            class="ps-2 pe-2  d-flex justify-content-between align-items-center  border-radius">
+            <div class="fs-12">
+                <span
+                    *ngIf="unit.start_date_time.actual_date_to_start != null">{{unit.start_date_time.actual_date_to_start}}
+                    | </span>
+                <span *ngIf="unit.start_date_time.actual_date_to_start == null&&unit.start_date_time.actual_time_to_start == null">yet to start</span>
+                <!-- <span *ngIf="unit.start_date_time.actual_date_to_start == null">NA | </span> -->
+                <span
+                    *ngIf="unit.start_date_time.actual_time_to_start != null">{{unit.start_date_time?.actual_time_to_start?.slice(0,8)}}</span>
+                <!-- <span *ngIf="unit.start_date_time.actual_time_to_start == null">NA</span> -->
+            </div>
+            <div class="fs-12 text-center">Actual</div>
+            <div class="fs-12">
+                <span
+                    *ngIf="unit.end_date_time.actual_date_to_complete != null">{{unit.end_date_time.actual_date_to_complete}}
+                    | </span>
+                <!-- <span *ngIf="unit.end_date_time.actual_date_to_complete == null">NA | </span> -->
+                <span *ngIf="unit.end_date_time.actual_date_to_complete == null&&unit.end_date_time.actual_time_to_complete == null">yet to finish</span>
+                <span
+                    *ngIf="unit.end_date_time.actual_time_to_complete != null">{{unit.end_date_time?.actual_time_to_complete?.slice(0,8)}}</span>
+                <!-- <span *ngIf="unit.end_date_time.actual_time_to_complete == null">NA</span> -->
+            </div>
+        </div>
+        <!-- *****************Critical Path Tasks Gain or Delay Row****************** -->
+        <div style="height:5vh;"
+            [ngClass]="unit.critical_path_delay[0] == '-' || unit.critical_path_delay[0] == '0' ?'bg-safe text-safe':'bg-warn text-warn'"
+            class="ps-2 pe-2  d-flex justify-content-between align-items-center mt-3">
+            <div class="fs-12 d-flex">Critical Path Tasks <span class="ps-2"
+                    [ngClass]="unit.critical_path_delay[0] == '-'?'d-block ms-2':'d-none'">Gain</span> <span
+                    [ngClass]="unit.critical_path_delay[0] != '-'?'d-block ms-2':'d-none'">Delay</span></div>
+            <!-- <div class="fs-12">(in hrs)</div> -->
+            <div class="fs-12">{{unit.critical_path_delay}}</div>
+            <!-- <div class="fs-12">(Delay)</div> -->
+        </div>
+        <!-- *****************Exception report****************** -->
+        <div class="primary-bg-color ps-2 border-radius-bottom" style="height:3vh;">
+            <div class="edit-btn cursor fs-12" (click)="getDailyReports(unit.unit_name)">
+                Daily progress report
+                <i class="fas fa-angle-right ms-3"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<app-overall-unit-data *ngIf="show_hide" (dataChange)="onDataChange($event)" [unit_id]="unit_id"
+    (unitEquipmentCount)="unitRelatedEquipmentCount($event)"></app-overall-unit-data>

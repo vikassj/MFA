@@ -1,0 +1,563 @@
+/* You can add global styles to this file, and also import other style files
+@import '~@swimlane/ngx-datatable/index.css';
+/* // @import '~@swimlane/ngx-datatable/themes/material.scss'; */
+/* @import '~@swimlane/ngx-datatable/assets/icons.css'; */
+
+/* $primary-color: #006699;
+$success-color: #33a437;
+$warning-color: #f76665; */
+
+html,
+body {
+  font-family: 'Montserrat' !important;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 600 !important;
+}
+
+/* //common colors */
+
+
+.primary-color {
+  color: #006699;
+}
+
+.primary-bg-color {
+  background-color: #E2F5FF;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.fullHeight {
+  height: 100%;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.fontSize12px {
+  font-size: 12px !important;
+}
+
+.fontSize14px {
+  font-size: 14px !important;
+}
+
+.fontSize16px {
+  font-size: 16px !important;
+}
+
+.autoOverflowX {
+  overflow-x: auto;
+}
+
+.autoOverflowY {
+  overflow-y: auto;
+}
+
+.btn-basic,
+.btn-basic :hover {
+    color: white !important;
+    background-color: #069 !important;
+    border-color: #069 !important;
+}
+
+.btn-warn,
+.btn-warn :hover {
+    color: white !important;
+    background-color: #f76665 !important;
+    border-color: #f76665 !important;
+}
+
+.btn-safe,
+.btn-safe :hover {
+    color: white !important;
+    background-color: #33a437 !important;
+    border-color: #33a437 !important;
+}
+
+.btn-outline-basic,
+.btn-outline-basic :hover {
+    color: #069 !important;
+    background-color: white !important;
+    border-color: #069 !important;
+}
+
+.btn-outline-warn,
+.btn-outline-warn :hover {
+    color: #f76665 !important;
+    background-color: white !important;
+    border-color: #f76665 !important;
+}
+
+.btn-outline-safe,
+.btn-outline-safe :hover {
+    color: #33a437 !important;
+    background-color: white !important;
+    border-color: #33a437 !important;
+}
+
+.text-warn {
+    color: #f76665 !important;
+}
+
+.text-basic {
+    color: #069 !important;
+}
+
+.text-safe {
+    color: #33a437 !important;
+}
+
+.datatable-icon-left:before {
+  content: "P R E V" !important;
+  font-style: normal !important;
+  font-size: 12px !important;
+  color: black !important;
+}
+
+  .fs-18{
+    font-size: 18px;
+  }
+  .fs-14{
+    font-size: 14px;
+  }
+  .container-panel {
+    width: 70%;
+    height: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 6px;
+  }
+  
+  .detectLogo {
+    width: 35%;
+    height: auto;
+  }
+  
+  .productDefinition {
+    background-color: rgba(255, 255, 255, 0.2);
+    width: 90%;
+  }
+  
+  .productLogo {
+    height: 48px;
+    width: auto;
+  }
+  
+  .copyrightCss {
+    margin-top: 20%;
+    font-size: 10px;
+  }
+
+  :root {
+	--primary-color : #006699;
+  }
+
+.credentialCss {
+  width: 100%;
+}
+
+h2 {
+  color: var(--primary-color);
+}
+
+.forgotPassword {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+.emergency {
+  color: red;
+  font-weight: bold;
+}
+
+.normal {
+  color: green;
+  font-weight: bold;
+}
+
+.cursorDisabled {
+  cursor: not-allowed !important;
+}
+
+.d-flow-root {
+  display: flow-root !important;
+}
+
+.verticalDivider {
+  border-right: 1px solid grey;
+}
+
+.bbox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  border: 1px solid red;
+}
+
+.cursorPointer {
+  cursor: pointer !important;
+}
+
+.cursorDisabled {
+  cursor: not-allowed !important;
+}
+
+.ngx-datatable.material .datatable-footer .page-count {
+  flex: none !important;
+  width: 38% !important;
+}
+
+
+.ngx-datatable .datatable-footer .datatable-pager .pager,
+.ngx-datatable .datatable-footer .datatable-pager .pager li {
+  display: flex !important;
+  align-items: center !important;
+  font-family: 'am-Montserrat', 'Font Awesome\ 5 Free' !important;
+}
+
+.ngx-datatable.material .datatable-footer .datatable-pager .datatable-icon-left,
+.ngx-datatable.material .datatable-footer .datatable-pager .datatable-icon-skip,
+.ngx-datatable.material .datatable-footer .datatable-pager .datatable-icon-right,
+.ngx-datatable.material .datatable-footer .datatable-pager .datatable-icon-prev {
+  line-height: 14px !important;
+  font-family: 'am-Montserrat', 'Font Awesome\ 5 Free' !important;
+}
+
+.datatable-icon-skip,
+.datatable-icon-prev {
+  vertical-align: middle !important;
+}
+
+
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  margin: 8px;
+  border: 4px solid #047FBD;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #047FBD transparent transparent transparent;
+}
+
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.obsDropdownCss .ng-select .ng-select-container {
+  border: unset !important;
+  border-radius: 0 !important;
+  border-bottom: 1px solid #ccc !important;
+  background-color: #f4f7fc !important;
+}
+
+.cdk-global-overlay-wrapper,
+.cdk-overlay-container {
+  z-index: 99999 !important;
+}
+
+/* standrd-font-sizes*/
+
+:root {
+  --base: 0.0521;
+  --fs-24: calc(24 * var(--base) * 1vw); /* 1.2504vw */
+  --fs-14: calc(14 * var(--base) * 1vw); /* 0.7294vw */
+  --fs-16: calc(16 * var(--base) * 1vw); /* 0.8336vw */
+  --fs-18: calc(18 * var(--base) * 1vw); /* 0.8336vw */
+  --fs-12: calc(12 * var(--base) * 1vw); /* 0.6252vw */;
+  // --fs-12: calc(10 * var(--base) * 1vw); /* 0.6252vw */;
+  // --fs-12: calc(8 * var(--base) * 1vw); /* 0.6252vw */;
+  --fw-900: 900;
+  --fw-800: 800;
+  --fw-700: 700;
+  --fw-600: 600;
+  --fw-500: 500;
+  --fw-400: 400;
+  --primary-text-color : #1E3044;
+  --primary-bg-color : #E2F5FF;
+  --default-font: 'Montserrat' !important;
+  --default-border: 0.078vw solid #CECECE !important;
+  --default-border-radius : 0.2vw !important;
+  --warning-color : #f76665 ;
+  --success-color : #33a437 ;
+  --text-color-blue : #006699
+}
+
+.fs-24 {
+  font-size: var(--fs-24) !important; /* 1.2504vw */
+}
+
+.fs-18 {
+  font-size: var(--fs-18) !important; /* 0.9372vw */
+}
+
+.fs-14 {
+  font-size: var(--fs-14) !important; /* 0.7294vw */
+}
+
+.fs-16 {
+  font-size: var(--fs-16) !important; /* 0.8336vw */
+}
+
+.fs-12 {
+  font-size: var(--fs-12) !important; /* This assumes you have --fs-12 defined */
+}
+
+.fs-10 {
+  font-size: var(--fs-10) !important; /* This assumes you have --fs-12 defined */
+}
+
+.fs-8 {
+  font-size: var(--fs-8) !important; /* This assumes you have --fs-12 defined */
+}
+
+
+/*font-weights*/
+.fw-900{
+  font-weight: var(--fw-900);
+}
+.fw-800{
+  font-weight: var(--fw-800);
+}
+.fw-700{
+  font-weight: var(--fw-700);
+}
+.fw-600{
+  font-weight: var(--fw-600);  // semi bold
+}
+.fw-500{
+  font-weight: var(--fw-500); // medium
+}
+.fw-400{
+  font-weight: var(--fw-400); // normal
+}
+
+
+/* color-codes*/
+$primary-color: #006699;
+$white-color: white;
+$black-color: black;
+$yellow-color: #F6BF42;
+$green-color: #06B050;
+
+.button-nested {
+  background-color: blue;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darkblue;
+  }
+
+  &--primary {
+    background-color: blue;
+
+    &:hover {
+      background-color: darkblue;
+    }
+  }
+}
+
+// Define a mixin
+@mixin button-styles($bg-color, $text-color) {
+  background-color: $bg-color;
+  color: $text-color;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.button{
+  @include button-styles(blue, white);
+}
+
+
+@function invert($color, $amount: 100%) {
+  $inverse: change-color($color, $hue: hue($color) + 180);
+  @return mix($inverse, $color, $amount);
+}
+
+$primary-color: #036;
+.header {
+  background-color: invert($primary-color, 80%);
+} 
+
+
+/* vertical heights */
+
+.vertical-height-100vh{
+  height:100vh;
+}
+.vertical-height-95vh{
+  height:95vh;
+}
+.vertical-height-90vh{
+  height:90vh;
+}
+.vertical-height-85vh{
+  height:85vh;
+}
+.vertical-height-80vh{
+  height:80vh;
+}
+
+.vertical-height-75vh{
+  height:75vh;
+}
+
+.vertical-height-70vh{
+  height:70vh;
+}
+.vertical-height-65vh{
+  height:65vh;
+}
+.vertical-height-60vh{
+  height:60vh;
+}
+.vertical-height-55vh{
+  height:55vh;
+}
+.vertical-height-50vh{
+  height:50vh;
+}
+.vertical-height-45vh{
+  height:45vh;
+}
+.vertical-height-40vh{
+  height:40vh;
+}
+.vertical-height-35vh{
+  height:35vh;
+}
+.vertical-height-30vh{
+  height:30vh;
+}
+.vertical-height-25vh{
+  height:25vh;
+}
+.vertical-height-20vh{
+  height:20vh;
+}
+.vertical-height-15vh{
+  height:15vh;
+}
+.vertical-height-10vh{
+  height:10vh;
+}
+.vertical-height-5vh{
+  height:5vh;
+}
+
+/* horizontal widths */
+
+.horizontal-width-5vw{
+  width:5vw;
+}
+.horizontal-width-10vw{
+  width:10vw;
+}
+.horizontal-width-15vw{
+  width:15vw;
+}
+.horizontal-width-20vw{
+  width:20vw;
+}
+.horizontal-width-25vw{
+  width:25vw;
+}
+.horizontal-width-30vw{
+  width:30vw;
+}
+.horizontal-width-35vw{
+  width:35vw;
+}
+.horizontal-width-40vw{
+  width:40vw;
+}
+.horizontal-width-45vw{
+  width:45vw;
+}
+.horizontal-width-50vw{
+  width:50vw;
+}
+.horizontal-width-55vw{
+  width:55vw;
+}
+.horizontal-width-60vw{
+  width:60vw;
+}
+.horizontal-width-65vw{
+  width:65vw;
+}
+.horizontal-width-70vw{
+  width:70vw;
+}
+.horizontal-width-75vw{
+  width:75vw;
+}
+.horizontal-width-80vw{
+  width:80vw;
+}
+.horizontal-width-85vw{
+  width:85vw;
+}
+.horizontal-width-90vw{
+  width:90vw;
+}
+.horizontal-width-95vw{
+  width:95vw;
+}
+.horizontal-width-100vw{
+  width:100vw;
+}
+

@@ -1,0 +1,189 @@
+<div class="d-flex align-items-center shadow-sm mb-1" style="height:50px">
+  <div class="row w-100">
+    <div class="col-5 d-flex align-items-center" style="height:50px">
+      <!-- <div *ngIf="selectedTab=='dashboard'" class=" primary-color d-flex align-items-center"
+        style="height:50px">
+        <div class="fs-12 ms-2 cursor " (click)="onRouteClicked()">
+          FILTER
+        </div>
+      </div> -->
+      <div class="tab-dropdown">
+        <div
+          *ngIf="selectedTab=='dashboard' || selectedTab=='equipment' || (selectedTab=='task'&&show_hide==true) || (selectedTab=='plan'&&show_dropdown==true)"
+          class="d-flex align-items-center form-control pt-2 pb-2 ps-2 pe-1"
+          [ngClass]="selectedTab=='dashboard' ? 'units' :'unit'">
+          <select class="border-none-outline-none  w-100" [(ngModel)]="selectedUnit"
+            (change)="getEquipmentCategories()">
+            <option *ngFor="let unit of units" [ngValue]="unit">
+              {{unit.name}}
+            </option>
+          </select>
+        </div>
+        <div class="d-flex align-items-center form-control ms-2 pt-2 pb-2 ps-2 pe-1"
+          *ngIf="(selectedTab=='task'&&show_hide==true) || (selectedTab=='plan'&&show_dropdown==true)">
+          <select class="border-none-outline-none w-100 " [(ngModel)]="selectedEquipmentCategory"
+            (change)="getEquipments()">
+            <option *ngFor="let category of equipmentCategory" [ngValue]="category">
+              {{category.name}}
+            </option>
+          </select>
+        </div>
+
+        <div *ngIf="(selectedTab=='task'&&show_hide==true) || (selectedTab=='plan'&&show_dropdown==true)"
+          class="d-flex align-items-center form-control ms-2 pt-2 pb-2 ps-2 pe-1">
+          <select class="border-none-outline-none w-100" [(ngModel)]="selectedDepartment" (change)="check()">
+            <option *ngFor="let department of departments" [ngValue]="department">
+              {{department.name}}
+            </option>
+          </select>
+        </div>
+        <!-- <div *ngIf="selectedTab=='equipment'" class="d-flex align-items-center form-control ms-2 pt-2 pb-2 ps-2 pe-1">
+          <select class="border-none-outline-none w-100" [(ngModel)]="selectedTaskCategory" (change)="check()">
+            <option *ngFor="let category of taskCategories" [ngValue]="category" >
+              {{category.name}}
+            </option>
+          </select>
+        </div> -->
+        <div *ngIf="(selectedTab=='plan'&&show_dropdown==true)"
+          class="d-flex align-items-center form-control ms-2 pt-2 pb-2 ps-2 pe-1">
+          <select class="border-none-outline-none w-100" [(ngModel)]="selectedVendor" (change)="check()">
+            <option *ngFor="let vendor of vendors" [ngValue]="vendor">
+              {{vendor?.name}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="col-5 align-items-center" style="height:50px">
+      <div class="menus  primary-color ps-2 pe-2 w-100 d-flex align-items-center " style="height:50px">
+        <div class="d-flex flex-column justify-content-between ms-2 cursor  pt-2" (click)="getSelectedTab('dashboard')">
+          <div [ngClass]="selectedTab == 'dashboard'?'padding-top-2px pb-1':'opacity pb-2'">Dashboard</div>
+          <div [ngClass]="selectedTab == 'dashboard'?'border-under-selected-page pt-2':'primary-color'"></div>
+        </div>
+        <div class="d-flex flex-column justify-content-between ms-5 cursor  pt-2" (click)="getSelectedTab('plan')">
+          <div [ngClass]="selectedTab == 'plan'?'padding-top-2px pb-1 ':'opacity pb-2'">Plan</div>
+          <div [ngClass]="selectedTab == 'plan'?'border-under-selected-page pt-2':'primary-color'"></div>
+        </div>
+        <div class=" d-flex flex-column justify-content-between ms-5 cursor  pt-2"
+          (click)="getSelectedTab('equipment')">
+          <div [ngClass]="selectedTab == 'equipment'?'padding-top-2px pb-1':'opacity pb-2'">Equipment</div>
+          <div [ngClass]="selectedTab == 'equipment'?'border-under-selected-page pt-2':'primary-color'"></div>
+        </div>
+        <div class="d-flex flex-column justify-content-between  ms-5 cursor  pt-2" (click)="getSelectedTab('task')">
+          <div [ngClass]="selectedTab == 'task'?'padding-top-2px pb-1':'opacity pb-2'">Task</div>
+          <div [ngClass]="selectedTab == 'task'?'border-under-selected-page pt-2 ':'primary-color'"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-2 px-0 d-flex align-items-center" style="height:50px">
+      <input id="globalSearchInput" type="text" class="form-control" [(ngModel)]="globalSearch"
+        (ngModelChange)="onGlobalSearch()" placeholder="Global Search..." />
+    </div>
+  </div>
+</div>
+
+<!-- <div class=""> -->
+<div class="w-100 page">
+  <ng-container *ngIf="selectedTab == 'dashboard'">
+    <app-dashboard class="w-100 h-100" *ngIf="selectedUnit && selectedDepartment" [selectedUnit]="selectedUnit"
+      [equipmentCategory]="selectedEquipmentCategory?.name" [department]="selectedDepartment.name"
+      [vendor]="selectedVendor"></app-dashboard>
+  </ng-container>
+  <ng-container *ngIf="selectedTab == 'plan'">
+    <app-plan class="w-100 h-100" *ngIf="selectedUnit && selectedDepartment && selectedEquipmentCategory && equipments"
+      [selectedUnit]="selectedUnit" [selectedDepartment]="selectedDepartment"
+      [selectedEquipmentCategory]="selectedEquipmentCategory" [equipments]="equipments"
+      [selectedEquipment]="selectedEquipment" [selectedVendor]="selectedVendor" (tabSelect)="getSelectTab($event)">
+    </app-plan>
+  </ng-container>
+  <ng-container *ngIf="selectedTab == 'equipment'">
+    <app-equipment *ngIf="selectedUnit && selectedDepartment" [unit]="selectedUnit"
+      [department]="selectedDepartment.name" [taskCategory]="selectedTaskCategory"></app-equipment>
+  </ng-container>
+  <ng-container *ngIf="selectedTab == 'task'">
+    <app-task-summary *ngIf="selectedUnit && selectedDepartment" [selectedUnit]="selectedUnit"
+      (showTaskDetailPage)="toggleTaskPage($event)" [equipmentCategory]="selectedEquipmentCategory"
+      [department]="selectedDepartment" [routingData]="routingData">
+    </app-task-summary>
+  </ng-container>
+</div>
+<!-- </div> -->
+
+
+<!------ ****************************** Filter Code *************************************---------->
+<div class="route-nav shadow-sm scroll side-bar-height position bg-white  fs-12 bg-body p-2" style="width:20%;"
+  *ngIf="isRouteClicked">
+  <div class="d-flex mb-2">
+    <button id="back-button" class="border-none-outline-none bg-white" (click)="onRouteClicked()"
+      style="margin-right: auto">
+      <i class="fas fa-arrow-left primary-color"></i>
+    </button>
+    <button class="btn btn-sm secondary-bg-color text-light" (click)="filterIssues()"
+      [disabled]="fromDateFliter ===''|| toDateFliter  ===''|| statusFilter ===''"><span>APPLY</span></button>
+    <button class=" primary-color btn btn-sm btn-border border-none-outline-none ms-2"
+      (click)="filterReset()">RESET</button>
+  </div>
+  <div class="route-nav-blocks">
+    <div class="select-vehicle">
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Vendor</legend>
+        <div class="input-group p-1 w-100">
+          <select class="w-100 text-capitalize border-none-outline-none" [(ngModel)]="statusFilter">
+            <option value="" disabled selected hidden>Select Multiple Vendors</option>
+            <option *ngFor="let Status of filterStatus">{{Status}}</option>
+          </select>
+          <div class="d-flex pointer align-items-center justify-content-center">
+
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Department</legend>
+        <div class="input-group p-1 w-100">
+          <select class="w-100 text-capitalize border-none-outline-none" [(ngModel)]="statusFilter">
+            <option value="" disabled selected hidden>Select Multiple Departments</option>
+            <option *ngFor="let Status of filterStatus">{{Status}}</option>
+          </select>
+          <div class="d-flex pointer align-items-center justify-content-center">
+
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Equipment Class</legend>
+        <div class="input-group p-1 w-100">
+          <select class="w-100 text-capitalize border-none-outline-none" [(ngModel)]="statusFilter">
+            <option value="" disabled selected hidden>Select Multiple Equipment</option>
+            <option *ngFor="let Status of filterStatus">{{Status}}</option>
+          </select>
+          <div class="d-flex pointer align-items-center justify-content-center">
+
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Equipment Number</legend>
+        <div class="input-group p-1 w-100">
+          <select class="w-100 text-capitalize border-none-outline-none" [(ngModel)]="statusFilter">
+            <option value="" disabled selected hidden>Select Multiple Number</option>
+            <option *ngFor="let Status of filterStatus">{{Status}}</option>
+          </select>
+          <div class="d-flex pointer align-items-center justify-content-center">
+
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+</div>
+
+<app-global-results-popup [popupData]="globalSearchResults" [showKeys]="globalSearchColumns"
+  (selectedOption)="onGlobalSearchOptionSelection($event)"></app-global-results-popup>

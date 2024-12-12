@@ -1,0 +1,39 @@
+<div class="chat-container fixed rounded-3" style="background-color: #f4f7fc;">
+    <div class="secondary-bg-color d-flex align-items-center justify-content-between pe-2 ps-2 text-light" style="height:6vh;">
+        <div class="bg-danger btn btn-sm text-light">#516567</div>
+        <div>
+            <div class="text-center fs-10">Chat on the issue</div>
+            <div class="text-center fs-10">(allows to tag a person and upload images)</div>
+        </div>
+        <div class="d-flex">
+            <div class="text-light me-4 cursor">-</div>
+            <div class="text-danger me-2 cursor" (click)="closeChat()">X</div>
+        </div>
+    </div>
+    <div class="messages-container" style="height:38vh;">
+        <app-chat-message *ngFor="let message of messages" [message]="message"></app-chat-message>
+    </div>
+    <div class="d-flex justify-content-between align-items-center bg-white" style="height:6vh;">
+        <input class="border-none-outline-none w-100 h-100" type="text" [(ngModel)]="newMessageText"
+            placeholder="Type a message...">
+        <!-- <input type="file" (change)="onFileSelected($event)"> -->
+        <div class="image-upload  mt-3 d-flex" title="Select File">
+            <label for="file-input" class="cursor">
+                <!-- <img src="https://via.placeholder.com/300x300.png?text=Select Files" > -->
+                <button type="button" style="pointer-events: none"
+                    class="btn common-bg-color btn-sm p-top p-bottom">
+                    <img src="assets/images/paper-clip.svg">
+                </button>
+            </label>
+            <input id="file-input" [disabled]="file" type="file" name="file" accept=".csv" #myInputFile
+                (click)="myInputFile.value = ''" class="form-group" (change)="onChange($event)">
+            <button (click)="sendMessage()" class="border-none-outline-none btn-sm btn mb-3 pe-3 ps-3 p-top p-bottom secondary-bg-color text-light">
+                <img src="assets/images/send-icon.svg" height="15px" width="15px" >
+            </button>
+        </div>
+    </div>
+    <!-- <div class="border border-2 mt-3 p-2" *ngIf="file">
+        <div class="p-1">{{file?.name}} <i class="fas fa-times mx-3 cursor" title="Delete"
+                (click)="removeSelectedFile()"></i> </div>
+    </div> -->
+</div>

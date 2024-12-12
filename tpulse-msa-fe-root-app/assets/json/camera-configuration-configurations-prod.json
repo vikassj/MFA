@@ -1,0 +1,32 @@
+{
+    "cameraUrl":"https://cp8zxm3442.execute-api.ap-south-1.amazonaws.com/default/CameraAppConfiguration",
+    "header": [
+        {
+            "identifier": "dashboard",
+            "acronym": "Home",
+            "name": "Dashboard",
+            "class": "fas fa-home",
+            "routePath": "/camera-configuration/dashboard"
+        },
+        {
+            "identifier": "help",
+            "acronym": "Help",
+            "name": "Help",
+            "class": "fas fa-question-circle",
+            "routePath": "/camera-configuration/help"
+        }
+    ],
+    "userManualFound": true,
+    "helpDetails": {
+        "sidebar": [
+            {
+                "camelName": "userManual",
+                "name": "User Manual",
+                "class": "fa fa-book"
+            }
+        ],
+        "tableColumns": [],
+        "tableRows": []
+    }
+    
+}

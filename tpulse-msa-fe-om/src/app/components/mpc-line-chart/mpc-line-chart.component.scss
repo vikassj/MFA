@@ -1,0 +1,42 @@
+.line-chart-height {
+    height: 40%;
+}
+
+.fixed-position {
+    position: relative;
+    top: 50%;
+    left: 25%;
+}
+
+.bdr1 {
+    background-color: #e6f7ff;
+    padding: 1%;
+    border-radius: 5px;
+}
+
+.text-color {
+    color: #006699;
+}
+
+.height {
+    width: 100%;
+    height: 300px;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.f-s {
+    font-size: 15px;
+}
+
+@media screen and (min-width: 1100px) {
+    * {
+        font-size: 12px !important;
+    }
+}
+
+@media screen and (min-width: 1496px) {
+    * {
+        font-size: 15px !important;
+    }
+}

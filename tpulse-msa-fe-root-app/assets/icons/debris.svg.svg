@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="50.459" height="74.813" viewBox="0 0 50.459 74.813">
+  <g id="Group_14550" data-name="Group 14550" transform="translate(-3880.541 18456.652)">
+    <g id="Group_1293" data-name="Group 1293" transform="translate(3880.523 -18456.652)">
+      <path id="Rectangle_937" data-name="Rectangle 937" d="M5,0H45a5,5,0,0,1,5,5V54a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V5A5,5,0,0,1,5,0Z" transform="translate(0.477)" fill="#ecf9ff"/>
+      <path id="Path_210" data-name="Path 210" d="M0,0H50V18.9c0,3.263-2.239,5.908-5,5.908H5c-2.761,0-5-2.645-5-5.908Z" transform="translate(0.017 50)" fill="#80d8ff"/>
+      <text id="DMD" transform="translate(12.477 66)" fill="#1e3044" font-size="10" font-family="Montserrat-SemiBold, Montserrat" font-weight="600"><tspan x="0" y="0">DMD</tspan></text>
+    </g>
+    <path id="Path_232" data-name="Path 232" d="M26.625,5.918H21.706v-1.1A3.822,3.822,0,0,0,17.889,1H13.72A3.822,3.822,0,0,0,9.9,4.818v1.1H4.984a.984.984,0,1,0,0,1.967h.984V25.828a4.687,4.687,0,0,0,4.682,4.682H20.959a4.687,4.687,0,0,0,4.682-4.682V7.886h.984a.984.984,0,0,0,0-1.967Zm-14.755-1.1a1.852,1.852,0,0,1,1.85-1.85h4.169a1.852,1.852,0,0,1,1.85,1.85v1.1H11.869Zm1.967,18.807a.984.984,0,0,1-1.967,0V12.8a.984.984,0,1,1,1.967,0Zm5.9,0a.984.984,0,1,1-1.967,0V12.8a.984.984,0,1,1,1.967,0Z" transform="translate(3889.966 -18444.971)" fill="#80d8ff"/>
+  </g>
+</svg>

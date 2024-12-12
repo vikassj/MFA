@@ -1,0 +1,17 @@
+
+<video *ngIf="video.live_url?.includes('.m3u8')" id="{{video.id}}" class="fullHeight fullWidth live-video" preload="metadata" controls></video>
+
+<vg-player id='controls' *ngIf="video.live_url?.includes('.html')" class="h-100 w-100 video-template">
+  <vg-controls  class="position-absolute">
+      <!-- <vg-play-pause></vg-play-pause>
+      <vg-time-display vgProperty="current" vgFormat="hh:mm:ss"></vg-time-display>
+      <vg-scrub-bar>
+          <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+          <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+      </vg-scrub-bar>
+      <vg-time-display vgProperty="total" vgFormat="hh:mm:ss"></vg-time-display>
+      <vg-mute></vg-mute> -->
+      <!-- <vg-fullscreen class="expand-button position" [ngClass]="!mode?'position1':'position'"></vg-fullscreen> -->
+  </vg-controls>
+  <iframe  *ngIf="video.live_url?.includes('.html')" id="{{video?.id}}" class="fullHeight fullWidth live-video" [src]="returnLiveVideoUrl(video) | safe" allowfullscreen></iframe>
+</vg-player>

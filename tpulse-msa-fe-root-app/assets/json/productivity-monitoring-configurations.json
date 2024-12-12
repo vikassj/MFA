@@ -1,0 +1,38 @@
+{
+    "page_configurations": {
+        "help_page": {
+            "page_sidebar": [
+                {
+                    "class": "fa fa-book",
+                    "show_hide": true,
+                    "name": "User Manual",
+                    "camelName": "userManual"
+                }
+            ],
+            "page_features": {
+                "user_manual_found": true
+            }
+        }
+    },
+    "module_configurations": {
+        "application_header": [
+            {
+                "show_hide": true,
+                "acronym": "OVERVIEW",
+                "name": "Dashboard",
+                "class": "fas fa-home",
+                "identifier": "dashboard",
+                "routePath": "/productivity-monitoring/dashboard"
+            },
+            
+            {
+                "show_hide": true,
+                "acronym": "Help",
+                "class": "fas fa-question-circle",
+                "routePath": "/productivity-monitoring/help",
+                "identifier": "help",
+                "name": "Help"
+            }
+        ]
+    }
+}

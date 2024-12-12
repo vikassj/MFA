@@ -1,0 +1,458 @@
+{
+    "vendorModule": {
+        "userManualFound": true,
+        "helpDetails": {
+            "sidebar": [
+                {
+                    "camelName": "userManual",
+                    "name": "User Manual",
+                    "class": "fa fa-book"
+                }
+            ]
+        },
+        "header": [
+            {
+                "identifier": "inventory-form",
+                "camelName": "inventoryForm",
+                "acronym": "Inventory",
+                "name": "inventory-form",
+                "class": "/assets/icons/vm-inventory.png",
+                "routePath": "/vendor-management/vendor/inventory-form"
+            },
+            {
+                "identifier": "history",
+                "camelName": "Status",
+                "acronym": "Status",
+                "name": "history",
+                "class": "/assets/icons/vm-status.svg",
+                "routePath": "/vendor-management/vendor/history"
+            },
+            {
+                "identifier": "help",
+                "camelName": "help",
+                "acronym": "Help",
+                "name": "Help",
+                "class": "fas fa-question-circle",
+                "routePath": "/vendor-management/vendor/help"
+            }
+        ],
+        "inventoryDetails": {
+            "createdAssetsColumns": [
+                {
+                    "prop": "asset",
+                    "name": "Asset Name",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "created_at",
+                    "name": "Date",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "input_fields.quantity",
+                    "name": "Quantity",
+                    "width": 100,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "actions",
+                    "name": "Actions",
+                    "width": 150,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false,
+                    "frozenRight": true
+                }
+            ]
+        },
+        "statusDetails": {
+            "approveColumns": [
+                {
+                    "prop": "asset_name",
+                    "name": "Asset Name",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "created_at",
+                    "name": "Date",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "quantity_rejected",
+                    "name": "Qty Rejected",
+                    "width": 100,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "quantity_approved",
+                    "name": "Approved/ Delivered Qty",
+                    "width": 150,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "status",
+                    "name": "Status",
+                    "width": 200,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                }
+            ],
+            "warningColumns": [
+                {
+                    "prop": "asset_name",
+                    "name": "Asset Name",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "created_at",
+                    "name": "Date",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "quantity_disqualified",
+                    "name": "Qty Disqualified",
+                    "width": 100,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "quantity_warned",
+                    "name": "Qty Warned",
+                    "width": 100,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                }
+            ],
+            "inventoryColumns": [
+                {
+                    "prop": "asset_name",
+                    "name": "Inventory Name",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "status",
+                    "name": "Status",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "status_date",
+                    "name": "Date",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "actions",
+                    "name": "",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                }
+            ]
+        }
+    },
+    "clientModule": {
+        "userManualFound": true,
+        "helpDetails": {
+            "sidebar": [
+                {
+                    "camelName": "userManual",
+                    "name": "User Manual",
+                    "class": "fa fa-book"
+                }
+            ]
+        },
+        "header": [
+            {
+                "identifier": "dashboard",
+                "camelName": "dashboard",
+                "acronym": "DASHBOARD",
+                "name": "Dashboard",
+                "class": "/assets/icons/vm-home.png",
+                "routePath": "/vendor-management/client/dashboard"
+            },
+            {
+                "identifier": "scan",
+                "camelName": "scan",
+                "acronym": "Scan",
+                "name": "Scan",
+                "class": "/assets/icons/vm-scan.svg",
+                "routePath": "/vendor-management/client/scan"
+            },
+            {
+                "identifier": "approvals",
+                "camelName": "approvals",
+                "acronym": "Approvals",
+                "name": "Approvals",
+                "class": "/assets/icons/vm-approval.png",
+                "routePath": "/vendor-management/client/approvals"
+            },
+            {
+                "identifier": "help",
+                "camelName": "help",
+                "acronym": "Help",
+                "name": "Help",
+                "class": "fas fa-question-circle",
+                "routePath": "/vendor-management/client/help"
+            }
+        ],
+        "dashboardDetails": {
+            "sidebar": [
+                {
+                    "camelName": "userManual",
+                    "name": "User Manual",
+                    "class": "fa fa-book"
+                }
+            ],
+            "tableColumns": [
+                {
+                    "prop": "vendor_id",
+                    "name": "Vendor Id",
+                    "width": 150,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "vendor_name",
+                    "name": "Vendor Name",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "vendor_company_name",
+                    "name": "Company Name",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "last_checked_date",
+                    "name": "Last Checked",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "quantity_delivered",
+                    "name": "Quantity Delivered",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "quantity_approved",
+                    "name": "Quantity Approved",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "quantity_rejected",
+                    "name": "Quantity Rejected",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "quantity_pending",
+                    "name": "Quantity Pending",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "quantity_disqualified",
+                    "name": "Quantity Disqualified",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "quantity_warned",
+                    "name": "Quantity Warned",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "material_exited",
+                    "name": "Material Exited",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "history",
+                    "name": "History",
+                    "width": 150,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                }
+            ],
+            "historyColumns": [
+                {
+                    "prop": "asset_name",
+                    "name": "Asset Name",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "date_of_approval",
+                    "name": "Date of Approval",
+                    "width": 150,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "last_check_by",
+                    "name": "Person Checked By",
+                    "width": 150,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "last_check_date",
+                    "name": "Last Date of Site Checked",
+                    "width": 200,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "quantity_rejected",
+                    "name": "Qty Rejected",
+                    "width": 150,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "quantity_approved",
+                    "name": "Approved",
+                    "width": 150,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "quantity_disqualified",
+                    "name": "Quantity Disqualified",
+                    "width": 150,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "quantity_warned",
+                    "name": "Quantity Warned",
+                    "width": 150,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "violations_recorded",
+                    "name": "Violations Recorded",
+                    "width": 150,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                }
+            ]
+        },
+        "scanDetails": {},
+        "approvalsDetails": {
+            "vendorTableColumns": [
+                {
+                    "prop": "vendor_name",
+                    "name": "Vendor",
+                    "width": 100,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "reg_date",
+                    "name": "Reg. Date",
+                    "width": 100,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "quantity_delivered",
+                    "name": "Quantity Delivered",
+                    "width": 150,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                }
+            ],
+            "assetTableColumns": [
+                {
+                    "prop": "sl_number",
+                    "name": "SL. No.",
+                    "width": 100,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "asset_name",
+                    "name": "Asset Name",
+                    "width": 100,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "scanned_status",
+                    "name": "Status",
+                    "width": 100,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "status_date",
+                    "name": "Date",
+                    "width": 100,
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                }
+            ]
+        }
+    }
+}

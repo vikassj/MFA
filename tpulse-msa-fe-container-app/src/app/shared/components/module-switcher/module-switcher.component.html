@@ -1,0 +1,116 @@
+<div title="SWITCH MODULE" class="fullHeight d-flex  bg-color" style="height: auto">
+    <button id="moduleSwitcher" type="button" class="btn p-3 btn-sm  bg-color my-auto mr-3" (click)="openMenu()">
+        <!-- <em id="moduleSwitcherIcon" class="fas fa-bars text-white"></em> -->
+        <img id="moduleSwitcherIcon" src="./assets/module-switcher-icons/menu.svg" height="22px" width="22px">
+    </button>
+</div>
+
+<div id="mySidenav" class="sidenav">
+    <div class=" d-flex justify-content-between ms-3 me-4 mb-3 mt-3">
+        <!-- <img class="headerLogo" src="{{headerLogo}}" alt="Logo" width="70px">
+        <h4 class="my-auto fs-14px fw-600">T-PULSE</h4> -->
+        <div class="d-flex align-items-center">
+            <div>
+                <button style="background: transparent; border: none;" title="{{userName}}"
+                    class="nav-link hoverMenu p-0" id="navbarDropdown2" role="button" data-bs-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <em class="userIcon ">{{shortName}}</em>
+                </button>
+            </div>
+            <div class="ms-2 text-color">
+                {{name | uppercase}}
+            </div>
+        </div>
+        <div *ngIf="count == false" class="form-control w-25 me-4">
+            <select class="border-none-outline-none w-100 mt-1" (change)="getAllApplications(true)"
+                [(ngModel)]="seletedPlant">
+                <option *ngFor="let plant of plants" [ngValue]="plant.id" [disabled]="plant?.application?.length < 1">
+                    {{plant.name}}
+                </option>
+            </select>
+        </div>
+        <em title="Close" class="fas fa-2x fa-angle-double-up closebtn text-blue cursorPointer"
+            (click)="closeMenu(true)"></em>
+    </div>
+    <button *ngIf="isControlTowerDashboardEnabled" [disabled]="!isControlTowerDashboardViewEnabled" class="btn btn-basic fullWidth mt-4 submit-button fs-16" type="button" (click)="navigateToCentralTower()">
+        <span aria-hidden="true"></span>
+        CONTROL TOWER DASHBOARD
+    </button>
+    <!-- <em title="Close" class="fas fa-2x fa-angle-double-up closebtn text-blue cursorPointer" (click)="closeMenu()"></em> -->
+
+    <!-- <div class="row m-0">
+        <div *ngFor="let module of modules" class="col-12 p-0 button-container">
+            <div class="cards cursorPointer" [ngClass]="{'card-selected': module.moduleName === selectedModule}"
+                (click)="navigateToSelectedModule(module.routeUrl)">
+                <ng-container *ngIf="module.moduleName === selectedModule">
+                    <img *ngIf="module.iconClassWhiteColor.includes('icons/')" [src]="module.iconClassWhiteColor"
+                        class=" card-icon" [ngClass]="{'card-icon-selected': module.moduleName === selectedModule}">
+                    <em *ngIf="!module.iconClassWhiteColor.includes('icons/')"
+                        class="{{module.iconClassWhiteColor}} card-icon"
+                        [ngClass]="{'card-icon-selected': module.moduleName === selectedModule}"></em>
+                </ng-container>
+                <ng-container *ngIf="module.moduleName != selectedModule">
+                    <img *ngIf="module.iconClass.includes('icons/')" [src]="module.iconClass" class=" card-icon"
+                        [ngClass]="{'card-icon-selected': module.moduleName === selectedModule}">
+                    <em *ngIf="!module.iconClass.includes('icons/')" class="{{module.iconClass}} card-icon"
+                        [ngClass]="{'card-icon-selected': module.moduleName === selectedModule}"></em>
+                </ng-container>
+                <p class="card-title my-auto" [ngClass]="{'card-title-selected': module.moduleName === selectedModule}">
+                    {{module.moduleName}}</p>
+            </div>
+        </div>
+    </div> -->
+    <!-- new module switcher-->
+
+    <div class="m-2">
+        <div class="m-top" *ngFor="let module of allModules;let i = index">
+            <div class="text-gray ms-2 fs-12">{{module?.name | uppercase}}</div>
+            <span #itemDiv class="modules" *ngFor="let m of module?.modules;let j = index">
+                <div id="item{{i}}{{j}}" class="d-inline-block rounded-3 p-2 m-2 module-border"
+                    [ngClass]="{'bg-color text-light': m?.key == currentModule,'module-border':m?.disabled == false,'gray-border':m?.disabled == true}">
+                    <span [ngClass]="m?.disabled === true ? 'not-allowed':'cursor'"
+                        class="d-inline-block d-flex flex-row"
+                        (click)="navigateToSelectedModule(m?.route_url,m?.disabled,m?.key)">
+                        <span class="d-inline-block">
+                            <div class="float-end">
+                                <span
+                                    [ngClass]="(m.disabled == false && m.is_client_provided == true) ? 'd-block':'d-none'">
+                                    <img [ngClass]="{'white-filter': m?.key == currentModule }"
+                                        src="./assets/module-switcher-icons/tick.svg" alt="Logo" width="10px"
+                                        height="10px">
+                                </span>
+                                <img [ngClass]="(m?.disabled == true && m.is_client_provided == false) ? 'd-block not-allowed':'d-none'"
+                                    src="./assets/module-switcher-icons/wrong.svg" alt="Logo" width="10px"
+                                    height="10px">
+                                <img [ngClass]="(m?.disabled == true && m.is_client_provided == true) ? 'd-block not-allowed':'d-none'"
+                                    src="./assets/module-switcher-icons/lock.svg" alt="Logo" width="10px" height="10px">
+                            </div>
+                            
+                            <div class="m-left m-top"><img class="" src="{{m?.icon_class}}" alt="Logo" width="35px"
+                                    height="35px"
+                                    [ngClass]="{'white-filter': m?.key == currentModule,'gray-filter':m?.disabled == true}">
+                            </div>
+                            <div class="text-center m-t">{{m?.name}}</div>
+                            <p *ngIf="hasHttps(m?.route_url)" class="fs-9px text-center text-dark fw-600">
+                                LEGACY
+                            </p>
+                        </span>
+                    </span>
+                    
+                </div>
+                <div class="tooltip-popup p-2 rounded"
+                    [ngStyle]="{top: getTopPosition('item', i, j) + 'px', left: getLeftPosition('item', i, j) + 'px'}"
+                    *ngIf="!(m.disabled == false && m.is_client_provided == true)">
+                    <div *ngIf="(m?.disabled == true && m.is_client_provided == false)">
+                        <span class="fs-11px fw-800">Module Unavailable: </span>
+                        <span class="fs-10px">{{moduleUnavailable}}</span>
+                    </div>
+                    <div *ngIf="(m?.disabled == true && m.is_client_provided == true)">
+                        <span class="fs-13px fw-800">Module Access Limited: </span>
+                        <span class="fs-10px">{{moduleAccessLimited}}</span>
+                    </div>
+                </div>
+            </span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,89 @@
+<div class="dashboardContainer">
+  <div class="row col-12 p-2">
+    <div class="col-2 pe-2">
+      <div class=" scroll side-bar-height shadow-sm bg-body rounded">
+        <!-- <div class=" py-2 pointer" (click)="sideBarSelectedItem('Categorization')"
+          [ngClass]="selectedSideBarItem == 'Categorization' ? 'selectedItem' : 'pl-18px'">
+          <div class="saidBar-icon">
+            <i class="fa fa-code-branch pe-3 m-auto fs-5"></i>
+          </div>Categorization
+        </div>
+        <div class=" py-2 pointer" (click)="sideBarSelectedItem('Category Mapping')"
+          [ngClass]="selectedSideBarItem == 'Category Mapping' ? 'selectedItem' : 'pl-18px'">
+          <div class="saidBar-icon">
+            <i class="fas fa-tags pe-3 m-auto fs-5"></i>
+          </div>Category Mapping
+        </div>
+        <div class=" py-2 pointer" (click)="sideBarSelectedItem('Zone Mapping')"
+          [ngClass]="selectedSideBarItem == 'Zone Mapping' ? 'selectedItem' : 'pl-18px'">
+          <div class="saidBar-icon">
+            <i class="fas fa-map-pin pe-3 m-auto fs-5"></i>
+          </div>Zone Mapping
+        </div> -->
+        <div class=" py-2 pointer" (click)="sideBarSelectedItem('User Manual')"
+          [ngClass]="selectedSideBarItem == 'User Manual' ? 'selectedItem' : 'pl-18px'">
+          <div class="saidBar-icon">
+            <i class="fa fa-book pe-3 m-auto fs-5"></i>
+          </div>User Manual
+        </div>
+        <!-- <div class=" py-2 pointer" (click)="sideBarSelectedItem('Release Notes')"
+          [ngClass]="selectedSideBarItem == 'Release Notes' ? 'selectedItem' : 'pl-18px'">
+          <div class="saidBar-icon">
+            <i class="fas fa-edit pe-3 m-auto fs-5"></i>
+          </div>Release Notes
+        </div> -->
+      </div>
+    </div>
+    <div class="col-10 side-bar-height shadow-sm bg-body">
+      <div class="" [ngClass]="selectedSideBarItem == 'Categorization' ? 'd-block':'d-none'">
+        <ngx-datatable class="material expandable side-bar-height text-wrap w-100" [rows]="categoryRows"
+          [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50" [rowHeight]="160" [scrollbarV]="true">
+          <ngx-datatable-column name="Category" prop="name" [width]="5"></ngx-datatable-column>
+          <ngx-datatable-column name="Indicator" [width]="10">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <!-- <div class="d-flex align-items-center"> -->
+              <span>
+                <img [src]="row.cardPath" width="40px">
+              </span>
+              <span class="ms-2">{{row.acronym}}</span>
+              <!-- </div> -->
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Description" prop="description" [width]="0"></ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+      <div [ngClass]="selectedSideBarItem == 'Category Mapping' ? 'd-block':'d-none'">
+        <ngx-datatable class="material expandable side-bar-height w-100" [rowHeight]="50" [scrollbarV]="true"
+          [rows]="mappingRows" [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50">
+          <ngx-datatable-column name="Given Category" prop="givenCategory"></ngx-datatable-column>
+          <ngx-datatable-column name="Closest IOGP category" prop="closestIogpCategory"></ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+      <div [ngClass]="selectedSideBarItem == 'Zone Mapping' ? 'd-block':'d-none'">
+        <ngx-datatable class="material expandable side-bar-height w-100" [rowHeight]="50" [scrollbarV]="true"
+          [rows]="zoneMappingRows" [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50">
+          <ngx-datatable-column name="Unit" prop="unit"></ngx-datatable-column>
+          <ngx-datatable-column name="Zone" prop="zone"></ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+      <div class="side-bar-height" [ngClass]="selectedSideBarItem == 'User Manual' ? 'd-block':'d-none'">
+        <div class="fw-bold p-3">
+          Web based streaming
+        </div>
+        <ng-container *ngIf="userManualFound else noUserManualTemplate">
+          <embed src="./assets/pdf/Web Based Streaming - User Manual.pdf" width="100%" class="ps-3 pe-3 pb-3 pdfHeight" />
+        </ng-container>
+      </div>
+      <div [ngClass]="selectedSideBarItem == 'Release Notes' ? 'd-block':'d-none'">
+        <app-release-notes *ngIf="selectedSideBarItem === 'Release Notes'"  [releaseNotesData]="releaseNotesData"></app-release-notes>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #noUserManualTemplate>
+  <div class="fullWidth categoryHeight d-flex">
+    <h2 class="m-auto">User manual coming soon.</h2>
+  </div>
+</ng-template>
+<!-- <app-unit-ss-dashboard></app-unit-ss-dashboard> -->

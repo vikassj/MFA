@@ -1,0 +1,20 @@
+.status-bar {
+  background-color: #00AAFF;
+  width: 100%;
+  color: white;
+  text-align: center;
+  font-size: 12px;
+}
+
+.menus {
+  font-size: 12px;
+  font-family: "Montserrat" !important;
+  font-weight: 600 !important;
+}
+
+.border-under-selected-page {
+  border-bottom: 5px #fcbb02 solid;
+}
+.opacity {
+  opacity: 0.5;
+}

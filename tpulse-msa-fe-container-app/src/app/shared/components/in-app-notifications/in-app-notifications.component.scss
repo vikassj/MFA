@@ -1,0 +1,115 @@
+.main-container {
+  display: flex;
+  align-items: center;
+  width: 95%;
+}
+
+.notification {
+  height: 90%;
+  width: 100%;
+  background-color: #005599;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  cursor: pointer;
+  padding-bottom: 10px;
+}
+
+.notification-container {
+  width: 100%;
+  height: 10px;
+  color: white;
+  display: flex;
+  justify-content: flex-end;
+  padding: 5px;
+}
+
+.close-notification {
+    padding: 0 8px;
+}
+
+.icon-container {
+  /* Add your styles for the icon container */
+  padding: 10px;
+}
+
+.details-container {
+  /* Add your styles for the details container */
+  display: flex;
+  flex-direction: column;
+}
+
+.details-header {
+  /* Add your styles for the details header */
+  color: white;
+  font-weight: 600;
+}
+
+::ng-deep .details-body {
+  /* Add your styles for the details body */
+  display: flex;
+  justify-content: space-between;
+}
+
+.zone-time-details {
+  /* Add your styles for the zone time details */
+  color: white;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.risk-rating-details {
+  /* Add your styles for the risk rating details */
+}
+
+.date-time-details {
+  opacity: 0.4;
+  font-size: x-small;
+  display: flex;
+  gap: 10px;
+}
+
+.date-time-values {
+  margin-right: 3px;
+}
+
+.zone-camera-details {
+  display: flex;
+}
+
+.camera-type {
+  color: #006699;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border-radius: 13px;
+  font-size: 10px;
+  display: inline-block;
+  // height: 25%;
+  padding: 0px 5px;
+  font-weight: 800;
+  margin-left: 5px;
+}
+
+.camera-details {
+  margin-bottom: 10px;
+}
+
+.h-40p {
+  height: 40px;
+}
+
+.h-70p {
+  height: 70px;
+}
+
+.w-15p {
+  width: 15px;
+}
+
+.w-60p {
+  width: 60px;
+}
+
+.fd-c {
+  flex-direction: column;
+}

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <g id="Group_2449" data-name="Group 2449" transform="translate(-2279 6180)">
+    <rect id="Rectangle_2178" data-name="Rectangle 2178" width="48" height="48" rx="8" transform="translate(2279 -6180)" fill="#33a437"/>
+    <g id="Group_1569" data-name="Group 1569" transform="translate(2258.155 -6172.575)">
+      <g id="Icon_feather-check-circle" data-name="Icon feather-check-circle" transform="translate(33.845 4.845)">
+        <path id="Path_454" data-name="Path 454" d="M14.256,26.771A12.515,12.515,0,0,1,11.5,2.049a12.422,12.422,0,0,1,7.85.776,1.25,1.25,0,0,1-1.017,2.284,10.012,10.012,0,1,0,5.937,9.151V13.224a1.25,1.25,0,0,1,2.5,0V14.26A12.531,12.531,0,0,1,14.256,26.771Z" transform="translate(-3 -2.991)" fill="#fff"/>
+        <path id="Path_455" data-name="Path 455" d="M16.879,18.524a1.25,1.25,0,0,1-.884-.366l-3.379-3.379a1.25,1.25,0,1,1,1.768-1.768l2.494,2.494L27.257,5.117a1.25,1.25,0,1,1,1.769,1.767L17.763,18.157a1.25,1.25,0,0,1-.884.367Z" transform="translate(-5.616 -3.74)" fill="#fff"/>
+      </g>
+    </g>
+  </g>
+</svg>

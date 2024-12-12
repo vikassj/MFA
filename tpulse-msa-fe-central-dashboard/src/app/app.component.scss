@@ -1,0 +1,94 @@
+.card {
+  border: none;
+  border-radius: 10px;
+  background-color: #eee;
+  cursor: pointer;
+}
+
+.c-details span {
+  font-weight: 300;
+  font-size: 13px;
+}
+
+.icon {
+  width: 50px;
+  height: 50px;
+  background-color: #eee;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 39px;
+}
+
+.badge span {
+  background-color: #fffbec;
+  width: 60px;
+  height: 25px;
+  padding-bottom: 3px;
+  border-radius: 5px;
+  display: flex;
+  color: black;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress {
+  height: 10px;
+  border-radius: 10px;
+}
+
+.progress div {
+  background-color: red;
+}
+
+.text1 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.text2 {
+  color: #a5aec0;
+}
+
+.abc {
+  margin-top: 50px;
+}
+
+.cd-header {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+#main {
+  height: 100vh;
+}
+
+.cardWithAppAccess {
+  background-color: #1e83b9;
+  height: 200px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.cardWithNoAppAccess {
+    background-color: lightgrey;
+    height: 200px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    pointer-events: none;
+}
+
+.wrapperWithNoAccess {
+  cursor: not-allowed;
+}
+
+.noApp {
+    bottom: 10px;
+    position: absolute;
+    font-weight: bold;
+    // color: red;
+    opacity: 0.4;
+}

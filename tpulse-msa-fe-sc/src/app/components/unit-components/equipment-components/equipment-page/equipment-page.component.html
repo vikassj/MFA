@@ -1,0 +1,805 @@
+<!-- <div class="d-flex bg-color">
+  <div class="col-3 page-height">
+    <div class="category" *ngFor="let cat of keys()">
+      <div>{{cat}}</div>
+      <div class="id cursor" [ngClass]="selectedCategory == id?'id-active':''" *ngFor="let id of category[cat]"
+        (click)="selectSidebar(cat,id)">
+        {{id}}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 p-0 px-2 page-height">
+    <div class=" bg-white z-index">
+      <div class="z-index p-2 col-12 p-0 px-3 mb-2 font-size-14px d-flex justify-content-between align-items-center">
+        <div class="text-blue d-flex justify-content-center w-100 p-0 fs-12">
+          <div class="d-flex pe-2">
+            <div class="mx-3 d-flex align-items-center">
+              <div class="me-2 bg-blue h-10px w-10px"></div>
+              <div class="text-blue font-size-10px">Completed</div>
+            </div>
+            <div class="mx-3 d-flex align-items-center">
+              <div class="me-2 bg-secondry h-10px w-10px"></div>
+              <div class="text-secondry font-size-10px">Yet to start</div>
+            </div>
+            <div class="mx-3 d-flex align-items-center">
+              <div class="me-2 bg-red h-10px w-10px"></div>
+              <div class="text-red font-size-10px">Delay</div>
+            </div>
+            <div class="mx-3 d-flex align-items-center">
+              <div class="me-2 bg-successGain h-10px w-10px"></div>
+              <div class="text-successGain font-size-10px">Gain</div>
+            </div>
+            <div class="mx-3 d-flex align-items-center">
+              <div class="me-2 bg-yellow h-10px w-10px"></div>
+              <div class="text-yellow font-size-10px">Inprogress</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="ngx-datatable">
+        <ngx-datatable #myTable class="material expandable dataTableHeight" id="dataTableContainer"
+          [columnMode]="ColumnMode.force" [groupExpansionDefault]="groupExpansionDefaultStatus" [footerHeight]="50"
+          [headerHeight]="40" [rowHeight]="'auto'" [rows]="rows" (treeAction)="onTreeAction($event)"
+          [groupRowsBy]="'equipment'" *ngIf="rowDataNotAvailable">
+
+          <ngx-datatable-group-header [rowHeight]="50" #myGroupHeader (toggle)="onDetailToggle($event)">
+            <ng-template let-group="group" let-expanded="expanded" ngx-datatable-group-header-template>
+              <div class="d-flex align-items-center py-2 bg-white">
+                <div class="font-size-12px w-50" style="padding-left:5px;">
+                  <a title="Expand/Collapse Group" (click)="toggleExpandGroup(group)">
+                    <b class="ps-2"
+                      [ngClass]="{ 'text-basic' : group.value[0].status == 'COMPLETED', 'text-yellow' : group.value[0].status == 'IN PROGRESS', 'text-secondary' :  group.value[0].status == 'PENDING' ,  'text-red' :  group.value[0].status == 'DELAYED'}">{{
+                      group.value[0].equipment }}</b>
+                  </a>
+                </div>
+                <div class="font-size-12px ps-4">
+                  <span class="pe-3"><span>Open </span><span
+                      class="border-danger ms-1 rounded px-1 text-red ff-montserrat">{{group.value[0].issues.open}}</span></span>
+                  <span><span>Closed </span><span
+                      class="border-green ms-1 rounded px-1 text-green ff-montserrat">{{group.value[0].issues.close}}</span></span>
+                </div>
+              </div>
+            </ng-template>
+          </ngx-datatable-group-header>
+          <ngx-datatable-column name="Function name" [width]="70">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="functionTask" style="min-width: 50px;">
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Task Name" prop="id" [flexGrow]="2">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div class="taskName font-weight-bold ps-2 cursorPointer d-flex" (click)="navigateToTask(row)">
+                <div class="float-left font-size-12px"
+                  [ngClass]="{ 'text-basic' : row.status == 'COMPLETED', 'text-yellow' : row.status == 'IN PROGRESS', 'text-secondary' :  row.status == 'PENDING' ,  'text-red' :  row.status == 'DELAYED'}"
+                  [title]="row.name">{{row.name }}</div>
+                <span *ngIf="row.status == 'DELAYED'" class="cursorPointer" (click)="navigateToIssues()"><i
+                    class="fas fa-exclamation-triangle text-red ps-3"></i></span>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Progress">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="  font-size-11px d-flex justify-content-center flex-wrap padding-10px-0px">
+                <div class="progress">
+                  <div class="progress-bar "
+                    [ngClass]="{ 'bg-basic' : row.status == 'COMPLETED', 'bg-yellow' : row.status == 'IN PROGRESS', 'bg-secondary' :  row.status == 'PENDING' ,  'bg-red' :  row.status == 'DELAYED'}"
+                    role="progressbar" style="width: 100px" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                  </div>
+                </div>
+                60%
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Actual /Planned Duration">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="  font-size-11px d-flex justify-content-center flex-wrap padding-10px-0px">
+                <div class="text-blue fs-10 ff-montserrat fw-semibold">{{row.actual_duration}}</div>
+                <div class="text-secondary fs-10 ff-montserrat fw-semibold"> / {{row.planned_duration}}</div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-3 p-0  page-height">
+    <div class=" bg-white">
+      <div class="d-flex justify-content-between font-size-14px align-items-center p-2 px-3">
+        <div class="text-blue fs-13 ff-montserrat fw-semibold">Milestone</div>
+        <div>
+          <div class="dropdown" [style.width]="categoryDropdownWidth + 'px'">
+            <div
+              class="text-dark-blue fs-12 ff-montserrat fw-semibold d-flex justify-content-between w-100 cursor-pointer"
+              (click)="milestoneDropdownShow()">
+              <div>{{milestoneCategory}}</div>
+              <div><i class="fas fa-caret-down fs-16 ms-2"></i></div>
+            </div>
+            <div class="dropdown-style shadow rounded w-100" *ngIf="milestoneDropdown">
+              <div class="options text-dark-blue fs-12 ff-montserrat fw-semibold" *ngFor="let key of keys()"
+                [ngClass]="key == milestoneCategory ? 'selected-dropdown':''" (click)="selectMilestoneCategory(key)">
+                {{key}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="font-size-10px  progress-height  bg-white" *ngIf="equipmentFunction ; else MilestoneData">
+        <div class="text-center text-blue font-style-italic fs-10 ff-montserrat fw-medium">
+          Start<br>{{FunctionOverviewEquipmentCategory?.message.start_date}}
+        </div>
+        <div class="fs-12">
+          <div class="d-flex" *ngFor="let item of equipmentFunction; index as i">
+            <ng-container>
+              <div class="w-50 position-relative d-flex justify-content-end">
+                <div class="border rounded-circle h-12px w-21px equipment-circle"
+                  [ngClass]="{ 'bg-basic' :  item.value.overall_status == 'Completed', 'bg-yellow' :  item.value.overall_status == 'In progress', 'bg-secondary' :  item.value.overall_status == 'Yet to start' ,  'bg-red' :  item.value.overall_status == 'Delay'}"
+                  contentType="template" (mouseover)="select( item.key)"></div>
+                <div class="equipment position popup-table">
+                  <div class="arrowIcon fs-21"><i class="fas fa-sort-up text-white"></i></div>
+                  <div class="m-2 p-2 fs-10  bg-white popup rounded shadow-sm">
+                    <div class="text-dark-blue font-weight-bold ff-montserrat">Number of task:
+                      {{ item.value['no_of_tasks']}}</div>
+                    <div class="text-dark-blue font-weight-bold ff-montserrat">Expected duration:
+                      {{ item.value['expected_duration']}}</div>
+                    <div class="border-bottom border-3 pb-2 mb-2 text-green">Actual Duration:
+                      {{ item.value['actual_duration']}}</div>
+
+                    <div class="text-red fs-8">Delayed in Task name</div>
+                    <div class="text-red fs-8" *ngFor="let item of  item.value['delay_tasks']">
+                      <div data-placement="top" [title]="item">{{item | hideInfo}}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="border w-4px h-40px margin"
+                  [ngClass]="{ 'bg-basic' :  item.value.overall_status == 'Completed', 'bg-yellow' :  item.value.overall_status == 'In progress', 'bg-secondary' :  item.value.overall_status == 'Yet to start' ,  'bg-red' :  item.value.overall_status == 'Delay', 'd-none' : i == equipmentFunction.length-1}">
+                </div>
+              </div>
+              <div class="w-50 ms-3">
+                <div class="d-flex justify-content-start ff-montserrat fw-semibold"
+                  [ngClass]="{ 'text-blue' : item.value['overall_status'] == 'Completed', 'text-yellow' : item.value['overall_status'] == 'In progress', 'text-secondary' :  item.value.overall_status == 'Yet to start' ,  'text-red' :  item.value.overall_status == 'Delay'}">
+                  {{ item['equipment']}}</div>
+                <div
+                  class="d-flex justify-content-start text-secondary font-style-italic fs-10 ff-montserrat fw-medium">
+                  {{ item.value['equipment_count']}}
+                  {{milestoneCategory}}</div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="text-center text-blue font-style-italic fs-10 ff-montserrat fw-medium">
+          End<br>{{FunctionOverviewEquipmentCategory?.message.end_date}}
+        </div>
+      </div>
+
+      <ng-template #MilestoneData>
+        <div class="fs-16 text-dark text-center">
+          no data available
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div> -->
+
+
+
+
+<div style="height:40px" class="d-flex align-items-center w-100">
+  <div class="primary-color w-15">
+    <div class="d-flex align-items-center form-control">
+      <input class="border-none-outline-none w-100" [(ngModel)]="searchTerm" (ngModelChange)="onFilter()"
+        placeholder="Search Equipment">
+    </div>
+  </div>
+  <div class="d-flex align-items-center form-control ms-2 pt-2 pb-2 ps-2 pe-1 w-15" *ngIf="!taskSelected">
+    <select class="border-none-outline-none w-100" [(ngModel)]="selectedDepartment" (change)="onFilterChange()">
+      <option *ngFor="let department of departments" [ngValue]="department">
+        {{department}}
+      </option>
+    </select>
+  </div>
+  <div class="d-flex align-items-center form-control ms-2 pt-2 pb-2 ps-2 pe-1 w-15" *ngIf="!taskSelected">
+    <select class="border-none-outline-none w-100" [(ngModel)]="selectedVendor" (change)="onFilterChange()">
+      <option *ngFor="let vendor of vendors" [ngValue]="vendor">
+        {{vendor.name}}
+      </option>
+    </select>
+  </div>
+
+  <!-- <div class="d-flex" style="width: 45%;" *ngIf="!taskSelected">
+    <div class="d-flex align-items-center form-control ms-2 pt-2 pb-2 ps-2 pe-1">
+      <select class="border-none-outline-none w-100" [(ngModel)]="selectedDepartment" (change)="onDepartmentChange()" >
+        <option *ngFor="let department of departments" [ngValue]="department" >
+          {{department.name}}
+        </option>
+      </select>
+    </div>
+    <div class="d-flex align-items-center form-control ms-2 pt-2 pb-2 ps-2 pe-1">
+      <select class="border-none-outline-none w-100" [(ngModel)]="selectedVendor" >
+        <option *ngFor="let vendor of vendors" [ngValue]="vendor">
+          {{vendor?.name}}
+        </option>
+      </select>
+    </div>
+    <div class="d-flex align-items-center form-control ms-2 pt-2 pb-2 ps-2 pe-1">
+      <select class="border-none-outline-none w-100" [(ngModel)]="selectedDepartment">
+        <option *ngFor="let department of departments" [ngValue]="department" >
+          {{department.name}}
+        </option>
+      </select>
+    </div> 
+  </div> -->
+
+
+  <div class="d-flex button-margin" *ngIf="taskSelected" style="width: 40%;">
+    <app-equipment-checklist *ngIf="equipmentId || taskSelected" [availableChecklists]="availableChecklists"
+      [selectedChecklist]="selectedChecklist" [selectedChecklistColumns]="selectedChecklistColumns"
+      [selectedChecklistRows]="selectedChecklistRows" [userDepartment]="userDepartment"
+      (emitSelectedChecklist)="onSelectChecklist($event)" (emitChecklistSave)="onChecklistSave($event)"
+      (emitChecklistSubmit)="onChecklistSubmit($event)"></app-equipment-checklist>
+    <!-- <button style="padding-top: 1px;padding-bottom: 2px; line-height: 4px; margin-top: 4px;"
+      class="primary-color btn-sm  btn-border border-none-outline-none bg-light-blue  h-27px ms-2">
+      CHECKLIST</button> -->
+    <button style="padding-top: 1px;padding-bottom: 2px; line-height: 4px;margin-top: 4px;"
+      class="primary-color btn-sm btn-border border-none-outline-none fw-bold bg-light-blue h-27px ms-2"
+      data-bs-toggle="modal" (click)="getSOP();open(pdfpopup,'largeModal');">
+      SOP
+    </button>
+    <button style="padding-top: 1px;padding-bottom: 2px; line-height: 4px;margin-top: 4px;"
+      class="primary-color btn-sm btn-border fw-bold border-none-outline-none bg-light-blue h-27px ms-2"
+      (click)="getDrawing();open(pdfpopup,'largeModal')">
+      DRAWING
+    </button>
+    <button style="padding-top: 1px;padding-bottom: 2px; line-height: 4px;margin-top: 4px;"
+      class="primary-color btn-sm btn-border fw-bold border-none-outline-none bg-light-blue h-27px ms-2"
+      (click)="open(history,'mediumModal')">
+      LINKED ISSUES
+    </button>
+  </div>
+
+  <!-- <div class="d-flex align-items-center form-control ms-2 pt-2 pb-2 ps-2 pe-1"> -->
+
+
+
+  <!-- <div class="dropdown w-30 form-control" >
+      <button class="btn border-none-outline-none dropdown-toggle  w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        Dropdown button
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        <div class="checkbox-container">
+          <label *ngFor="let equipment of equipmentNameIdMap?.[equipment_category]">
+            <input type="checkbox" class="equipment-checkbox" [value]="equipment.id" (change)="onCheckboxChange($event)">{{equipment.name}}
+          </label>
+        </div>
+        <button class="btn btn-primary mt-2" id="add-selected-btn" (click)="onEquipmentFilterApply()">APPLY</button>
+      </ul>
+    </div> -->
+  <!-- <ng-multiselect-dropdown id="multiSelect" class="border-none-outline-none" [placeholder]="'Filter by Status'"
+          [settings]="dropdownSettings" [data]="issue_types_list" [(ngModel)]="statusFilter"
+          (onSelect)="onItemSelect($event)" (onDeSelect)="onItemDeSelect($event)">
+    </ng-multiselect-dropdown> -->
+
+  <!-- </div> -->
+
+  <div class="text-blue d-flex flex-wrap p-0 fs-12 justify-content-center" style="width:22%;flex-grow: 1;">
+    <div class="d-flex flex-wrap pe-2" style="margin-left: auto;">
+      <div class="mx-3 d-flex align-items-center">
+        <div class="me-2 bg-blue h-10px w-10px"></div>
+        <div class="text-blue font-size-10px">Completed</div>
+      </div>
+      <div class="mx-3 d-flex align-items-center">
+        <div class="me-2 bg-secondry h-10px w-10px"></div>
+        <div class="text-secondry font-size-10px">Yet to start</div>
+      </div>
+      <div class="mx-3 d-flex align-items-center" *ngIf="taskSelected">
+        <div class="me-2 bg-red h-10px w-10px"></div>
+        <div class="text-red font-size-10px">Delayed</div>
+      </div>
+      <div class="mx-3 d-flex align-items-center" *ngIf="taskSelected">
+        <div class="me-2 bg-successGain h-10px w-10px"></div>
+        <div class="text-successGain font-size-10px">Gain</div>
+      </div>
+      <div class="mx-3 d-flex align-items-center" *ngIf="!taskSelected">
+        <div class="me-2 bg-stripped-grey h-10px w-10px"></div>
+        <div class="text-grey font-size-10px">Task not present</div>
+      </div>
+      <div class="mx-3 d-flex align-items-center">
+        <div class="me-2 bg-yellow h-10px w-10px"></div>
+        <div class="text-yellow font-size-10px">Inprogress</div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="primary-color w-25 text-center" *ngIf="taskSelected">
+    <div class="form-check form-switch col d-flex" style="padding-left: 0;">
+      <div style="margin-right: 41px">Observation</div>
+      <div class="">
+        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+          [checked]="observationsRecommendationsToggle" (change)="onRecommendationChange()">
+      </div>
+      <div>Recommendation</div>
+    </div>
+  </div>
+</div>
+<div class="d-flex ">
+  <!-- *************** part-1 *************-->
+  <!-- Equipment category selection side bar -->
+  <div class="w-15 page-height border-right border-top">
+    <div class="category border-bottom" *ngFor="let categoryKey of filteredCategoryKeyList">
+      <div 
+        class="font-size-12px d-flex align-items-center justify-content-between border-radius-5"
+        [ngClass]="selectedEquipmentCategory == categoryKey?.categoryName && !taskSelected ? 'id-active':'id'"
+        >
+        <span class="cursor" (click)="onCategoryClick(categoryKey)">{{categoryKey?.categoryName?.slice(0,20)|uppercase}} ({{category[categoryKey?.categoryName]?.length }})</span>
+        <i [ngClass]="categoryKey.istoggled? 'fas fa-angle-up': 'fas fa-angle-down'" class="text-color cursor" (click)="onToggleClick(categoryKey)" ></i>
+        <!-- <i [ngClass]="!categoryKey.istoggled? 'd-none': 'd-block'" class="fas fa-angle-up text-color" (click)="onToggleClick(categoryKey)"></i> -->
+      </div>
+      <div  [ngClass]="categoryKey.istoggled? 'd-block': 'd-none'">
+        <div class="cursor" [ngClass]="selectedCategory == id && taskSelected ?'task-card-active':'task-card'"
+          *ngFor="let id of filteredEquipmentList[categoryKey?.categoryName]"
+          (click)="selectSidebar(categoryKey?.categoryName,id)">
+          {{id}}
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- *************** part-2 ***********-->
+  <ng-container *ngIf="taskSelected">
+    <div class="w-55 border-right">
+      <div id="ngx-datatable">
+        <ngx-datatable #myTable class="material expandable dataTableHeight" id="dataTableContainer"
+          [columnMode]="ColumnMode.force" [footerHeight]="0" [headerHeight]="60" [scrollbarH]="true"
+          [scrollbarV]="true" [rowHeight]="60" [rows]="rows">
+
+          <ngx-datatable-column [name]="selectedCategory" prop="id" [freezeLeft]="true" [width]="200">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div class="taskName p-3 font-weight-bold ps-2 cursorPointer d-flex" (click)="navigateToTask(row)">
+                <div class="float-left font-size-12px"
+                  [ngClass]="{ 'text-basic' : row.task_status == 'COMPLETED', 'text-yellow' : row.task_status == 'IN-PROGRESS', 'text-secondary' :  row.task_status == 'NOT STARTED' ,  'text-red' :  row.task_status == 'DELAYED'}"
+                  [title]="row.name">{{row.name }}</div>
+                <span [ngClass]="row.issues_count>0?'d-block':'d-none'" class="cursorPointer"
+                  (click)="navigateToIssues()">
+                  <i class="fas fa-exclamation-triangle text-red ps-3"></i>
+                </span>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Progress" [flexGrow]="2">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="  font-size-11px d-flex p-3  align-items-center padding-10px-0px">
+                <div class="progress w-80 me-2 border-radius" style="height:20px;">
+                  <div class="progress-bar" [ngStyle]="{'width':row.percentage_completed+'%'}"
+                    [ngClass]="{ 'bg-basic' : row.task_status == 'COMPLETED', 'bg-yellow' : row.task_status == 'IN-PROGRESS', 'bg-secondary' :  row.task_status == 'NOT STARTED' ,  'bg-red' :  row.task_status == 'DELAYED'}"
+                    role="progressbar" [attr.aria-valuenow]="row.percentage_completed" aria-valuemin="0"
+                    aria-valuemax="100">
+                  </div>
+                </div>
+                <div class="w-20">{{row['percentage_completed']}}%</div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Actual /Planned Duration">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="  font-size-11px d-flex p-3  flex-wrap padding-10px-0px">
+
+                <div class="text-blue fs-10 ff-montserrat fw-semibold">{{row.elapsed_duration}}</div>
+                <div class="text-secondary fs-10 ff-montserrat fw-semibold"> / {{row.scheduled_duration}}</div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+    </div>
+    <!-- ************ part3 ***************-->
+    <!-- MILESTONE  - NOT REQUIRED -->
+    <div class="w-30 page-height" *ngIf="false">
+      <div class=" bg-white">
+        <!-- <div class="d-flex justify-content-between font-size-14px align-items-center p-2 px-3">
+          <div>
+            <div class="dropdown form-control" [style.width]="categoryDropdownWidth + 'px'">
+              <div
+                class="text-dark-blue fs-12 ff-montserrat fw-semibold d-flex justify-content-between w-100 cursor-pointer"
+                (click)="milestoneDropdownShow()">
+                <div>{{milestoneCategory}}</div>
+                <div><i class="fas fa-caret-down fs-16 ms-2"></i></div>
+              </div>
+              <div class="dropdown-style shadow rounded w-100" *ngIf="milestoneDropdown">
+                <div class="options text-dark-blue fs-12 ff-montserrat fw-semibold" *ngFor="let key of keys()"
+                  [ngClass]="key == milestoneCategory ? 'selected-dropdown':''" (click)="selectMilestoneCategory(key)">
+                  {{key}}</div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <div class="font-size-10px  bg-white" *ngIf="equipmentFunction ; else MilestoneData">
+          <div class="text-center text-blue font-style-italic fs-10 ff-montserrat fw-medium">
+            Start<br>{{FunctionOverviewEquipmentCategory?.message.start_date}}
+          </div>
+          <div class="fs-12">
+            <div class="d-flex" *ngFor="let item of equipmentFunction; index as i">
+              <ng-container>
+                <div class="w-50 position-relative d-flex justify-content-end">
+                  <div class="border rounded-circle h-12px w-21px equipment-circle"
+                    [ngClass]="{ 'bg-basic' :  item.value.overall_status == 'Completed', 'bg-yellow' :  item.value.overall_status == 'In progress', 'bg-secondary' :  item.value.overall_status == 'Yet to start' ,  'bg-red' :  item.value.overall_status == 'Delay'}"
+                    contentType="template" (mouseover)="select( item.key)"></div>
+                  <div class="equipment position popup-table">
+                    <div class="arrowIcon fs-21"><i class="fas fa-sort-up text-white"></i></div>
+                    <div class="m-2 p-2 fs-10  bg-white popup rounded shadow-sm">
+                      <div class="text-dark-blue font-weight-bold ff-montserrat">Number of task:
+                        {{ item.value['no_of_tasks']}}</div>
+                      <div class="text-dark-blue font-weight-bold ff-montserrat">Expected duration:
+                        {{ item.value['expected_duration']}}</div>
+                      <div class="border-bottom border-3 pb-2 mb-2 text-green">Actual Duration:
+                        {{ item.value['actual_duration']}}</div>
+
+                      <div class="text-red fs-8">Delayed in Task name</div>
+                      <div class="text-red fs-8" *ngFor="let item of  item.value['delay_tasks']">
+                        <div data-placement="top" [title]="item">{{item | hideInfo}}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="border w-4px h-40px margin"
+                    [ngClass]="{ 'bg-basic' :  item.value.overall_status == 'Completed', 'bg-yellow' :  item.value.overall_status == 'In progress', 'bg-secondary' :  item.value.overall_status == 'Yet to start' ,  'bg-red' :  item.value.overall_status == 'Delay', 'd-none' : i == equipmentFunction.length-1}">
+                  </div>
+                </div>
+                <div class="w-50 ms-3">
+                  <div class="d-flex justify-content-start ff-montserrat fw-semibold"
+                    [ngClass]="{ 'text-blue' : item.value['overall_status'] == 'Completed', 'text-yellow' : item.value['overall_status'] == 'In progress', 'text-secondary' :  item.value.overall_status == 'Yet to start' ,  'text-red' :  item.value.overall_status == 'Delay'}">
+                    {{ item['equipment']}}</div>
+                  <div
+                    class="d-flex justify-content-start text-secondary font-style-italic fs-10 ff-montserrat fw-medium">
+                    {{ item.value['equipment_count']}}
+                    {{milestoneCategory}}</div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+          <div class="text-center text-blue font-style-italic fs-10 ff-montserrat fw-medium">
+            End<br>{{FunctionOverviewEquipmentCategory?.message.end_date}}
+          </div>
+        </div>
+
+        <ng-template #MilestoneData>
+          <div class="fs-16 text-dark text-center">
+            no data available
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+
+
+
+
+    <div class="w-30 page-height" style="overflow: hidden;">
+      <div id="ngx-datatable">
+        <ngx-datatable #myTable class="material expandable dataTableHeight" id="dataTableContainer"
+          [columnMode]="ColumnMode.force" [footerHeight]="0" [headerHeight]="40" [scrollbarH]="true" [scrollbarV]="true"
+          [rowHeight]="60" [rows]="observationRecommendationRows">
+
+
+          <ngx-datatable-column name="Component Name" prop="id">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <!-- <div class="d-flex row m-2 h-100 align-items-center">
+                <span class="text-black me-2 font-size-12px">{{row?.component_name}} </span>
+                <span class="text-black me-2 mt-1font-size-12px">{{row?.date}} | {{row?.time}} </span>
+              </div> -->
+              <div *ngIf="observationsRecommendationsToggle == false" class="fs-11 m-1 mt-2"
+                title="{{row.component_name}}">
+                {{row?.component_name}}
+              </div>
+              <div *ngIf="observationsRecommendationsToggle == true" class="fs-11 m-1 mt-2"
+                title="{{row.component_name}}">
+                {{row?.component_name}}
+              </div>
+              <div *ngIf="observationsRecommendationsToggle == false" class="fs-11 m-1 mt-2"
+                title="{{row.component_date}}">
+                {{row?.date}} | {{row?.time}}
+              </div>
+              <div *ngIf="observationsRecommendationsToggle == true" class="fs-11 m-1 mt-2"
+                title="{{row.component_date}}">
+                {{row?.date}} | {{row?.time}}
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column>
+            <ng-template ngx-datatable-header-template let-column="column">
+              <span *ngIf="observationsRecommendationsToggle == false" title="observations">Observations</span>
+              <span *ngIf="observationsRecommendationsToggle == true" title="recommendations">Recommendations</span>
+            </ng-template>
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="d-flex flex-column w-100" style="align-items: flex-start;">
+                <div class="d-flex flex-row" style="
+                align-items: baseline;">
+                  <div *ngIf="observationsRecommendationsToggle == true" class="fs-9" style="background-color: #2196F3;
+                  color: white;
+                  height: 22px;
+                  width: max-content;
+                  padding: 4px;
+                  border-radius: 5px;
+                  margin-bottom: 5px ;">#{{row?.component_name_id}}</div>
+                  <div *ngIf="observationsRecommendationsToggle == false" class="fs-9" style="background-color: #2196F3;
+                  color: white;
+                  height: 22px;
+                  width: max-content;
+                  padding: 4px;
+                  border-radius: 5px;
+                  margin-bottom: 5px ;">#{{row?.component_name_id}}</div>
+
+                  <div
+                    [ngClass]="{'open': row?.status === 'Open', 'approved' : row?.status === 'Maintenance Accepted',  'rejected' : row?.status === 'Maintenance Rejected'}"
+                    *ngIf="observationsRecommendationsToggle == true">
+                    <span>{{row?.status}}</span>
+                  </div>
+                </div>
+                <div *ngIf="observationsRecommendationsToggle == true" class="fs-11"
+                  style="font-weight: 600; color: #006699;">{{row?.recommendation}}</div>
+                <div *ngIf="observationsRecommendationsToggle == false" class="fs-11"
+                  style="font-weight: 600; color: #006699;">{{row?.observation}}</div>
+              </div>
+            </ng-template>
+            <!-- <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="m-2">
+                <div class="mt-1 primary-color">{{row?.observation}} </div>
+              </div>
+            </ng-template> -->
+          </ngx-datatable-column>
+          <!-- <ngx-datatable-column name="Recommendation" *ngIf="isRecommendationSelected" >
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="m-2">
+                <button class="border-none-outline-none btn border-danger btn-sm text-warn ps-4 pe-4" style="background-color: #FFF3F3;">{{row?.status}}</button>
+                <div class="mt-1 primary-color">{{row?.recommendation}}</div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column> -->
+        </ngx-datatable>
+      </div>
+      <!-- <div id="ngx-datatable" *ngIf="!isRecommendationSelected">
+        <ngx-datatable #myTable class="material expandable dataTableHeight" id="dataTableContainer"
+          [columnMode]="ColumnMode.force" [footerHeight]="0" [headerHeight]="40" [scrollbarH]="true" [scrollbarV]="true"
+          [rowHeight]="60" [rows]="recommendationRows">
+          <ngx-datatable-column name="Component Name" prop="id" [flexGrow]="2">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div class="d-flex row m-2 h-100 align-items-center">
+                <span class="text-black me-2 font-size-12px">{{row?.component_name}} </span>
+                <span class="text-black me-2 mt-1font-size-12px">{{row?.date}} | {{row?.time}} </span>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Recommendation" >
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="m-2">
+                <button class="border-none-outline-none btn border-danger btn-sm text-warn ps-4 pe-4"
+                  style="background-color: #FFF3F3;">{{row?.status}}</button>
+                <div class="mt-1 primary-color">{{row?.recommendation}}</div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>       -->
+    </div>
+  </ng-container>
+
+
+
+  <!-- heatmap -->
+  <div class="w-83" *ngIf="!taskSelected">
+    <div id="ngx-datatable">
+      <ngx-datatable #myTable class="material expandable dataTableHeight" id="dataTableContainer"
+        [columnMode]="ColumnMode.force" [footerHeight]="0" [headerHeight]="45" [scrollbarH]="true" [scrollbarV]="true"
+        [rowHeight]="70" [rows]="equipmentRows">
+        <ngx-datatable-column name="Equipments" prop="id" [flexGrow]="1" [width]="250" [frozenLeft]="true">
+          <ng-template let-row="row" let-value="value" let-index="index" ngx-datatable-cell-template>
+            <div class="taskName ps-2  d-flex">
+              <div class="d-flex row h-100 align-items-center">
+                <span
+                  class="text-black mt-2 w-80 font-size-12px font-weight-bold text-overflow-ellipsis">{{row?.equipment}}</span>
+                <span class="text-blue font-style-italic">{{row[row?.equipment]?.observation_count }}
+                  Observations</span>
+                <span class="text-blue font-style-italic">{{row[row?.equipment]?.recommendation_count}} Recommendations
+                  <span class="text-red me-1 font-style-italic">{{row[row?.equipment]?.issues_count}} issues</span>
+                </span>
+                <span
+                  class="text-blue font-style-italic">Checklist({{row[row?.equipment]?.checklist?.['completed']}}/{{row[row?.equipment]?.checklist?.['total']}})</span>
+              </div>
+
+              <!-- <div class="float-left font-size-12px"
+                [ngClass]="{ 'text-basic' : row.task_status == 'COMPLETED', 'text-yellow' : row.task_status == 'IN-PROGRESS', 'text-secondary' :  row.task_status == 'NOT STARTED' ,  'text-red' :  row.task_status == 'DELAYED'}"
+                [title]="row.name">{{row.name }}</div>
+              <span *ngIf="row.task_status == 'DELAYED'" class="cursorPointer" (click)="navigateToIssues()"><i
+                  class="fas fa-exclamation-triangle text-red ps-3"></i></span> -->
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ng-container *ngFor="let task of taskHeaderWithCount">
+          <ngx-datatable-column name="task" [width]="250">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <ng-container>
+                <div title="task">{{task.label}}</div>
+                <div title="task" *ngIf="task.total_task_count" class="font-style-italic text-black fs-10">
+                  {{task.completed_task_count}}/{{task.total_task_count}} completed</div>
+              </ng-container>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div *ngIf="row?.tasksAvailable?.includes(task.label)" class=" h-100 w-100">
+                <div class="cursor" style="border-radius: 5px;height: 85%;margin: 4px" [ngClass]="{
+                  'bg-blue': row?.task_by_name?.[task.label]?.task_status === 'COMPLETED',
+                  'bg-secondry': row?.task_by_name?.[task.label]?.task_status == 'NOT STARTED',
+                  'bg-yellow': (row?.task_by_name?.[task.label]?.actual_start_date && !(row?.task_by_name?.[task.label]?.actual_end_date) && (row?.task_by_name?.[task.label]?.percentage_completed!=100) || row?.task_by_name?.[task.label]?.task_status == 'IN-PROGRESS' )
+                }" (click)="navigateToTask(row,row?.task_by_name?.[task.label])">
+                </div>
+              </div>
+
+
+              <div *ngIf="!row?.tasksAvailable?.includes(task.label)" class=" h-100 w-100 ">
+                <div style="border-radius: 5px;height: 85%;margin: 4px;" class="cursor bg-stripped-grey non-clickable">
+                </div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        </ng-container>
+        <!-- <ng-container  *ngFor="let task of taskHeaders">
+          <ngx-datatable-column  name="task" >
+            <ng-template ngx-datatable-header-template let-column="column">
+              <span title="task">{{task}}</span>             
+          </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div *ngIf="row?.tasksAvailable?.includes(task)" class=" h-100 w-100">
+                <div class="cursor" style="border-radius: 5px;height: 85%;margin: 4px" [ngClass]="{
+                  'bg-blue': row?.task_by_name?.[task]?.task_status === 'COMPLETED',
+                  'bg-secondry': row?.task_by_name?.[task]?.task_status == 'NOT STARTED',
+                  'bg-yellow': (row?.task_by_name?.[task]?.actual_start_date && !(row?.task_by_name?.[task]?.actual_end_date) && (row?.task_by_name?.[task]?.percentage_completed!=100) )
+                }" (click)="navigateToTask(row,row?.task_by_name?.[task])">
+               </div>
+              </div>
+  
+  
+              <div *ngIf="!row?.tasksAvailable?.includes(task.equipment_overview_label)" class=" h-100 w-100 ">
+                <div style="border-radius: 5px;height: 85%;margin: 4px;" class="cursor bg-stripped-grey non-clickable"></div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        </ng-container> -->
+
+      </ngx-datatable>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modals -->
+{{modalHeader | uppercase}}
+<ng-template #pdfpopup let-modal class="pdf-model">
+  <div class="modal-header row m-0 p-2">
+    <div class="primary-color col-2 ps-0 cursor fw-bold" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <img src="./assets/icons/Back.svg" width="15px" height="10px" class="me-2">Back
+    </div>
+    <div class="primary-color pop-w2 fw-bold col-8 text-center"><b>{{modalHeader | uppercase}}</b></div>
+    <div class="col-2"></div>
+  </div>
+  <div class="modal-body fs-12 ">
+    <ng-container *ngIf="isPdfLoaded">
+      <div *ngFor="let pdf of pdfData" class="w-100 h-100">
+        <ng-container>
+          <iframe [src]="pdf | safeUrl" width="100%" height="100%"></iframe>
+        </ng-container>
+      </div>
+    </ng-container>
+    <div *ngIf="!pdfData?.length" style="text-transform: uppercase;"
+      class="h-100 d-flex align-items-center justify-content-center">
+      <span class="text-grey"> No {{modalHeader}}s available at the moment </span>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<ng-template #history let-modal>
+  <!-- <div class="modal-header row fs-12 m-0"> -->
+  <!-- <div class="primary-color col-2 cursor fw-bold" data-bs-dismiss="modal"> <img src="./assets/icons/Back.svg"
+              width="15px" height="10px" class="me-2">Back</div> -->
+  <!-- <div class="primary-color col-2 ps-0 cursor fw-bold" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <img src="./assets/icons/Back.svg" width="15px" height="10px" class="me-2">Back
+    </div> -->
+  <!-- <div class="primary-color pop-w2  fw-bold col-8 text-center w-95">LINKED ISSUES</div> -->
+  <!-- <span aria-hidden="true" class="close text-right fs-16 col-2 text-right cursor w-5 m-0 p-0" aria-label="Close"
+      (click)="modal.dismiss('Cross click')">×</span> -->
+  <!-- </div> -->
+  <div class="modal-header row m-0 p-2">
+    <div class="primary-color col-2 ps-0 cursor fw-bold" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <img src="./assets/icons/Back.svg" width="15px" height="10px" class="me-2">Back
+    </div>
+    <div class="primary-color pop-w2 fw-bold col-8 text-center"><b>LINKED ISSUES</b></div>
+    <div class="col-2"></div>
+  </div>
+  <div class="modal-body fs-12">
+    <div class="row">
+
+      <ng-container *ngIf="issues.length">
+        <div class="p-2 box-shadow-sm" *ngFor="let issue of issues">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex col justify-content-between">
+              <div class="m-2 rounded bg-danger p-1 l-h-10px px-2 text-white">#{{issue?.issue_number}}</div>
+              <div class="m-2 primary-color font-weight-bold fs-13">{{issue?.equipment_name}}</div>
+            </div>
+          </div>
+          <div class="m-2 fs-11px font-weight-bold  primary-color">{{issue?.task_name}}</div>
+          <div class="d-flex m-2 col justify-content-between">
+            <div class="font-weight-bold">Risk Rating:</div>
+            <div>
+              <div class="progress riskrating-bar-w-h w-100 riskrating-bg-color">
+                <!-- <div (click)="decreaseRiskRatingLevel()"
+                     [ngClass]="(firtIssue?.status ==='Closed')? 'cursorDisabled': (selectedRiskRating == 1)? 'cursorDisabled' : 'cursorPointer' ">
+                     <i class="fas fa-minus-square icon-cog" style="font-size:17px ;"></i>
+                  </div> -->
+                <div class="progress-bar-color low-level riskrating-bar-radius rating" title="very Low"
+                  role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"
+                  [ngClass]="{'low-level-color' : issue?.risk_rating>=1 }"></div>
+                <div class=" low ms-1 defalut-riskrating-bg-color riskrating-bar-radius rating" title="Low"
+                  role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"
+                  [ngClass]="{'low-color' : issue?.risk_rating>=2}"></div>
+                <div class=" medium ms-1 defalut-riskrating-bg-color riskrating-bar-radius rating" title="Medium"
+                  role="progressbar" aria-valuenow="" aria-valuemin=" 0" aria-valuemax="100"
+                  [ngClass]="{'medium-color' : issue?.risk_rating>=3}">
+                </div>
+                <div class=" high ms-1 defalut-riskrating-bg-color riskrating-bar-radius rating" title="High"
+                  role="progressbar" aria-valuenow="" aria-valuemin=" 0" aria-valuemax="100"
+                  [ngClass]="{'high-color' :issue?.risk_rating>=4}"></div>
+                <div class=" very-high ms-1 defalut-riskrating-bg-color riskrating-bar-radius rating" title="very High"
+                  role="progressbar" aria-valuenow="" aria-valuemin=" 0" aria-valuemax="100"
+                  [ngClass]="{'very-high-color' :issue?.risk_rating>=5}">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex m-2 col justify-content-between">
+            <div class="font-weight-bold">Created on:</div>
+            <div class="text-secondry">{{issue?.date}} </div>
+          </div>
+          <div class="d-flex m-2 col justify-content-between">
+            <div class="font-weight-bold">Status</div>
+            <div
+              class="cursorDisabled py-1 px-2 m-w-100px text-capitalize  rounded font-weight-bold border-none-outline-none cursor-none"
+              ria-label="Default select example" disabled
+              [ngClass]="(issue?.status == 'Open' || issue?.status == 'Reopen' ) ? 'status-dropdown-open': 'status-dropdown-close' ">
+              {{issue?.status}}
+            </div>
+
+          </div>
+          <div class="m-2">
+            <div class="font-weight-bold">Issue Description:</div>
+            <div class="text-secondry">{{issue?.summary}}</div>
+          </div>
+          <div class="m-2">
+            <div class="goToIssue cursorPointer font-weight-bold"
+              (click)="navigateToParticularIssue(issue); modal.dismiss('Cross click')">Go to issue
+            </div>
+          </div>
+          <!-- <div class="fs-11px d-flex justify-content-between align-items-center mt-1">
+              
+              <div id="removeIcon">
+                <select
+                  class="cursorDisabled py-1 px-2 m-w-100px text-capitalize  rounded font-weight-bold border-none-outline-none cursor-none"
+                  ria-label="Default select example" disabled
+                  [ngClass]="(row?.status == 'Open' || row?.status == 'Reopen' ) ? 'status-dropdown-open': 'status-dropdown-close' ">
+                  <option>status</option>
+                </select>
+              </div>
+            </div> -->
+          <!-- <div class="fs-10px text-secondry opacity-75">
+              Task Name will display here.
+            </div> -->
+        </div>
+      </ng-container>
+
+      <div *ngIf="!issues?.length" style="text-transform: uppercase;"
+        class="h-100 d-flex align-items-center justify-content-center">
+        <span>No linked issues available</span>
+      </div>
+    </div>
+  </div>
+</ng-template>

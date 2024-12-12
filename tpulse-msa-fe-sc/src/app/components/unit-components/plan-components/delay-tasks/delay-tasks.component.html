@@ -1,0 +1,192 @@
+<!-- <div class="d-flex justify-content-between p-2 align-items-center">
+  <div class="d-flex">
+    <div class=" blue-color">
+      DELAYED AND SOON TO BE DELAYED TASKS
+    </div>
+    <div class="px-3">
+      <div class="filter d-flex pb-2 w-100">
+        <div *ngFor="let equipment of equipmentCategory"
+          [ngClass]="selectedEquipmentCategory == equipment?'filter-active':''">
+          <div class="w-100 h-100 cursor" (click)="selectCategory(equipment)">{{equipment}}</div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- <div class="form-control w-15">
+    <select class="border-none-outline-none w-100" (change)="overviewDetial()" [(ngModel)]="department">
+      <option *ngFor="let deparment of departments" [value]="deparment">
+        {{deparment}}
+      </option>
+    </select>
+  </div> -->
+<!-- </div>  -->
+<div class="row  col-12 pt-1  ps-1">
+  <div class="col-6  p-1">
+    <div class="card tableCard shadow-sm border-0 radius bg-body h-100 w-100">
+      <div class="card-body font-size-12px">
+        <div>
+          <div class="ff-montserrat fw-semibold fs-15 text-dark-blue pb-3 ps-3">Soon to be Delayed (Slack < 12 hours)
+            <!-- [ngClass]="{'cursorPointer': alarmRows.length, 'cursorDisabled': !alarmRows.length}" -->
+            <!-- (click)="navigateToTaskPage(alarmRows.length)" -->
+            <span class="ff-montserrat fw-semibold fs-14 text-dark-blue mx-2">{{alarmRows?.length}}</span>
+          </div>
+          <div class="" id="ngx-datatable">
+
+            <ngx-datatable class="material expandable dataTableHeight " [rows]="alarmRows" [columnMode]="'force'" [headerHeight]="50" [rowHeight]="60"  [scrollbarV]="true" [rowClass]="getSoonDelayedRow" (select)="onRowSelect($event)">
+              <ngx-datatable-column [width]="100" [sortable]="true">
+                <ng-template let-column="column" ngx-datatable-header-template>
+                  {{tb1_name3}}
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <div class="font-size-12px text-red flex-wrap font-weight-bold" [style.color]="row.color">
+                    <div class="fs-13 fw-extrabold flex-wrap pointer white-space-normal" title="{{row.equipment}}"
+                      [ngClass]="row.taskName == 'Task 2'? 'text-warning':''"
+                      [ngClass]="row.taskName == 'Task 1'? 'text-warning':''">
+                      <b>{{row.equipment__equipment_category__name}}</b>
+                    </div>
+                    <!-- <div>
+                      {{row.department__name}}
+                    </div> -->
+                    <div class="fs-11 fw-semibold pointer" [ngClass]="row.taskName == 'Task 2'? 'text-warning':''"
+                      title="{{row.department}}">
+                      {{row.department__name}}</div>
+                  </div>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column [width]="100" [sortable]="true">
+                <ng-template let-column="column" ngx-datatable-header-template>
+                  {{tb1_name4}}
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <div class="text-red flex-wrap font-weight-bold font-size-12px">
+                    <div class="fs-13 fw-bold text-overflow-ellipsis cursor-pointer text-underline white-space-normal" [ngClass]="row.taskName == 'Task 2'? 'text-warning':''"
+                      title="{{row.task}}" (click)="navigateToTaskDetail(row)" >
+                      <b>{{row.equipment__name}} > {{row.name}}</b>
+                    </div>
+                    <div class="fs-11 fw-semibold pointer" [ngClass]="row.time == '0hrs'? 'text-success':''"
+                      title="{{row.delay_in_hrs}}">
+                      {{row.delay}}</div>
+                  </div>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column [width]="130" [sortable]="true">
+                <ng-template let-column="column" ngx-datatable-header-template>
+                  {{tb1_name1}}
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <div class=" text-left d-flex  font-size-12px pointer"
+                    title="{{row.actual_start_date}}/{{row.scheduled_start_date}}">
+                    <div class="text-basic fw-semibold fs-11 text-left">{{row.actual_start_date?row.actual_start_date: 'Yet to start'}} / </div>
+                    <div class="fw-semibold fs-11 color-dull text-left"> {{row.planned_date_to_start}}</div>
+                  </div>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column class="text-center" [width]="130" [sortable]="true">
+                <ng-template let-column="column" ngx-datatable-header-template>
+                  {{tb1_name2}}
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <div class="text-left d-flex font-size-12px pointer"
+                    title="{{row.actual_start_date}}/{{row.scheduled_start_date}}">
+                    <div class="text-basic fs-11 fw-semibold text-left">{{row.actual_end_date ? row.actual_end_date : 'Yet to finish'}} / </div>
+                    <div class="fs-11 fw-semibold color-dull text-left">{{row.planned_date_to_complete}}</div>
+                  </div>
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6  ps-1 pt-1 pb-1 ">
+    <div class="card tableCard shadow-sm border-0 radius bg-body h-100 w-100">
+      <div class="card-body font-size-12px">
+        <div>
+          <!-- <div class="ff-montserrat fw-semibold fs-15 text-dark-blue py-2 mb-2 h-35px ps-3"> Escalated Delayed -->
+            <!-- [ngClass]="{'cursorPointer': alarmRow.length, 'cursorDisabled': !alarmRow.length}" -->
+            <!-- (click)="navigateToTaskPage(alarmRow.length)" -->
+            <!-- <span class="ff-montserrat fw-semibold fs-14 text-dark-blue mx-2">{{alarmRow?.length}}</span> -->
+          <!-- </div> -->
+
+          <div class="pb-3">
+            <div class="form-check form-switch ps-3 d-flex">
+              <div class="form-check-label " for="flexSwitchCheckNotChecked">Escalated Delayed  <span class="ff-montserrat fw-semibold fs-14 text-dark-blue mx-2">{{escalatedCount}}</span></div>
+              <div class="pl-40 cursor">
+                <input (click)="toggle()" class="form-check-input cursor" type="checkbox" id="flexSwitchCheckChecked">
+              </div>
+              <div class="form-check-label" for="flexSwitchCheckChecked">Delayed <span class="ff-montserrat fw-semibold fs-14 text-dark-blue mx-2">{{delayedCount}}</span></div>
+            </div>
+          </div>
+
+
+          <div class="" id="ngx-datatable">
+
+            <ngx-datatable class="material expandable dataTableHeight " [rows]="alarmRow" [columnMode]="'force'"
+              [headerHeight]="50" [rowHeight]="60"  [scrollbarV]="true" [rowClass]="getEscalatedDelayedRow"
+              (select)="onRowSelect($event)">
+
+              <ngx-datatable-column [width]="100" [sortable]="true">
+                <ng-template let-column="column" ngx-datatable-header-template>
+                  {{tb1_name3}}
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <div class="font-size-12px  flex-wrap text-red white-space-normal font-weight-bold" [style.color]="row.color">
+                    <div class="fs-13 fw-extrabold pointer" [ngClass]="row.taskName == 'Task 2'? 'text-warning':''"
+                      title="{{row.equipment}}">
+                      <b>{{row.equipment__equipment_category__name}}</b>
+                    </div>
+                    <div class="fs-11 fw-semibold pointer" [ngClass]="row.taskName == 'Task 2'? 'text-warning':''"
+                      title="{{row.department}}">
+                      {{row.department__name}}</div>
+                  </div>
+                </ng-template>
+   
+              </ngx-datatable-column>
+              <ngx-datatable-column [width]="100" [sortable]="true">
+                <ng-template let-column="column" ngx-datatable-header-template>
+                  {{tb1_name4}}
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                  <div class="text-red  flex-wrap font-weight-bold font-size-12px">
+                    <div class="fs-13 fw-bols cursor-pointer text-overflow-ellipsis text-underline table-content-position white-space-normal"
+                      [ngClass]="row.taskName == 'Task 2'? 'text-warning':''" title="{{row.task}}"
+                      [ngClass]="row.taskName == 'Task 1'? 'text-warning':''" (click)="navigateToTaskDetail(row)" >
+                      <b>{{row.equipment__name}} > {{row.name}}</b><i class="fas fa-exclamation-triangle ps-1"></i>
+                    </div>
+                    <div class="fs-11 fw-semibold table-content-position pointer"
+                      [ngClass]="row.time == '0hrs'? 'text-success':''" title="{{row.delay_in_hrs}}">
+                      {{row.delay}}</div>
+                  </div>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column [width]="130" [sortable]="true">
+                <ng-template let-column="column" ngx-datatable-header-template>
+                  {{tb1_name1}}
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value" class="tabe-bg">
+                  <div class=" text-left d-flex pointer " title="{{row.actual_start_date}}/{{row.scheduled_start_date}}">
+                    <div class="text-basic fs-11 fw-semibold text-left">{{row.actual_start_date ? row.actual_start_date : 'Yet to start'}} /</div>
+                    <div class="fs-11 fw-semibold color-dull text-left"> {{row.planned_date_to_start}}</div>
+                  </div>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column [width]="130" [sortable]="true">
+                <ng-template let-column="column" ngx-datatable-header-template>
+                  {{tb1_name2}}
+                </ng-template>
+                <ng-template ngx-datatable-cell-template let-row="row" let-value="value" class="tabe-bg">
+                  <div class=" text-left d-flex  pointer" title="{{row.actual_end_date}}/{{row.scheduled_end_date}}">
+                    <div class="text-basic fs-11 fw-semibold text-left ">{{row.actual_date_of_completion ? row.actual_date_of_completion : 'Yet to finish'}} /</div>
+                    <div class="fs-11 fw-semibold color-dull text-left"> {{row.planned_date_to_complete}}</div>
+                  </div>
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

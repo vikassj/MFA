@@ -1,0 +1,134 @@
+<div class="btn btn-sm border-basic primary-bg-color primary-color fw-bold ms-2 mt-1" (click)="open(equipmentChecklist)">
+    CHECKLIST</div>
+
+<ng-template #equipmentChecklist let-modal>
+    <div class="modal-header row m-0 p-2">
+        <div class="primary-color col-2 ps-0 cursor fw-bold" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <img src="./assets/icons/Back.svg" width="15px" height="10px" class="me-2">Back
+        </div>
+        <div class="primary-color pop-w2 fw-bold col-8 text-center"><b>EQUIPMENT CHECKLIST</b></div>
+        <div class="col-2"></div>
+    </div>
+    <div class="modal-body fs-12">
+        <p class="text-center mb-0" *ngIf="availableChecklists.length === 0">No checklists are available</p>
+        <div *ngIf="availableChecklists.length > 0" class="row m-0">
+            <div class="col-3 px-0">
+                <div class="w-100">
+                    <p class="primary-color fontSize12px"><b>CHECKLISTS</b></p>
+                    <div class="accordion accordion-flush pe-3" id="equipmentChecklistAccordian">
+                        <div *ngFor="let group of availableChecklists; let gi = index" class="accordion-item">
+                            <h2 class="accordion-header" id="groupingHeading{{gi}}">
+                                <button class="accordion-button collapsed primary-color fontSize12px p-2" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#groupingCollapse{{gi}}"
+                                    aria-expanded="true" aria-controls="groupingCollapse{{gi}}">
+                                    <b>{{group.group_Name}}</b>
+                                </button>
+                            </h2>
+                            <div id="groupingCollapse{{gi}}" class="accordion-collapse collapse show"
+                                aria-labelledby="groupingHeading{{gi}}" data-bs-parent="#equipmentChecklistAccordian">
+                                <div class="accordion-body py-2 px-0">
+                                    <div class="btn-group-vertical fullWidth" role="group"
+                                        aria-label="Vertical radio toggle button group">
+                                        <ng-container *ngIf="group.checklists.length > 0">
+                                            <div *ngFor="let checklist of group.checklists" class="d-block fullWidth">
+                                                <div class="fullWidth cursorPointer p-1"
+                                                    [ngClass]="{'btn-outline-basic': selectedChecklist?.id != checklist.id, 'btn-basic': selectedChecklist?.id === checklist.id}"
+                                                    (click)="onChecklistSelect(checklist.id)">
+                                                    <p class="mb-0">{{checklist.name}}</p>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <p class="text-center mb-0" *ngIf="group.checklists === 0">No
+                                            checklists are available</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-9 px-0">
+                <div class="w-100">
+                    <ngx-datatable class="material expandable equipmentChecklistTable" [columnMode]="'force'"
+                        [footerHeight]="35" [headerHeight]="40" [scrollbarH]="true" [scrollbarV]="true" [rowHeight]="65"
+                        [rows]="selectedChecklistRows">
+                        <ngx-datatable-column *ngFor="let column of selectedChecklistColumns; let i = index"
+                            [prop]="column.id" [name]="column.name" [sortable]="false" [draggable]="false"
+                            [resizable]="false" [width]="getColumnWidth(column)">
+                            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                                <ng-container *ngIf="column.is_editable === false">
+                                    <p class="ps-3 my-auto"
+                                        [ngClass]="{'pe-3': i === (selectedChecklistColumns.length - 1)}">{{value}}</p>
+                                </ng-container>
+                                <ng-container *ngIf="column.data_type === 'string' && column.is_editable">
+                                    <input type="text" class="form-control form-control-sm inputCss my-auto ms-3"
+                                        [ngClass]="{'me-3': i === (selectedChecklistColumns.length - 1)}"
+                                        [(ngModel)]="row[column.id]"
+                                        [disabled]="selectedChecklist?.is_completed || disable(row, true)" (input)="isChanged(row[column.id])" />
+                                </ng-container>
+                                <ng-container *ngIf="column.data_type === 'number' && column.is_editable">
+                                    <input type="number" class="form-control form-control-sm inputCss my-auto ms-3"
+                                        [ngClass]="{'me-3': i === (selectedChecklistColumns.length - 1)}"
+                                        [(ngModel)]="row[column.id]"
+                                        [disabled]="selectedChecklist?.is_completed || disable(row, true)" (change)="isChanged(row[column.id])" />
+                                </ng-container>
+                                <ng-container *ngIf="column.data_type === 'dropdown'  && column.is_editable">
+                                    <select class="form-control form-control-sm inputCss my-auto ms-3"
+                                        [ngClass]="{'me-3': i === (selectedChecklistColumns.length - 1)}"
+                                        [(ngModel)]="row[column.id]"
+                                        [disabled]="selectedChecklist?.is_completed ||  disable(row, true)" (change)="isChanged(row[column.id])">
+                                        <option *ngFor="let option of column.data_values" [value]="option">
+                                            {{option}}</option>
+                                    </select>
+                                </ng-container>
+                                <ng-container *ngIf="column.data_type === 'datetime'  && column.is_editable">
+                                    <input type="datetime-local"
+                                        class="form-control form-control-sm inputCss my-auto ms-3"
+                                        [ngClass]="{'me-3': i === (selectedChecklistColumns.length - 1)}"
+                                        [(ngModel)]="row[column.id]"
+                                        [disabled]="selectedChecklist?.is_completed ||  disable(row, true)" (change)="isChanged(row[column.id])" />
+                                </ng-container>
+                                <ng-container *ngIf="column.data_type === 'text' && column.is_editable">
+                                    <textarea class="form-control form-control-sm ms-3"
+                                        [ngClass]="{'me-3': i === (selectedChecklistColumns.length - 1)}"
+                                        [(ngModel)]="row[column.id]"
+                                        [disabled]="selectedChecklist?.is_completed ||  disable(row, true)" (input)="isChanged(row[column.id])"></textarea>
+                                </ng-container>
+                            </ng-template>
+                        </ngx-datatable-column>
+                    </ngx-datatable>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer d-flex align-items-end">
+        <button type="button" class="btn common-bg-color btn-sm text-light px-4 align-items-center"
+            [disabled]="isStaticEquipmentChecklist || (!isStaticEquipmentChecklist && selecteselectedChecklist?.is_completed) || disable(null, false) || disableSubmit() || (isValueChanged && !currentChecklistSaved) "
+            (click)="onChecklistSubmit()">SUBMIT</button>
+        <button type="button" class="btn common-bg-color btn-sm text-light px-4 align-items-center"
+            [disabled]="isStaticEquipmentChecklist || (!isStaticEquipmentChecklist && selecteselectedChecklist?.is_completed) || disable(null, false) || !isValueChanged"
+            (click)="onChecklistSave()">SAVE</button>
+        <button type="button" class="btn border-outline  text-color btn-sm  px-4 mx-2" aria-label="Close"
+            (click)="modal.dismiss('Cross click')">CANCEL</button>
+    </div>
+</ng-template>
+
+<div class="modal fade" id="submitModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="text-center border-bottom">
+                <div class="modal-title text-danger p-2" id="exampleModalLabel">Confirmation</div>
+            </div>
+            <div class="modal-body text-center fontSize12px">
+                Submitting the equipment checklist will restrict you from modifying this further. Are you sure you want
+                to submit?
+            </div>
+            <div class="text-center p-1 mb-2">
+                <button type="button" class="btn btn-sm secondary-bg-color text-light fontSize12px"
+                    (click)="onChecklistSubmit()">YES</button>
+                <button type="button" class="btn btn-sm secondary-bg-color text-light ms-2 fontSize12px"
+                    data-bs-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>

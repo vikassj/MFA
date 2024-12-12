@@ -1,0 +1,58 @@
+*{
+  font-family: "Montserrat";
+}
+.w-70px{
+  width: 70px;
+}
+.h-25px{
+  height: 25px;
+}
+.fs-10px{
+  font-size: 10px;
+}
+.selected-item{
+  background-color: #006699 !important;
+  color: white !important ;
+}
+ul{
+  margin-bottom: 0px;
+}
+.notselected{
+  background-color: white !important;
+  color: #006699 !important;
+}
+.page-numbers{
+  min-width: 25px;
+  height: 25px;
+  padding: 0px 6px !important;
+  border-radius: 50%;
+  border: none !important;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+li{
+  margin-left: 5px;
+}
+.page-link {
+  position: relative;
+  margin-left: -1px;
+  line-height: 1.25;
+  background-color: #fff;
+  border: none !important;
+}
+
+.navigationDisabledCss {
+  /* background-color: #bfbfbf !important; */
+  cursor: not-allowed !important;
+}
+.prev, .next{
+  font-weight: 800;
+  font-size: 10px !important;
+}
+.previous{
+  font-size: 10px !important;
+}
+.next{
+  font-size: 10px !important;
+}

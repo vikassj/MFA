@@ -1,0 +1,191 @@
+<div class="">
+  <div class="text-basic fw-bold mt-3 font-size-12px">Comments</div>
+  <div class="d-flex justify-content-between w-100  ">
+    <div>
+      <img class="border rounded-circle" src="assets/images/auth-panel.png" width="25px" height="25px" />
+    </div>
+    <div id="commentSection" class="w-75 mx-2 ">
+      <input type="text" class=" input-border  border-2 fs-11 " [mention]="emailList" [mentionConfig]="mentionConfig"
+        placeholder="Add new Comments here.." title="{{newComments}}" [(ngModel)]="newComments" (input)="entertext()">
+      <!-- <p *ngIf="!alphaNumericWithoutSpaceValidator(newComments) || newComments === ''"
+        class="font-italic text-danger fs-10 mb-0">Comment cannot be empty and shouldn't have
+        space
+        characters at
+        start
+        and end</p> -->
+    </div>
+    <div>
+    <div class="btn-file">
+      <!-- <button class="btn btn-sm browse-btn px-2  fs-10px fw-800">Browse Image</button> -->
+      <button class="att btn btn-sm attech-btn text-center fs-10px fw-800 cursor-pointer" style="padding: 1px 5px;
+      margin: 1px 5px;" title="Select document"><i
+          class="fas fa-paperclip text-basic fw-800"></i></button>
+      <input type="file" accept="image/jpeg" multiple class="cursor-pointer" title="Select document"
+        (change)="selectImage($event)" (click)="$event.target.value=null">
+    </div>
+    <!-- <img [src]="observationImage" > -->
+  </div>
+    <div>
+      <button class=" rounded pt-1 pb-1 flter-side-bar-input-box text-basic common-bg-color fs-10"
+        (click)="commentOnTask()" [disabled]="newComments === ''">COMMENT</button>
+    </div>
+  </div>
+
+  <div class="d-flex flex-wrap">
+    <div class="d-flex flex-wrap m-1" *ngFor="let item of actionCommentImage;let i = index">
+      <div class="postImage position-relative w-125px">
+        <div class="pe-2 pb-2 w-125px">
+          <img [src]="item.actionImage" width="125px" height="70px">
+          <!-- <div class="h-30px rounded-bottom bg-dark text-white w-125px p-1">
+            <div class=" fs-8px">{{images.filename | imageNameHideInfo }}</div>
+            <div class="d-flex fs-8px">
+              <div class="me-2 fw-bold"><i class="far fa-calendar-alt pe-2"></i>{{images.created_at | date : 'yyyy-MM-dd'}}
+              </div>
+              <div class=" fw-bold"><i class="far fa-clock pe-2"></i>{{images.created_at | date : 'HH:mm:ss'}}</div>
+            </div>
+          </div> -->
+        </div>
+        <div class="delete-option">
+          <div class="d-flex justify-content-center align-items-center">
+            <!-- <div class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center me-1" (click)="downloadImg()"><i class="fas fa-download text-color"></i></div> -->
+            <div
+              class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center cursor-pointer"
+              (click)="deleteSlectedCommentImg(i)"><i class="fas fa-trash custom"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div id="taskComment" class="comment-height comment-box-bg-color">
+      <div class=" comment-box-bg-color font-size-10px">
+        <!-- <div class="d-flex w-100 ">
+         <div>
+           <img class="border rounded-circle margin-left" src="assets/images/auth-panel.png" width="25px"
+             height="25px" />
+         </div>
+         <div class="w-75 mx-2">
+           <input type="text" class=" input-border issue-chat-box-bg-color border-bottom border-2 fs-12 "
+             placeholder="Add new Comments here.." title="{{newComments}}" [(ngModel)]="newComments">
+         </div>
+         <div>
+           <button class="btn btn-sm text-basic common-bg-color fs-12" (click)="commentOnIssue()"
+             [disabled]="!commonService.alphaNumericWithoutSpaceValidator(newComments)">COMMENT</button>
+         </div>
+       </div> -->
+        <div id="comment{{c.id}}" *ngFor="let c of comments; let ci = index" class="border-bottom py-2 p-2 w-100">
+          <div>
+            <div class="d-flex  justify-content-between  ">
+              <!-- <div
+                 class="w-15px h-15px me-2 my-1 d-flex justify-content-center align-items-center rounded common-bg-color p-1  btn-outline-basic">
+                 {{ci + 1}}</div> -->
+              <div class=" d-flex">
+                <div>
+                  <img class="border rounded-circle " src="assets/images/auth-panel.png" width="20px" height="20px" />
+                </div>
+                <div class=" fs-10  text-basic text-wrap w-100 ms-4">{{c.commented_by}}
+                </div>
+              </div>
+              <div class="d-flex date-time-color min-width">
+                <div class=" text-color fs-8  ">
+                  <i class="fas fa-calendar-alt me-1"></i>
+                  {{c.date}}
+                </div>
+                <div class="text-color fs-8  ms-1">
+                  <i class="far fa-clock me-1"></i>
+                  {{c.time}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ms-5 text-wrap">
+            <div class=" fs-11 comment-color text-wrap w-100" [innerHTML]="c.comment | highlight"></div>
+            <div class=" fs-11  text-basic cursorPointer" (click)="toggleReply(ci)">
+              REPLY</div>
+            <div class="pt-2 d-flex">
+              <div class="d-flex p-1" *ngFor="let images of c.comment_files">
+                <div class="imageComments position-relative w-125px">
+                  <div class="img pe-2 pb-2 w-125px" id="modalImage">
+                    <img [src]="images.url" width="125px" height="70px" class="rounded-corners">
+                    <div class="h-35px rounded-bottom bg-dark text-white w-125px p-1">
+                      <div class=" fs-8px imageName">{{images.filename}}</div>
+                      <div class="d-flex fs-8px py-1">
+                        <div class="me-2 fw-bold"><i class="far fa-calendar-alt pe-2"></i>{{images.created_at | date :
+                          'yyyy-MM-dd'}}
+                        </div>
+                        <div class=" fw-bold"><i class="far fa-clock pe-2"></i>{{images.created_at | date : 'HH:mm:ss'}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="download-option cursorPointer">
+                    <div class="d-flex justify-content-center align-items-center">
+                      <div
+                        class="w-25px h-25px bg-white cursor-pointer rounded d-flex justify-content-center align-items-center me-1"
+                        (click)="downloadImg(images.url)">
+                        <i class="fas fa-download text-color"></i>
+                      </div>
+                      <div class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center">
+                        <button class="btn btn-sm p-0 cursor-pointer"
+                          [disabled]="!(loggedUserEmail == c?.commented_by)"
+                          (click)="deleteActionCommentImage(c.id, images.id)">
+                          <i class="fas fa-trash text-danger"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ng-container *ngIf="replyshow">
+            <ng-container *ngIf="replyIndex === ci ">
+              <div *ngIf="currentComment === ci" class="d-flex mt-1 ms-4">
+                <div class="ms-4">
+                  <img class=" border rounded-circle " src="assets/images/auth-panel.png" width="20px" height="20px" />
+                </div>
+                <div class="w-50 mx-2">
+                  <input type="text" class="fs-10 form-control-sm issue-chat-box-bg-color input-border "
+                    [mention]="emailList" [mentionConfig]="mentionConfig" placeholder="Reply Here..."
+                    title="{{newReply}}" [(ngModel)]="newReply">
+                </div>
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <button class="rounded pt-1 pb-1 flter-side-bar-input-box text-basic me-2 common-bg-color"
+                      (click)="addReplyToComment()" [disabled]=" newReply === ''">REPLY</button>
+                  </div>
+                  <div class="text-basic ms-2 fs-10 cursor py-1" (click)="toggleReply('')">
+                    CANCEL</div>
+                </div>
+              </div>
+              <div *ngFor="let r of c.replies ; let ri = index" class="border-bottom py-2 ms-5">
+                <div class="d-flex justify-content-between align-items-center">
+                  <!-- <div
+                     class="w-15px h-15px me-2 d-flex justify-content-center rounded common-bg-color p-1 align-items-center btn-outline-basic">
+                     {{ri + 1}}
+                   </div> -->
+                  <div>
+                    <img class="border rounded-circle ms-2" src="assets/images/auth-panel.png" width="20px"
+                      height="20px" />
+                  </div>
+                  <div class="fw-bold fs-2px text-color  word-break w-100 text-basic ms-3">
+                    {{r.replied_by}}
+                  </div>
+                  <div class="d-flex min-width w-40 text-wrap">
+                    <div class=" text-color fs-8 fw-bold"><i class="fas fa-calendar-alt me-1"></i>{{r.date}}
+                    </div>
+                    <div class="text-color fs-8 fw-bold ms-1"><i class="far fa-clock me-1"></i>{{r.time}}
+                    </div>
+                  </div>
+                </div>
+                <div class="fw-bold fs-20px  word-break ms-5" [innerHTML]="r.reply | highlight"></div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

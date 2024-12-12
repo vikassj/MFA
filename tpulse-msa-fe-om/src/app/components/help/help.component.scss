@@ -1,0 +1,30 @@
+.left-col-height {
+    height: calc(100vh - 65px);
+    overflow-y: auto;
+}
+
+.right-col-height {
+    height: calc(100vh - 65px);
+}
+
+.row {
+    margin-left: 0% !important;
+    margin-right: 0% !important;
+    --bs-gutter-x: 0rem;
+}
+
+.active {
+    border-left: 3px solid #006699;
+    background-color: #cce6ff;
+    color: #006699;
+    font-weight: bolder;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.saidBar-icon {
+    width: 30px;
+    display: inline-block;
+}

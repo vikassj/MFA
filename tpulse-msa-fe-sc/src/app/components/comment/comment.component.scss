@@ -1,0 +1,977 @@
+.w-40 {
+  width: 45%;
+}
+
+.w-60 {
+  width: 55%;
+}
+
+.text-warn {
+  color: #f76665;
+}
+
+.bg-warn {
+  background-color: #FEE5E5 !important;
+}
+
+.text-safe {
+  color: #33a437;
+}
+
+.bg-safe {
+  background-color: #D5FFD5 !important;
+
+}
+
+.level1 {
+  position: relative;
+  z-index: 2;
+}
+
+.level2 {
+  position: relative;
+  z-index: 3;
+}
+
+.popup {
+  position: absolute;
+  // left:0px;
+  top: 25px;
+  width: 220px;
+  // height:20vh;
+  // overflow-y: auto;
+  flex-direction: column !important;
+  background: white;
+
+  z-index: 4;
+}
+
+.coustom-border {
+  border: 1px solid rgb(223, 222, 222);
+  border-radius: 5px;
+  padding: 8px;
+}
+
+.border-right {
+  border-right: 1px solid rgb(223, 222, 222);
+  height: calc(100vh - 165px);
+}
+
+//comment section css
+.fixed-popup {
+  position: fixed;
+  top: 3%;
+  left: 25%;
+  width: 50%;
+  height: 70vh;
+  z-index: 200;
+  /* border: 3px solid #73AD21; */
+  background-color: white;
+}
+
+.chatboxHeight {
+  height: 40% !important;
+}
+
+
+/* issues page styles */
+
+.fs-10 {
+  font-size: 10px !important;
+}
+
+.fs-11 {
+  font-size: 11px !important;
+}
+
+.fs-12 {
+  font-size: 12px !important;
+}
+
+.fs-13 {
+  font-size: 13px !important;
+}
+
+.text-basic {
+  color: #006699;
+}
+
+.common-bg-color {
+  background-color: #E2F5FF !important;
+}
+
+.date-time-color {
+  color: #939393;
+}
+
+.bg-basic {
+  background-color: rgb(0, 102, 153);
+}
+
+.comment-color {
+  color: #1E3044;
+}
+
+.text-safe {
+  color: #33a437;
+}
+
+.bg-safe {
+  background-color: rgb(51, 164, 55);
+
+}
+
+.text-warn {
+  color: #f76665;
+}
+
+.checkboxes input[type=checkbox] {
+  vertical-align: middle !important;
+}
+
+
+.bg-warn {
+  background-color: rgb(247, 102, 101)
+}
+
+.border-basic {
+  border: 1px solid rgb(0, 102, 153);
+}
+
+/* .pageBg {
+    height: calc(100vh - 100px);
+    background-color: #f4f7fc;
+    overflow-y: auto;
+  } */
+
+
+
+.h-20px {
+  height: 20px;
+}
+
+.min-max-h-60 {
+  height: 54.7%;
+  overflow: auto;
+}
+
+.chatboxHeight {
+  height: 40% !important;
+}
+
+.w-45 {
+  width: 32% !important;
+}
+
+.w-35 {
+  width: 10% !important;
+}
+
+.margin-left {
+  margin-left: 30% !important;
+}
+
+.pageBg {
+  height: calc(100vh - 102px);
+  background-color: #f4f7fc;
+}
+
+.comment-height {
+  height: 23vh !important;
+  overflow-y: auto;
+  /* overflow-x: auto !important; */
+}
+
+select {
+  width: auto;
+  border: none;
+  outline: none;
+}
+
+.font-size-10px {
+  font-size: 10px;
+}
+
+.font-size-12px {
+  font-size: 12px;
+}
+
+.fs-14 {
+  font-size: 16px;
+}
+
+.extra-bold {
+  font-weight: 900;
+}
+
+.all-issues-height {
+  height: calc(100vh - 110px);
+}
+
+.status-dropdown-open {
+  background-color: rgb(246 81 80 / 0.14);
+  color: #F65150;
+
+}
+
+.status-dropdown-close {
+  background-color: #D5FFD7;
+  color: #33A437;
+
+}
+
+.w-200px {
+  width: 200px;
+}
+
+.w-150px {
+  width: 150px;
+}
+
+.w-400px {
+  width: 400px;
+}
+
+.margin-left {
+  margin-left: -15px;
+}
+
+.personTagged {
+  background-color: #cce6ff;
+  color: #006699 !important;
+}
+
+.button {
+  outline: none;
+  border: none;
+}
+
+.input-border {
+  border: none;
+  outline: none !important;
+  border-bottom: 1px solid rgb(136, 136, 136, 0.5) !important;
+  width: 100%;
+}
+
+.fw-400 {
+  font-weight: 400 !important;
+}
+
+:host ::ng-deep.ngx-datatable.material {
+  box-shadow: none;
+}
+
+
+#ngx-datatable ::ng-deep .ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
+  /* background-color: #E2F5FF;
+    font-family: 'am-Montserrat' !important;
+    color: #006699 !important;
+    font-size: 11px !important;
+    font-weight: bolder;
+    height: 100%;
+    text-align: left !important;
+    width: "'auto'" !important;
+    white-space: break-spaces !important; */
+  text-align: left !important;
+  color: #006699 !important;
+  font-size: 11px !important;
+  line-height: normal !important;
+  font-weight: 600 !important;
+  border: none !important;
+  font-family: "am-Montserrat" !important;
+  background-color: #E2F5FF !important;
+  height: 100%;
+  white-space: break-spaces !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  /* text-align: center !important; */
+  padding: 0.5rem 0.5rem 0.5rem 0.8rem !important;
+  border-bottom: 0px !important;
+  text-align: left !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: left !important;
+
+}
+
+#ngx-datatable ::ng-deep .ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell {
+  font-family: 'am-Montserrat' !important;
+  text-align: left !important;
+  color: rgba(0, 0, 0, 0.87);
+  -webkit-transition: width 0.3s ease;
+  transition: width 0.3s ease;
+  font-size: 11px !important;
+  text-align: left !important;
+  text-overflow: ellipsis;
+  padding: 1rem 0.5rem 1rem 0.8rem !important;
+}
+
+.mr-left {
+  margin-left: -5px;
+}
+
+.comment-box-bg-color {
+  background-color: #FBFBFB;
+}
+
+.color {
+  color: rgb(136, 136, 136, 0.5);
+}
+
+.issue-chat-box-bg-color {
+  background-color: #FBFBFB;
+}
+
+.send-icon-bg-color {
+  background-color: #006699;
+  color: white;
+  padding-left: 1.6%;
+  padding-right: 1.6%;
+  padding-top: 1.8%;
+  padding-bottom: 1.8%;
+}
+
+/* filter-side-bar-css */
+.side-bar-fieldset {
+  padding-left: 2px;
+  border: 1px solid #CECECE;
+  border-radius: 5px;
+  opacity: 1;
+  /* padding-top: 2px; */
+  padding-bottom: 4px;
+  margin-bottom: 9px;
+  width: 100%;
+  min-height: 45px;
+}
+
+.side-bar-legend {
+  font-size: 12px;
+  font-weight: bolder;
+  float: none;
+  width: auto;
+  padding: 0;
+  margin-left: 10px;
+  margin-bottom: 0;
+  line-height: inherit;
+}
+
+.cancel-button {
+  width: 86px;
+  border: 0;
+  background-color: none;
+  border-radius: 5px;
+
+}
+
+.position {
+  position: fixed;
+  top: 60px;
+  left: 0;
+}
+
+.position1 {
+  position: fixed;
+  top: 151px;
+  right: 0;
+  z-index: 999999;
+}
+
+.route-nav #back-button {
+  border: none;
+  background-color: transparent;
+  color: #047FBD;
+  width: 30px;
+}
+
+/* .scroll {
+    overflow-x: auto;
+    overflow-y: auto;
+  } */
+
+.side-bar-height {
+  height: calc(100vh - 75px) !important;
+}
+
+.side-bar-bg {
+  background-color: white;
+}
+
+.fliter-btn-bg-color {
+  background-color: #006699;
+  color: white;
+}
+
+.flter-side-bar-input-box {
+  outline: none;
+  border: none;
+}
+
+.w-90 {
+  width: 89.6%;
+}
+
+.font-size {
+  font-size: 18px;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.chat-box-height {
+  /* height: calc(100vh - 600px) !important;
+    overflow-y: auto !important; */
+  max-height: 23.5vh;
+  min-height: 23.5vh;
+  overflow-y: auto;
+}
+
+.chat-box-header-height {
+  height: 30vh;
+}
+
+
+/* Risk rating bar styles */
+
+.progress {
+  height: 0.5rem;
+  border-radius: 0rem;
+  width: 75%;
+}
+
+.progress-bar-color {
+  /* background-color: #fff5cc; */
+  background: #FFBC00 0% 0% no-repeat padding-box;
+  opacity: 1;
+}
+
+.low-level:hover {
+  background: #FFBC00 0% 0% no-repeat padding-box !important;
+  opacity: 1 !important;
+}
+
+.low-level-color {
+  background: #FFBC00 0% 0% no-repeat padding-box !important;
+  opacity: 1 !important;
+}
+
+.progress-bar-color-2 {
+  /* background-color: #ffeb99; */
+  background: #DC9222 0% 0% no-repeat padding-box;
+  opacity: 1;
+}
+
+.low:hover {
+  background: #DC9222 0% 0% no-repeat padding-box !important;
+  opacity: 1 !important;
+}
+
+.low-color:hover {
+  background: #DC9222 0% 0% no-repeat padding-box !important;
+  opacity: 1 !important;
+}
+
+.progress-bar-color-3 {
+  /* background-color:#ffc2b3; */
+  background: #FF5E28 0% 0% no-repeat padding-box;
+  opacity: 1;
+}
+
+.medium:hover {
+  background: #FF5E28 0% 0% no-repeat padding-box !important;
+  opacity: 1 !important;
+}
+
+.medium-color {
+  background: #FF5E28 0% 0% no-repeat padding-box !important;
+  opacity: 1 !important;
+}
+
+.progress-bar-color-4 {
+  /* background-color: #ff9980; */
+  background: #D90504 0% 0% no-repeat padding-box;
+  opacity: 1;
+}
+
+.high:hover {
+  background: #D90504 0% 0% no-repeat padding-box !important;
+  opacity: 1;
+}
+
+.high-color {
+  background: #D90504 0% 0% no-repeat padding-box !important;
+  opacity: 1;
+}
+
+.progress-bar-color-5 {
+  /* background-color: #ffb399; */
+  background: #910707 0% 0% no-repeat padding-box;
+  opacity: 1;
+}
+
+.very-high:hover {
+  background: #910707 0% 0% no-repeat padding-box !important;
+  opacity: 1 !important;
+}
+
+.very-high-color {
+  background: #910707 0% 0% no-repeat padding-box !important;
+  opacity: 1 !important;
+}
+
+.outline-none-border-none {
+  outline: none;
+  border: none;
+}
+
+.w-10 {
+  width: 10%;
+}
+
+.fs-12 {
+  font-size: 12px;
+}
+
+.fs-10 {
+  font-size: 10px;
+}
+
+.fs-8 {
+  font-size: 8px;
+}
+
+.edit_hover_class i {
+  visibility: hidden;
+}
+
+.edit_hover_class:hover span i {
+  visibility: visible;
+}
+
+.dot {
+  height: 8px;
+  width: 8px;
+  background-color: #33A437;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.offline {
+  height: 8px;
+  width: 8px;
+  background-color: #F65150;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.persons-tagged-styles {
+  height: 35px;
+  text-transform: uppercase;
+  width: 35px;
+  background-color: #4D5C6C;
+  /* border: 2px solid #4d94ff; */
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  color: white;
+  font-weight: 900;
+  display: inline-block;
+  text-align: center !important;
+  margin-right: -15px !important;
+  margin-left: 2px !important;
+
+
+  /* display: inline-block;
+      height: 32px !important;
+      width: 32px !important;
+      font-size: 1.2rem;
+      padding: 2px 5px;
+      margin: auto;
+      font-style: normal;
+      border-radius: 50%;
+      border: 2px solid white;
+      background-color: #4d94ff;
+      text-transform: capitalize; */
+}
+
+.text-wrap {
+  word-wrap: break-word !important;
+
+}
+
+.word-break {
+  word-break: break-all !important;
+}
+
+.float-right {
+  /* margin-left:8% !important; */
+  float: right !important;
+}
+
+.float-right1 {
+  float: right !important;
+  margin-left: 10% !important;
+}
+
+/* check box styles */
+.main {
+  display: block;
+  position: relative;
+  padding-left: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 3px !important;
+}
+
+h1 {
+  color: orange;
+}
+
+/* Hiding the initial checkbox */
+input[type=checkbox] {
+  visibility: hidden;
+}
+
+/* Creating a custom checkbox based on demand */
+.w3docs {
+  position: absolute;
+  top: 3px;
+  left: 0;
+  height: 12px;
+  width: 12px;
+  border: 1px solid #006699;
+  border-radius: 2px;
+}
+
+/* Specify the background color to be shown when checkbox is active */
+.main input:active~.w3docs {
+  background-color: white;
+}
+.custom {
+  color: #F65150;
+}
+.imageComments {
+  width: 125px;
+  height: 110px;
+}
+
+.imageComments:hover .download-option {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+img.rounded-corners {
+  // border-radius: 3px;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  border: 1px solid #555
+}
+.download-option {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.fs-8px{
+  font-size: 8px;
+}
+.imageName{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.issueImageName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Specify the background color to be shown when checkbox is checked */
+.main input:checked~.w3docs {
+  background-color: #006699;
+}
+
+/* Checkmark to be shown in checkbox */
+/* It is not be shown when not checked */
+.w3docs:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Display checkmark when checked */
+.main input:checked~.w3docs:after {
+  display: block;
+}
+
+/* Styling the checkmark using webkit */
+/* Rotated the rectangle by 45 degree and
+  showing only two border to make it look
+  like a tickmark */
+.main .w3docs:after {
+  left: 4px;
+  bottom: 1.5px;
+  width: 3px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.min-width {
+  min-width: 110px;
+  max-width: 135px;
+}
+
+
+/* .dropdown{
+    display: inline-block;
+  } */
+.dropdown-style {
+  /* position: absolute; */
+  /* right: 0px; */
+  z-index: 999999 !important;
+  background-color: white !important;
+  margin-top: 2px;
+  /* max-height: 250px; */
+  overflow-y: auto;
+}
+
+
+.dropdown-style::-webkit-scrollbar {
+  width: 2px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.options {
+  padding: 0px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.selected-dropdown {
+  background-color: #D2F0FF;
+}
+
+.options:hover {
+  background-color: #D2F0FF;
+}
+
+.w-70 {
+  width: 70% !important;
+  word-break: break-all !important;
+}
+
+.h-15px {
+  height: 15px !important;
+}
+
+.w-15px {
+  width: 15px !important;
+}
+
+.select-border-bottom {
+  border-bottom: 1.5px solid #EEEEEE;
+}
+
+.w-150px {
+  width: 150px;
+}
+
+.Word-keep-all {
+  word-break: keep-all !important;
+}
+
+.marginTop {
+  margin-top: 5%;
+}
+
+::ng-deep.ngx-datatable {
+  max-height: 100vh;
+  overflow-y: auto !important;
+}
+
+::ng-deep.color-open {
+  background-color: #FFF7F7;
+  color: #F65150 !important;
+}
+
+::ng-deep.color-closed {
+  background-color: #D5FFD7;
+  color: #33A437 !important;
+}
+
+.delete-btn-color {
+  color: #dc3545 !important;
+}
+
+.font-weight-500 {
+  font-weight: 500;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.underline {
+  border-bottom: 1px solid #dc3545 !important;
+}
+
+.w-99 {
+  width: 95%;
+}
+
+.riskrating-bar-w-h {
+  /* width:70%; */
+  /* width:20px !important; */
+  height: 20px;
+
+}
+
+.riskrating-bar-radius {
+  border-radius: 5px;
+}
+
+.icon-cog {
+  /* background-color: #047FBD; */
+  color: #006699;
+}
+
+.riskrating-bg-color {
+  background-color: white;
+}
+
+.defalut-riskrating-bg-color {
+  background-color: #BEBEBE45;
+}
+
+@media screen and (max-height: 700px) {
+
+  .fs-12 {
+    font-size: 10px !important;
+  }
+
+}
+
+.font-size-12px {
+  font-size: 12px;
+}
+
+.word-wrap {
+  word-wrap: break-word;
+}
+
+#table ::ng-deep.ngx-datatable.material .datatable-body {
+  position: relative;
+  height: calc(100vh - 290px) !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#table ::ng-deep.ngx-datatable.material .datatable-body-row {
+  border-bottom: 1px solid #ebebe0 !important;
+}
+
+.ngx-datatable.material {
+  box-shadow: none !important;
+  // box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px !important;
+}
+
+#table ::ng-deep.ngx-datatable.fixed-header .datatable-header {
+  border-bottom: 0px solid #ebebe0 !important;
+}
+
+#table ::ng-deep.ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell {
+  font-weight: 600 !important;
+  font-size: 11px !important;
+  padding: 0px !important;
+  // border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+
+.background-bg {
+  background-color: #f4f7fc !important;
+}
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-file input[type="file"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+
+}
+
+.browse-btn {
+  background-color: #E2F5FF;
+  color: #006699;
+}
+.attech-btn {
+  background-color: #E2F5FF;
+  color: #006699;
+}
+.postImage {
+  width: 125px;
+  height: 80px;
+}
+
+.postImage:hover .delete-option {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.position-relative {
+  position: relative;
+}
+.w-125px {
+  width: 125px;
+}
+.w-25px {
+  width: 25px;
+}
+.h-25px {
+  height: 25px;
+}
+.delete-option {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 30px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.top500px{
+  top: 500px !important;
+}

@@ -1,0 +1,237 @@
+.date-picker {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #BEBEBE;
+  border-radius: 4px;
+  opacity: 1;
+  height: 30px;
+  width: 272px;
+  margin-left: 20px;
+  font-size: 13px;
+}
+
+.date-picker-container{
+  width: 100%;
+  margin-bottom: 0px;
+}
+
+.h-30px{
+  height: 30px;
+}
+.date-picker-input{
+  border: none;
+  outline: none;
+}
+.mat-form-field {
+  font-family: 'Montserrat';
+  caret-color: transparent;
+}
+
+.dates {
+display: flex;
+align-items: center;
+justify-content: space-around;
+cursor: pointer;
+text-decoration: none !important;
+width: 100%;
+  /* margin-top: 0.5rem; */
+}
+
+.applyButton {
+  display: block;
+  background: #006699 0% 0% no-repeat padding-box;
+  width: 95px;
+  /* height: 30px; */
+  border-radius: 4px !important;
+  font-family: "Montserrat";
+}
+
+a {
+  color: black;
+}
+
+.side-bar-fieldset {
+  padding-left: 2px;
+  border: 1px solid #CECECE;
+  border-radius: 5px;
+  opacity: 1;
+  /* padding-top: 2px; */
+  padding-bottom: 4px;
+  margin-bottom: 9px;
+  width: 100%;
+  min-height: 45px;
+}
+
+.side-bar-legend {
+  font-size: 12px;
+  font-weight: bolder;
+  float: none;
+  width: auto;
+  padding: 0;
+  margin-left: 10px;
+  margin-bottom: 0;
+  line-height: inherit;
+}
+.w-100{
+  width: 100%;
+}
+.w-40{
+  width: 40%;
+}
+.calendar {
+  width: 272px !important;
+}
+.date-range{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.example-form-field {
+  margin-right: 20px;
+}
+
+::ng-deep .mat-calendar-body-comparison-identical.mat-calendar-body-selected, .mat-calendar-body-in-comparison-range>.mat-calendar-body-selected{
+  background-color: gray;
+}
+
+.mat-calendar-body-in-range>.mat-calendar-body-comparison-identical, .mat-calendar-body-in-comparison-range.mat-calendar-body-in-range::after{
+  background-color: #BEBEBE;
+}
+
+::ng-deep .mat-datepicker-content .mat-calendar{
+  height: 350px !important;
+}
+
+::ng-deep .mat-datepicker-actions {
+  flex-direction: column;
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background-color: #006699;
+  color: #fff;
+}
+
+
+::ng-deep .mat-calendar-body-in-range::before {
+  background-color: #e2f5ff;
+}
+
+::ng-deep .mat-calendar-body {
+  background-color: #e9e9e9;
+}
+
+
+/*
+::ng-deep .mat-date-range-input-inner{
+  padding-bottom: 15px !important;
+}
+
+::ng-deep  .mat-date-range-input-start-wrapper{
+  padding-bottom: 15px !important;
+}
+
+::ng-deep  .mat-date-range-input-separator{
+  padding-bottom: 15px !important;
+} */
+
+::ng-deep .mat-calendar-body-comparison-identical.mat-calendar-body-selected,
+::ng-deep .mat-calendar-body-in-comparison-range > .mat-calendar-body-selected {
+  background: #ababab;
+}
+
+::ng-deep .mat-calendar-body-in-range > .mat-calendar-body-comparison-identical,
+::ng-deep
+  .mat-calendar-body-in-comparison-range.mat-calendar-body-in-range::after {
+  background: #cdcdcd;
+}
+
+::ng-deep .mat-calendar-body-comparison-identical,
+::ng-deep .mat-calendar-body-in-comparison-range::before {
+  background: #cdcdcd;
+}
+
+::ng-deep .mat-calendar-body-comparison-identical,
+::ng-deep .mat-calendar-body-in-comparison-range::before {
+  background: #cdcdcd;
+}
+
+::ng-deep .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background{
+  background-color: #3f51b5;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  border: 1px solid #BEBEBE;
+  border-radius: 4px;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix{
+  padding: 0;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #BEBEBE!important;
+}
+
+::ng-deep .mat-form-field-wrapper{
+  padding-bottom: 0px !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: #BEBEBE!important;
+}
+
+::ng-deep .mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary{
+  background-color: #006699 !important;
+}
+
+::ng-deep .mat-form-field-type-mat-date-range-input .mat-form-field-infix{
+  font-family: 'Montserrat';
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 0px !important;
+  margin-bottom: 6px !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
+  padding: 0 0.75em 0 0.75em;
+  margin-top: -0.25em;
+  position: relative;
+  align-items: flex-start;
+}
+
+
+
+
+::ng-deep .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  font-size: inherit;
+  width: 11px !important;
+  height: 14px !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-suffix {
+  top: 10px !important;
+}
+
+.primary{
+  color: white;
+  background-color: #006699;
+  border: none;
+}
+
+::ng-deep .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-datepicker-toggle-default-icon {
+  display: block !important;
+  width: 1.1em !important;
+  height: 1.2em !important;
+}
+::ng-deep .mat-date-range-input-inner {
+  font-weight: 600 !important;
+}

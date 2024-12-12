@@ -1,0 +1,150 @@
+{
+  "Plant-1": {
+    "unitName": "Plant-1",
+    "moduleType": "Plant",
+    "imageUrl": "assets/images/Units/Plant.png",
+    "locationMap": [
+      {
+        "id": "location1",
+        "name": "QA Unit",
+        "color": "#00ff5e",
+        "label": "",
+        "mapCoords": [
+          187,
+          252,
+          287,
+          250,
+          290,
+          356,
+          186,
+          356
+        ],
+        "openCount": 0,
+        "closeCount": 0
+      },
+      {
+        "id": "location2",
+        "name": "MCR",
+        "color": "#00ff5e",
+        "label": "",
+        "mapCoords": [
+          188,
+          363,
+          291,
+          362,
+          291,
+          468,
+          187,
+          471
+        ],
+        "openCount": 0,
+        "closeCount": 0
+      },
+      {
+        "id": "location3",
+        "name": "Construction",
+        "color": "#00ff5e",
+        "label": "",
+        "mapCoords": [
+          623,343,715,347,714,431,626,444
+        ],
+        "openCount": 0,
+        "closeCount": 0
+      },
+      {
+        "id": "location4",
+        "name": "D-DHDSXY-1",
+        "color": "#00ff5e",
+        "label": "",
+        "mapCoords": [
+          653,77,742,73,763,193,673,195
+        ],
+        "openCount": 0,
+        "closeCount": 0
+      },
+      {
+        "id": "location5",
+        "name": "Manufacturing",
+        "color": "#00ff5e",
+        "label": "",
+        "mapCoords": [
+          6,158,130,151,131,205,7,211
+        ],
+        "openCount": 0,
+        "closeCount": 0
+      },
+      {
+        "id": "location6",
+        "name": "ApplicationTeamUnit",
+        "color": "#00ff5e",
+        "label": "",
+        "mapCoords": [
+          6,227,124,227,123,290,9,287
+        ],
+        "openCount": 0,
+        "closeCount": 0
+      },
+      {
+        "id": "location7",
+        "name": "Manufacturing",
+        "color": "#00ff5e",
+        "label": "",
+        "mapCoords": [
+          5,336,123,338,127,465,4,457
+        ],
+        "openCount": 0,
+        "closeCount": 0
+      }
+    ]
+  },
+  "FPU-Unit": {
+    "unitName": "FPU-Unit",
+    "moduleType": "Unit",
+    "imageUrl": "assets/images/Units/Plant.png",
+    "locationMap": [
+      {
+        "id": "location1",
+        "name": "ZONE A",
+        "color": "#00ff5e",
+        "label": "",
+        "mapCoords": [
+          359,
+          191,
+          674,
+          189,
+          674,
+          255,
+          361,
+          261
+        ],
+        "openCount": 0,
+        "closeCount": 0
+      }
+    ]
+  },
+  "HZL-Unit": {
+    "unitName": "HZL-Unit",
+    "moduleType": "Unit",
+    "imageUrl": "assets/images/Units/NHGU.png",
+    "locationMap": [
+      {
+        "id": "location1",
+        "name": "ZONE A",
+        "color": "#00ff5e",
+        "label": "",
+        "mapCoords": [
+          108,
+          298,
+          404,
+          295,
+          406,
+          489,
+          111,
+          494
+        ],
+        "openCount": 0,
+        "closeCount": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,132 @@
+.overlay {
+    position: fixed;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 99999;
+  }
+  
+  .default-container {
+    z-index: 999;
+    position: absolute;
+    left: calc(50% - 40px);
+    top: calc(50% - 40px);
+  }
+  
+  .tpulse-container {
+    z-index: 999;
+    position: absolute;
+    left: calc(50% - 262px);
+    top: calc(50% - 115px);
+  }
+  
+  .loader-path {
+    stroke-dasharray: 150, 200;
+    stroke-dashoffset: -10;
+    animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+    stroke-linecap: round;
+  }
+  
+  .drone-container {
+    z-index: 999;
+    position: absolute;
+    left: calc(50% - 100px);
+    top: calc(50% - 40px);
+  }
+  
+  .blade {
+    position: absolute;
+    top: 26px;
+    animation-duration: 0.35s;
+    animation-name: spin;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-play-state: running;
+  }
+  
+  .bladeLeft {
+    left: -12px;
+  }
+  
+  .bladeRight {
+    left: 135px;
+  }
+  
+  .cctv-container {
+    z-index: 999;
+    position: absolute;
+    left: calc(50% - 40px);
+    top: calc(50% - 40px);
+  }
+  
+  .cctv {
+    fill: transparent;
+    stroke-width: 10;
+    stroke: #3c3b3b;
+    stroke-dasharray: 1500;
+    stroke-dashoffset: 2000;
+    animation: cctv 3s infinite normal;
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotateY(0deg);
+    }
+  
+    to {
+      transform: rotateY(-360deg);
+    }
+  }
+  
+  @keyframes cctv {
+    0% {
+      stroke-dashoffset: 0;
+    }
+  
+    20% {
+      stroke-dashoffset: 1000;
+      fill: rgb(167, 167, 167);
+    }
+  
+    40% {
+      stroke-dashoffset: 1500;
+      fill: rgb(182, 182, 182);
+    }
+  
+    60% {
+      stroke-dashoffset: 2000;
+      fill: rgb(192, 192, 192);
+    }
+  
+    80% {
+      stroke-dashoffset: 2500;
+      fill: rgb(202, 202, 202);
+    }
+  
+    100% {
+      stroke-dashoffset: 3000;
+      fill: rgb(209, 208, 208);
+    }
+  }
+  
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1, 200;
+      stroke-dashoffset: 0;
+    }
+  
+    50% {
+      stroke-dasharray: 89, 200;
+      stroke-dashoffset: -35;
+    }
+  
+    100% {
+      stroke-dasharray: 89, 200;
+      stroke-dashoffset: -124;
+    }
+  }

@@ -1,0 +1,328 @@
+@font-face {
+  font-family: "am-Montserrat";
+  font-weight: 500;
+  src: local("am-Montserrat"), url(../../../../assets/fonts/montserrat/Montserrat-VariableFont_wght.ttf) format("truetype");
+}
+
+.ff-montserrat {
+  font-family: "am-Montserrat";
+}
+
+.navbar {
+  border-bottom: 1px solid rgb(202, 202, 202);
+  padding: 0;
+  margin: 0;
+  height: 50px;
+}
+
+#navbarSupportedContent {
+  height: 50px !important;
+}
+
+.padding {
+  padding: 0rem 1rem;
+}
+
+.navbar-brand {
+  font-size: 14px !important;
+  font-weight: bold !important;
+  color: #006699 !important;
+}
+
+.borderRight {
+  border-right: 2px solid #006699;
+}
+
+.headerLogo {
+  height: 45px;
+  width: auto;
+
+}
+
+.headerLogoMarginCss {
+  margin-right: calc(4% - 32px);
+}
+
+.headerTitle {
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: white !important;
+}
+
+.dropdown-item {
+  padding: 0.25rem 1rem !important;
+  color: #808080 !important;
+}
+
+a {
+  color: rgb(230, 230, 230, 0.7) !important;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+  color: #fff !important;
+  background-color: #313a46 !important;
+}
+
+.navbar-icon-top .navbar-nav .nav-link > .fa {
+  position: relative;
+  font-size: 18px;
+}
+
+.navbar-toggler {
+  padding: 0.3rem 0.7rem !important;
+  border: 1px solid #313a46 !important;
+}
+
+.dropdown {
+  display: none;
+  margin-top: 0.4rem;
+}
+
+.dropdown-menu {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.dropstart .dropdown-menu {
+  top: 51px !important;
+  margin-right: -2.875rem;
+}
+
+.userIcon {
+  display: inline-block;
+  height: 32px !important;
+  width: 32px !important;
+  font-size: 1.2rem;
+  margin: auto;
+  font-style: normal;
+  border-radius: 50%;
+  border: 2px solid white;
+  color: white;
+  background-color: #4d94ff;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+.fs-18px {
+  font-size: 18px;
+}
+
+.fa-bars {
+  color: #313a46;
+}
+
+.fs-17px {
+  font-size: 18px;
+}
+
+.hoverMenu {
+  font-family: "Montserrat" !important;
+  font-size: 11px !important;
+  color: #ffffff;
+}
+
+.hoverMenu:hover {
+  font-weight: 500;
+}
+
+.hoverMenu .userIcon:hover {
+  border: 2px solid white !important;
+}
+
+.activeMenu {
+  color: #ffffff !important;
+  background-color: #037ebc;
+  font-family: "am-Montserrat";
+  font-size: 13px;
+  border-bottom: 5px #fcbb02 solid;
+  font-weight: bold;
+}
+.m-w100px{
+min-width: 100px;
+}
+
+.navbar-nav {
+  margin-left: auto;
+}
+
+.activeMenu .userIcon {
+  border: 2px solid #014f9a !important;
+}
+
+.text-basic {
+  color: #006699;
+}
+
+.bg-basic {
+  background-color: #006699;
+}
+
+.text-safe {
+  color: #33a437;
+}
+
+.bg-safe {
+  background-color: rgb(51, 164, 55);
+}
+
+.text-warn {
+  color: #f76665;
+}
+
+.bg-warn {
+  background-color: rgb(247, 102, 101);
+}
+.dropdown-item:hover{
+ background-color: #e9ecef;
+}
+
+
+@media (min-width: 576px) {
+  .navbar-icon-top.navbar-expand-sm .navbar-nav .nav-link {
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+    padding-top: 0.3rem;
+    padding-bottom: 0.2rem;
+  }
+
+  .navbar-icon-top.navbar-expand-sm .navbar-nav .nav-link > .fa {
+    display: block;
+    width: 48px;
+    margin: 2px auto 4px auto;
+    top: 0;
+    line-height: 18px;
+  }
+
+  .navbar-icon-top.navbar-expand-sm .navbar-nav .nav-link > .fa > .badge {
+    top: -7px;
+  }
+}
+
+@media (min-width: 768px) {
+  .navbar-icon-top.navbar-expand-md .navbar-nav .nav-link {
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+    padding-top: 0.3rem;
+    padding-bottom: 0.2rem;
+  }
+
+  .navbar-icon-top.navbar-expand-md .navbar-nav .nav-link > .fa {
+    display: block;
+    width: 48px;
+    margin: 2px auto 4px auto;
+    top: 0;
+    line-height: 18px;
+  }
+
+  .navbar-icon-top.navbar-expand-md .navbar-nav .nav-link > .fa > .badge {
+    top: -7px;
+  }
+}
+
+@media (min-width: 992px) {
+  .hoverMenu {
+    font-family: "Montserrat" !important;
+    font-size: 10px !important;
+    color: #ffffff;
+  }
+  .dropdown {
+    display: block !important;
+  }
+
+  .logout {
+    display: none !important;
+  }
+
+  .navbar-icon-top.navbar-expand-lg .navbar-nav .nav-link {
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+    padding-top: 0.3rem;
+    padding-bottom: 0.1rem;
+    font-size: 14px;
+  }
+
+  .navbar-icon-top.navbar-expand-lg .navbar-nav .nav-link > .fa {
+    display: block;
+    width: 48px;
+    margin: 2px auto 4px auto;
+    top: 0;
+    line-height: 18px;
+  }
+
+  .navbar-icon-top.navbar-expand-lg .navbar-nav .nav-link > .fa > .badge {
+    top: -7px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .headerTitle {
+    margin-left: 2.5%;
+  }
+
+  .navbar-icon-top.navbar-expand-xl .navbar-nav .nav-link {
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+    padding-top: 0.3rem;
+    padding-bottom: 0.2rem;
+    font-size: 10px;
+  }
+
+  .navbar-icon-top.navbar-expand-xl .navbar-nav .nav-link > .fa {
+    display: block;
+    width: 48px;
+    margin: 2px auto 4px auto;
+    top: 0;
+    line-height: 18px;
+  }
+
+  .navbar-icon-top.navbar-expand-xl .navbar-nav .nav-link > .fa > .badge {
+    top: -7px;
+  }
+}
+
+.nav-item {
+  cursor: pointer;
+}
+.m-w-120px{
+  min-width: 120px;
+}
+.nav-link {
+  text-decoration: none !important;
+  font-family: "am-Montserrat";
+}
+
+.cd-button {
+  background-color: rgba(230, 230, 230, 0.7);
+  color: white;
+  font-weight: bold;
+}
+
+@media only screen and (max-width:1250px) {
+  .hoverMenu {
+    font-family: "Montserrat" !important;
+    font-size: 9px !important;
+    color: #ffffff;
+  }
+
+}
+.notification-count{
+  background-color: #fa3e3e;
+  border-radius: 2px;
+  color: white;
+
+  padding: 1px 3px;
+  font-size: 10px;
+
+  position: absolute; /* Position the badge within the relatively positioned button */
+  top: 0;
+  left: 45px;
+}
+.notificationArea{
+  display: inline-block; /* Inline elements with width and height. TL;DR they make the icon buttons stack from left-to-right instead of top-to-bottom */
+  position: relative; /* All 'absolute'ly positioned elements are relative to this one */
+  padding: 2px 5px;
+}

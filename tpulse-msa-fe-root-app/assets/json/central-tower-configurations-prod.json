@@ -1,0 +1,19 @@
+{
+    "header": [
+        {
+            "identifier": "central-tower",
+            "acronym": "CENTRAL-TOWER",
+            "name": "central-tower",
+            "class": "./assets/icons/Group 10827.svg",
+            "routePath": "/central-tower/overall"
+        },
+        {
+            "identifier": "help",
+            "acronym": "Help",
+            "name": "Help",
+            "class": "fas fa-question-circle",
+            "routePath": "/central-tower/help"
+        }
+    ],
+    "userManualFound": true
+}

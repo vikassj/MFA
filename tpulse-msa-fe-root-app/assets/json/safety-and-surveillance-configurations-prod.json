@@ -1,0 +1,695 @@
+{
+    "insightsUrl":"https://smart-query-system.detectpl.com",
+    "overallPlantReport": true,
+    "header": [
+        {
+            "identifier": "analytics",
+            "acronym": "Analytics",
+            "name": "Analytics",
+            "class": "/assets/icons/analytics_icon.svg",
+            "routePath": "/safety-and-surveillance/analytics"
+        },
+        {
+            "identifier": "dashboard",
+            "acronym": "Home",
+            "name": "Dashboard",
+            "class": "fas fa-home",
+            "routePath": "/safety-and-surveillance/dashboard"
+        },
+        {
+            "identifier": "observations",
+            "acronym": "Observations",
+            "name": "Observations",
+            "class": "/assets/icons/S&Sobservation.svg",
+            "routePath": "/safety-and-surveillance/observations"
+        },
+        {
+            "identifier": "actions",
+            "acronym": "Actions",
+            "name": "Actions",
+            "class": "fas fa-sitemap",
+            "routePath": "/safety-and-surveillance/actions"
+        },
+        {
+            "identifier": "highlights",
+            "acronym": "SIF",
+            "name": "Serious Injury or Fatality",
+            "class": "/assets/icons/S&Shighlights.png",
+            "routePath": "/safety-and-surveillance/highlights"
+        },
+        {
+            "identifier": "reports",
+            "acronym": "Reports",
+            "name": "Reports",
+            "class": "fas fa-file-alt",
+            "routePath": "/safety-and-surveillance/reports"
+        },
+        {
+            "identifier": "help",
+            "acronym": "Help",
+            "name": "Help",
+            "class": "fas fa-question-circle",
+            "routePath": "/safety-and-surveillance/help"
+        }
+    ],
+    "userManualFound": true,
+    "manualObservationFound": true,
+    "analyticsFound": true,
+    "actionFound": true,
+    "commentFound": true,
+    "helpDetails": {
+        "sidebar": [
+            {
+                "camelName": "categorization",
+                "name": "Categorization",
+                "class": "fa fa-code-branch"
+            },
+            {
+                "camelName": "categoryMapping",
+                "name": "Category Mapping",
+                "class": "fas fa-tags"
+            },
+            {
+                "camelName": "zoneMapping",
+                "name": "Zone Mapping",
+                "class": "fas fa-map-pin"
+            },
+            {
+                "camelName": "userManual",
+                "name": "User Manual",
+                "class": "fa fa-book"
+            },
+            {
+                "camelName": "releaseNotes",
+                "name": "Release Notes",
+                "class": "fas fa-edit"
+            }
+        ],
+        "tableColumns": [
+            {
+                "prop": "name",
+                "name": "Category",
+                "resizeable": false,
+                "draggable": false,
+                "sortable": false
+            },
+            {
+                "prop": "acronym",
+                "name": "Indicator",
+                "width": 50,
+                "resizeable": false,
+                "draggable": false,
+                "sortable": false
+            },
+            {
+                "prop": "description",
+                "name": "Description",
+                "width": 600,
+                "resizeable": false,
+                "draggable": false,
+                "sortable": false
+            }
+        ],
+        "mappingColumns": [
+            {
+                "prop": "givenCategory",
+                "name": "Given Category",
+                "resizeable": false,
+                "draggable": false,
+                "sortable": false
+            },
+            {
+                "prop": "closestIogpCategory",
+                "name": "Closest IOGP Category",
+                "resizeable": false,
+                "draggable": false,
+                "sortable": false
+            }
+        ],
+        "mappingRows": [
+            {
+                "givenCategory": "Mechanical",
+                "closestIogpCategory": "Hazard Communication"
+            },
+            {
+                "givenCategory": "Electrical",
+                "closestIogpCategory": "Hazard Communication"
+            },
+            {
+                "givenCategory": "Environmental",
+                "closestIogpCategory": "Housekeeping"
+            },
+            {
+                "givenCategory": "Hazard Communication",
+                "closestIogpCategory": "Hazard Communication"
+            },
+            {
+                "givenCategory": "Hot Work Compliance",
+                "closestIogpCategory": "Hazard Communication"
+            },
+            {
+                "givenCategory": "Confined Space Compliance",
+                "closestIogpCategory": "Confined Space Compliance"
+            },
+            {
+                "givenCategory": "Fire & Emergency",
+                "closestIogpCategory": "Hazard Communication"
+            },
+            {
+                "givenCategory": "Working at Height/ Scaffold/ Ladder",
+                "closestIogpCategory": "Work at Height"
+            },
+            {
+                "givenCategory": "Vehicle Safety",
+                "closestIogpCategory": "Vehicle Safety"
+            },
+            {
+                "givenCategory": "Personal Safety and PPE Compliance",
+                "closestIogpCategory": "PPE"
+            },
+            {
+                "givenCategory": "Lifting and Hoisting",
+                "closestIogpCategory": "Lifting and Hoisting"
+            },
+            {
+                "givenCategory": "Life Saving Rules Violation",
+                "closestIogpCategory": "Hazard Communication"
+            },
+            {
+                "givenCategory": "Housekeeping",
+                "closestIogpCategory": "Housekeeping"
+            },
+            {
+                "givenCategory": "Falling Object",
+                "closestIogpCategory": "Falling Objects"
+            },
+            {
+                "givenCategory": "Positive Observation",
+                "closestIogpCategory": "Can fall into any of the categories"
+            },
+            {
+                "givenCategory": "Others",
+                "closestIogpCategory": "Can fall into any of the categories"
+            },
+            {
+                "givenCategory": "Safe Distancing",
+                "closestIogpCategory": "Hazard Communication"
+            },
+            {
+                "givenCategory": "Improper/ Not Wearing Mask",
+                "closestIogpCategory": "PPE"
+            },
+            {
+                "givenCategory": "Improper Disposal of Mask",
+                "closestIogpCategory": "Housekeeping"
+            },
+            {
+                "givenCategory": "Hygiene",
+                "closestIogpCategory": "Housekeeping"
+            }
+        ],
+        "zoneMappingColumns": [
+            {
+                "prop": "unit",
+                "name": "Unit",
+                "resizeable": false,
+                "draggable": false,
+                "sortable": false
+            },
+            {
+                "prop": "zone",
+                "name": "Zone",
+                "resizeable": false,
+                "draggable": false,
+                "sortable": false
+            }
+        ],
+        "zoneMappingRows": [
+            {
+                "unit": "Unit1",
+                "zone": "Zone 1"
+            }
+        ]
+    },
+    "plantModule": {
+        "dashboardDetails": {
+            "views": [
+                {
+                    "label": "Stats View",
+                    "value": "stats"
+                },
+                {
+                    "label": "Map View",
+                    "value": "map"
+                },
+                {
+                    "label": "Reports",
+                    "value": "reports"
+                }
+            ],
+            "showBarChart": true,
+            "showCumulative": false,
+            "chartRefreshInterval": 600000
+        },
+        "reportsDetails": {
+            "sidebar": {
+                "startDate": true,
+                "endDate": true
+            },
+            "tableColumns": [
+                {
+                    "prop": "name",
+                    "name": "Report Name",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "date",
+                    "name": "Date",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "time",
+                    "name": "Time",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "file",
+                    "name": "File",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                }
+            ]
+        }
+    },
+    "unitModule": {
+        "imageTableToggle": true,
+        "selectedView": false,
+        "birdsEyeView": true,
+        "riskRatingLevels": [
+            {
+                "rating": 1,
+                "ratingName": "Very Low",
+                "colorCode": "#FFBC00"
+            },
+            {
+                "rating": 2,
+                "ratingName": "Low",
+                "colorCode": "#DC9222"
+            },
+            {
+                "rating": 3,
+                "ratingName": "Medium",
+                "colorCode": "#FF5E28"
+            },
+            {
+                "rating": 4,
+                "ratingName": "High",
+                "colorCode": "#D90504"
+            },
+            {
+                "rating": 5,
+                "ratingName": "Very High",
+                "colorCode": "#910707"
+            }
+        ],
+        "faultChoiceColors": {
+            "Open": "#dc3545",
+            "Closed-No Action": "#ee82ee",
+            "Closed-Action Taken": "#28a745",
+            "Closed-False Positive": "#ffa500",
+            "Snooze": "#ff681c",
+            "Archive": "#313a46"
+        },
+        "videoSpeedList": [
+            {
+                "value": 0.25,
+                "label": "0.25x"
+            },
+            {
+                "value": 0.5,
+                "label": "0.5x"
+            },
+            {
+                "value": 0.75,
+                "label": "0.75x"
+            },
+            {
+                "value": 1,
+                "label": "Normal"
+            },
+            {
+                "value": 1.25,
+                "label": "1.25x"
+            },
+            {
+                "value": 1.5,
+                "label": "1.5x"
+            },
+            {
+                "value": 1.75,
+                "label": "1.75x"
+            }
+        ],
+        "iogpDashboardDetails": {
+            "sidebar": [],
+            "showRiskRatingDetails": true,
+            "showDetailedLegend": true,
+            "showSessionFlights": true,
+            "chartRefreshInterval": 30000
+        },
+        "sortByList": [
+            {
+                "key": "dateDesc",
+                "value": "Date (Newest to Oldest)"
+            },
+            {
+                "key": "dateAsc",
+                "value": "Date (Oldest to Newest)"
+            },
+            {
+                "key": "ratingDesc",
+                "value": "Rating (Highest to Lowest)"
+            },
+            {
+                "key": "ratingAsc",
+                "value": "Rating (Lowest to Highest)"
+            },
+            {
+                "key": "zone",
+                "value": "Zone"
+            },
+            {
+                "key": "category",
+                "value": "Category"
+            },
+            {
+                "key": "status",
+                "value": "Status"
+            }
+        ],
+        "tableViewColumns": [
+            {
+                "prop": "thumbnailImageUrl",
+                "width": 200,
+                "name": "Image Name",
+                "sortable": false,
+                "draggable": false,
+                "resizeable": false
+            },
+            {
+                "prop": "riskLevel",
+                "name": "Category",
+                "width": 100,
+                "sortable": true,
+                "draggable": false,
+                "resizeable": false
+            },
+            {
+                "prop": "ratingDetails.rating",
+                "name": "Zone",
+                "sortable": true,
+                "draggable": false,
+                "resizeable": false
+            },
+            {
+                "prop": "date",
+                "name": "Date",
+                "width": 120,
+                "sortable": true,
+                "draggable": false,
+                "resizeable": false
+            },
+            {
+                "prop": "observation",
+                "name": "Observations",
+                "sortable": false,
+                "draggable": false,
+                "resizeable": false
+            },
+            {
+                "prop": "recommendation",
+                "name": "Recommendations",
+                "sortable": false,
+                "draggable": false,
+                "resizeable": false
+            },
+            {
+                "prop": "isOpen",
+                "name": "Status",
+                "width": 200,
+                "sortable": true,
+                "draggable": false,
+                "resizeable": false
+            },
+            {
+                "prop": "remarks",
+                "name": "Remarks",
+                "sortable": false,
+                "draggable": false,
+                "resizeable": false
+            },
+            {
+                "prop": "action",
+                "name": "Submit",
+                "width": 70,
+                "sortable": false,
+                "draggable": false,
+                "resizeable": false
+            }
+        ],
+        "obsDetails": {
+            "sidebar": {
+                "zoneName": true,
+                "category": true,
+                "date": true,
+                "time": true,
+                "mode": true,
+                "riskRating": true,
+                "status": true,
+                "sortBy": true,
+                "displayType": true
+            },
+            "bulkUpdateObservations": true
+        },
+        "reportsDetails": {
+            "sidebar": {
+                "startDate": true,
+                "endDate": true
+            },
+            "tableColumns": [
+                {
+                    "prop": "name",
+                    "name": "Report Name",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "date",
+                    "name": "Date",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "time",
+                    "name": "Time",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "file",
+                    "name": "File",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "delete",
+                    "name": "Delete",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                }
+            ]
+        },
+        "colorMap": [
+            [
+                "Closed",
+                "#28a745"
+            ],
+            [
+                "PPE",
+                "#fc5600"
+            ],
+            [
+                "HC",
+                "#007183"
+            ],
+            [
+                "W@H",
+                "#c24885"
+            ],
+            [
+                "HK",
+                "#1c92ff"
+            ],
+            [
+                "CSC",
+                "#ff0000"
+            ],
+            [
+                "FO",
+                "#dca716"
+            ],
+            [
+                "L&H",
+                "#5f5f5f"
+            ],
+            [
+                "VS",
+                "#22aeff"
+            ],
+            [
+                "Open",
+                "#dc3545"
+            ],
+            [
+                "Flights",
+                "#0069d9"
+            ]
+        ],
+        "abbreviationMap": [
+            [
+                "PPE",
+                "Personal Protective Equipment1"
+            ],
+            [
+                "HC",
+                "Job Safety"
+            ],
+            [
+                "W@H",
+                "Work at Height"
+            ],
+            [
+                "HK",
+                "Housekeeping"
+            ],
+            [
+                "CSC",
+                "Confined Space Entry"
+            ],
+            [
+                "FO",
+                "Dropped Objects"
+            ],
+            [
+                "L&H",
+                "Lifting and Hoisting"
+            ],
+            [
+                "VS",
+                "Construction Traffic Interference"
+            ]
+        ]
+    },
+    "iogpCategories": [
+        {
+            "acronym": "PPE",
+            "camelName": "personalProtectiveEquipment",
+            "name": "Personal Protective Equipment",
+            "description": "Use of hard hats, gloves, safety glasses, safety toed shoes, hearing protection and long sleeves and trousers or coveralls in work areas. Use of work specific PPE where applicable.",
+            "imagePath": "assets/icons/PPE.png",
+            "cardPath": "assets/icons/PPE1.png",
+            "iconPath": "assets/icons/PPE1.svg",
+            "openCount": 0,
+            "closeCount": 0
+        },
+        {
+            "acronym": "HC",
+            "camelName": "jobSafety",
+            "name": "Hazard Communication",
+            "description": "Personnel to stay away from line of fire hazards such as - Dropped objects, Swinging loads, Tool or equipmenet movement, Hoisted loads that might swing or fall. Simultaneous Operations (SIMOPS) is defined as two or more work scopes during pre-commissioning/commissioning at site occurring simultaneously in a same or adjacent area which can interfere with one another. SIMOPS risks are identified and controls are set prior to work. Work is however recommended to be planned to avoid or minimise SIMOPS.",
+            "imagePath": "assets/icons/HC.png",
+            "cardPath": "assets/icons/HC1.png",
+            "iconPath": "assets/icons/HC1.svg",
+            "openCount": 0,
+            "closeCount": 0
+        },
+        {
+            "acronym": "W@H",
+            "camelName": "workAtHeight",
+            "name": "Work at Height",
+            "description": "Working at a height more than 1.8 m requires either a fixed platform with railing, approved scaffolding or the use of approved personal fall protection systems secured to an appropriate anchoring point. Where practical, both are recommended. - lanyards required even if they are on platforms. It is only not required if on green-tagged scaffolds. However, since this is not visible from drone footage, all observations to be captured, and the HSE officers can then verify on a case to case basis. Orange netted scaffolds are green tagged and can be assumed to not require lanyards. Scaffold materials and components are in good condition and free from visible defects - Scaffolding Orange mesh is required for all scaffolding.",
+            "imagePath": "assets/icons/W@H.png",
+            "cardPath": "assets/icons/W@H1.png",
+            "iconPath": "assets/icons/W@H1.svg",
+            "openCount": 0,
+            "closeCount": 0
+        },
+        {
+            "acronym": "HK",
+            "camelName": "housekeeping",
+            "name": "Housekeeping",
+            "description": "Periodic segregation and disposal of scrap, waste and surplus materials. Accumulated trash containers to be cleared periodically. Stairways, passageways, ladders, scaffolds and gangways are to be free of materials, supplies and obstructions - even more so for passageways at height.",
+            "imagePath": "assets/icons/HK.png",
+            "cardPath": "assets/icons/HK1.png",
+            "iconPath": "assets/icons/HK1.svg",
+            "openCount": 0,
+            "closeCount": 0
+        },
+        {
+            "acronym": "CSC",
+            "camelName": "confinedSpaceEntry",
+            "name": "Confined Space Compliance",
+            "description": "Obtain authorisation before entering a confined space. Requirement of a watchman/attendant with emergency response equipment (first aid & firefighting). Labelling, signage and barricading all potential entry points.",
+            "imagePath": "assets/icons/CSC.png",
+            "cardPath": "assets/icons/CSC1.png",
+            "iconPath": "assets/icons/CSC1.svg",
+            "openCount": 0,
+            "closeCount": 0
+        },
+        {
+            "acronym": "FO",
+            "camelName": "droppedObjects",
+            "name": "Falling Objects",
+            "description": "Personnel working at height to maintain the highest level of housekeeping standards to reduce the risk of potential dropped objects. Regular inspections and periodic 'Hazard Hunts' to be carried out - i. No loose object - No unsecured tools or materials left in basket of MEWP, ii.No holes in grating, iii.Toe boards are in place, iv.Regular housekeeping-Material baskets and waste receptacles at heights: materials must not exceed the top of bin, v. Barriers in place where necessary - JLG Lifts in Operation requires barricading below, Scaffolds without gratings or flooring where there's work at height needs barricading below, JLG’s and scissor lifts are to be fully encapsulated with orange mesh and or manufacturers recommended metal screens used for drops prevention.",
+            "imagePath": "assets/icons/FO.png",
+            "cardPath": "assets/icons/FO1.png",
+            "iconPath": "assets/icons/FO1.svg",
+            "openCount": 0,
+            "closeCount": 0
+        },
+        {
+            "acronym": "L&H",
+            "camelName": "liftingandHoisting",
+            "name": "Lifting and Hoisting",
+            "description": "Manual load handling is never used to stop a swinging load. If control of the load is required, tag lines or other means of hands-free practices are used. Lifted personnel are secured with approved harnesses and lanyards. - may be tricky to identify as the lanyards are secured to the bottom of the man-baskets.",
+            "imagePath": "assets/icons/L&H.png",
+            "cardPath": "assets/icons/L&H1.png",
+            "iconPath": "assets/icons/L&H1.svg",
+            "openCount": 0,
+            "closeCount": 0
+        },
+        {
+            "acronym": "VS",
+            "camelName": "constructionTrafficInterference",
+            "name": "Vehicle Safety",
+            "description": "Appropriate use of spotters/banksmen/flagmen/signallers for blind spots. Reflective vests and high visibility apparel to be used by people exposed to operating vehicles/vehicle routes. Provide ample separation distance between spotters and vehicles and equipment as indicated by blind spots. - Spotter not to be in the line of fire.",
+            "imagePath": "assets/icons/VS.png",
+            "cardPath": "assets/icons/VS1.png",
+            "iconPath": "assets/icons/VS1.svg",
+            "openCount": 0,
+            "closeCount": 0
+        }
+    ]
+}

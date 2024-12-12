@@ -1,0 +1,107 @@
+<nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-white">
+  <div class="headerLogoMarginCss" style="align-items: center">
+    <app-module-switcher *ngIf="navigatedToApplication == 'true'" class="d-inline-block" [navigatedFromAdmin]="navigatedFromAdmin"
+      (currentPlantName)="onDataChange($event)" [moduleName]="moduleName"></app-module-switcher>
+    <img class="headerLogo cursorPointer" src="{{ headerLogo }}" alt="Logo" (click)="navigateToHome()" />
+  </div>
+  <button id="navbar-toggler" class="navbar-toggler" type="button" data-toggle="collapse"
+    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+    aria-label="Toggle navigation">
+    <em class="fas fa-bars"></em>
+  </button>
+  <div class="collapse navbar-collapse bg-basic padding" id="navbarSupportedContent">
+    <p id="headerTitle" class="headerTitle my-auto mr-auto text-center text-md-left">
+      <span *ngIf="ShowNavigateToHome">T-Pulse - {{ headerName | uppercase }}</span>
+      <span *ngIf="!windowPath.includes('vendor') && (windowPath != '/central-dashboard' && !ShowNavigateToHome) ">{{selectedPlantData?.name | uppercase }} - {{ currentPlant |
+        uppercase }}</span>
+      <span *ngIf="windowPath == '/central-dashboard'">{{clientName| uppercase }} - {{ headerName | uppercase }}</span>
+      <span *ngIf="windowPath.includes('vendor') && windowPath != '/central-dashboard'">{{selectedPlantData?.name | uppercase }} - {{ headerName | uppercase }}</span>
+    </p>
+    <ul class="navbar-nav">
+      <li *ngFor="let menu of menuItems" style="line-height: 15px;" class="nav-item px-1"
+        [ngClass]="((!analyticsFound && menu.name == 'Analytics') || (!actionFound && menu.name == 'Actions')) ? 'd-none' : 'd-block'"
+        (click)="onMenuClick('', menu.identifier); selectItem(menu.routePath)">
+        <a title="{{ menu.name }}" class="nav-link hoverMenu"
+          [ngClass]="{ activeMenu: currentPage === menu.name,'notificationArea': menu.identifier=='notification',  'm-w100px' : (menu.acronym?.length > 10 && menu?.name === 'New-Analytics')}">
+          <div class="mb-1 m-auto" style="width: 18px; height: 18px">
+            <img *ngIf="menu.class?.includes('assets/')" [src]="menu.class" width="100%" height="100%"
+              [ngClass]="{'opacity-50': currentPage != menu.name}">
+            <em *ngIf="!menu.class?.includes('assets/')" class="{{menu.class}} fs-18px"
+              [ngClass]="{'opacity-75': currentPage != menu.name}"></em>
+          </div>
+          <span *ngIf="menu.identifier=='notification' && selectedUrl?.includes('schedule-control')"
+            class="notification-count">{{notificationCount || 0}}</span>
+          <span *ngIf="menu.identifier=='notification' && selectedUrl?.includes('safety-and-surveillance')"
+            class="notification-count">{{saNotificationCountFormat()}}</span>
+          <span *ngIf="menu.identifier=='notification' && selectedUrl?.includes('productivity-monitoring')"
+            class="notification-count">{{saNotificationCountFormat()}}</span>
+          {{ menu.acronym | uppercase }}
+        </a>
+      </li>
+      <li class="nav-item logout">
+        <a title="Settings" class="nav-link dropdown-toggle hoverMenu" id="navbarDropdown1" role="button"
+          data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <em class="fa fa-cog"></em>
+          Settings
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+          <a *ngIf="show2FA" class="dropdown-item cursorPointer" (click)="onMenuClick('2fa', '')">
+            <em class="fas fa-shield-alt pe-2"></em>
+            Change 2FA Mode
+          </a>
+          <!-- <a *ngIf="showCD == 'true'" class="dropdown-item cursorPointer" (click)="navigateToCentralDashboard()">
+            <em class="fas fa-boxes pe-2"></em>
+            Central Dashboard
+          </a> -->
+          <a *ngIf="ShowNotifications && notificationFound && validation()" class="dropdown-item"
+            (click)="navigateToNotification()">
+            <em class="fas fa-cog pe-2"></em>
+            Notification Settings
+          </a>
+          <a class="dropdown-item cursorPointer" (click)="logout()">
+            <em class="fa fa-sign-out-alt pe-2"></em>
+            Logout
+          </a>
+        </div>
+      </li>
+      <div class="nav-item dropdown btn-group dropstart">
+        <button style="background: transparent; border: none;" title="{{userName}}" class="nav-link hoverMenu"
+          id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <em class="userIcon ">{{shortName}}</em>
+        </button>
+        <div class="dropdown-menu " aria-labelledby="navbarDropdown2">
+          <a *ngIf="(adminAccess || isItManagerAccess) && !router.url?.includes('admin-app')"
+            class="dropdown-item cursorPointer" (click)="navigateToAdminPortal()">
+            <em class="fas fa-user-shield pe-2"></em>
+            Open Admin Portal
+          </a>
+          <a *ngIf="validateVendor" class="dropdown-item cursorPointer" [href]="vendorLoginUrl" target="_blank">
+            <em class="fas fa-user-shield pe-2"></em>
+            Open Vendor Portal
+          </a>
+          <a *ngIf="showChangePassword" class="dropdown-item" (click)="resetPassword()">
+            <em class="fa fa-key pe-2"></em>
+            Change Password
+          </a>
+          <a *ngIf="ShowNavigateToHome && checkModulesAccess()" class="dropdown-item" (click)="navigateToApp()">
+            <em class="fas fa-user-shield pe-2"></em>
+            Open T-Pulse
+          </a>
+          <!-- <a *ngIf="showCD == 'true'" class="dropdown-item cursorPointer" (click)="navigateToCentralDashboard()">
+            <em class="fas fa-boxes pe-2"></em>
+            Central Dashboard
+          </a> -->
+          <a *ngIf="ShowNotifications && notificationFound && validation()" class="dropdown-item"
+            (click)="navigateToNotification()">
+            <em class="fas fa-cog pe-2"></em>
+            Notification Settings
+          </a>
+          <a class="dropdown-item cursorPointer" (click)="logout()">
+            <em class="fa fa-sign-out-alt pe-2"></em>
+            Logout
+          </a>
+        </div>
+      </div>
+    </ul>
+  </div>
+</nav>

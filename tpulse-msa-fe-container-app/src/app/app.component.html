@@ -1,0 +1,7 @@
+<app-feedback *ngIf="showFeedback"></app-feedback>
+<app-snackbar *ngIf="showSnackbar"></app-snackbar>
+<app-spinner></app-spinner>
+<app-timeout [countdown]="countdown"></app-timeout>
+<app-header *ngIf="showHeader" [moduleDetails]="moduleDetails" [menuItems]="menuItems"></app-header>
+<container-in-app-notifications id="in-app-notification" *ngIf="loggedIn" class="in-app-notification"></container-in-app-notifications>
+<!-- <app-welcome-user *ngIf="showWelcomeMessage"></app-welcome-user> -->

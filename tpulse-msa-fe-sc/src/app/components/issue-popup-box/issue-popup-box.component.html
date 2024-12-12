@@ -1,0 +1,323 @@
+<!-- <div style="background-color:grey;"> -->
+<div class="w-100 bg-white" *ngIf="selectedIssue?.issue_number">
+  <div class="ps-2">
+    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" ></button> -->
+    <div class="d-flex justify-content-between align-items-center" style="height:40px;">
+      <!-- <h5 class="modal-title" >Modal 2</h5> -->
+      <!-- <div class="d-flex align-items-center" style="height:40px;">
+            <div><img src="assets/images/back_arrow.png" width="15px" height="10px" (click)="closePopUp()"
+                  class="cursor"></div>
+            <div class="primary-color ms-2" (click)="closePopUp()">Back</div>
+         </div> -->
+      <div class="primary-color d-flex align-items-center fs-11 ps-3" style="height:40px;">
+        <div>
+          <span>{{selectedUnitName}} > </span>
+          <span>{{firtIssue?.issue_category_name}} > </span>
+          <span>{{firtIssue?.equipment_name}} > </span>
+          <span class="cursorPointer text-underline" (click)="navigateToTask()">{{firtIssue?.task_name}} > </span>
+        </div>
+        <div class="bg-danger btn btn-sm text-light ms-2">#{{firtIssue?.issue_number}}</div>
+      </div>
+      <!-- <div class="d-flex align-items-center float-right" style="height:40px;">
+            <div>
+               <span class="primary-bg-color primary-color btn btn-sm d-flex align-items-center ms-2" (click)="showIssueRelatedChat()"><img src="assets/icons/chat_icon.svg" class="me-1" height="15px" width="15px">Chat</span>
+            </div>
+            <div class="w-100 ms-3 float-right p-0 ps-2 pt-1 pe-2" style="height:30px;">
+               <select class="py-1 px-2 w-100 text-capitalize cursor rounded font-weight-bold border-none-outline-none"
+                  ria-label="Default select example" [(ngModel)]="selectedStatus" (change)="changeIssueStatus()"
+                  [ngClass]="(selectedStatus == 'Open' || selectedStatus == 'Reopen') ? 'status-dropdown-open': 'status-dropdown-close' ">
+                  <option *ngFor="let s of status"
+                     [ngClass]="(selectedStatus == 'Closed' && s == 'Open') || (selectedStatus == 'Reopen' && s == 'Open') || (selectedStatus == 'Open' && s == 'Reopen')?'d-none':''">
+                     {{s}}</option>
+               </select>
+            </div>
+         </div> -->
+    </div>
+    <div class="pt-0" style="height:70vh;">
+
+
+      <!-- ********** new code ****************** -->
+
+      <div class="d-flex">
+        <div class="w-60 border-right px-3">
+          <div class="py-2">
+            <div class=" text-basic fs-11 fw-bold">Issue</div>
+            <div class="pt-1 fs-11px" id="action">
+              <!-- <input type="text" id="act" class="fw-800 form-control fs-11px" style="width: 500px;
+                    height: 80px;" maxlength="255" placeholder="Action" [ngModel]="selectedItemSummary" (input)="getSummary($event.target.value)" name="action" [disabled]="loginUserId != selectAction.created_by">
+                    <div *ngIf="!commonServices.alphaNumericWithoutSpaceValidator(selectedItemSummary) && selectedItemSummary.length == 0" class="text-danger fs-10px mt-1">Comments cannot
+                      be empty and shouldn't have space characters at start and end
+                    </div> -->
+              <!-- <div class="pt-1 fs-11px text-dark" id="action"> -->
+              <!-- <textarea type="text" class="textArea bg-ash form-control fs-11 fw-800 w-100"  rows="3" placeholder="type text" disabled [ngModel]="selectedIssue?.summary"></textarea> -->
+              <div class="bg-ash p-1 fs-11 fw-800 w-100 m-h-60px">{{selectedIssue?.summary}}</div>
+              <!-- <div *ngIf="!commonServices.alphaNumericWithoutSpaceValidator(selectedItemSummary) && selectedItemSummary.length == 0" class="text-danger fs-10px mt-1">Comments cannot
+                      be empty and shouldn't have space characters at start and end
+                      </div>
+                      <div *ngIf="sndAction" class="mt-2 btns_width" id="action_btns">
+                        <button *ngIf="selectedItemSummary.length > 0" class="btn btn-sm btn-basic send me-2 fs-10px fw-800" style="padding: 2px 10px !important;"
+                        (click)="changingActionStatu(selectAction.id, selectAction.object_type_id, selectedItemSummary, selectAction.description, selectAction.assignee, selectAction.due_date, selectAction.status)">SAVE</button>
+                        <button *ngIf="selectedItemSummary.length > 0" class="btn btn-sm btn-outline-basic cancel fs-10px fw-800"
+                        style="padding: 2px 4px !important;" [disabled]="!commonServices.alphaNumericWithoutSpaceValidator(selectedItemSummary)" (click)="hideBtns('action_btns')">CANCEL</button>
+                      </div> -->
+            </div>
+          </div>
+          <div class="pt-2" *ngIf="selectedIssue?.issue_files?.length > 0">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class=" text-basic fs-11 fw-bold">Issue Attachments</div>
+              <div class=" text-basic fs-11 fw-bold cursor" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                (click)="this.selectedImage = this.selectedIssue?.issue_files[0]">View all images</div>
+            </div>
+            <div class="pt-2 d-flex align-items-center">
+              <div class="d-flex p-1 cursorPointer" *ngFor="let images of selectedIssue?.issue_files,let i = index"
+                [ngClass]="i > 2? 'd-none':''" (click)="selectImageToDisplay(images)">
+                <div class="imageComments position-relative w-125px">
+                  <div class="img pe-2 pb-2 w-125px" id="modalImage">
+                    <img [src]="images.url" width="125px" height="70px" class="rounded-corners">
+                    <div class="h-35px rounded-bottom bg-dark text-white w-125px p-1">
+                      <div class=" fs-8 issueImageName">{{images.filename}}</div>
+                      <div class="d-flex fs-8 py-1">
+                        <div class="me-2 fw-bold"><i class="far fa-calendar-alt pe-2"></i>{{images.created_at | date :
+                          'yyyy-MM-dd'}}
+                        </div>
+                        <div class=" fw-bold"><i class="far fa-clock pe-2"></i>{{images.created_at | date : 'HH:mm:ss'}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="selectedIssue?.issue_files?.length > 3" class="d-flex align-items-center fs-11 pe-1"> +
+                {{selectedIssue?.issue_files?.length - 3}} Images</div>
+            </div>
+          </div>
+          <div class="pt-2 bg-white">
+            <app-chatbox [faultId]="selectedIssue?.id" [selectedIssueStatus]="selectedIssue?.status"
+              [selectedIssue]="selectedIssue" [listOfUsers]="allUsersList" [currentId]="'action_id'"
+              [commentTagging]="commentTagging" [selectedUnitName]="selectedUnitName"
+              [selectedUnit_id]="selectedUnit_id"></app-chatbox>
+          </div>
+        </div>
+        <div class="w-40 px-3 right_height">
+          <div class="py-2">
+            <div class=" text-basic fs-11 fw-bold">Created on</div>
+            <div class="fs-11 fw-800 opacity-75">{{firtIssue?.date | date :'dd.MM.yyyy'}}</div>
+            <div class="fs-10 fw-800 opacity-75">Created by</div>
+            <div class=" text-basic fs-11 fw-bold">{{firtIssue?.created_by}}</div>
+          </div>
+          <div class="py-2">
+            <div class=" text-basic fs-11 fw-bold">Status</div>
+            <div class="mt-2" style="height:30px;">
+              <select class="py-1 px-2 fs-11 w-110px text-capitalize cursor rounded fw-800"
+                ria-label="Default select example" [(ngModel)]="selectedStatus" (change)="changeIssueStatus()"
+                [disabled]="validateUser"
+                [ngClass]="{'status-dropdown-open' : (selectedStatus == 'Open' || selectedStatus == 'Reopen'), 'status-dropdown-close' : !(selectedStatus == 'Open' || selectedStatus == 'Reopen'), 'opacity-75 cursorDisabled': validateUser } ">
+                <!-- [ngClass]="(selectedStatus == 'Open' || selectedStatus == 'Reopen') ? 'status-dropdown-open': 'status-dropdown-close' "> -->
+                <option *ngFor="let s of status"
+                  [ngClass]="{'d-none' : ((selectedStatus == 'Closed' && s == 'Open') || (selectedStatus == 'Reopen' && s == 'Open') || (selectedStatus == 'Open' && s == 'Reopen')), 'status-dropdown-close' : s == 'Closed' , 'status-dropdown-open' : s != 'Closed'}">
+                  {{s}}</option>
+              </select>
+            </div>
+            <div class="mb-1">
+              <span class="fs-10 opacity-75 text-basic">by: </span>
+              <span class="fs-10 opacity-75">
+                <ng-container *ngIf="firtIssue?.status_by != 0">
+                  <ng-container *ngFor="let item of allUsersList">
+                    <ng-container *ngIf="item.id == firtIssue?.status_by">
+                      <span>{{item.email}}</span>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngIf="firtIssue?.status_by == 0">
+                  {{firtIssue?.created_by}}
+                </ng-container>
+              </span>
+            </div>
+          </div>
+          <div class="py-2">
+            <div class=" text-basic fs-11 fw-bold">Risk Rating</div>
+            <div class="mt-2">
+              <div class=" mt-1">
+                <div *ngIf="firtIssue?.risk_rating == undefined || riskRating == ''">NA</div>
+                <div class="progress riskrating-bar-w-h riskrating-bg-color">
+                  <!-- <div (click)="decreaseRiskRatingLevel()"
+                              [ngClass]="(firtIssue?.status ==='Closed')? 'cursorDisabled': (selectedRiskRating == 1)? 'cursorDisabled' : 'cursorPointer' ">
+                              <i class="fas fa-minus-square icon-cog" style="font-size:17px ;"></i>
+                           </div> -->
+                  <div class="progress-bar-color low-level riskrating-bar-radius rating" title="very Low"
+                    role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"
+                    [ngClass]="{'low-level-color' : selectedRiskRating >= '1', 'cursor' : (firtIssue?.status !== 'Closed' && !validateUser), 'opacity-75 cursorDisabled' : !(firtIssue?.status !== 'Closed' && !validateUser)}"
+                    (click)="selectRiskRating(1)"></div>
+                  <div class=" low ms-1 defalut-riskrating-bg-color riskrating-bar-radius rating" title="Low"
+                    role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"
+                    [ngClass]="{'low-color' : selectedRiskRating >= '2', 'cursor' : (firtIssue?.status !== 'Closed' && !validateUser), 'opacity-75 cursorDisabled' : !(firtIssue?.status !== 'Closed' && !validateUser)}"
+                    (click)="selectRiskRating(2)"></div>
+                  <div class=" medium ms-1 defalut-riskrating-bg-color riskrating-bar-radius rating" title="Medium"
+                    role="progressbar" aria-valuenow="" aria-valuemin=" 0" aria-valuemax="100"
+                    [ngClass]="{'medium-color' : selectedRiskRating >= '3', 'cursor' : (firtIssue?.status !== 'Closed' && !validateUser), 'opacity-75 cursorDisabled' : !(firtIssue?.status !== 'Closed' && !validateUser)}"
+                    (click)="selectRiskRating(3)">
+                  </div>
+                  <div class=" high ms-1 defalut-riskrating-bg-color riskrating-bar-radius rating" title="High"
+                    role="progressbar" aria-valuenow="" aria-valuemin=" 0" aria-valuemax="100"
+                    [ngClass]="{'high-color' : selectedRiskRating >= '4', 'cursor' : (firtIssue?.status !== 'Closed' && !validateUser), 'opacity-75 cursorDisabled' : !(firtIssue?.status !== 'Closed' && !validateUser)}"
+                    (click)="selectRiskRating(4)"></div>
+                  <div class=" very-high ms-1 defalut-riskrating-bg-color riskrating-bar-radius rating"
+                    title="very High" role="progressbar" aria-valuenow="" aria-valuemin=" 0" aria-valuemax="100"
+                    [ngClass]="{'very-high-color' : selectedRiskRating >= '5', 'cursor' : (firtIssue?.status !== 'Closed' && !validateUser), 'opacity-75 cursorDisabled' : !(firtIssue?.status !== 'Closed' && !validateUser)} "
+                    (click)="selectRiskRating(5)"></div>
+                  <!-- <div class="ms-2" (click)="increaseRiskRatingLevel()"
+                              [ngClass]="(firtIssue?.status ==='Closed')? 'cursorDisabled': (selectedRiskRating == 5)? 'cursorDisabled' : 'cursorPointer' "><i
+                                 class="fas fa-plus-square icon-cog" style="font-size:17px ;"></i> </div> -->
+                  <div class="ms-2"
+                    [ngClass]="!(firtIssue?.status !== 'Closed' && !validateUser) ? 'cursorDisabled' : ''">
+                    <button class="btn btn-sm ratingSubmitBtn w-16px h-16px"
+                      [disabled]="(submitRatingBtn || validateUser)">
+                      <div
+                        class="w-16px h-16px border-radius-3 bg-green d-flex justify-content-center align-items-center me-1 cursor-pointer"
+                        (click)="updateRiskRating()">
+                        <i class="far fa-check-circle text-white fs-12px"></i>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+              <div class="mb-1">
+                <span class="fs-10 opacity-75 text-basic">by</span>
+                <span class="fs-10 opacity-75">: {{firtIssue?.rated_by}}</span>
+              </div>
+
+            </div>
+          </div>
+          <div class="py-2">
+            <div class=" text-basic fs-11 fw-bold">Tagged Persons({{taggedEmailIds?.length}})</div>
+            <div class="d-flex align-items-center level1 bg-ash">
+              <div class="level2 width-person-input">
+                <!-- <input type="text" class="border-none-outline-none bg-ash w-100 ps-2 h-35px fs-12"
+                  onkeypress="return /[0-9a-zA-Z ]/i.test(event.key)" #data [(ngModel)]="selectedEmail.email"
+                  placeholder="Search to Tag User..." (keyup)="getSelectedEmail(data.value)" [disabled]="validateUser">
+                <div class="popup" [ngClass]="searchRelatedEmailData.length > 0 ?'coustom-border':''">
+                  <div class="cursor col-md-3" title="{{email.email}}"
+                    *ngFor="let email of searchRelatedEmailData; let i = index" (click)="chipsData(email)">
+                    {{email?.email.slice(0,25)}}...
+                  </div>
+                </div> -->
+                  <ng-select class="" [items]="searchRelatedEmailData" [multiple]="true" [closeOnSelect]="true"
+                      name="tag_person" [(ngModel)]="selectedEmail" placeholder="Search to Tag user..." bindLabel="email"
+                      bindValue="id">
+                      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <div class="ng-value">
+                          <span class="ng-value-label">{{items.length}} selected</span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+              </div>
+              <div>
+                <button class=" text-basic fw-800 btn btn-sm  ms-2 border-none-outline-none d-flex align-items-center"
+                  [disabled]="!selectedEmail?.length" (click)="addEmailIds()"><span
+                    class="pluseIcon">+</span> Add</button>
+              </div>
+            </div>
+          </div>
+          <div class="border mt-2 pb-2 rounded-3 taggedUsers" *ngIf="taggedEmailIds.length > 0">
+            <div *ngFor="let email of taggedEmailIds"
+              class="fs-10 cursor-default d-flex align-items-center justify-content-between p-2"
+              title="{{email.email}}">
+              <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+                <div class="d-flex align-items-center">
+                  <div
+                  class="min-w-20px w-20px h-20px bg-danger rounded-circle d-flex align-items-center justify-content-center me-1 ">
+                  {{getUserName(email, '') | uppercase}}</div>
+                  <div [title]="getUserName(email, 'full')">{{getUserName(email, 'full') | titlecase}}</div>
+                </div>
+                <div class="opacity-75">
+                  {{email.department ? email.department : email.department_name}}
+                </div>
+              </div>
+              <div class="text-dark ms-2" [ngClass]="loginUserEmail == firtIssue?.created_by ? 'cursor' : ''"
+                (click)="removeTaggedEmail(email)">X</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-chat-box *ngIf="issueRelatedChat == true" (dataChange)="closeChatBox($event)"></app-chat-box>
+<div *ngIf="!selectedIssue?.issue_number" class="nodata-position text-center fw-bold">
+  No Data Available
+</div>
+<!-- Display All Images -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div data-bs-dismiss="modal" aria-label="Close" class="mx-2 text-basic fs-11 cursor"> <i
+            class="fas fa-arrow-left pe-1"></i> Back</div>
+        <div class="w-75 text-center">
+          <div class="text-basic fs-11 fw-800">Attachments for Issue</div>
+          <!-- <div class="opacity-75">Remove</div> -->
+        </div>
+      </div>
+      <div class="modal-body h-400px">
+        <div class="d-flex">
+          <div class="w-135px left-part scroll">
+            <div class="d-flex p-1" *ngFor="let images of selectedIssue?.issue_files">
+              <div class="imageComments position-relative w-125px" (click)="this.selectedImage = images">
+                <div class="img pe-2 pb-2 w-125px" id="modalImage">
+                  <img [src]="images.url" width="125px" height="110px" class="rounded-corners">
+                  <!-- <div class="h-35px rounded-bottom bg-dark text-white w-125px p-1">
+                  <div class=" fs-8 issueImageName">{{images.filename}}</div>
+                  <div class="d-flex fs-8 py-1">
+                    <div class="me-2 fw-bold"><i class="far fa-calendar-alt pe-2"></i>{{images.created_at | date :
+                      'yyyy-MM-dd'}}
+                    </div>
+                    <div class=" fw-bold"><i class="far fa-clock pe-2"></i>{{images.created_at | date : 'HH:mm:ss'}}</div>
+                  </div>
+                </div> -->
+                </div>
+                <div class="download-option">
+                  <div class=" fs-8 issueImageName text-white px-2">{{images.filename}}</div>
+                  <div class="d-flex justify-content-center align-items-center mt-2">
+                    <div
+                      class="w-25px h-25px bg-white cursor rounded d-flex justify-content-center align-items-center me-1"
+                      (click)="downloadImg(images.url, false)">
+                      <i class="fas fa-download text-color"></i>
+                    </div>
+                    <!-- <div class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center">
+                    <button class="btn btn-sm p-0 cursor" [disabled]="!(loggedUserEmail == selectedIssue?.created_by)"
+                      (click)="deleteIssueImage(selectedIssue?.id, images.id)">
+                      <i class="fas fa-trash text-danger"></i>
+                    </button>
+                  </div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="fullImage pt-1 pe-1">
+            <div>
+              <div
+                class="px-2 fs-12 bg-image-popup h-30px rounded text-white d-flex align-items-center justify-content-between">
+                <div class="issueImageName">{{selectedImage?.['filename']}}</div>
+                <div class="d-flex align-items-center">
+                  <div class="pe-2">{{selectedIssue?.created_by}}</div>
+                  <div>{{selectedImage?.['created_at'] | date :'yyyy-MM-dd'}} | {{selectedImage?.['created_at'] | date :
+                    'HH:mm:ss'}}</div>
+                  <div class="w-25px h-25px cursor rounded d-flex justify-content-center align-items-center"
+                    (click)="downloadImg(selectedImage?.['url'], false)">
+                    <i class="fas fa-download text-color"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="w-100 image-height pt-1">
+                <img [src]="selectedImage?.['url']" width="100%" height="100%" class="rounded">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

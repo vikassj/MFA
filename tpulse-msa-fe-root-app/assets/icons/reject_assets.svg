@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <g id="Group_1572" data-name="Group 1572" transform="translate(-0.035 7.787)">
+    <rect id="Rectangle_2179" data-name="Rectangle 2179" width="48" height="48" rx="8" transform="translate(0.035 -7.787)" fill="#fa5959" opacity="0.99"/>
+    <g id="Group_1672" data-name="Group 1672" transform="translate(-26.526 -5.152)">
+      <g id="Icon_ionic-ios-close-circle-outline" data-name="Icon ionic-ios-close-circle-outline" transform="translate(37.82 8.624)">
+        <path id="Path_456" data-name="Path 456" d="M21.886,20.5l-3.228-3.228,3.228-3.228A.979.979,0,0,0,20.5,12.66l-3.228,3.228L14.045,12.66a.979.979,0,0,0-1.384,1.384l3.228,3.228L12.661,20.5a.946.946,0,0,0,0,1.384.972.972,0,0,0,1.384,0l3.228-3.228L20.5,21.886a.983.983,0,0,0,1.384,0A.972.972,0,0,0,21.886,20.5Z" transform="translate(-4.532 -4.531)" fill="#fff"/>
+        <path id="Path_457" data-name="Path 457" d="M16.116,5.09a11.022,11.022,0,1,1-7.8,3.228,10.953,10.953,0,0,1,7.8-3.228m0-1.715A12.741,12.741,0,1,0,28.858,16.116,12.74,12.74,0,0,0,16.116,3.375Z" transform="translate(-3.375 -3.375)" fill="#fff"/>
+      </g>
+    </g>
+  </g>
+</svg>

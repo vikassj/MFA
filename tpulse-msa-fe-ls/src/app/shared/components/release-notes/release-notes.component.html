@@ -1,0 +1,36 @@
+<h5 class="p-2 fw-800">Release Notes</h5>
+<ng-container *ngFor="let releaseNotes of releaseNotesData">
+    <div class="d-inline-flex p-2 fw-800">
+        <p class="badge bg-primary p-2 fontSize16px fw-800">v{{releaseNotes.version}}</p>
+        <h5 class="ps-3 alignCenterCss fw-800">{{commonService.dateFormat(releaseNotes.date)}}</h5>
+    </div>
+    <div class="ms-5">
+        <ng-container *ngIf="releaseNotes.new_feature">
+            <p class="badge bg-success py-1 px-2 fontSize14px mb-2 fw-800"><em class="fas fa-plus-circle pe-2"></em>New
+                Features
+            </p>
+            <div class="ms-5">
+                <p *ngFor="let feature of releaseNotes.new_feature_text" class="mb-2"><em
+                        class="far fa-circle pe-2"></em>{{feature}}</p>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="releaseNotes.enhancement">
+            <p class="badge bg-dark py-1 px-2 fontSize14px mb-2 fw-800"><em class="fas fa-bolt pe-2"></em>Enhancements
+            </p>
+            <div class="ms-5">
+                <p *ngFor="let enhancement of releaseNotes?.enhancement_text" class="mb-2">
+                    <em class="far fa-circle pr-2"></em>{{enhancement}}
+                </p>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="releaseNotes.bug_fix">
+            <p class="badge bg-danger py-1 px-2 fontSize14px mb-2 fw-800"><em class="fas fa-bug pe-2"></em>Bug Fixes
+            </p>
+            <div class="ms-5">
+                <p *ngFor="let bug of releaseNotes.bug_fix_text" class="mb-2"><em
+                        class="far fa-circle pe-2"></em>{{bug}}
+                </p>
+            </div>
+        </ng-container>
+    </div>
+</ng-container>

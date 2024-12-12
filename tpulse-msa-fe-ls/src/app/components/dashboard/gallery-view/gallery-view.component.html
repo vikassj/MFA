@@ -1,0 +1,97 @@
+<div class="list-view-height pt-2" *ngIf="dataLoaded && isGalleryView">
+  <div class="shadow-sm height pb-2  ">
+
+      <div class="row bg-white h-180 pt-2 w-100">
+          <div *ngFor="let video of filteredLiveStreamData | search :'name' : searchValue.toLowerCase(): 'includes' ; let i = index"
+              class="col-4 gallery-view">
+              <!-- <div class="video-template"> -->
+                  <div class="video m-auto">
+                    <ng-container *ngIf="selectedType != 'Live' || !video.is_stop && video.live_url">
+                      <app-zoomable-video *ngIf="video.live_url.includes('mp4')" class="w-100 h-100"
+                          [attr.src]="video.live_url" [uuid]="video.id" [url]="video.live_url">
+                      </app-zoomable-video>
+                      <app-live-video *ngIf="video.live_url.includes('.html') || video.live_url.includes('.m3u8')" class="w-100 h-100"
+                          [attr.src]="video.live_url" [video]="video" [selectedVideoId]="true" [mode]="mode">
+                      </app-live-video>
+                    </ng-container>
+                    <ng-container *ngIf="selectedType == 'Live' && video.is_stop">
+                      <div class="h-100 video-stop">
+                        <div class="fs-9px text-center">
+                          <div>{{video?.type_of_permit}} > {{video?.nature_of_work}} Web Live Stream Stopped Successfuly</div>
+                          <div>Stream will start playing automatically when it's live</div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+              <!-- </div> -->
+              <!-- <video width="98%" height="75%" class="border-top" controls> -->
+              <!-- </video> -->
+              <div class="pe-1 ps-1 col-12  descriptionTemplate">
+                  <div class="card p-2 p  border-bottom">
+                    <div class="font-size">
+                      <div class="d-flex justify-content-between align-items-center text-blue">
+                        <!-- <div class="d-flex justify-content-between align-items-center">
+                          <span  class="me-1 fs-12px fw-700" [title]="video.name" [ngClass]="video?.name?.length > 12 ? 'uploadfileCss' : ''">{{video.name}}</span>
+                        </div> -->
+                          <div class="me-1" [title]="video.name" [ngClass]="video?.name?.length > 12 ? 'uploadfileCss' : ''">{{video.name}}</div>
+                          <!-- <span [title]="video.description" class="dots ms-1">{{video.description}}</span> -->
+                          <div *ngIf="selectedType == 'Live' && isPermitEnabled" class="mx-2">
+                            <div class="stop-btn" *ngIf="video?.source != 'CCTV' && video?.source != 'PTZ' && !video.is_stop && streamAccess.indexOf('stop_stream_in_wbs') > -1"  (click)="stopVideo(video)">
+                              <i class="fas fa-stop me-2 " ></i><span class="fs-11px">STOP</span>
+                            </div>
+                            <!-- <div class="start-btn" *ngIf="video.is_stop" (click)="stopVideo(video)">
+                              <i class="fas fa-play me-2"></i><span class="fs-11px">START</span>
+                            </div> -->
+                          </div>
+
+                        <div class="no-wrap">
+                          <i class="fas fa-calendar-alt me-1"></i>{{ (video.date ? video.date : "---- --,----") | dateFormat}}
+                          <i class="far fa-clock me-1 ms-2"></i>{{video.time ? video.time  : "-- : -- : --"}}
+                        </div>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="fs-12px">
+                          <span class="fw-600 dots" [title]="video?.unit">{{video?.unit}} > </span>
+                          <span class="fw-600 dots" [title]="video?.zone">{{video?.zone}}</span>
+                        </div>
+                        <div class="fw-400">
+                          {{video?.source}}
+                        </div>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="fw-400">
+                          <ng-container *ngIf="isPermitEnabled">
+                            <span *ngIf="video?.permit_number" [title]="video?.permit_number" class="dots">{{video?.permit_number}}</span><span *ngIf="video?.permit_number && video?.type_of_permit"> | </span>
+                            <span *ngIf="video?.type_of_permit" [title]="video?.type_of_permit" class="dots">{{video?.type_of_permit}}</span><span *ngIf="video?.type_of_permit && video?.nature_of_work"> | </span>
+                            <span *ngIf="video?.nature_of_work" [title]="video?.nature_of_work" class="text-wrap dots">{{video?.nature_of_work}}</span>
+                          </ng-container>
+                          <!-- <span class="text-success ms-2"><span class="circle me-1"></span>Live</span> -->
+                          <!-- <span *ngIf="selectedType != 'Live'" class="ms-2"><span class="circle_red me-1"></span>Video Currently Playing</span> -->
+                          <span *ngIf="selectedType == 'Live' && !video.is_stop" class="ms-2"><span class="circle_green me-1"></span>Live</span>
+                        </div>
+                        <div class="fw-400"  *ngIf="selectedType == 'Live' && video?.battery_percentage !== null && video?.battery_percentage >= 0 && video?.source != 'PTZ' && video?.source != 'CCTV'">Battery
+                          <span class="fw-700">{{video?.battery_percentage}}%</span>
+                        </div>
+                      </div>
+                    </div>
+                      <!-- <div> -->
+                        <!-- <div class=" fw-400 text-blue fs-10px"><i class="fas fa-calendar me-1"></i>{{video.date ? video.date : "---- --,----"}} <i class="fas fa-clock me-1 ms-2"></i>{{video.time ? video.time  : "-- : -- : --"}}
+                        </div> -->
+
+                        <!-- <div class="align fw-400">{{video.source}}</div> -->
+                        <!-- <div class="align fw-400"  *ngIf="selectedType == 'Live'">Battery <span class="fw-700">{{video.battery}}</span></div> -->
+                      <!-- </div> -->
+                  </div>
+            </div>
+
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<ng-template #noDataTemplate>
+  <div class="row liveStreamHeightCss">
+      <h4 class="m-auto text-center">No live streams available for the selected location</h4>
+  </div>
+</ng-template>

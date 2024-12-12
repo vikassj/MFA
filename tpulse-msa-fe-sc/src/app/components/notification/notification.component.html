@@ -1,0 +1,151 @@
+<div class=" shadow-sm bg-white primary-color p-2 w-100 d-flex align-items-center" style="height:50px">
+    <div class="fontWeight14px">
+        Activities - {{totalNotificationCount}}
+    </div>
+    <div class="ms-5 d-flex align-items-center">
+        <!-- <div class="fs-12">Mute All</div> -->
+        <div class="muteAll">Mute All</div>
+        <div class="form-check form-switch ms-2">
+            <input class="form-check-input" type="checkbox"
+
+                [checked]="muteAllNotification" (click)="muteNotifications(null, muteAllNotification)">
+            <!-- <input class="form-check-input" type="checkbox"
+                [ngClass]="(muteAllNotification.length === notificationCategories.length)?'d-block':(muteAllNotification.includes(true))?'d-block':'d-none'"
+                [checked]="true" (click)="muteNotifications(null,true)"> -->
+        </div>
+        <!-- <div class="fs-12">Unmute All</div> -->
+        <!-- <div class="border-end border-1 border-danger h-15px line-h-12px ms-4"></div> -->
+        <!-- <div class="read font-weight-bold ps-3">Unread Notifications</div> -->
+        <!-- <button
+      class="bg-white border rounded border-danger text-danger mx-2  open-close-count d-flex align-items-center justify-content-center"></button> -->
+        <!-- <div class="noti border rounded text-blue ms-2 px-2 d-flex align-items-center justify-content-center">
+            {{unreadcount}}
+        </div> -->
+    </div>
+    <div class="form-control form-control-sm w-15 ms-3">
+        <select class="border-none-outline-none w-100" [(ngModel)]="selectedUnit_id"
+            (change)="getNotificationCategories(true)">
+            <option *ngFor="let unit of unitsList" [value]="unit.id">{{unit.name}}</option>
+        </select>
+    </div>
+
+    <div style="margin-left:10%;" *ngIf="selectedCategoryName=='Creation of Surprise Activity'">
+        <span class="text-dark">
+          Overall Shutdown delay <span class="text-danger">{{totalTAdelayHrs}} hrs</span>
+        </span>
+    </div>
+</div>
+
+<div class="notifications-page-height m-0 p-2 d-flex">
+    <div class="bg-white shadow-sm bg-white" style="width:20%;">
+        <div *ngFor="let category of notificationCategories" (click)="getSelectedCategory(category)"
+            class=" d-flex justify-content-between align-items-center p-2 ps-4 fs-12 cursor"
+            [ngClass]="category.id == selectedCategory?'secondary-bg-color text-light':''">
+            <div class="fs-11">{{category.name}}</div>
+            <div class="d-flex align-items-center">
+                <div class="volumeIcon mx-2"
+                    [ngClass]="category.id == selectedCategory?'bg-white text-light d-block':'d-none'">
+                    <img src="assets/images/volume-icon.svg" class="p-1 rounded"  width="25px" height="25px"
+                        [ngClass]="category.notification_is_muted == true?'d-block':'d-none'"
+                        (click)="muteNotifications(category?.id,category.notification_is_muted)">
+                    <img src="assets/icons/volume-on.svg" class="p-1 fw-bold rounded" width="25px" height="25px"
+                        [ngClass]="category.notification_is_muted == false?'d-block':'d-none'"
+                        (click)="muteNotifications(category?.id,category.notification_is_muted)">
+                    <!-- <i class="fas fa-volume-off primary-color fs-2"[ngClass]="category.notification_is_muted == false?'d-block':'d-none'" (click)="muteNotifications(category?.notification_access_id,category.notification_is_muted)"></i> -->
+                </div>
+                <!-- <div class="rounded primary-color ps-2 pe-2 pt-1 pb-1"
+                    [ngClass]="category.id == selectedCategory?'bg-white':'primary-bg-color'">
+                    {{category.notification_count}}</div> -->
+                <div class="rounded primary-color ps-2 pe-2 pt-1 pb-1"
+                    [ngClass]="category.id == selectedCategory?'bg-white':'primary-bg-color'">
+                    {{category.unread_notification_count}}</div>
+                <!-- <div *ngIf="category.unread_notification_count > 0">
+                  <div class="w-10px h-10px rounded-circle bg-primarycolor"></div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="ms-2 " style="width:80%;">
+        <div class="" id="table">
+            <!-- <div class="bg-white d-flex justify-content-between align-items-center ps-4 pe-4 " style="height:45px;">
+                <div class="fs-12">TODAY</div>
+                <div class="fs-12 primary-color cursor edit-btn" (click)="deleteNotification(null)">Mark all as read
+                </div>
+            </div> -->
+            <div class="notification-height bg-white">
+              <div *ngIf="tempNotificationData?.length < 1" class="w-100 h-100 d-flex justify-content-center align-items-center">
+                No Notifications Recorded
+              </div>
+              <div *ngFor="let item of notificationData; let i = index">
+                <div class="px-2" *ngFor="let d of item | keyvalue">
+                  <div class="d-flex align-items-center justify-content-between ps-3 h-40px">
+                    <div class="font-size-11px">{{ d.key | todayYesterday }}</div>
+                    <div class="fw-500 d-flex justify-content-end align-items-center" *ngIf="i == 0">
+                      <div class=" clearall pointer pe-2 me-2 border-end border-danger font-size-11px " (click)="deleteAllNotification()">
+                        Clear all Notifications
+                      </div>
+                      <div class="clearall w-100px font-size-11px pointer" (click)="readAllNotifications()">
+                        Mark all as read
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="notification-panel w-100 py-2 ps-3 col-12 mt-1" *ngFor="let c of d.value" [ngClass]="c.viewed == false ? 'one' : 'bg-white'" >
+                    <div class="w-100 d-flex align-items-center min-h-40px" (click)="updateTheReadStatusForNotification(c)">
+                      <div class="w-45px p-0 me-2">
+                        <div class="profile-image">
+                          <img src="../../../../../assets/images/dummy.png" alt="" class="profile-pic" />
+                        </div>
+                      </div>
+                      <div class="notification-content-width p-0 d-flex justify-content-between">
+                        <div class="font-size-11px">
+                          <div class="d-flex flex-wrap notification-content">
+                            <!-- <span class="text-blue">{{c.id}} </span> -->
+                            <span class="" *ngFor="let cItem of c.description">
+                              <span class="pe-1" [ngClass]="c.viewed == false ? 'fw-700' : ''" (click)="navigateToTask(c, cItem)" [ngStyle]="styleForNameAndId(cItem)">{{returnFraming(cItem)}}</span>
+                              <span></span>
+                              <span></span>
+                              <span></span>
+                            </span>
+                            <!-- <span class="" (click)="navigateToObservation(1)"></span>
+                            <span class="" (click)="navigateToAction(c)"></span>
+                            <span class="" (click)="navigate(1,c?)"></span> -->
+                            <!-- <span>has {{c.notification_type}} the {{c.object_type}}</span>
+                            <span class="font-weight-bold text-danger px-1 criticalPath pointer" (click)="navigateToTask(c)">
+                            {{c.object_type}}#{{ c.object_type_id }}</span> -->
+                          </div>
+                          <div class="unit align-items-center">
+                            <!-- <span class="" *ngIf="c?.metadata?.equipment_name">{{c?.metadata?.equipment_name}} <span *ngIf="c?.metadata?.equipment_category_name || c?.metadata?.equipment_department_name"> -> </span> </span>
+                            <span class="" *ngIf="c?.metadata?.equipment_category_name">{{c?.metadata?.equipment_category_name}} <span *ngIf="c?.metadata?.equipment_department_name"> -> </span> </span>
+                            <span class="" *ngIf="c?.metadata?.equipment_department_name">{{c?.metadata?.equipment_department_name}}</span> -->
+                          </div>
+                          <div style="color: black; font-size: smaller; font-weight: light;">{{ c?.date | dateAgo:c?.time  }}</div>
+                        </div>
+                        <div class="rem d-flex  align-items-center">
+                          <div class="remov ms-3 w-25px">
+                            <button class="remove" [disabled]="!c.viewed" data-toggle="tooltip" title="Clear Notification"
+                              (click)="deleteNotification(c.id, c.viewed)">
+                              <img [src]="close_btn" width="20px" height="20px" />
+                            </button>
+                          </div>
+                          <!-- <div class="ms-3 w-25px">
+                            <div class="w-10px h-10px bg-basic rounded-circle" *ngIf="!c.viewed"></div>
+                          </div> -->
+                        </div>
+                      </div>
+
+                      <!-- <div class="time">2 hours ago</div> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="h-40px bg-white ">
+              <div *ngIf="tempNotificationData?.length >= 1" class="w-100 h-100 d-flex align-items-center justify-content-center">
+                <app-pagination [totalRecords]="notificationLength" [recordsPerPage]="noOfRows"
+                  (onPageChange)="displayActivePage($event)"></app-pagination>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>

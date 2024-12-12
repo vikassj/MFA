@@ -1,0 +1,21 @@
+.in-app-notification {
+        width: calc(33% + 20px); /* Adjusted width to account for scrollbar width */
+        position: absolute;
+        bottom: 0;
+        right: 20px;
+        z-index: 9999;
+        max-height: calc(100% - 40px); /* Adjust the max-height to leave space for bottom and top margins */
+        overflow-y: scroll; /* Always show scrollbar */
+}
+
+@media screen and (max-height: 560px) {
+        .in-app-notification {
+                width: calc(33% + 20px);
+        }
+}
+
+@media screen and (min-height: 560px) {
+        .in-app-notification {
+                width: calc(30% + 20px);
+        }
+}

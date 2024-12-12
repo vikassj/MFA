@@ -1,0 +1,18 @@
+{
+    "header": [
+        {
+            "identifier": "dashboard",
+            "acronym": "Home",
+            "name": "Dashboard",
+            "class": "fa fa-home",
+            "routePath": "/live-streaming/dashboard"
+        },
+        {
+            "identifier": "help",
+            "acronym": "Help",
+            "name": "Help",
+            "class": "fa fa-question-circle",
+            "routePath": "/live-streaming/help"
+        }
+    ]
+}

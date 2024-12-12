@@ -1,0 +1,20 @@
+<div *ngIf="locationData" class="f-s">
+    <div class="ms-2 fw-bold" [ngClass]="  fixSDate !== undefined || fixEDate !== undefined ? 'd-none': '' ">
+        {{locationData.zone}} - Occupancy Monitoring
+        for <span class="text-color">{{locationData.zone}}</span> <span class="text-color ms-1">from {{overallMpcData.date}} to {{overallMpcData.date}}</span>
+    </div>
+    <div class="ms-2 fw-bold" [ngClass]=" fixSDate !== undefined && fixEDate !== undefined ? 'd-block': 'd-none' ">
+        {{locationData.zone}} - Occupancy Monitoring
+        for <span class="text-color">{{locationData.zone}}</span> <span class="text-color ms-1">from {{fdate}} to {{fedate}}</span></div>
+    <div class="ms-2 fw-bold" [ngClass]="fixSDate !== undefined && fixEDate == undefined ? 'd-block': 'd-none' ">
+        {{locationData.zone}} - Occupancy Monitoring
+        for <span class="text-color">{{locationData.zone}}</span> <span class="text-color ms-1">from {{fdate}} to {{overallMpcData.date}}</span></div>
+    <div class="ms-2 fw-bold" [ngClass]="fixSDate == undefined && fixEDate !== undefined ? 'd-block': 'd-none' ">
+        {{locationData.zone}} -  Occupancy Monitoring
+        for<span class="text-color">{{locationData.zone}}</span> <span class="text-color ms-1">from {{overallMpcData.date}} to {{fedate}}</span></div>
+</div>
+<div class="line-chart-height height">
+    <div [ngClass]="lineData.length == 0 ? 'd-none':'d-block'" echarts [options]="lineOptions" class="h-100"></div>
+    <div class="mx-4 fw-bold fixed-position" [ngClass]="lineData.length == 0 ? 'd-block':'d-none'">No Data available for
+        the selected date.</div>
+</div>

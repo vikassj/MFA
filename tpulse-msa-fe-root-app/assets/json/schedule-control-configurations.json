@@ -1,0 +1,39 @@
+{
+    "header": [
+        {
+            "identifier": "unit",
+            "acronym": "UNIT",
+            "name": "Unit",
+            "class": "assets/icons/sc-s-curve.png",
+            "routePath": "/schedule-control/unit"
+        },
+        {
+            "identifier": "issues",
+            "acronym": "ISSUES",
+            "name": "Issues",
+            "class": "assets/icons/sc-task.png",
+            "routePath": "/schedule-control/issues"
+        },
+        {
+            "identifier": "knowledgement",
+            "acronym": "KNOWLEDGEMENT",
+            "name": "Knowledgement",
+            "class": "assets/icons/sc-issues.png",
+            "routePath": "/schedule-control/knowledgement"
+        },
+        {
+            "identifier": "reports",
+            "acronym": "Reports",
+            "name": "Reports",
+            "class": "assets/icons/sc-reports.png",
+            "routePath": "/schedule-control/reports"
+        },
+        {
+            "identifier": "notification",
+            "acronym": "Notification",
+            "name": "notification",
+            "class": "assets/icons/sc-notifications.png",
+            "routePath": "/schedule-control/notification"
+        }
+    ]
+}

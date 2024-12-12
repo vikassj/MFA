@@ -1,0 +1,19 @@
+{
+    "header": [
+        {
+            "identifier": "uam",
+            "acronym": "UAM",
+            "name": "uam",
+            "class": "./assets/icons/Group 10827.svg",
+            "routePath": "/admin-app/uam"
+        },
+        {
+            "identifier": "help",
+            "acronym": "Help",
+            "name": "Help",
+            "class": "fas fa-question-circle",
+            "routePath": "/admin-app/help"
+        }
+    ],
+    "userManualFound": true
+}

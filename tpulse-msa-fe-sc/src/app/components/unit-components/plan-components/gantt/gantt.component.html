@@ -1,0 +1,252 @@
+<div class="h-100 w-100 d-flex flex-column">
+  <div class="w-100 d-flex justify-content-between gantt-chart">
+    <div class="d-flex align-items-center">
+      <div class="edit-btn cursor" (click)="open(mymodal)">CATEGORY WISE ISSUES ></div>
+      <!-- <button  class="btn btn-sm btn-primary secondary-bg-color border-none-outline-none ms-2"
+        (click)="toggleSidebar()">Create new Surprise
+        task</button> -->
+    </div>
+    <!-- <div class="pt-2">
+      <div class="form-check form-switch ps-3 d-flex">
+        <div class="form-check-label " for="flexSwitchCheckNotChecked">All Tasks</div>
+        <div class="pl-40 cursor">
+          <input (click)="toggle()" class="form-check-input cursor" type="checkbox" id="flexSwitchCheckChecked">
+        </div>
+        <div class="form-check-label text-danger" for="flexSwitchCheckChecked">Critical Path Tasks</div>
+      </div>
+    </div> -->
+    <div class="my-2 rounded" style="height:25px;background-color:#FFE8E8">
+      <div class="d-flex pt-1 pb-2 ">
+        <div class="form-check-label ps-2 pe-2 cursor" (click)="toggle('allTasks',true)" [ngClass]="allTasks == true?'text-light bg-dark rounded':'text-danger'" for="flexSwitchCheckNotChecked">All Tasks</div>
+        <div class="form-check-label ps-2 pe-2 cursor" (click)="toggle('criticalPath',true)" [ngClass]="criticalPath == true?'text-light bg-dark rounded':'text-danger'" for="flexSwitchCheckChecked">Critical Path</div>
+        <div class="form-check-label ps-2 pe-2 cursor" (click)="toggle('overShoot',true)" [ngClass]="overShoot == true?'text-light bg-dark rounded':'text-danger'" for="flexSwitchCheckChecked">Over Shoot</div>
+      </div>
+    </div>
+    <div class="pt-2">
+      <div class="d-flex pe-2">
+        <div class="mx-3 d-flex align-items-center">
+          <div class="me-2 bg-secondry h-10px w-10px"></div>
+          <div class="text-secondry font-size-10px">Yet to start</div>
+        </div>
+        <div class="mx-3 d-flex align-items-center">
+          <div class="me-2 bg-yellow h-10px w-10px"></div>
+          <div class="text-yellow font-size-10px">Inprogress</div>
+        </div>
+        <div class="mx-3 d-flex align-items-center">
+          <div class="me-2 common-bg-color h-10px w-10px"></div>
+          <div class="common-color font-size-10px">Completed</div>
+        </div>
+        <div class="mx-3 d-flex align-items-center">
+          <div class="me-2 bg-successGain h-10px w-10px"></div>
+          <div class="text-successGain font-size-10px">Gain</div>
+        </div>
+        <div class="mx-3 d-flex align-items-center">
+          <div class="me-2 bg-black h-10px w-10px"></div>
+          <div class="text-black font-size-10px">Delay</div>
+        </div>
+        <div class="mx-3 d-flex align-items-center">
+          <div class="me-2 bg-skyblue h-10px w-10px"></div>
+          <div class="text-skyblue font-size-10px">Slack</div>
+        </div>
+        <!-- <div class="mx-3 d-flex align-items-center">
+          <div class="me-2 bg-warn h-10px w-10px"></div>
+          <div class="text-warn font-size-10px">CP1</div>
+        </div> -->
+        <!-- <div class="mx-3 d-flex align-items-center">
+          <div class="me-2 bg-yellow h-10px w-10px"></div>
+          <div class="text-yellow font-size-10px">CP2</div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+  <app-statistic class="w-100 h-100" [selectedUnit]="selectedUnit"
+    [selectedEquipmentCategory]="selectedEquipmentCategory" [selectedDepartment]="selectedDepartment"
+    [selectedVendor]="selectedVendor" [scale]="selectedPeriod" [reload]="reload"[overShoot]="overShoot" [showCriticalPathTasks]="showCriticalPathTasks"
+    (showSurpriseTask)="toggleSurpriseTask($event)">
+  </app-statistic>
+</div>
+
+<div class="period d-flex cursor">
+  <div class='p-2' [ngClass]="selectedPeriod=='W'?'active':''" (click)="selectPeriod('W')">Weekly</div>
+  <div class="p-2" [ngClass]="selectedPeriod=='M'?'active':''" (click)="selectPeriod('M')">Monthly</div>
+</div>
+
+
+
+
+<ng-template #mymodal let-modal>
+  <div class="modal-header row">
+    <div class="primary-color col-2 cursor fw-bold fs-12" data-bs-dismiss="modal"> <img src="./assets/icons/Back.svg"
+        width="15px" height="10px" class="me-2">Back</div>
+    <div class="primary-color pop-w2  fw-bold fs-12 col-8 text-center">CATEGORY WISE ISSUES</div>
+    <span aria-hidden="true" class="close fs-16 col-2 text-right cursor" aria-label="Close"
+      (click)="modal.dismiss('Cross click')">×</span>
+  </div>
+  <div class="modal-body">
+    <app-category-wise-issues></app-category-wise-issues>
+  </div>
+</ng-template>
+
+
+<!------------------- Surprise task sidebar----------------->
+<div class="route-nav shadow-sm scroll side-bar-height fs-12 position bg-white  bg-body p-2" style="width:20%;"
+  *ngIf="isSidebarOpened">
+  <div class="d-flex mb-2">
+    <button id="back-button" class="border-none-outline-none bg-white" (click)="toggleSidebar()"
+      style="margin-right: auto">
+      <i class="fas fa-arrow-left primary-color"></i>
+    </button>
+  </div>
+  <div class="route-nav-blocks">
+    <div class="primary-color">Create new Surprise task</div>
+    <form [formGroup]="surprise_task_form" (ngSubmit)="submitSurpriseTask()">
+      <div class="select-vehicle">
+        <fieldset class="side-bar-fieldset">
+          <legend class="side-bar-legend">Department</legend>
+          <div class="input-group p-1 w-100">
+            <select class="w-100 text-capitalize border-none-outline-none" formControlName="department_id">
+              <option value="" disabled selected hidden>Select Department</option>
+              <option *ngFor="let department of depertments" [value]="department?.id">{{department.name}}</option>
+            </select>
+            <div class="d-flex pointer align-items-center justify-content-center">
+
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="select-vehicle">
+        <fieldset class="side-bar-fieldset">
+          <legend class="side-bar-legend">Equipment name</legend>
+          <div class="input-group p-1 w-100">
+            <select class="w-100 text-capitalize border-none-outline-none" formControlName="equipment_id"
+              (change)="getTasks()">
+              <option value="" disabled selected hidden>Select Equipment</option>
+              <option *ngFor="let Status of equipments" [value]="Status.id">{{Status.name}}</option>
+            </select>
+            <div class="d-flex pointer align-items-center justify-content-center">
+
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="select-vehicle">
+        <fieldset class="side-bar-fieldset">
+          <legend class="side-bar-legend">Predecessor Task</legend>
+          <div class="input-group p-1 w-100">
+            <select class="w-100 text-capitalize border-none-outline-none" formControlName="predecessor_task_id"
+              (change)="getSuccessors()">
+              <option value="" disabled selected hidden>Select Predecessor Task</option>
+              <option *ngFor="let task of predecessorTaskList" [value]="task.id">{{task.name}}</option>
+            </select>
+            <div class="d-flex pointer align-items-center justify-content-center">
+
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="select-vehicle">
+        <fieldset class="side-bar-fieldset">
+          <legend class="side-bar-legend">Successor Task</legend>
+          <div class="input-group p-1 w-100">
+            <select class="w-100 text-capitalize border-none-outline-none" formControlName="successor_task_id">
+              <option value="" disabled selected hidden>Select Successor Task</option>
+              <option *ngFor="let successor of successorTaskList" [value]="successor.id">{{successor.name}}</option>
+            </select>
+            <div class="d-flex pointer align-items-center justify-content-center">
+
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="select-vehicle">
+        <fieldset class="side-bar-fieldset">
+          <legend class="side-bar-legend">Task name</legend>
+          <div class="input-group p-1 w-100">
+            <input type="text" class="border-none-outline-none w-100" formControlName="task_name"
+              (keyup)="checkTaskName()" />
+            <span id="tastName"></span>
+          </div>
+        </fieldset>
+      </div>
+      <!-- <div *ngIf="surprise_task_form.controls['task_name'].invalid && (surprise_task_form.controls['task_name'].dirty || surprise_task_form.controls['task_name'].touched)" class="alert">
+        <div *ngIf="surprise_task_form.controls['task_name'].errors.required">
+        Please enter username
+      </div>
+    </div> -->
+      <div class="select-vehicle">
+        <fieldset class="side-bar-fieldset">
+          <legend class="side-bar-legend">Expected Start Date</legend>
+          <div class="input-group p-1 w-100">
+            <input type="date" class="border-none-outline-none w-100" formControlName="expected_start_date">
+            <div class="d-flex pointer align-items-center justify-content-center">
+
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="select-vehicle">
+        <fieldset class="side-bar-fieldset">
+          <legend class="side-bar-legend">Expected Start Time</legend>
+          <div class="input-group p-1 w-100">
+            <input type="time" class="border-none-outline-none w-100 "   formControlName="expected_start_time">
+            <div class="d-flex pointer align-items-center justify-content-center">
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="select-vehicle">
+        <fieldset class="side-bar-fieldset">
+          <legend class="side-bar-legend">Planned Duration(in Days - hrs)</legend>
+          <div class="border d-flex">
+            <div class="w-25">
+              <input class="border-none w-100" type="number" min="0" formControlName="planned_duration_days">
+            </div>
+            <div class="w-75">
+              <input class="border-none w-100" type="time"  formControlName="planned_duration_hours">
+            </div>
+          </div>
+          <!-- <div class="input-group p-1 w-100">
+            <input type="text" class="form-control">
+            <div class="d-flex pointer align-items-center justify-content-center">
+
+            </div>
+          </div> -->
+        </fieldset>
+      </div>
+      <div class="select-vehicle">
+        <fieldset class="side-bar-fieldset">
+          <legend class="side-bar-legend">Tag person</legend>
+          <div id="ng-select" class="input-group p-1 w-100">
+            <ng-select id="multiSelect" class="w-100 p-0 " [items]="personList" [multiple]="true"
+              formControlName="tag_persons" placeholder="Search to Tag user..." bindLabel="email" bindValue="id">
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                <div class="ng-value">
+                  <span class="ng-value-label">{{items.length}} selected</span>
+                </div>
+              </ng-template>
+            </ng-select>
+          </div>
+        </fieldset>
+      </div>
+      <div class="select-vehicle">
+        <fieldset class="side-bar-fieldset">
+          <legend class="side-bar-legend">Comments</legend>
+          <div class="input-group p-1 w-100">
+            <input type="text" class="border-none-outline-none w-100 " formControlName="comments">
+            <div class="d-flex pointer align-items-center justify-content-center">
+
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="select-vehicle">
+        <fieldset>
+          <button class="btn btn-sm btn-primary ms-2 secondary-bg-color border-none-outline-none me-2"
+            [disabled]="!surprise_task_form.valid">CREATE</button>
+          <button class="btn btn-sm btn-outline-primary primary-color border-none-outline-none"
+            (click)="toggleSidebar()">CANCEL</button>
+        </fieldset>
+      </div>
+    </form>
+  </div>
+</div>

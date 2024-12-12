@@ -1,0 +1,252 @@
+<div class="w-100 list-view-height" *ngIf="dataLoaded && !isNotListView">
+  <div class="shadow-sm py-2 d-flex">
+    <div class="col-8 height1 bg-white left-cont">
+      <ng-container *ngIf="selectedVideoData && filteredLiveStreamData.length > 0">
+        <div class="w-100 rounded bg-white selected-video-height"  *ngIf="largeViewDisplay">
+          <!-- <video width="100%" height="78%" class="border-top" controls> -->
+          <!-- <div class="w-100 "> -->
+          <ng-container *ngIf="selectedType != 'Live' || !selectedVideoData.is_stop && selectedVideoData?.live_url">
+            <app-zoomable-video  *ngIf="selectedVideoData?.live_url.includes('mp4')"  class="d-block w-100"  [ngClass]="shareShows? 'h-55':'h-100'"
+              [attr.src]="selectedVideoData?.live_url" [uuid]="selectedVideoData?.id" [url]="selectedVideoData?.live_url">
+            </app-zoomable-video>
+            <app-live-video  *ngIf="selectedVideoData?.live_url.includes('.html') || selectedVideoData?.live_url.includes('.m3u8')"  class="d-block w-100" [ngClass]="shareShows? 'h-55':'h-100'"
+              [attr.src]="selectedVideoData?.live_url" [video]="selectedVideoData"  [selectedVideoId]="true">
+            </app-live-video>
+          </ng-container>
+          <ng-container *ngIf="selectedType == 'Live' && selectedVideoData.is_stop">
+            <div class="video-stop"  [ngClass]="shareShows? 'h-55':'h-100'">
+              <div class="fs-12px text-center">
+                <div>{{selectedVideoData?.type_of_permit}} > {{selectedVideoData?.nature_of_work}} Web Live Stream Stopped Successfuly</div>
+                <div>Stream will start playing automatically when it's live</div>
+              </div>
+            </div>
+          </ng-container>
+          <!-- </div> -->
+          <!-- </video> -->
+          <div class="border-top ps-3 pe-2  current-button">
+            <div class="card p border-bottom2">
+              <div class="font-size d-flex justify-content-between align-items-center">
+                <div class="">
+                  <div class="pt-2  text-blue d-flex align-items-center">
+                    <div class="fiw-600 me-1" [title]="selectedVideoData?.name"  [ngClass]="selectedVideoData?.name?.length > 20 ? 'uploadfileCss' : ''" >{{selectedVideoData?.name}}</div> |
+                    <div class="ms-1" [ngClass]="selectedVideoData?.description?.length > 20 ? 'uploadfileCss' : ''"
+                      [title]="selectedVideoData?.description">{{selectedVideoData?.description}}</div>
+                  </div>
+
+                  <!-- <div class="pt-2 location">
+                    <span [title]="selectedVideoData?.location.name">{{selectedVideoData?.location.name |
+                      dropdownFideInfo}}</span>
+                  </div> -->
+                </div>
+                <div class="d-flex align-items-center">
+                  <div *ngIf="filterData?.videoType && isPermitEnabled" class="me-3">
+                    <div class="stop-btn" *ngIf="selectedVideoData?.source != 'CCTV' && selectedVideoData?.source != 'PTZ' && !selectedVideoData.is_stop && streamAccess.indexOf('stop_stream_in_wbs') > -1" (click)="updateCamera()"><i class="fas fa-stop me-2 " ></i><span class="fs-11px">STOP</span></div>
+                  </div>
+                  <div class="text-blue d-flex">
+                    <div class=" fw-600 text-end me-1 ">{{ (selectedVideoData?.date ? selectedVideoData?.date : "---- --, ----") | dateFormat}}|</div>
+                    <div class="fw-600 text-end">{{selectedVideoData?.time ? selectedVideoData?.time : "-- : -- : --"}}</div>
+                  </div>
+                  <div class="ms-2" *ngIf="hasShareAccess">
+                    <span style="background-color: #006699; height: 30px; width :30px; border-radius: 3px;"
+                    class="share-bgColor-select cursorPointer">
+                    <!-- <i class="fas fa-upload me-3"></i> -->
+                    <img src="assets/icons/share.svg" alt="share" height="18px"  (click)="openSendObservationModal()">
+                    </span>
+                  </div>
+                </div>
+
+              </div>
+              <div class="d-flex justify-content-between align-items-center mt-1">
+                <div>
+                  <div class="fw-600 fs-11px">
+                    <span class="fw-600 dots" [title]="selectedVideoData?.unit">{{selectedVideoData?.unit}} > </span>
+                    <span class="fw-600 dots" [title]="selectedVideoData?.zone">{{selectedVideoData?.zone}}</span><span *ngIf="selectedVideoData?.permit_number && selectedVideoData?.type_of_permit" class="px-1">></span>
+                    <span *ngIf="selectedVideoData?.type_of_permit" [title]="selectedVideoData?.type_of_permit" [ngClass]="selectedVideoData?.type_of_permit?.length > 20 ? 'uploadfileCss' : ''" >{{selectedVideoData?.type_of_permit}}</span><span *ngIf="selectedVideoData?.type_of_permit && selectedVideoData?.nature_of_work" class="px-1">></span>
+                    <span *ngIf="selectedVideoData?.nature_of_work" [title]="selectedVideoData?.nature_of_work" [ngClass]="selectedVideoData?.nature_of_work?.length > 20 ? 'uploadfileCss' : ''" >{{selectedVideoData?.nature_of_work}}</span>
+                  </div>
+                  <!-- <div *ngIf="isPermitEnabled" class="fw-600 d-flex align-items-center fs-11px"> -->
+                    <!-- <div *ngIf="selectedVideoData?.permit_number" [title]="selectedVideoData?.permit_number" [ngClass]="selectedVideoData?.permit_number?.length > 20 ? 'uploadfileCss' : ''" >{{selectedVideoData?.permit_number}}</div><div *ngIf="selectedVideoData?.permit_number && selectedVideoData?.type_of_permit" class="px-1">|</div> -->
+                    <!-- <div *ngIf="selectedVideoData?.type_of_permit" [title]="selectedVideoData?.type_of_permit" [ngClass]="selectedVideoData?.type_of_permit?.length > 20 ? 'uploadfileCss' : ''" >{{selectedVideoData?.type_of_permit}}</div><div *ngIf="selectedVideoData?.type_of_permit && selectedVideoData?.nature_of_work" class="px-1">|</div> -->
+                    <!-- <div *ngIf="selectedVideoData?.nature_of_work" [title]="selectedVideoData?.nature_of_work" [ngClass]="selectedVideoData?.nature_of_work?.length > 20 ? 'uploadfileCss' : ''" >{{selectedVideoData?.nature_of_work}}</div> -->
+                  <!-- </div> -->
+                </div>
+               
+              </div>
+
+              <!-- <div class="pt-2">
+                          COOLING TOWER | Channel-80-F-320 HOT OIL... | Channel-80-F-320 HOT OIL...
+                      </div> -->
+                    <div *ngIf="isPermitEnabled" class="font-size ">
+                        <div class="fiw-600  d-flex justify-content-between align-items-center">
+                            <div class="d-flex row">
+                              <span class="text-blue">Job Description</span>
+                              <span>{{selectedVideoData?.permit_work_detail}}</span>
+                            </div>
+                            <div>
+                              <div class="d-flex">
+                                <span class="text-blue">Permit valid from</span>
+                              <div class="d-flex ms-1">
+                                <div class=" fw-600 text-end me-1 ">{{ (selectedVideoData?.permit_start_date ? selectedVideoData?.permit_start_date : "---- --, ----") | dateFormat}}|</div>
+                                <div class="fw-600 text-end">{{selectedVideoData?.permit_start_time ? selectedVideoData?.permit_start_time : "-- : -- : --"}}</div>
+                              </div>
+                              </div>
+                              <div class="d-flex">
+                                <span class="text-blue">Permit valid to</span>
+                              <div class="d-flex ms-4">
+                                <div class=" fw-600 text-end me-1 ">{{ (selectedVideoData?.permit_end_date ? selectedVideoData?.permit_end_date : "---- --, ----") | dateFormat}}|</div>
+                                <div class="fw-600 text-end">{{selectedVideoData?.permit_end_time ? selectedVideoData?.permit_end_time : "-- : -- : --"}}</div>
+                              </div>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+            <div *ngIf="shareShows" class="shared mt-2">
+              <!-- <div class="fw-700">Share video link</div> -->
+              <div>
+                <form action="/action_page.php">
+                  <fieldset class="overlayCss">
+                    <legend class="fs-12px">Email ID</legend>
+                    <div class="d-flex justify-content-between align-items-center col-12">
+                      <div class="pb-1 col-11">
+                        <input class="border-none form-control px-0 h-100 w-100"
+                          [(ngModel)]="sendObservationData.emailID" name="email" placeholder="Enter Email Id"
+                          type="text" #chip (keyup.enter)="addTag(chip.value);chip.value=''">
+                      </div>
+                      <div class="col-1 d-flex align-items-center h-100" [ngClass]="sendObservationData.emailID ? 'cursorPointer':'disabledPointer'">
+                        <div class="plus-icon"  (click)="addTag(chip.value);chip.value=''">+</div>
+                        <!-- <i class="far fa-plus-square btn-outline-basic bg-none plus-icon"
+                          (click)="addTag(chip.value);chip.value=''"></i> -->
+                      </div>
+                    </div>
+                  </fieldset>
+                  <p *ngIf="msg" class="text-danger font-italic"
+                      [ngClass]="{'mb-0': sendObservationData.emailIDList.length === 0}">{{msg}}</p>
+                  <div class="text-color fs-12px fw-bold mt-2">Send To</div>
+                  <div class="d-flex flex-wrap mb-2 ">
+                    <div class="border chip-style mx-2 px-2" *ngFor="let item of sendObservationData.emailIDList">
+                      {{item}}<i class="ms-3 fas fa-times cursorPointer" (click)="removeItem(item)"></i></div>
+                  </div>
+                  <div class="d-flex align-items-end ">
+                    <button type="submit" class="btn btn-basic btn-sm me-2" (click)="sendCameraImageEmail()"
+                    [disabled]="sendObservationData.emailIDList?.length === 0">SUBMIT</button>
+                    <button type="reset" (click)="resetSendObservationData()" class="btn btn-outline-basic btn-sm" >CANCEL</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <!-- for no data available -->
+      <div *ngIf="noData">
+        <div class="row fullHeight rounded bg-white ff-montserrat m-0">
+          <h4 class="m-auto text-center">No data available</h4>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-4 ps-2 height right-cont">
+      <ng-container *ngIf="filteredLiveStreamData.length > 0">
+        <div class="bg-white rounded">
+          <diV class="d-flex justify-content-between">
+            <div class="d-flex ms-3 pt-2">
+              <div class="fw-bold ">All</div>
+              <div class="mx-3">
+                <input type="checkbox" class="my-1" id="vehicle1" name="vehicle1" value="Bike" (change)="bulk($event)"
+                  [checked]="restoreSelectedVideos?.length === filteredLiveStreamData?.length?true:false">
+                <span class="mx-3">Selected ({{restoreSelectedVideos?.length}}<span *ngIf="!restoreSelectedVideos">0</span>)
+                </span>
+              </div>
+            </div>
+            <div class="d-flex ">
+            </div>
+
+          </diV>
+          <div class="border rounded me-2 ms-3 py-1 ps-1 mt-2 fs-12px"> <input type="text" placeholder="Search Camera" id="gsearch" style="width: calc(100% - 25px);"
+            [(ngModel)]="searchValue" name="gsearch" ><i class="fas fa-search me-1"></i></div>
+
+          <div class="left-img-h">
+            <div class="d-flex ms-3 my-2 position-relative list-video-item"
+              *ngFor="let video of filteredLiveStreamData | search :'name' : searchValue.toLowerCase(): 'includes' ; let i = index;">
+              <div class="ms-3 w-100 h-100 d-flex" (click)="playSelectedVideo(video)">
+                  <div class="w-15 " [ngClass]="video == selectedVideoData ? 'selectedVideo position-relative':'notSelect'">
+                    <div class="list-video-template " *ngIf="listViewDisplay">
+                    </div>
+                  </div>
+                  <div class="w-80 font-size m-top d-flex align-items-center ">
+                  <div class="card-left p-1 w-100  border-bottom1" [ngClass]="video == selectedVideoData ? 'selectedVideoText':''">
+                    <div class="mt-2 fw-600 text-blue ps-2 pe-4 d-flex align-items-center justify-content-between">
+                      <div class="me-1" [title]="video.name" [ngClass]="video?.name?.length > 12 ? 'uploadfileCss' : ''">{{video.name}}</div>
+                      <div [title]="video.date+'|'+video.time" class="no-wrap">{{video.date}} | {{video.time}}</div>
+                       <!-- | <div class="ms-1"
+                        [title]="video.description"  [ngClass]="video?.description?.length > 15 ? 'uploadfileCss' : ''">{{video.description}}</div> -->
+                    </div>
+                    <div class="fw-600 fs-11px ps-2 pe-4" >
+                      <span class="fw-600 dots" [title]="video?.unit">{{video?.unit}} > </span>
+                    <span class="fw-600 dots" [title]="video?.zone">{{video?.zone}}</span>
+                    </div>
+                    <!-- <div class="mb-2 location ps-2">
+                      <span [title]="video.location.name">{{video.location.name | dropdownFideInfo}}</span>
+                    </div> -->
+                    <div *ngIf="isPermitEnabled" class="fw-600 ps-2 pe-4 d-flex align-items-center fs-11px">
+                      <div *ngIf="video?.permit_number" [title]="video?.permit_number" [ngClass]="video?.permit_number?.length > 8 ? 'uploadfileCss' : ''">{{video?.permit_number}}</div><div *ngIf="video?.permit_number && video?.type_of_permit" class="px-1">|</div>
+                      <div *ngIf="video?.type_of_permit" [title]="video?.type_of_permit" [ngClass]="video?.type_of_permit?.length > 8 ? 'uploadfileCss' : ''">{{video?.type_of_permit}}</div><div *ngIf="video?.type_of_permit && video?.nature_of_work" class="px-1">|</div>
+                      <div *ngIf="video?.nature_of_work" [title]="video?.nature_of_work" [ngClass]="video?.nature_of_work?.length > 8 ? 'uploadfileCss' : ''">{{video?.nature_of_work}}</div>
+                    </div>
+                    <!-- <div class="ps-2 d-flex justify-content-between align-items-center fs-11px">
+                      <div class="fw-500 uploadfileCss">{{video?.area}}</div>
+                      <div class="fw-600 uploadfileCss">{{video?.source}}</div>
+                    </div> -->
+                    <div class="ps-2 pe-4 d-flex justify-content-between align-items-center py-1 fs-11px">
+                      <div class="fw-600 uploadfileCss" [title]="video?.source">{{video?.source}}</div>
+                      <div class="fw-600"  *ngIf="video?.source != 'CCTV' && selectedType == 'Live' && video?.battery_percentage !== null && video?.battery_percentage >= 0 && video?.source != 'PTZ'">
+                        Battery <span class="fw-700">{{video?.battery_percentage}}%</span>
+                      </div>
+                    </div>
+                    <div class="" *ngIf="selectedType != 'Live'" [ngClass]="video == selectedVideoData ? 'd-block positionAbsolute text-blue':'d-none'"><i class="fas fa-circle mx-2"></i>
+                      <span >Video Currently Playing</span>
+                    </div>
+                    <div  *ngIf="selectedType == 'Live' && !video.is_stop" class="" [ngClass]="video == selectedVideoData ? 'd-block positionAbsolute text-blue':'d-none'"><i class="fas fa-circle mx-2"></i>
+                      <span>Live</span>
+                    </div>
+                    <!-- <div class="mt-2 fw-600">
+                      {{video.date ? video.date : "---- --, ----"}}
+                    </div>
+                    <div class="mt-2 fw-600">
+                      {{video.time ? video.time : "-- : -- : --"}}
+                    </div> -->
+                    <div class="mt-2"></div>
+                  </div>
+                  </div>
+              </div>
+              <div class="position-absolute z-index p-2" ng-repeat="record in records">
+                <input *ngIf="!filterData?.videoType" type="checkbox" class=" img-check " id="vehicle1" name="image" value="Bike" [checked]="restoreSelectedVideos?.includes(video?.video_id)?true:false"
+                  (change)="selectImg($event, video)">
+                <input *ngIf="filterData?.videoType" type="checkbox" class=" img-check " id="vehicle1" name="image" value="Bike" [checked]="restoreSelectedVideos?.includes(video?.id)?true:false"
+                  (change)="selectImg($event, video)">
+              </div>
+            </div>
+
+          </div>
+          <div class="d-flex justify-content-center align-items-center h-40px">
+            <app-pagination [totalRecords]="arrayLenght" [recordsPerPage]="noOfRows" *ngIf="arrayLenght"
+              [activePage]="activePage" (onPageChange)="changePage($event)"></app-pagination>
+          </div>
+
+        </div>
+      </ng-container>
+        <!-- for no data available -->
+        <div *ngIf="noData">
+          <div class="row fullHeight rounded bg-white ff-montserrat m-0">
+            <h4 class="m-auto text-center">No data available</h4>
+          </div>
+        </div>
+        
+    </div>
+  </div>
+
+</div>
+
+

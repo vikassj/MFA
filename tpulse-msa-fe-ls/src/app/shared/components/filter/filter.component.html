@@ -1,0 +1,215 @@
+<div [ngClass]="{'show':this.isRouteClicked,'hide':!this.isRouteClicked}"
+  class="route-nav border scroll side-bar-height position bg-body p-2">
+  <div class="d-flex mb-2">
+    <button id="back-button" (click)="onRouteClicked()" style="margin-right: auto">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <button class="btn btn-basic btn-sm me-2 w-60px fw-600"
+      [disabled]="!applyBtnDisabled"
+      (click)="applyFilters()">APPLY</button>
+    <button class="btn btn-outline-basic btn-sm w-60px fw-600"
+      (click)="onObsFilterReset()">RESET</button>
+  </div>
+  <div class="route-nav-blocks">
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">{{zoneNomenclature}}</legend>
+        <ng-select [items]="zones" [multiple]="true" [closeOnSelect]="false"  [bindLabel]="'zone_name'" [bindValue]="'zone_id'" [(ngModel)]="selectedZones"
+          placeholder="Select {{zoneNomenclature}}s" (ngModelChange)="onFilterChange('zone'); this.applyBtnDisabled = true" [closeOnSelect]="false">
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div class="ng-value" *ngFor="let item of items | slice:0:1">
+              <span class="ng-value-label" [title]="item?.['zone_name']">{{item?.['zone_name'] | hideInfo}}</span>
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            </div>
+            <div class="ng-value" *ngIf="items.length > 1">
+              <span class="ng-value-label">{{items.length - 1}} more...</span>
+            </div>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+            {{item.zone_name}}
+          </ng-template>
+          <ng-template ng-footer-tmp>
+            <div class="d-flex justify-content-between">
+              <button (click)="selectedAllItems('zone')" class="btn btn-sm btn-basic fs-10px" [disabled]="zones?.length == selectedZones?.length">Select all</button>
+              <button (click)="unSelectAllItems('zone')" class="btn btn-sm btn-basic ms-2 fs-10px" [disabled]="zones?.length !== selectedZones?.length">Unselect all</button>
+            </div>
+          </ng-template>
+        </ng-select>
+      </fieldset>
+    </div>
+    <div class="select-vehicle d-flex justify-content-between"  *ngIf="selectedType == 'Time lapse (Video summary)'">
+      <fieldset class="side-bar-fieldset1">
+        <legend class="side-bar-legend">Start Time</legend>
+        <input type="time" [(ngModel)]="selectedTime[0]" step="1" (change)="selectStartTime()">
+      </fieldset>
+      <fieldset class="side-bar-fieldset1">
+        <legend class="side-bar-legend">End Time</legend>
+        <input type="time" [(ngModel)]="selectedTime[1]" step="1"  (change)="selectEndTime()">
+      </fieldset>
+    </div>
+    <div *ngIf="isPermitEnabled" class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Source</legend>
+        <ng-select [items]="source" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedSource"
+          placeholder="Select Source" (ngModelChange)="onFilterChange('source'); this.applyBtnDisabled = true">
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div class="ng-value" *ngFor="let item of items | slice:0:1">
+              <span class="ng-value-label" [title]="item">{{item}}</span>
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            </div>
+            <div class="ng-value" *ngIf="items.length > 1">
+              <span class="ng-value-label">{{items.length - 1}} more...</span>
+            </div>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+            {{item}}
+          </ng-template>
+          <ng-template ng-footer-tmp>
+            <div class="d-flex justify-content-between">
+              <button (click)="selectedAllItems('source')" class="btn btn-sm btn-basic fs-10px" [disabled]="source?.length == selectedSource?.length">Select all</button>
+              <button (click)="unSelectAllItems('source')" class="btn btn-sm btn-basic ms-2 fs-10px" [disabled]="source?.length !== selectedSource?.length">Unselect all</button>
+            </div>
+          </ng-template>
+        </ng-select>
+      </fieldset>
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Camera Name</legend>
+        <ng-select [items]="camera" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedCamera"
+          placeholder="Select Camera Name" (ngModelChange)="onFilterChange('camera'); this.applyBtnDisabled = true" [closeOnSelect]="false">
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div class="ng-value" *ngFor="let item of items | slice:0:1">
+              <span class="ng-value-label" [title]="item">{{item | hideInfo}}</span>
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            </div>
+            <div class="ng-value" *ngIf="items.length > 1">
+              <span class="ng-value-label">{{items.length - 1}} more...</span>
+            </div>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+            {{item}}
+          </ng-template>
+          <ng-template ng-footer-tmp>
+            <div class="d-flex justify-content-between">
+              <button (click)="selectedAllItems('camera')" class="btn btn-sm btn-basic fs-10px" [disabled]="camera?.length == selectedCamera?.length">Select all</button>
+              <button (click)="unSelectAllItems('camera')" class="btn btn-sm btn-basic ms-2 fs-10px" [disabled]="camera?.length !== selectedCamera?.length">Unselect all</button>
+            </div>
+          </ng-template>
+        </ng-select>
+      </fieldset>
+    </div>
+    <!-- <div *ngIf="isPermitEnabled" class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Permit Number</legend>
+        <ng-select [items]="permit" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedPermit"
+          placeholder="Select Permit Number" (ngModelChange)="onFilterChange('permit'); this.applyBtnDisabled = true" [closeOnSelect]="false">
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div class="ng-value" *ngFor="let item of items | slice:0:1">
+              <span class="ng-value-label" [title]="item">{{item | hideInfo}}</span>
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            </div>
+            <div class="ng-value" *ngIf="items.length > 1">
+              <span class="ng-value-label">{{items.length - 1}} more...</span>
+            </div>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+            {{item}}
+          </ng-template>
+          <ng-template ng-footer-tmp>
+            <div class="d-flex justify-content-between">
+              <button (click)="selectedAllItems('permit')" class="btn btn-sm btn-basic fs-10px">Select all</button>
+              <button (click)="unSelectAllItems('permit')" class="btn btn-sm btn-basic ms-2 fs-10px">Unselect all</button>
+            </div>
+          </ng-template>
+        </ng-select>
+      </fieldset>
+    </div> -->
+    <div *ngIf="isPermitEnabled" class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Type Of Permit</legend>
+        <ng-select [items]="typeOfPermit" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedTypeOfPermit"
+          placeholder="Select Type Of Permit" (ngModelChange)="onFilterChange('typeOfPermit'); this.applyBtnDisabled = true" [closeOnSelect]="false">
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div class="ng-value" *ngFor="let item of items | slice:0:1">
+              <span class="ng-value-label" [title]="item">{{item | hideInfo}}</span>
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            </div>
+            <div class="ng-value" *ngIf="items.length > 1">
+              <span class="ng-value-label">{{items.length - 1}} more...</span>
+            </div>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+            {{item}}
+          </ng-template>
+          <ng-template ng-footer-tmp>
+            <div class="d-flex justify-content-between">
+              <button (click)="selectedAllItems('typeOfPermit')" class="btn btn-sm btn-basic fs-10px" [disabled]="typeOfPermit?.length == selectedTypeOfPermit?.length">Select all</button>
+              <button (click)="unSelectAllItems('typeOfPermit')" class="btn btn-sm btn-basic ms-2 fs-10px" [disabled]="typeOfPermit?.length !== selectedTypeOfPermit?.length">Unselect all</button>
+            </div>
+          </ng-template>
+        </ng-select>
+      </fieldset>
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Sort</legend>
+        <ng-select [items]="sort" [multiple]="false" [closeOnSelect]="true" [(ngModel)]="selectedSort"
+          placeholder="Select Sort" (ngModelChange)="onFilterChange('sort'); this.applyBtnDisabled = true" [closeOnSelect]="true">
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div class="ng-value" *ngFor="let item of items | slice:0:1">
+              <span class="ng-value-label" [title]="item">{{item}}</span>
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            </div>
+            <div class="ng-value" *ngIf="items.length > 1">
+              <span class="ng-value-label">{{items.length - 1}} more...</span>
+            </div>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <!-- <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> -->
+            {{item}}
+          </ng-template>
+          <!-- <ng-template ng-footer-tmp>
+            <div class="d-flex justify-content-between">
+              <button (click)="selectedAllItems('sort')" class="btn btn-sm btn-basic fs-10px">Select all</button>
+              <button (click)="unSelectAllItems('sort')" class="btn btn-sm btn-basic ms-2 fs-10px">Unselect all</button>
+            </div>
+          </ng-template> -->
+        </ng-select>
+      </fieldset>
+    </div>
+    <div *ngIf="isPermitEnabled" class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Nature Of Work</legend>
+        <ng-select [items]="nature" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="selectedNature"
+          placeholder="Select Nature Of Work" (ngModelChange)="onFilterChange('nature'); this.applyBtnDisabled = true" [closeOnSelect]="false">
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div class="ng-value" *ngFor="let item of items | slice:0:1">
+              <span class="ng-value-label" [title]="item">{{item | hideInfo}}</span>
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+            </div>
+            <div class="ng-value" *ngIf="items.length > 1">
+              <span class="ng-value-label">{{items.length - 1}} more...</span>
+            </div>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+            {{item}}
+          </ng-template>
+          <ng-template ng-footer-tmp>
+            <div class="d-flex justify-content-between">
+              <button (click)="selectedAllItems('nature')" class="btn btn-sm btn-basic fs-10px" [disabled]="nature?.length == selectedNature?.length">Select all</button>
+              <button (click)="unSelectAllItems('nature')" class="btn btn-sm btn-basic ms-2 fs-10px" [disabled]="nature?.length !== selectedNature?.length">Unselect all</button>
+            </div>
+          </ng-template>
+        </ng-select>
+      </fieldset>
+    </div>
+
+  </div>
+</div>

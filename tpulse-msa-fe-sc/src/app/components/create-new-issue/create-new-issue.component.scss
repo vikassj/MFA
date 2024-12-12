@@ -1,0 +1,523 @@
+.notifications-page-height {
+    height: calc(100vh - 172px);
+    background-color: #f4f7fc;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.fs-12{
+    font-size: 12px !important;
+}
+
+/* Risk rating bar styles */
+.issue{
+    background-color: whitesmoke !important;
+    border: none;
+    border-radius: 0px;
+    height: 28px;
+    font-size: 12px;
+}
+.sum{
+    background-color: whitesmoke !important;
+    border: none;
+    border-radius: 0px;
+    height: 80px;
+    font-size: 12px;
+}
+.progress {
+    height: 0.5rem;
+    border-radius: 0rem;
+    width: 75%;
+}
+.btn-file {
+    position: relative;
+    overflow: hidden;
+  }
+.btn-file input[type="file"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+
+  }
+  .delete-option {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding-top: 15px;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  .postImage:hover .delete-option {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding-top: 15px;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  .custom {
+    color: #F65150;
+  }
+  .h-25px{
+    height: 25px;
+  }
+  .w-25px{
+    width: 25px;
+  }
+  .w-40px{
+    width: 40px;
+  }
+//   .attech-btn{
+//     background-color: #E2F5FF;
+//     color: #006699;
+//   }
+.progress-bar-color {
+    /* background-color: #fff5cc; */
+    background: #FFBC00 0% 0% no-repeat padding-box;
+    opacity: 1;
+}
+
+.low-level:hover {
+    background: #FFBC00 0% 0% no-repeat padding-box !important;
+    opacity: 1 !important;
+}
+
+.low-level-color {
+    background: #FFBC00 0% 0% no-repeat padding-box !important;
+    opacity: 1 !important;
+}
+
+.progress-bar-color-2 {
+    /* background-color: #ffeb99; */
+    background: #DC9222 0% 0% no-repeat padding-box;
+    opacity: 1;
+}
+
+.low:hover {
+    background: #DC9222 0% 0% no-repeat padding-box !important;
+    opacity: 1 !important;
+}
+
+.low-color:hover {
+    background: #DC9222 0% 0% no-repeat padding-box !important;
+    opacity: 1 !important;
+}
+
+.progress-bar-color-3 {
+    /* background-color:#ffc2b3; */
+    background: #FF5E28 0% 0% no-repeat padding-box;
+    opacity: 1;
+}
+
+.medium:hover {
+    background: #FF5E28 0% 0% no-repeat padding-box !important;
+    opacity: 1 !important;
+}
+
+.medium-color {
+    background: #FF5E28 0% 0% no-repeat padding-box !important;
+    opacity: 1 !important;
+}
+
+.progress-bar-color-4 {
+    /* background-color: #ff9980; */
+    background: #D90504 0% 0% no-repeat padding-box;
+    opacity: 1;
+}
+
+.high:hover {
+    background: #D90504 0% 0% no-repeat padding-box !important;
+    opacity: 1;
+}
+
+.high-color {
+    background: #D90504 0% 0% no-repeat padding-box !important;
+    opacity: 1;
+}
+
+.progress-bar-color-5 {
+    /* background-color: #ffb399; */
+    background: #910707 0% 0% no-repeat padding-box;
+    opacity: 1;
+}
+
+.very-high:hover {
+    background: #910707 0% 0% no-repeat padding-box !important;
+    opacity: 1 !important;
+}
+
+.very-high-color {
+    background: #910707 0% 0% no-repeat padding-box !important;
+    opacity: 1 !important;
+}
+
+.outline-none-border-none {
+    outline: none;
+    border: none;
+}
+
+.w-10 {
+    width: 10%;
+}
+
+.fs-12 {
+    font-size: 12px;
+}
+
+.fs-10 {
+    font-size: 10px;
+}
+
+.fs-8 {
+    font-size: 8px;
+}
+
+.edit_hover_class i {
+    visibility: hidden;
+}
+
+.edit_hover_class:hover span i {
+    visibility: visible;
+}
+
+.dot {
+    height: 8px;
+    width: 8px;
+    background-color: #33A437;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.offline {
+    height: 8px;
+    width: 8px;
+    background-color: #F65150;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.persons-tagged-styles {
+    height: 35px;
+    text-transform: uppercase;
+    width: 35px;
+    background-color: #4D5C6C;
+    /* border: 2px solid #4d94ff; */
+    border: 2px solid #FFFFFF;
+    border-radius: 50%;
+    color: white;
+    font-weight: 900;
+    display: inline-block;
+    text-align: center !important;
+    margin-right: -15px !important;
+    margin-left: 2px !important;
+
+
+    /* display: inline-block;
+        height: 32px !important;
+        width: 32px !important;
+        font-size: 1.2rem;
+        padding: 2px 5px;
+        margin: auto;
+        font-style: normal;
+        border-radius: 50%;
+        border: 2px solid white;
+        background-color: #4d94ff;
+        text-transform: capitalize; */
+}
+
+.text-wrap {
+    word-wrap: break-word !important;
+
+}
+
+.word-break {
+    word-break: break-all !important;
+}
+
+.float-right {
+    /* margin-left:8% !important; */
+    float: right !important;
+}
+
+.float-right1 {
+    float: right !important;
+    margin-left: 10% !important;
+}
+
+/* check box styles */
+.main {
+    display: block;
+    position: relative;
+    padding-left: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 3px !important;
+}
+
+h1 {
+    color: orange;
+}
+
+/* Hiding the initial checkbox */
+input[type=checkbox] {
+    visibility: hidden;
+}
+
+/* Creating a custom checkbox based on demand */
+.w3docs {
+    position: absolute;
+    top: 3px;
+    left: 0;
+    height: 12px;
+    width: 12px;
+    border: 1px solid #006699;
+    border-radius: 2px;
+}
+
+/* Specify the background color to be shown when checkbox is active */
+.main input:active~.w3docs {
+    background-color: white;
+}
+
+/* Specify the background color to be shown when checkbox is checked */
+.main input:checked~.w3docs {
+    background-color: #006699;
+}
+
+/* Checkmark to be shown in checkbox */
+/* It is not be shown when not checked */
+.w3docs:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Display checkmark when checked */
+.main input:checked~.w3docs:after {
+    display: block;
+}
+
+/* Styling the checkmark using webkit */
+/* Rotated the rectangle by 45 degree and
+    showing only two border to make it look
+    like a tickmark */
+.main .w3docs:after {
+    left: 4px;
+    bottom: 1.5px;
+    width: 3px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.min-width {
+    min-width: 110px;
+    max-width: 135px;
+}
+
+
+/* .dropdown{
+      display: inline-block;
+    } */
+.dropdown-style {
+    /* position: absolute; */
+    /* right: 0px; */
+    z-index: 999999 !important;
+    background-color: white !important;
+    margin-top: 2px;
+    /* max-height: 250px; */
+    overflow-y: auto;
+}
+
+
+.dropdown-style::-webkit-scrollbar {
+    width: 2px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.options {
+    padding: 0px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.selected-dropdown {
+    background-color: #D2F0FF;
+}
+
+.options:hover {
+    background-color: #D2F0FF;
+}
+
+.w-70 {
+    width: 70% !important;
+    word-break: break-all !important;
+}
+
+.h-15px {
+    height: 15px !important;
+}
+
+.w-15px {
+    width: 15px !important;
+}
+
+.select-border-bottom {
+    border-bottom: 1.5px solid #EEEEEE;
+}
+
+.w-150px {
+    width: 150px;
+}
+
+.Word-keep-all {
+    word-break: keep-all !important;
+}
+
+.marginTop {
+    margin-top: 5%;
+}
+
+::ng-deep.ngx-datatable {
+    max-height: 100vh;
+    overflow-y: auto !important;
+}
+
+::ng-deep.color-open {
+    background-color: #FFF7F7;
+    color: #F65150 !important;
+}
+
+::ng-deep.color-closed {
+    background-color: #D5FFD7;
+    color: #33A437 !important;
+}
+
+.delete-btn-color {
+    color: #dc3545 !important;
+}
+
+.font-weight-500 {
+    font-weight: 500;
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.underline {
+    border-bottom: 1px solid #dc3545 !important;
+}
+
+.w-99 {
+    width: 95%;
+}
+
+.riskrating-bar-w-h {
+    /* width:70%; */
+    /* width:20px !important; */
+    height: 20px;
+
+}
+
+.riskrating-bar-radius {
+    border-radius: 5px;
+}
+
+.icon-cog {
+    /* background-color: #047FBD; */
+    color: #006699;
+}
+
+.riskrating-bg-color {
+    background-color: white;
+}
+.status-dropdown-open {
+    /* background-color: #FFF7F7; */
+    background-color: rgb(246 81 80 / 0.14) !important;
+    color: #F65150 !important;
+    padding: 0.375rem 0.75rem;
+}
+.defalut-riskrating-bg-color {
+    background-color: #BEBEBE45;
+}
+@media screen and (max-height: 700px) {
+
+    .fs-12 {
+        font-size: 12px !important;
+    }
+
+}
+.font-size-12px{
+    font-size: 12px;
+}
+.w-75{
+    width: 75% !important;
+}
+.w-80{
+    width: 80% !important;
+}
+.level1 {
+    position: relative;
+    z-index: 2;
+}
+
+.level2 {
+    position: relative;
+    z-index: 3;
+}
+// .added{
+//     margin-left: 145px !important;
+// }
+.popup {
+    // position: absolute;
+    // left:0px;
+    // padding: 5px;
+    top: 25px;
+    width: 230px;
+    // height:20vh;
+    // overflow-y: auto;
+    flex-direction: column !important;
+    background: white;
+
+    z-index: 4;
+}
+.popups{
+    padding-top: 2px;
+}
+.coustom-border {
+    border: 1px solid rgb(223, 222, 222);
+    border-radius: 5px;
+    padding: 8px;
+}
+::ng-deep .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-placeholder {
+  z-index: 1;
+  font-size: 12px;
+}
+::ng-deep .ng-select .ng-select-container {
+  color: #333;
+  background-color: whitesmoke;
+  border-radius: 4px;
+  border: 0px solid #ccc;
+  min-height: 20px !important;
+  align-items: center;
+}

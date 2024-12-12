@@ -1,0 +1,1185 @@
+<div class="fs-14 align-items-center d-flex justify-content-center"
+  style="height:25px;background-color:#FFE8E8;color:#F65150">
+  {{overShootingProjectTimeLine?.equipment_count}} Equipment overshooting project timeline,
+  <span class="cursor mx-1" style="border-bottom: 1px solid #F65150;" data-bs-toggle="modal"
+    data-bs-target="#dateTimeEntryModal" (click)="getOverShootingProjectTimeLine()">click here</span> to view Details
+</div>
+<!-- <div class="page w-100 height">
+    <div class="row h-100 w-100">
+    <div class="filters" *ngIf="false">
+      <div class="filter" *ngFor="let filter of filters">
+        {{filter}} <span style="margin-left: 10px; margin-right: 5px;"> x </span>
+      </div>
+    </div>
+    <div class="col-5 d-flex flex-column ps-2 pe-0 pb-0 pt-0">
+      <div class="milestone-cards">
+        <div class="milestone-1"
+          (click)="navitageToTask({navigationType: 'tab', navigationDetails: {count: 0, key: 'all_tasks', name: 'All_tasks' }, tab: 'task'})">
+          <div class="milestone-header">
+            OVERALL COMPLETION
+          </div>
+          <div style="display: flex;
+          justify-content: center;
+          margin-top: 10px;">
+            <div *ngIf="taskIssuesOverview?.task_completion?.actual_overall_completion != null"
+              class="overall-percentage">
+              {{taskIssuesOverview?.task_completion.actual_overall_completion}}%
+            </div>
+            <div *ngIf="taskIssuesOverview?.task_completion?.actual_overall_completion == null">
+              NA
+            </div>
+            <div style="    display: flex;
+            flex-direction: column;
+            margin-top: 5px;
+            margin-left: 5px;">
+              <div class="actual-text">Actual as against </div>
+              <div class="planned-text">
+                <span
+                  *ngIf="taskIssuesOverview?.task_completion?.planned_overall_completion != null">{{taskIssuesOverview?.task_completion.planned_overall_completion}}</span>
+                <span *ngIf="taskIssuesOverview?.task_completion?.planned_overall_completion == null"></span>
+                planned
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="milestone-2"
+          (click)="navitageToTask({navigationType: 'tab', navigationDetails: { key: 'critical_path_tasks', name: 'Critical Path Tasks', count: 0 }, tab: 'task'})">
+          <div class="milestone-header">
+            CRITICAL PATH COMPLETION
+          </div>
+          <div style="display: flex;
+          justify-content: center;
+          margin-top: 10px;">
+            <div *ngIf="taskIssuesOverview?.task_completion?.actual_critical_completion != null"
+              class="overall-percentage">
+              {{taskIssuesOverview?.task_completion.actual_critical_completion}}%
+            </div>
+            <div *ngIf="taskIssuesOverview?.task_completion?.actual_critical_completion == null"
+              class="overall-percentage">
+              NA
+            </div>
+            <div style="    display: flex;
+            flex-direction: column;
+            margin-top: 5px;
+            margin-left: 5px;">
+              <div class="actual-text">Actual as against </div>
+              <div class="planned-text">
+                <span
+                  *ngIf="taskIssuesOverview?.task_completion?.planned_critical_completion != null">{{taskIssuesOverview?.task_completion.planned_critical_completion}}</span>
+                <span *ngIf="taskIssuesOverview?.task_completion?.planned_critical_completion == null">NA</span>
+                planned
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tableHeight" id="table1">
+        <ngx-datatable #table class="material expandable tableHeight" [columnMode]="ColumnMode.force"
+          [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [scrollbarH]="true" [rows]="milestoneTableData"
+          [selectionType]="selectionType.single" [limit]="6">
+          <ngx-datatable-column name="Milestones" [sortable]="true" [width]="50" [cellClass]="checkIsCritical">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <span title="Milestones">Milestones</span>
+            </ng-template>
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="fs-9" title="{{row.name}}">{{row.name}}</div>
+              <div class="cp1" [ngClass]="row.critical ? 'd-block px-1' : 'd-none'">CP1</div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Start" [sortable]="true" [width]="120" [cellClass]="checkIsCriticalRow">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <span title="Start">Planned Start <br>Actual Start</span>
+            </ng-template>
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="fs-9" title="{{row.planned_start_date}}">
+                {{row.planned_start_date}} | {{row.planned_start_time}}
+              </div>
+              <div class="fs-9" title="{{row.actual_start_date}}">
+                {{row.actual_start_date}} | {{row.actual_start_time}}
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="End" [sortable]="true" [width]="120" [cellClass]="checkIsCriticalRow">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <span title="Start">Planned End <br>Actual End</span>
+            </ng-template>
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="fs-9" title="{{row.planned_end_date}}">
+                {{row.planned_end_date}} | {{row.planned_end_time}}
+              </div>
+              <div class="fs-9" title="{{row.actual_end_date}}">
+                {{row.actual_end_date}} | {{row.actual_end_time}}
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Progress" [sortable]="true" [width]="120" [cellClass]="checkIsCriticalRow">
+            <ng-template ngx-datatable-header-template let-column="column">
+              <span title="Progress">Progress % with <br> Statistics</span>
+            </ng-template>
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="fs-9" [ngClass]="row.critical ? 'percentage-not-critical' : 'percentage-not-critical'">Actual
+                {{row.actual_percentage}} | Planned {{row.planned_percentage}}</div>
+              <div class="fs-9">
+                {{row.name}} completed : {{row.completed_task}}
+              </div>
+              <div class="fs-9">
+                Ongoing : {{row.ongoing_task}}
+              </div>
+              <div class="fs-9">
+                Total : {{row.total_task}}
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+    </div>
+    <div class="col-4 d-flex flex-column ps-2 pe-0 pb-0 pt-0" style="width: 36%;">
+      <div class="d-flex flex-row jc-s-between">
+        <div class="heading pb-2">
+          Task overview
+        </div>
+        <div class="daily-report fs-10" style="float: right;" (click)="getDailyReports()">
+          DAILY PROGRESS REPORT >
+        </div>
+      </div>
+      <div class="d-flex">
+        <div class="col-12 red-bg-white-font p-2" style="background-color: #006699 !important;">
+          <div class="heading text-white">
+            Tasks
+          </div>
+          <div class="text-white fs-12">
+            <span
+              *ngIf="taskIssuesOverview?.task_overview?.ongoing_tasks != null">{{taskIssuesOverview?.task_overview.ongoing_tasks}}
+            </span> <span *ngIf="taskIssuesOverview?.task_overview?.ongoing_tasks == null">NA</span>Ongoing | <span
+              *ngIf="taskIssuesOverview?.task_overview?.next_24_hrs_due_tasks != null">{{taskIssuesOverview?.task_overview.next_24_hrs_due_tasks}}</span><span
+              *ngIf="taskIssuesOverview?.task_overview?.next_24_hrs_due_tasks == null">NA</span> Due in next 24 hrs
+          </div>
+        </div>
+      </div>
+      <div class="h-100 d-flex flex-row jc-s-between" style="width: 100%; max-height: 80%;">
+        <div class="d-flex flex-column blocks h-100" style="width: 48%; max-height: 100%;">
+          <div class=" p-3 cursor-pointer" style="height: 22%;"
+            [ngClass]="taskIssuesOverview?.task_overview?.total_ta_delay_hrs < 0 ? 'green-bg-green-font' : 'red-bg-red-font'"
+            (click)="navitageToTask({navigationType: 'tab', navigationDetails: { key: 'delayed_tasks', name: 'Delayed Tasks', count: 0 }, tab: 'task'})">
+            <div style="display: flex; flex-direction: row; align-items: baseline; width: 105%;">
+              <div class="text-big" style="width: 113%;">
+                <span
+                  *ngIf="taskIssuesOverview?.task_overview?.total_ta_delay_hrs != null">{{returnCountNumber(taskIssuesOverview?.task_overview?.total_ta_delay_hrs)}}
+                  hrs</span>
+                <span *ngIf="taskIssuesOverview?.task_overview?.total_ta_delay_hrs == null">NA</span>
+              </div>
+              <div class="heading total-ta">
+                <span>Total TA {{taskIssuesOverview?.task_overview?.total_ta_delay_hrs < 0 ? 'gain' : 'delay' }}</span>
+              </div>
+            </div>
+            <div *ngIf="taskIssuesOverview?.task_overview?.total_ta_delay_equipment != null" class="heading fs-10">
+              {{taskIssuesOverview?.task_overview?.total_ta_delay_equipment}}
+            </div>
+            <div *ngIf="taskIssuesOverview?.task_overview?.total_ta_delay_equipment == null" class="heading fs-10">
+              NA
+            </div>
+          </div>
+          <div class="red-bg-red-font p-3 cursor-pointer"
+            (click)="navitageToTask({navigationType: 'tab', navigationDetails: { key: 'delay-tasks', name: 'Delayed Tasks'}, tab: 'plan'})">
+            <div class="d-flex flex-row jc-s-between">
+              <div class="text-big">
+                <span
+                  *ngIf="taskIssuesOverview?.task_overview?.tasks_going_critical != null">{{taskIssuesOverview?.task_overview.tasks_going_critical}}</span>
+                <span *ngIf="taskIssuesOverview?.task_overview?.tasks_going_critical == null">NA</span>
+              </div>
+              <div class="d-flex flex-column" style="margin-left: 5px;">
+                <div class="fs-10">
+                  Tasks going critical
+                </div>
+                <div class="fs-10">
+                  (less than 12 hrs of slack left)
+                </div>
+              </div>
+            </div>
+            <div class="fs-10" style="color: black;">
+              Across
+              <span *ngIf="taskIssuesOverview?.task_overview?.tasks_going_critical_equipments != null"
+                class="fs-11-bold">{{taskIssuesOverview?.task_overview.tasks_going_critical_equipments}}</span>
+              <span *ngIf="taskIssuesOverview?.task_overview?.tasks_going_critical_equipments == null"
+                class="fs-11-bold">NA</span>
+
+              Equipments
+            </div>
+          </div>
+          <div class="grey-bg-dark-font p-3 jc-s-even cursor-pointer" style="height: 59.5%;">
+            <div>
+              <span style="font-size: 10px; font-weight: bold; color: #006699;">
+                INSPECTION STATISTICS
+              </span>
+            </div>
+            <div
+              (click)="navitageToTask({navigationType: 'page', navigationDetails: {tab: 'observations' }, page: 'inspection'})"
+              class="d-flex flex-row" style="margin-bottom: 10px;">
+              <div class="text-big">
+                <span
+                  *ngIf="taskIssuesOverview?.inspection_statistics?.total_observations != null">{{taskIssuesOverview?.inspection_statistics.total_observations}}</span>
+                <span *ngIf="taskIssuesOverview?.inspection_statistics?.total_observations == null">NA</span>
+              </div>
+              <div class="d-flex flex-column jc-s-between" style="margin-left: 5px;">
+                <div style="font-size: 10px;">
+                  Observations
+                </div>
+                <div class="fs-10">
+                  Across
+                  <span *ngIf="taskIssuesOverview?.inspection_statistics?.total_observations_equipments != null"
+                    class="fs-10-bold">{{taskIssuesOverview?.inspection_statistics.total_observations_equipments}}</span>
+                  <span *ngIf="taskIssuesOverview?.inspection_statistics?.total_observations_equipments == null"
+                    class="fs-10-bold">NA</span>
+                  /
+                  <span
+                    *ngIf="taskIssuesOverview?.inspection_statistics?.total_equipments != null">{{taskIssuesOverview?.inspection_statistics.total_equipments}}</span>
+                  <span *ngIf="taskIssuesOverview?.inspection_statistics?.total_equipments == null">NA</span>
+                  Equipments
+                </div>
+              </div>
+            </div>
+            <div
+              (click)="navitageToTask({navigationType: 'page', navigationDetails: {tab: 'recommendations', filter: 'open_recommendations' }, page: 'inspection'})"
+              class="d-flex flex-row" style="margin-bottom: 10px;">
+              <div class="text-big">
+                <span *ngIf="taskIssuesOverview?.inspection_statistics?.open_recommendations != null"
+                  style="color: #F65150;">{{taskIssuesOverview?.inspection_statistics.open_recommendations}}</span>
+                <span *ngIf="taskIssuesOverview?.inspection_statistics?.open_recommendations == null">NA</span>
+              </div>
+              <div class="d-flex flex-column jc-s-center" style="margin-left: 5px;">
+                <div class="fs-10" style="color: #F65150;">
+                  Open Recommendations
+                </div>
+                <div class="fs-10">
+                  Across
+                  <span *ngIf="taskIssuesOverview?.inspection_statistics?.open_recommendation_equipments != null"
+                    class="fs-10-bold">{{taskIssuesOverview?.inspection_statistics.open_recommendation_equipments}}</span>
+                  <span *ngIf="taskIssuesOverview?.inspection_statistics?.open_recommendation_equipments == null"
+                    class="fs-10-bold">NA</span>
+                  Equipments
+                </div>
+              </div>
+            </div>
+            <div
+              (click)="navitageToTask({navigationType: 'page', navigationDetails: {tab: 'recommendations', filter: 'closed_recommendations' }, page: 'inspection'})"
+              class="d-flex flex-row" style="margin-bottom: 10px;">
+              <div class="text-big">
+                <span *ngIf="taskIssuesOverview?.inspection_statistics?.closed_recommendations != null"
+                  style="color: #33A437;">{{taskIssuesOverview?.inspection_statistics.closed_recommendations}}</span>
+                <span *ngIf="taskIssuesOverview?.inspection_statistics?.closed_recommendations == null">NA</span>
+              </div>
+              <div class="d-flex flex-column jc-s-center" style="margin-left: 5px;">
+                <div class="fs-10" style="color: #33A437;">
+                  Closed Recommendations
+                </div>
+                <div class="fs-10">
+                  Across
+                  <span *ngIf="taskIssuesOverview?.inspection_statistics?.closed_recommendation_equipments != null"
+                    class="fs-10-bold">{{taskIssuesOverview?.inspection_statistics.closed_recommendation_equipments}}</span>
+                  <span *ngIf="taskIssuesOverview?.inspection_statistics?.closed_recommendation_equipments == null"
+                    class="fs-10-bold">NA</span>
+                  Equipments
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex flex-column blocks other-tasks h-100" style="max-width: 50%; max-height: 92%;">
+          <div class="blue-bg-dark-font p-3 cursor-pointer" style="height:23.9%;"
+            (click)="navitageToTask({navigationType: 'tab', navigationDetails: { key: 'delayed_tasks', name: 'Delayed Tasks', count: 0 }, tab: 'task'})">
+            <div class="other-tasks-heading">
+              <span class="fs-10" style="font-weight: bold;">
+                OTHER TASKS
+              </span>
+            </div>
+            <div class="d-flex flex-row">
+              <div class="d-flex flex-column" style="color: #F65150;">
+                <div class="text-big" style="font-weight: 600;">
+                  <span
+                    *ngIf="taskIssuesOverview?.task_overview?.delayed_other_tasks != null">{{taskIssuesOverview?.task_overview.delayed_other_tasks}}</span>
+                  <span *ngIf="taskIssuesOverview?.task_overview?.delayed_other_tasks == null">NA</span>
+                </div>
+                <div class="fs-10">
+                  <span>Tasks delayed</span>
+                </div>
+              </div>
+              <div class="d-flex flex-column" style="margin-left: 15px;  color: #33A437;">
+                <div class="text-big" style="font-weight: 600;">
+                  <span
+                    *ngIf="taskIssuesOverview?.task_overview?.gained_other_tasks != null">{{taskIssuesOverview?.task_overview.gained_other_tasks}}</span>
+                  <span *ngIf="taskIssuesOverview?.task_overview?.gained_other_tasks == null">NA</span>
+                </div>
+                <div class="fs-10">
+                  <span>Tasks in gain</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-3 cursor-pointer" style="background: #F5F5F5;"
+            (click)="navitageToTask({navigationType: 'tab', navigationDetails: {}, tab: 'plan'})">
+            <div class="other-tasks-heading" style="margin-bottom: 10px;">
+              <span class="fs-10" style="font-weight: bold; color: #006699;">
+                BUFFER LEFT
+              </span>
+            </div>
+            <div style="display: flex; flex-direction: column; overflow-y: auto; height: 7.5rem;">
+              <div
+                style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700 !important; margin-bottom: 10px; margin-right: 10px;"
+                *ngFor="let item of bufferItems">
+                <div class="one-liner">
+                  <span>{{item.name}}</span>
+                </div>
+                <div *ngIf="item.is_critical != true">
+                  <span style="color: #006699; font-size: 10px; font-weight: 700;">{{item.slack}}hrs</span> out of
+                  <span>{{item.planned_slack}}hrs</span>
+                </div>
+                <div *ngIf="item.is_critical == true">
+                  In critical path
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="blue-bg-dark-font p-3 d-flex flex-row jc-s-normal cursor-pointer"
+            (click)="navitageToTask({navigationType: 'tab', navigationDetails: { key: 'surprise_tasks', name: 'Surprise Tasks', count: 0 }, tab: 'task'})">
+            <div style="color: black;" *ngIf="taskIssuesOverview?.task_overview?.surprise_tasks != null"
+              class="text-big">
+              {{taskIssuesOverview?.task_overview.surprise_tasks}}
+            </div>
+            <div style="color: black;" *ngIf="taskIssuesOverview?.task_overview?.surprise_tasks == null"
+              class="text-big">
+              NA
+            </div>
+            <div class="d-flex flex-column jc-s-center">
+              <div class="fs-10" style="color: black;">
+                Surprise Tasks Added
+              </div>
+              <div class="fs-10" style="color: black;">
+                Across
+                <span *ngIf="taskIssuesOverview?.task_overview?.surprise_tasks_equipments != null"
+                  class="fs-11-bold">{{taskIssuesOverview?.task_overview.surprise_tasks_equipments}}</span>
+                <span *ngIf="taskIssuesOverview?.task_overview?.surprise_tasks_equipments == null"
+                  class="fs-11-bold"></span>
+                Equipments
+              </div>
+            </div>
+          </div>
+          <div class="green-bg-green-font p-3 cursor-pointer" style="height: 27%;"
+            (click)="navitageToTask({navigationType: 'tab', navigationDetails: { key: '', name: '', count: 0 }, tab: 'equipment'})">
+            <div class="d-flex flex-row justify-content-between">
+              <div *ngIf="taskIssuesOverview?.task_overview?.completed_checklists != null" class="text-big"
+                style="color: #33A437; width: 20%;">
+                {{taskIssuesOverview?.task_overview.completed_checklists}}
+              </div>
+              <div *ngIf="taskIssuesOverview?.task_overview?.completed_checklists == null" class="text-big"
+                style="color: #33A437; width: 20%;">
+                NA
+              </div>
+              <div class="d-flex flex-column">
+                <div class="fs-10" style="color: #33A437;">
+                  Checklists Completed
+                </div>
+                <div class="fs-10">
+                  Across
+                  <span
+                    *ngIf="taskIssuesOverview?.task_overview?.completed_checklists_equipments != null">{{taskIssuesOverview?.task_overview.completed_checklists_equipments}}</span>
+                  <span *ngIf="taskIssuesOverview?.task_overview?.completed_checklists_equipments == null">NA</span>
+                  Equipments
+                </div>
+              </div>
+            </div>
+            <div class="d-flex flex-row justify-content-between mt-2 me-2">
+              <div *ngIf="taskIssuesOverview?.task_overview?.completed_box_up_checklists != null" class="text-big"
+                style="color: #33A437;">
+                {{taskIssuesOverview?.task_overview.completed_box_up_checklists}}
+              </div>
+              <div *ngIf="taskIssuesOverview?.task_overview?.completed_box_up_checklists == null" class="text-big"
+                style="color: #33A437;">
+                NA
+              </div>
+              <div class="d-flex flex-column">
+                <div class="fs-10" style="color: #33A437;">
+                  Box Up Checklists
+                </div>
+                <div class="fs-10" style="color: #33A437;">
+                  Completed out of
+                  <span *ngIf="taskIssuesOverview?.task_overview?.total_box_up_checklists != null"
+                    class="fs-11-bold">{{taskIssuesOverview?.task_overview?.total_box_up_checklists}}</span>
+                  <span *ngIf="taskIssuesOverview?.task_overview?.total_box_up_checklists == null"
+                    class="fs-11-bold">NA</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex flex-column ps-2 pe-0 pb-0 pt-0" style="max-width: 22%;">
+      <div class="heading pb-2 d-flex" style="margin-bottom: -10px;">
+        <div>Issues</div>
+        <div class="blue-color">
+          <div class="form-check form-switch d-flex">
+            <div class="form-check-label " for="flexSwitchCheckNotChecked">All Issues</div>
+            <div class="pl-40">
+              <input (click)="toggle()" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                [checked]="criticalPathIssues">
+            </div>
+            <div class="form-check-label" for="flexSwitchCheckChecked">Critical Path Issues</div>
+          </div>
+        </div>
+      </div>
+      <div class="row pb-2">
+        <div class="col-6 d-flex flex-column blocks ps-3 pb-0 pe-0 pt-0">
+          <div class="red-bg-red-font p-3 box-height cursor-pointer"
+            (click)="navitageToTask({navigationType: 'page', navigationDetails: { tab: 'allIsuues',escalated:true, critical:criticalPathIssues},page: 'issues'})">
+            <div class="heading fs-12">
+              Total Number of <span *ngIf="criticalPathIssues == true">Critical Path</span> Escalated Issues
+            </div>
+            <div class="text-bigger pt-3">
+              <span *ngIf="criticalPathIssues == false">
+                <span
+                  *ngIf="dashboardDetails?.escalated_critical_issues != null">{{taskIssuesOverview?.issues_statistics?.all_escalated_issues}}</span>
+                <span *ngIf="dashboardDetails?.escalated_critical_issues == null">NA</span>
+              </span>
+              <span *ngIf="criticalPathIssues != false">
+                <span
+                  *ngIf="dashboardDetails?.escalated_issues != null">{{taskIssuesOverview?.issues_statistics?.critical_path_escalated_issues}}</span>
+                <span *ngIf="dashboardDetails?.escalated_issues == null">NA</span>
+              </span>
+            </div>
+          </div>
+          <div class="green-bg-green-font p-3 box-height cursor-pointer"
+            (click)="navitageToTask({navigationType: 'page', navigationDetails: { tab: 'allIsuues', status: '2', critical:criticalPathIssues}, page: 'issues'})">
+            <div class="heading fs-12">
+              Total Issues Closed <span *ngIf="criticalPathIssues == true">in Critical Path</span>
+            </div>
+            <div class="text-bigger pt-3">
+              <span *ngIf="criticalPathIssues == false">
+                <span
+                  *ngIf="dashboardDetails?.close_critical_issues != null">{{taskIssuesOverview?.issues_statistics?.all_closed_issues}}</span>
+                <span *ngIf="dashboardDetails?.close_critical_issues == null">NA</span>
+              </span>
+              <span *ngIf="criticalPathIssues != false">
+                <span
+                  *ngIf="dashboardDetails?.close_issues != null">{{taskIssuesOverview?.issues_statistics?.critical_path_closed_issues}}</span>
+                <span *ngIf="dashboardDetails?.close_issues == null">NA</span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 d-flex flex-column blocks" style="height: 130%;">
+          <div class="red-bg-red-font p-3 box-height cursor-pointer"
+            (click)="navitageToTask({navigationType: 'page', navigationDetails: { tab: 'allIsuues', critical:criticalPathIssues}, page: 'issues'})">
+            <div class="heading fs-12">
+              Total Number of Issues <span *ngIf="criticalPathIssues == true">in Critical Path</span>
+            </div>
+            <div class="text-bigger pt-2">
+              <span *ngIf="criticalPathIssues == false">
+                <span
+                  *ngIf="dashboardDetails?.total_critical_issues != null">{{taskIssuesOverview?.issues_statistics?.all_total_issues}}</span>
+                <span *ngIf="dashboardDetails?.total_critical_issues == null">NA</span>
+              </span>
+              <span *ngIf="criticalPathIssues != false">
+                <span
+                  *ngIf="dashboardDetails?.total_issues != null">{{taskIssuesOverview?.issues_statistics?.critical_path_total_issues}}</span>
+                <span *ngIf="dashboardDetails?.total_issues == null">NA</span>
+              </span>
+            </div>
+          </div>
+          <div class="red-bg-red-font p-3 box-height cursor-pointer"
+            (click)="navitageToTask({navigationType: 'page', navigationDetails: {tab: 'allIsuues', status: '1',critical: criticalPathIssues}, page: 'issues'})">
+            <div class="heading fs-12">
+              Total Issues Open <span *ngIf="criticalPathIssues == true">in Critical Path</span>
+            </div>
+            <div class="text-bigger pt-3">
+              <span *ngIf="criticalPathIssues == false">
+                <span
+                  *ngIf="dashboardDetails?.open_critical_issues != null">{{taskIssuesOverview?.issues_statistics?.all_open_issues}}</span>
+                <span *ngIf="dashboardDetails?.open_critical_issues == null">NA</span>
+              </span>
+              <span *ngIf="criticalPathIssues != false">
+                <span
+                  *ngIf="dashboardDetails?.open_issues != null">{{taskIssuesOverview?.issues_statistics?.critical_path_open_issues}}</span>
+                <span *ngIf="dashboardDetails?.open_issues == null">NA</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex flex-column" style="margin-top: -40px;">
+        <div class="heading pb-2">
+          Major Updates
+        </div>
+        <div class="updates">
+          <div *ngIf="majorUpdates?.length == 0">
+            No Updates available
+          </div>
+          <div *ngIf="majorUpdates?.length > 0">
+
+            <div class="majorUpdatesTable" id="table">
+              <ngx-datatable #majorUpdatesTable class="material expandable " [columnMode]="ColumnMode.force"
+                [headerHeight]="0" [footerHeight]="50" [rowHeight]="'auto'" [scrollbarH]="true" [rows]="majorUpdates">
+                <ngx-datatable-column [sortable]="true" [width]="50">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    <div class="d-flex flex-row jc-s-between" style="width: 100%;">
+                      <div style="max-width: 75%; margin-left: -10px; display: flex; flex-wrap: wrap;">
+                        <span class="" *ngFor="let cItem of row.text">
+                          <span class="pe-1" (click)="navigateToTask(row, cItem)"
+                            [ngStyle]="styleForNameAndId(cItem)">{{returnFraming(cItem)}}</span>
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                        </span>
+                      </div>
+                      <div>
+                        <span style="opacity: 0.6;">{{row.time}}</span>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-footer>
+                  <ng-template ngx-datatable-footer-template let-rowCount="updatesTotalCount"
+                    let-pageSize="updatesLimit" let-selectedCount="selectedCount" let-curPage="curPage"
+                    let-offset="updatesOffset">
+                    <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                      [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
+                      [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="updatesLimit"
+                      [count]="updatesTotalCount" (change)="updatesPageChanged($event)">
+                      <ng-template ngx-datatable-pager-template>
+                        <i class="datatable-icon-prev" (click)="pager.previous()"
+                          [ngClass]="{ 'disabled': !pager.hasPrevious()}" style="white-space: nowrap;"></i>
+                        <i class="datatable-icon-skip" (click)="pager.next()"
+                          [ngClass]="{ 'disabled': !pager.hasNext() }" style="white-space: nowrap;"></i>
+                      </ng-template>
+                    </datatable-pager>
+                  </ng-template>
+                </ngx-datatable-footer>
+              </ngx-datatable>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div> -->
+
+
+
+<!-- **********************NEW CODE************************** -->
+<div class="w-100 page-height d-flex fs-12">
+
+  <!--********************* Part-1**********************-->
+  <div class="w-40 ms-2 mt-2 shadow-sm ">
+    <div class="d-flex w-100 bg-white">
+      <div class="milestone-1 w-50 ms-2 mt-2 me-2 mb-2"
+        (click)="navitageToTask({navigationType: 'tab', navigationDetails: {count: 0, key: 'all_tasks', name: 'All_tasks' }, tab: 'task'})">
+        <div class="text-basic  text-center mt-3">
+          OVERALL COMPLETION
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+          <div *ngIf="taskIssuesOverview?.task_completion?.actual_overall_completion != null"
+            class="overall-percentage mx-2">
+            {{taskIssuesOverview?.task_completion.actual_overall_completion}}%
+          </div>
+          <div *ngIf="taskIssuesOverview?.task_completion?.actual_overall_completion == null">
+            NA
+          </div>
+          <div class="mx-2">
+            <div class="actual-text">Actual as against </div>
+            <div class="planned-text">
+              <span
+                *ngIf="taskIssuesOverview?.task_completion?.planned_overall_completion != null">{{taskIssuesOverview?.task_completion.planned_overall_completion}}</span>
+              <span *ngIf="taskIssuesOverview?.task_completion?.planned_overall_completion == null"></span>
+              planned
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="milestone-2 w-50 mt-2 mb-2 me-2"
+        (click)="navitageToTask({navigationType: 'tab', navigationDetails: { key: 'critical_path_tasks', name: 'Critical Path Tasks', count: 0 }, tab: 'task'})">
+        <div class="text-basic text-center mt-3">
+          CRITICAL PATH COMPLETION
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+          <div *ngIf="taskIssuesOverview?.task_completion?.actual_critical_completion != null"
+            class="overall-percentage mx-2">
+            {{taskIssuesOverview?.task_completion.actual_critical_completion}}%
+          </div>
+          <div *ngIf="taskIssuesOverview?.task_completion?.actual_critical_completion == null"
+            class="overall-percentage">
+            NA
+          </div>
+          <div class="mx-2">
+            <div class="actual-text">Actual as against </div>
+            <div class="planned-text">
+              <span
+                *ngIf="taskIssuesOverview?.task_completion?.planned_critical_completion != null">{{taskIssuesOverview?.task_completion.planned_critical_completion}}</span>
+              <span *ngIf="taskIssuesOverview?.task_completion?.planned_critical_completion == null">NA</span>
+              planned
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ps-2 pb-2 pe-2 bg-white" id="table1">
+      <ngx-datatable #table class="material expandable" [columnMode]="ColumnMode.force" [headerHeight]="50"
+        [footerHeight]="0" [rowHeight]="'auto'" [scrollbarH]="true" [rows]="milestoneTableData"
+        [selectionType]="selectionType.single">
+        <ngx-datatable-column name="Milestones" [sortable]="true" [width]="50" [cellClass]="checkIsCritical">
+          <ng-template ngx-datatable-header-template let-column="column">
+            <span title="Milestones">Milestones</span>
+          </ng-template>
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div class="fs-9" title="{{row.name}}">{{row.name}}</div>
+            <div class="cp1" [ngClass]="row.critical ? 'd-block px-1' : 'd-none'">CP1</div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Start" [sortable]="true" [width]="120" [cellClass]="checkIsCriticalRow">
+          <ng-template ngx-datatable-header-template let-column="column">
+            <span title="Start">Planned Start <br>Actual Start</span>
+          </ng-template>
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div class="fs-9" title="{{row.planned_start_date}}">
+              {{row.planned_start_date}} | {{row.planned_start_time}}
+            </div>
+            <div class="fs-9" title="{{row.actual_start_date}}">
+              {{row.actual_start_date}} | {{row.actual_start_time}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="End" [sortable]="true" [width]="120" [cellClass]="checkIsCriticalRow">
+          <ng-template ngx-datatable-header-template let-column="column">
+            <span title="Start">Planned End <br>Actual End</span>
+          </ng-template>
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div class="fs-9" title="{{row.planned_end_date}}">
+              {{row.planned_end_date}} | {{row.planned_end_time}}
+            </div>
+            <div class="fs-9" title="{{row.actual_end_date}}">
+              {{row.actual_end_date}} | {{row.actual_end_time}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Progress" [sortable]="true" [width]="120" [cellClass]="checkIsCriticalRow">
+          <ng-template ngx-datatable-header-template let-column="column">
+            <span title="Progress">Progress % with <br> Statistics</span>
+          </ng-template>
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div class="fs-9" [ngClass]="row.critical ? 'percentage-not-critical' : 'percentage-not-critical'">Actual
+              {{row.actual_percentage}} | Planned {{row.planned_percentage}}</div>
+            <div class="fs-9">
+              {{row.name}} completed : {{row.completed_task}}
+            </div>
+            <div class="fs-9">
+              Ongoing : {{row.ongoing_task}}
+            </div>
+            <div class="fs-9">
+              Total : {{row.total_task}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+
+  <!--********************* Part-2**********************-->
+  <div class="w-60 me-2 mb-2 mt-2 shadow-sm bg-white">
+    <div class="w-100 d-flex">
+      <div class="w-60">
+        <div class="d-flex justify-content-between pt-2 pe-2 w-100 fs-14">
+          <div class="heading fs-14">
+            Task overview
+          </div>
+          <div class="daily-report fs-10" style="float: right;" (click)="getDailyReports()">
+            DAILY PROGRESS REPORT >
+          </div>
+        </div>
+        <div class="d-flex w-100 pt-1">
+          <div class="red-bg-white-font w-100 p-2" style="background-color: #006699 !important;">
+            <div class="heading text-light">
+              Tasks
+            </div>
+            <div class="text-white fs-12">
+              <span
+                *ngIf="taskIssuesOverview?.task_overview?.ongoing_tasks != null">{{taskIssuesOverview?.task_overview.ongoing_tasks}}
+              </span> <span *ngIf="taskIssuesOverview?.task_overview?.ongoing_tasks == null">NA</span>Ongoing | <span
+                *ngIf="taskIssuesOverview?.task_overview?.next_24_hrs_due_tasks != null">{{taskIssuesOverview?.task_overview.next_24_hrs_due_tasks}}</span><span
+                *ngIf="taskIssuesOverview?.task_overview?.next_24_hrs_due_tasks == null">NA</span> Due in next 24 hrs
+            </div>
+          </div>
+        </div>
+        <div class="justify-content-between d-flex w-100 page-height1">
+          <div class="d-flex flex-column w-50 ">
+            <div class="cursor-pointer mt-2 me-2 mb-2 p-3 pt-4" style="height:90px;"
+              [ngClass]="taskIssuesOverview?.task_overview?.total_ta_delay_hrs < 0 ? 'green-bg-green-font' : 'red-bg-red-font'"
+              (click)="navitageToTask({navigationType: 'tab', navigationDetails: { key: 'gantt-chart', name: 'Gantt chart', count: 0 }, tab: 'plan'})">
+              <div class="d-flex justify-content-between">
+                <div style="font-size:20px;">
+                  <span
+                    *ngIf="taskIssuesOverview?.task_overview?.total_ta_delay_hrs != null">{{returnCountNumber(taskIssuesOverview?.task_overview?.total_ta_delay_hrs)}}
+                    hrs</span>
+                  <span *ngIf="taskIssuesOverview?.task_overview?.total_ta_delay_hrs == null">NA</span>
+                </div>
+                <div class="pt-2 fs-10">
+                  <span>Total TA {{taskIssuesOverview?.task_overview?.total_ta_delay_hrs < 0 ? 'gain' : 'delay'
+                      }}</span>
+                </div>
+              </div>
+              <div *ngIf="taskIssuesOverview?.task_overview?.total_ta_delay_equipment != null"
+                class="heading fs-10 pt-2">
+                {{taskIssuesOverview?.task_overview?.total_ta_delay_equipment}}
+              </div>
+              <div *ngIf="taskIssuesOverview?.task_overview?.total_ta_delay_equipment == null"
+                class="heading fs-10 pt-2">
+                NA
+              </div>
+            </div>
+            <div class="red-bg-red-font p-3 cursor-pointer me-2 mb-2" style="height:90px;"
+              (click)="navitageToTask({navigationType: 'tab', navigationDetails: { key: 'delay-tasks', name: 'Delayed Tasks'}, tab: 'plan'})">
+              <div class="d-flex justify-content-between">
+                <div class="text-big">
+                  <span
+                    *ngIf="taskIssuesOverview?.task_overview?.tasks_going_critical != null">{{taskIssuesOverview?.task_overview.tasks_going_critical}}</span>
+                  <span *ngIf="taskIssuesOverview?.task_overview?.tasks_going_critical == null">NA</span>
+                </div>
+                <div class="d-flex flex-column" style="margin-left: 5px;">
+                  <div class="fs-10">
+                    Tasks going critical
+                  </div>
+                  <div class="fs-10">
+                    (less than 12 hrs of slack left)
+                  </div>
+                </div>
+              </div>
+              <div class="fs-10" style="color: black;">
+                Across
+                <span *ngIf="taskIssuesOverview?.task_overview?.tasks_going_critical_equipments != null"
+                  class="fs-11-bold">{{taskIssuesOverview?.task_overview.tasks_going_critical_equipments}}</span>
+                <span *ngIf="taskIssuesOverview?.task_overview?.tasks_going_critical_equipments == null"
+                  class="fs-11-bold">NA</span>
+
+                Equipments
+              </div>
+            </div>
+            <div class="grey-bg-dark-font p-3 jc-s-even cursor-pointer me-2">
+              <div>
+                <span style="font-size: 10px; font-weight: bold; color: #006699;">
+                  INSPECTION STATISTICS
+                </span>
+              </div>
+              <div
+                (click)="navitageToTask({navigationType: 'page', navigationDetails: {tab: 'observations' }, page: 'inspection'})"
+                class="d-flex flex-row" style="margin-bottom: 10px;">
+                <div class="text-big">
+                  <span
+                    *ngIf="taskIssuesOverview?.inspection_statistics?.total_observations != null">{{taskIssuesOverview?.inspection_statistics.total_observations}}</span>
+                  <span *ngIf="taskIssuesOverview?.inspection_statistics?.total_observations == null">NA</span>
+                </div>
+                <div class="d-flex flex-column jc-s-between" style="margin-left: 5px;">
+                  <div style="font-size: 10px;">
+                    Observations
+                  </div>
+                  <div class="fs-10">
+                    Across
+                    <span *ngIf="taskIssuesOverview?.inspection_statistics?.total_observations_equipments != null"
+                      class="fs-10-bold">{{taskIssuesOverview?.inspection_statistics.total_observations_equipments}}</span>
+                    <span *ngIf="taskIssuesOverview?.inspection_statistics?.total_observations_equipments == null"
+                      class="fs-10-bold">NA</span>
+                    /
+                    <span
+                      *ngIf="taskIssuesOverview?.inspection_statistics?.total_equipments != null">{{taskIssuesOverview?.inspection_statistics.total_equipments}}</span>
+                    <span *ngIf="taskIssuesOverview?.inspection_statistics?.total_equipments == null">NA</span>
+                    Equipments
+                  </div>
+                </div>
+              </div>
+              <div
+                (click)="navitageToTask({navigationType: 'page', navigationDetails: {tab: 'recommendations', filter: 'open_recommendations' }, page: 'inspection'})"
+                class="d-flex flex-row" style="margin-bottom: 10px;">
+                <div class="text-big">
+                  <span *ngIf="taskIssuesOverview?.inspection_statistics?.open_recommendations != null"
+                    style="color: #F65150;">{{taskIssuesOverview?.inspection_statistics.open_recommendations}}</span>
+                  <span *ngIf="taskIssuesOverview?.inspection_statistics?.open_recommendations == null">NA</span>
+                </div>
+                <div class="d-flex flex-column jc-s-center" style="margin-left: 5px;">
+                  <div class="fs-10" style="color: #F65150;">
+                    Open Recommendations
+                  </div>
+                  <div class="fs-10">
+                    Across
+                    <span *ngIf="taskIssuesOverview?.inspection_statistics?.open_recommendation_equipments != null"
+                      class="fs-10-bold">{{taskIssuesOverview?.inspection_statistics.open_recommendation_equipments}}</span>
+                    <span *ngIf="taskIssuesOverview?.inspection_statistics?.open_recommendation_equipments == null"
+                      class="fs-10-bold">NA</span>
+                    Equipments
+                  </div>
+                </div>
+              </div>
+              <div
+                (click)="navitageToTask({navigationType: 'page', navigationDetails: {tab: 'recommendations', filter: 'closed_recommendations' }, page: 'inspection'})"
+                class="d-flex flex-row" style="margin-bottom: 10px;">
+                <div class="text-big">
+                  <span *ngIf="taskIssuesOverview?.inspection_statistics?.closed_recommendations != null"
+                    style="color: #33A437;">{{taskIssuesOverview?.inspection_statistics.closed_recommendations}}</span>
+                  <span *ngIf="taskIssuesOverview?.inspection_statistics?.closed_recommendations == null">NA</span>
+                </div>
+                <div class="d-flex flex-column jc-s-center" style="margin-left: 5px;">
+                  <div class="fs-10" style="color: #33A437;">
+                    Closed Recommendations
+                  </div>
+                  <div class="fs-10">
+                    Across
+                    <span *ngIf="taskIssuesOverview?.inspection_statistics?.closed_recommendation_equipments != null"
+                      class="fs-10-bold">{{taskIssuesOverview?.inspection_statistics.closed_recommendation_equipments}}</span>
+                    <span *ngIf="taskIssuesOverview?.inspection_statistics?.closed_recommendation_equipments == null"
+                      class="fs-10-bold">NA</span>
+                    Equipments
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex flex-column w-50">
+            <div class="blue-bg-dark-font p-3 cursor-pointer mt-2"
+              (click)="navitageToTask({navigationType: 'tab', navigationDetails: { key: 'delayed_tasks', name: 'Delayed Tasks', count: 0 }, tab: 'task'})">
+              <div class="other-tasks-heading">
+                <span class="fs-10" style="font-weight: bold;">
+                  OTHER TASKS
+                </span>
+              </div>
+              <div class="d-flex flex-row">
+                <div class="d-flex flex-column" style="color: #F65150;">
+                  <div class="text-big" style="font-weight: 600;">
+                    <span
+                      *ngIf="taskIssuesOverview?.task_overview?.delayed_other_tasks != null">{{taskIssuesOverview?.task_overview.delayed_other_tasks}}</span>
+                    <span *ngIf="taskIssuesOverview?.task_overview?.delayed_other_tasks == null">NA</span>
+                  </div>
+                  <div class="fs-10">
+                    <span>Tasks delayed</span>
+                  </div>
+                </div>
+                <div class="d-flex flex-column" style="margin-left: 15px;  color: #33A437;">
+                  <div class="text-big" style="font-weight: 600;">
+                    <span
+                      *ngIf="taskIssuesOverview?.task_overview?.gained_other_tasks != null">{{taskIssuesOverview?.task_overview.gained_other_tasks}}</span>
+                    <span *ngIf="taskIssuesOverview?.task_overview?.gained_other_tasks == null">NA</span>
+                  </div>
+                  <div class="fs-10">
+                    <span>Tasks in gain</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-3 cursor-pointer mt-2" style="background: #F5F5F5;"
+              (click)="navitageToTask({navigationType: 'tab', navigationDetails: {}, tab: 'plan'})">
+              <div class="other-tasks-heading" style="margin-bottom: 10px;">
+                <span class="fs-10" style="font-weight: bold; color: #006699;">
+                  BUFFER LEFT
+                </span>
+              </div>
+              <div style="display: flex; flex-direction: column; overflow-y: auto; height: 7.5rem;">
+                <div
+                  style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700 !important; margin-bottom: 10px; margin-right: 10px;"
+                  *ngFor="let item of bufferItems">
+                  <div class="one-liner">
+                    <span>{{item.name}}</span>
+                  </div>
+                  <div *ngIf="item.is_critical != true">
+                    <span style="color: #006699; font-size: 10px; font-weight: 700;">{{item.slack}}hrs</span> out of
+                    <span>{{item.planned_slack}}hrs</span>
+                  </div>
+                  <div *ngIf="item.is_critical == true">
+                    In critical path
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="blue-bg-dark-font p-3 d-flex flex-row jc-s-normal cursor-pointer mt-2"
+              (click)="navitageToTask({navigationType: 'tab', navigationDetails: { key: 'surprise_tasks', name: 'Surprise Tasks', count: 0 }, tab: 'task'})">
+              <div style="color: black;" *ngIf="taskIssuesOverview?.task_overview?.surprise_tasks != null"
+                class="text-big">
+                {{taskIssuesOverview?.task_overview.surprise_tasks}}
+              </div>
+              <div style="color: black;" *ngIf="taskIssuesOverview?.task_overview?.surprise_tasks == null"
+                class="text-big">
+                NA
+              </div>
+              <div class="d-flex flex-column jc-s-center">
+                <div class="fs-10" style="color: black;">
+                  Surprise Tasks Added
+                </div>
+                <div class="fs-10" style="color: black;">
+                  Across
+                  <span *ngIf="taskIssuesOverview?.task_overview?.surprise_tasks_equipments != null"
+                    class="fs-11-bold">{{taskIssuesOverview?.task_overview.surprise_tasks_equipments}}</span>
+                  <span *ngIf="taskIssuesOverview?.task_overview?.surprise_tasks_equipments == null"
+                    class="fs-11-bold"></span>
+                  Equipments
+                </div>
+              </div>
+            </div>
+            <div class="green-bg-green-font p-3 cursor-pointer mt-2"
+              (click)="navitageToTask({navigationType: 'tab', navigationDetails: { key: '', name: '', count: 0 }, tab: 'equipment'})">
+              <div class="d-flex flex-row justify-content-between">
+                <div *ngIf="taskIssuesOverview?.task_overview?.completed_checklists != null" class="text-big"
+                  style="color: #33A437; width: 20%;">
+                  {{taskIssuesOverview?.task_overview.completed_checklists}}
+                </div>
+                <div *ngIf="taskIssuesOverview?.task_overview?.completed_checklists == null" class="text-big"
+                  style="color: #33A437; width: 20%;">
+                  NA
+                </div>
+                <div class="d-flex flex-column">
+                  <div class="fs-10" style="color: #33A437;">
+                    Checklists Completed
+                  </div>
+                  <div class="fs-10">
+                    Across
+                    <span
+                      *ngIf="taskIssuesOverview?.task_overview?.completed_checklists_equipments != null">{{taskIssuesOverview?.task_overview.completed_checklists_equipments}}</span>
+                    <span *ngIf="taskIssuesOverview?.task_overview?.completed_checklists_equipments == null">NA</span>
+                    Equipments
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex flex-row justify-content-between mt-2 me-2">
+                <div *ngIf="taskIssuesOverview?.task_overview?.completed_box_up_checklists != null" class="text-big"
+                  style="color: #33A437;">
+                  {{taskIssuesOverview?.task_overview.completed_box_up_checklists}}
+                </div>
+                <div *ngIf="taskIssuesOverview?.task_overview?.completed_box_up_checklists == null" class="text-big"
+                  style="color: #33A437;">
+                  NA
+                </div>
+                <div class="d-flex flex-column">
+                  <div class="fs-10" style="color: #33A437;">
+                    Box Up Checklists
+                  </div>
+                  <div class="fs-10" style="color: #33A437;">
+                    Completed out of
+                    <span *ngIf="taskIssuesOverview?.task_overview?.total_box_up_checklists != null"
+                      class="fs-11-bold">{{taskIssuesOverview?.task_overview?.total_box_up_checklists}}</span>
+                    <span *ngIf="taskIssuesOverview?.task_overview?.total_box_up_checklists == null"
+                      class="fs-11-bold">NA</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w-40">
+        <div class="d-flex flex-column pe-0 pb-0 pt-0 w-100">
+          <div class="heading d-flex pt-2 ps-2 fs-14">
+            <div>Issues</div>
+            <div class="blue-color">
+              <div class="form-check form-switch d-flex">
+                <div class="form-check-label " for="flexSwitchCheckNotChecked">All Issues</div>
+                <div class="pl-40">
+                  <input (click)="toggle()" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                    [checked]="criticalPathIssues">
+                </div>
+                <div class="form-check-label" for="flexSwitchCheckChecked">Critical Path Issues</div>
+              </div>
+            </div>
+          </div>
+          <div class="w-100 d-flex">
+            <div class="d-flex flex-column pb-2 ps-2 pe-2 pt-0 w-50">
+              <div class="red-bg-red-font p-2  cursor-pointer mb-2" style="height:90px;"
+                (click)="navitageToTask({navigationType: 'page', navigationDetails: { tab: 'allIsuues',escalated:true, critical:criticalPathIssues},page: 'issues'})">
+                <div class="heading fs-12">
+                  Total Number of <span *ngIf="criticalPathIssues == true">Critical Path</span> Escalated Issues
+                </div>
+                <div class="text-bigger">
+                  <span *ngIf="criticalPathIssues == false">
+                    <span
+                      *ngIf="dashboardDetails?.escalated_critical_issues != null">{{taskIssuesOverview?.issues_statistics?.all_escalated_issues}}</span>
+                    <span *ngIf="dashboardDetails?.escalated_critical_issues == null">NA</span>
+                  </span>
+                  <span *ngIf="criticalPathIssues != false">
+                    <span
+                      *ngIf="dashboardDetails?.escalated_issues != null">{{taskIssuesOverview?.issues_statistics?.critical_path_escalated_issues}}</span>
+                    <span *ngIf="dashboardDetails?.escalated_issues == null">NA</span>
+                  </span>
+                </div>
+              </div>
+              <div class="green-bg-green-font p-2  cursor-pointer"
+                (click)="navitageToTask({navigationType: 'page', navigationDetails: { tab: 'allIsuues', status: '2', critical:criticalPathIssues}, page: 'issues'})">
+                <div class="heading fs-12">
+                  Total Issues Closed <span *ngIf="criticalPathIssues == true">in Critical Path</span>
+                </div>
+                <div class="text-bigger pt-3">
+                  <span *ngIf="criticalPathIssues == false">
+                    <span
+                      *ngIf="dashboardDetails?.close_critical_issues != null">{{taskIssuesOverview?.issues_statistics?.all_closed_issues}}</span>
+                    <span *ngIf="dashboardDetails?.close_critical_issues == null">NA</span>
+                  </span>
+                  <span *ngIf="criticalPathIssues != false">
+                    <span
+                      *ngIf="dashboardDetails?.close_issues != null">{{taskIssuesOverview?.issues_statistics?.critical_path_closed_issues}}</span>
+                    <span *ngIf="dashboardDetails?.close_issues == null">NA</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex flex-column w-50 pe-2">
+              <div class="red-bg-red-font p-2 cursor-pointer" style="height:90px"
+                (click)="navitageToTask({navigationType: 'page', navigationDetails: { tab: 'allIsuues', critical:criticalPathIssues}, page: 'issues'})">
+                <div class="heading fs-12">
+                  Total Number of Issues <span *ngIf="criticalPathIssues == true">in Critical Path</span>
+                </div>
+                <div class="text-bigger pt-2">
+                  <span *ngIf="criticalPathIssues == false">
+                    <span
+                      *ngIf="dashboardDetails?.total_critical_issues != null">{{taskIssuesOverview?.issues_statistics?.all_total_issues}}</span>
+                    <span *ngIf="dashboardDetails?.total_critical_issues == null">NA</span>
+                  </span>
+                  <span *ngIf="criticalPathIssues != false">
+                    <span
+                      *ngIf="dashboardDetails?.total_issues != null">{{taskIssuesOverview?.issues_statistics?.critical_path_total_issues}}</span>
+                    <span *ngIf="dashboardDetails?.total_issues == null">NA</span>
+                  </span>
+                </div>
+              </div>
+              <div class="red-bg-red-font p-2 cursor-pointer mt-2"
+                (click)="navitageToTask({navigationType: 'page', navigationDetails: {tab: 'allIsuues', status: '1',critical: criticalPathIssues}, page: 'issues'})">
+                <div class="heading fs-12">
+                  Total Issues Open <span *ngIf="criticalPathIssues == true">in Critical Path</span>
+                </div>
+                <div class="text-bigger pt-3">
+                  <span *ngIf="criticalPathIssues == false">
+                    <span
+                      *ngIf="dashboardDetails?.open_critical_issues != null">{{taskIssuesOverview?.issues_statistics?.all_open_issues}}</span>
+                    <span *ngIf="dashboardDetails?.open_critical_issues == null">NA</span>
+                  </span>
+                  <span *ngIf="criticalPathIssues != false">
+                    <span
+                      *ngIf="dashboardDetails?.open_issues != null">{{taskIssuesOverview?.issues_statistics?.critical_path_open_issues}}</span>
+                    <span *ngIf="dashboardDetails?.open_issues == null">NA</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex flex-column ps-2">
+            <div class="heading">
+              Major Updates
+            </div>
+            <div class="updates">
+              <div *ngIf="majorUpdates?.length == 0">
+                No Updates available
+              </div>
+              <div *ngIf="majorUpdates?.length > 0">
+
+                <div class="majorUpdatesTable" id="table">
+                  <ngx-datatable #majorUpdatesTable class="material expandable " [columnMode]="ColumnMode.force"
+                    [headerHeight]="0" [footerHeight]="50" [rowHeight]="'auto'" [scrollbarH]="true"
+                    [rows]="majorUpdates">
+                    <ngx-datatable-column [sortable]="true" [width]="50">
+                      <ng-template let-row="row" ngx-datatable-cell-template>
+                        <div class="d-flex flex-row jc-s-between" style="width: 100%;">
+                          <div style="max-width: 75%; margin-left: -10px; display: flex; flex-wrap: wrap;">
+                            <span class="" *ngFor="let cItem of row.text">
+                              <span class="pe-1" (click)="navigateToTask(row, cItem)"
+                                [ngStyle]="styleForNameAndId(cItem)">{{returnFraming(cItem)}}</span>
+                              <span></span>
+                              <span></span>
+                              <span></span>
+                            </span>
+                          </div>
+                          <div>
+                            <span style="opacity: 0.6;">{{row.time}}</span>
+                          </div>
+                        </div>
+                      </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-footer>
+                      <ng-template ngx-datatable-footer-template let-rowCount="updatesTotalCount"
+                        let-pageSize="updatesLimit" let-selectedCount="selectedCount" let-curPage="curPage"
+                        let-offset="updatesOffset">
+                        <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                          [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'"
+                          [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="updatesLimit"
+                          [count]="updatesTotalCount" (change)="updatesPageChanged($event)">
+                          <ng-template ngx-datatable-pager-template>
+                            <i class="datatable-icon-prev" (click)="pager.previous()"
+                              [ngClass]="{ 'disabled': !pager.hasPrevious()}" style="white-space: nowrap;"></i>
+                            <i class="datatable-icon-skip" (click)="pager.next()"
+                              [ngClass]="{ 'disabled': !pager.hasNext() }" style="white-space: nowrap;"></i>
+                          </ng-template>
+                        </datatable-pager>
+                      </ng-template>
+                    </ngx-datatable-footer>
+                  </ngx-datatable>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--********************* Project time line modal ************************* -->
+
+  <div class="modal fade" id="dateTimeEntryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="w-25">
+            <button type="button" class="btn btn-sm text-basic fw-bold" data-bs-dismiss="modal" aria-label="Close">
+              <i class="fas fa-arrow-left pe-1"></i>
+              Back
+            </button>
+          </div>
+          <div class="text-basic w-75 ms-5">Equipment Overshooting the Project Timeline</div>
+        </div>
+        <div class="modal-body d-flex flex-column fs-12 pt-2">
+          <div class="justify-content-center d-flex ">
+            <button type="button" class="btn btn-sm btn-primary" (click)="navigateToGanttchart()"
+              [disabled]="overShootingProjectTimeLine?.equipment_count == 0">Click to View on Gantt Chart</button>
+          </div>
+          <div class="mt-2" id="table3">
+            <ngx-datatable #table class="material expandable tableHeight" [columnMode]="ColumnMode.force"
+              [headerHeight]="50" [footerHeight]="0" [rowHeight]="'auto'" [scrollbarH]="true"
+              [rows]="overShootingProjectTimeLine?.equipments">
+              <ngx-datatable-column name="Equipment Category" [sortable]="true" [width]="100">
+                <ng-template ngx-datatable-header-template let-column="column">
+                  <span title="Equipment Category">Equipment Category</span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  <div>{{row?.equipment_category_name}}</div>
+                </ng-template>
+              </ngx-datatable-column>
+
+              <ngx-datatable-column name="Equipment Name" [sortable]="true" [width]="100">
+                <ng-template ngx-datatable-header-template let-column="column">
+                  <span title="Equipment Name">Equipment Name</span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  <div>{{row?.equipment_name}}</div>
+                </ng-template>
+              </ngx-datatable-column>
+
+              <ngx-datatable-column [sortable]="false" [width]="100">
+                <ng-template ngx-datatable-header-template let-column="column">
+                  <span title="Delay">Delay</span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  <div>{{row?.delay}}</div>
+                </ng-template>
+              </ngx-datatable-column>
+              <ngx-datatable-column [sortable]="false" [width]="100">
+                <ng-template ngx-datatable-header-template let-column="column">
+                  <span title="Forecast End">Forecast End</span>
+                </ng-template>
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  <div>{{row?.forecasted_end}}</div>
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

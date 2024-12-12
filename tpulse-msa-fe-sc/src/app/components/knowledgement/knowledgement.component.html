@@ -1,0 +1,144 @@
+<div class="shadow-sm primary-color p-2 w-100 d-flex align-items-center justify-content-center" style="height:50px;">
+    <div class="form-control" style="width:150px;">
+        <select class="border-none-outline-none w-100" [(ngModel)]="selectedUnit_id"
+            (change)="getEquipmentCategories()">
+            <option *ngFor="let unit of unitsList" [value]="unit.id">{{unit.name}}</option>
+        </select>
+    </div>
+</div>
+
+<div class="row over-view-page-height m-0 pt-2 pe-2 pb-2" style="width:100%;">
+    <div class="col-12 d-flex">
+        <div class="col-2 bg-white rounded-3">
+            <div class="form-control m-3" style="width:150px;">
+                <select class="border-none-outline-none w-100" (change)="getEquipments()"
+                    [(ngModel)]="equipmentCategory_id">
+                    <option *ngFor="let equipmentCategory of equipmentCategories" [value]="equipmentCategory.id">
+                        {{equipmentCategory.name}}</option>
+                </select>
+            </div>
+            <div *ngFor="let equipment of equipmentsList" (click)="getTasks(equipment.id)"
+                class=" d-flex justify-content-between align-items-center p-2 pb-3 pt-3 ps-4 fs-12 cursor border-bottom"
+                [ngClass]="equipment.id == equipment_id?'primary-bg-color primary-color border-left':''">
+                <div>{{equipment.name}}</div>
+            </div>
+        </div>
+        <div class="col-4 bg-white ms-2 rounded-start border-right" id="table">
+            <ngx-datatable #table class="material  expandable tableHeight w-100" [columnMode]="ColumnMode.force"
+                [selectionType]="selectionType.single" [selected]="selected" [headerHeight]="50" [footerHeight]="0"
+                [rowHeight]="'auto'" [rows]="tasks_list" [scrollbarH]="true" (select)="onSelect($event)">
+                <ngx-datatable-column [sortable]="false">
+                    <ng-template ngx-datatable-header-template let-column="column">
+                        <div class=" text-center d-flex justify-content-center align-items-center" title="Name">
+                            Summary Task</div>
+                    </ng-template>
+                    <ng-template let-column="column" let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <div class="d-flex border-bottom justify-content-between p-2">
+                            <div>{{row.name}}</div>
+                            <div>View Task History</div>
+                        </div>
+                        <div class="p-2">
+                            <div class="primary-color">Learnings</div>
+                            <div *ngFor="let lernings of row?.learnings">
+                                {{lernings}}
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+        <div class="col-6 bg-white rounded-end">
+            <div class="primary-color p-2 w-100 d-flex align-items-center justify-content-center primary-bg-color fs-12"
+                style="height:45px;">
+                Log History
+            </div>
+            <div class="d-flex p-3 justify-content-between w-100">
+                <div class="w-50">
+                    <div class="primary-color fs-12 fw-bold">Started Tray Opening</div>
+                    <div class="fs-12">sreedhar@detecttechnologies.com</div>
+                    <div class="fs-10"><i>20.06.2023 | 04:45:20</i></div>
+                </div>
+                <div class="w-50">
+                    <label class="fs-12 primary-color">Discription</label><br>
+                    <div class="mt-2 w-100">
+                        <textarea placeholder="Enter Discription"
+                            class="w-100 p-2 border-none-outline-none defalut-riskrating-bg-color rounded-3"
+                            style="height:8vh;overflow-y:auto;"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="ps-3 pe-3 pb-3 border-bottom">
+                <div class="fs-12 primary-color fw-bold">Issue Status</div>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <button class="border-none-outline-none btn btn-sm bg-warn text-warn ps-4 pe-4">Open</button>
+                        <div class="fs-12">Status by</div>
+                        <div class="primary-color fs-12">sreedhar@detecttechnologies</div>
+                        <div class="fs-10">20.06.2023 | 05:01:00</div>
+                    </div>
+                    <div>
+                        <button class="border-none-outline-none btn btn-sm bg-safe text-safe ps-4 pe-4">Closed</button>
+                        <div class="fs-12">Status by</div>
+                        <div class="primary-color fs-12">sreedhar@detecttechnologies</div>
+                        <div class="fs-10">20.06.2023 | 05:01:00</div>
+                    </div>
+                    <div>
+                        <button class="border-none-outline-none btn btn-sm bg-warn text-warn ps-4 pe-4">Reopen</button>
+                        <div class="fs-12">Status by</div>
+                        <div class="primary-color fs-12">sreedhar@detecttechnologies</div>
+                        <div class="fs-10">20.06.2023 | 05:01:00</div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-height w-100 d-flex">
+                <div class="w-60 p-2">
+                    <div></div>
+                    <div>
+                        <div class="primary-color fs-12 fw-bold">Linked Observations</div>
+                        <div class="defalut-riskrating-bg-color p-2">
+                            <div *ngFor="let observation of recomondationsAndObservations[0]?.observations">
+                                <div class="bg-white p-2 rounded mt-2">
+                                    <span class="fs-12">
+                                        {{observation?.observation}}
+                                    </span><br>
+                                    <span class="fs-10">
+                                        {{observation?.created_by}}
+                                    </span>
+                                </div>
+                                <div class="fs-10">{{observation?.created_at?.slice(0,10)}} |
+                                    {{observation?.created_at?.slice(12,20)}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-40 p-2">
+                    <div class="primary-color fs-12 fw-bold">Linked Issues</div>
+                    <div *ngFor="let issue of linkedIssuesList">
+                        <span class="bg-danger btn btn-sm text-light mt-2">#{{issue?.issue_number}}</span>
+                        <span class="edit-btn cursor fs-10 ms-2">See Issue History</span>
+                        <div class="fs-12">{{issue?.created_by}}</div>
+                        <div class="fs-10">{{issue?.date}} | {{issue?.time}}</div>
+                    </div>
+
+                    <div class="primary-color fs-12 fw-bold">Issue Images</div>
+                    <div class="row position-relative mt-2 bg-color pt-2 pb-2 ps-0 ">
+                        <div class="col-md-3" *ngFor="let result of recordRows;let i = index"
+                            [ngClass]="{'d-none': i > 3}">
+                            <img style="border-radius:10px" src="{{result?.image_path}}" height="100vh" width="100%"
+                                (click)="openpopup()">
+                        </div>
+                        <p *ngIf="recordRows.length === 0" class="mb-0">No images available</p>
+                    </div>
+                    <div class="primary-color fs-12 fw-bold">Uploaded by</div>
+                    <div class="fs-12">Sreedhar@detecttechnologies.com</div>
+                    <div class="fs-10">20.06.2023 | 05:01:00</div>
+                    <div class="fs-12">Sreedhar@detecttechnologies.com</div>
+                    <div class="fs-10">20.06.2023 | 05:01:00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-view-attachments [totalImages]="recordRows" [booleanDataTrue]="booleanDataTrue"
+    (booleanDataFalse)="closepopup($event)"></app-view-attachments>

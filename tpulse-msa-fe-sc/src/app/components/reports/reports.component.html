@@ -1,0 +1,149 @@
+<div class="shadow-sm primary-color p-2 w-100 d-flex align-items-center justify-content-between" style="height:50px;">
+    <div class="w-35 d-flex align-items-center">
+        <div class="form-control ms-2">
+            <select class="border-none-outline-none" [(ngModel)]="selectedUnit" (change)="changeUnit(selectedUnit)">
+                <option *ngFor="let unit of unitsList" [ngValue]="unit.name">{{unit.name}}</option>
+            </select>
+        </div>
+        <div class="form-control w-100 ms-3 pe-3">
+            <select class="border-none-outline-none typeCss" [(ngModel)]="selectedReport" name="selectedReport"
+                (change)="changeReportType(selectedReport)">
+                <option *ngFor="let report of reportTypeList" [ngValue]="report.name">{{report.name}}</option>
+            </select>
+        </div>
+        <!-- <div class="fs-12 pe-3 ms-2">
+            <button class="border-none-outline-none btn btn-sm  primary-color fw-bold"
+                (click)="onRouteClicked()">FILTER</button>
+        </div> -->
+    </div>
+    <div class="d-flex w-50" style="margin-right:36%; margin-left:5%;">
+        <div class="form-control w-120px ms-3">
+            <select class="fw-bold border-none-outline-none w-100" [(ngModel)]="selectedItemDate"
+                (change)="changeRangeType()">
+                <option *ngFor="let selectItem of selectedItems" [value]="selectItem">{{selectItem}}</option>
+            </select>
+        </div>
+        <div class="form-control w-120px ms-3" *ngIf="selectedItemDate == 'Monthly'">
+            <select class="fw-bold border-none-outline-none w-100" [(ngModel)]="selectMonth"
+                (change)="changeRangeType()">
+                <option *ngFor="let month of months" [value]="month.key">{{month.value}}</option>
+            </select>
+        </div>
+        <div class="form-control w-120px ms-3"  *ngIf="selectedItemDate == 'Monthly' || selectedItemDate == 'Yearly'">
+            <select class="fw-bold border-none-outline-none w-100 " [(ngModel)]="selectedYear"
+                (change)="changeRangeType()">
+                <option *ngFor="let year of getYears(5)" [value]="year">
+                    {{year}}
+                </option>
+            </select>
+        </div>
+        <div class="d-flex align-items-center w-100 ms-3"  *ngIf="selectedItemDate == 'Custom'">
+            <div class="me-2">
+              <input type="date" id="startDate"  class="form-control w-160px"
+              (change)="changeRangeType()" placeholder="DD-MM-YYYY" [(ngModel)]="fromDateFliter" name="fromDateFliter" required >
+            </div>
+            <div>
+              <input type="date" id="endDate" class="form-control w-160px" [(ngModel)]="toDateFliter"
+              (change)="changeRangeType()" placeholder="DD-MM-YYYY"  name="toDateFliter" required >
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row over-view-page-height m-0 pt-2 pe-0" style="width:100%;">
+    <div class="col-12" id="table">
+        <ngx-datatable #table class="material  expandable tableHeight w-100" [columnMode]="ColumnMode.force"
+            [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [rows]="recordRows" [columns]="recordColumns"
+            [scrollbarH]="true" [limit]="rowsLimit">
+            <ngx-datatable-column name="Report Name" prop="{{recordColumns[0]?.prop}}" [sortable]="false"
+                [width]="100">
+                <ng-template let-column="column" let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div>{{row.name}}</div>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Date" [sortable]="true" [width]="100">
+                <ng-template let-column="column" let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div>{{row.date | date: 'dd-MMM-yyyy'}}</div>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Time" [sortable]="false" [width]="100">
+                <ng-template let-column="column" let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div>{{row.time}}</div>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column [sortable]="false" [width]="100" >
+                <ng-template let-column="column" let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div *ngIf="row.file !== null ">
+                        <button class="btn btn-outline-primary btn-sm" (click)="openPDF(row['file'])">VIEW FILE</button>
+                    </div>
+                    <div *ngIf="row.file == null ">
+                        no file available
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-footer>
+              <ng-template
+                ngx-datatable-footer-template
+                let-rowCount="rowCount"
+                let-pageSize="pageSize"
+                let-selectedCount="selectedCount"
+                let-curPage="curPage"
+                let-offset="offset"
+                let-isVisible="isVisible">
+                  <div class="page-count">
+                    <span>Total: {{((curPage - 1) * rowsLimit + 1)}} - {{((curPage) * rowsLimit) < recordRows.length ? ((curPage) * rowsLimit) : recordRows.length}}  of {{recordRows.length}}</span>
+                  </div>
+                  <datatable-pager
+                      [pagerLeftArrowIcon]="'datatable-icon-left'"
+                      [pagerRightArrowIcon]="'datatable-icon-right'"
+                      [pagerPreviousIcon]="'datatable-icon-prev'"
+                      [pagerNextIcon]="'datatable-icon-skip'"
+                      [page]="curPage"
+                      [size]="pageSize"
+                      [count]="rowCount"
+                      [hidden]="!((rowCount / pageSize) > 1)"
+                      (change)="table.onFooterPage($event)">
+                  </datatable-pager>
+              </ng-template>
+            </ngx-datatable-footer>
+        </ngx-datatable>
+    </div>
+</div>
+
+
+<!------ ****************************** Filter Code *************************************---------->
+<div class="route-nav shadow-sm scroll side-bar-height position bg-white  bg-body p-2" style="width:20%;"
+    *ngIf="isRouteClicked">
+    <div class="d-flex mb-2">
+        <button id="back-button" class="border-none-outline-none bg-white" (click)="onRouteClicked()"
+            style="margin-right: auto">
+            <i class="fas fa-arrow-left primary-color"></i>
+        </button>
+        <button class="btn btn-sm secondary-bg-color text-light" [disabled]="fromDateFliter ===''|| toDateFliter  ===''"
+            (click)="getReportsList()"><span>APPLY</span></button>
+        <button class=" primary-color btn btn-sm btn-border border-none-outline-none ms-2"
+            (click)="filterReset()">RESET</button>
+    </div>
+    <div class="route-nav-blocks">
+        <div class="select-vehicle">
+            <fieldset class="side-bar-fieldset">
+                <legend class="side-bar-legend">Satrt date</legend>
+                <div class="input-group p-1 w-100">
+                    <input type="date" id="startDate" class=" w-100 border-none-outline-none"
+                        [(ngModel)]="fromDateFliter" name="date" required (click)="startInputDisabled()">
+                </div>
+            </fieldset>
+        </div>
+        <div class="select-vehicle">
+            <fieldset class="side-bar-fieldset">
+                <legend class="side-bar-legend">End date</legend>
+                <div class="input-group p-1 w-100">
+                    <input type="date" id="endDate" class=" w-100 border-none-outline-none" [(ngModel)]="toDateFliter"
+                        name="date" required (click)="endInputDisabled()">
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>

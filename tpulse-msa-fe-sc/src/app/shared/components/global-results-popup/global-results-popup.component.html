@@ -1,0 +1,10 @@
+<div *ngIf="popupVisible" class="popup">
+  <p *ngIf="popupData.length === 0" id="filteredList" class="text-center mb-0">No data found</p>
+  <div *ngFor="let data of popupData">
+      <div class="d-flex listOfEle px-2 py-1" [ngClass]="returnClasses(data)" (click)="onOptionSelect(data)">
+          <span class="text-no-wrap" id="filteredList" *ngFor="let element of showKeys; let i = index"  [ngClass]="i == (showKeys.length -1) ? 'listName' : ''" >{{(i != 0)?
+              "\&nbsp; >>
+              ":""}}{{data?.item[element]}}</span>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<div class="modal" id="feedBackModal" tabindex="-1"
+data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="feedBackModalLabel"
+aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered w-100 m-auto" >
+  <div class="modal-content p-2">
+      <!-- <p >feedback works!111</p> -->
+      <div class="d-flex justify-content-end">
+        <div class="cursor-pointer fw-600" id="closeIcon" (click)="closeFeedBackModal()">
+          <!-- <i class="fas fa-times"></i> -->
+          <img src="/assets/icons/closeIcon.png" width="11px" alt="">
+        </div>
+      </div>
+      <div class="px-3 pb-3">
+        <div class="fs-12px text-blue fw-800">
+          {{selectedQuestion?.question}}
+          <!-- How's your experience so for with T-Pulse Application? -->
+        </div>
+        <div id="ratingSymbol" class="d-flex justify-content-center fs-25px py-4">
+          <ng-container *ngFor="let item of selectedQuestion?.question_options;let i = index">
+            <div *ngIf="item" class="cursor-pointer mx-2" [ngClass]="selectedRating?.rating >= (i + 1) ? 'text-warning' : 'op-2'" (click)="this.selectedRating = {rating: (i + 1), name: item}" data-toggle="tooltip" [title]="item"><i class="fas fa-star"></i></div>
+          </ng-container>
+        </div>
+        <div>
+          <button class="btn btn-basic btn-sm fullWidth fs-10px fw-800" (click)="sendFeedBack()">
+            SEND FEEDBACK
+          </button>
+        </div>
+      </div>
+  </div>
+</div>
+</div>

@@ -1,0 +1,43 @@
+<div class="w-100 h-100 d-flex flex-column">
+  <div class="d-flex flex-column p-2 fs-12">
+    <div *ngIf="this.data === 'no'" class="row">
+      <div class=" blue-color col-1">
+        Unit
+      </div>
+      <div class="px-3 col-11">
+        <div class="filter d-flex pb-2 w-100">
+          <div *ngFor="let unit of units" [ngClass]="selectedUnit.name == unit.name?'filter-active':''">
+            <div class="w-100 h-100 cursor" (click)="selectUnit(unit)">{{unit.name}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="this.data === 'no'" class="row">
+      <div class=" blue-color col-1">
+        Department
+      </div>
+      <div class="px-3 col-11">
+        <div class="filter d-flex pb-2 w-100">
+          <div *ngFor="let department of scurveDepartments"
+            [ngClass]="selectedScurveDepartment == department?'filter-active':''">
+            <div class="w-100 h-100 cursor" (click)="selectDepartment(department)">{{department}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="this.data === 'no'" class="row">
+      <div class=" blue-color col-1">
+        Vendor
+      </div>
+      <div class="px-3 col-11">
+        <div class="filter d-flex pb-2 w-100">
+          <div *ngFor="let vendor of vendors" [ngClass]="selectedVendor == vendor?'filter-active':''">
+            <div class="w-100 h-100 cursor" (click)="selectVendor(vendor)">{{vendor.name}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-stats class='h-100 w-100' *ngIf="selectedUnit" [unitName]="selectedUnit?.name"
+    [department]="selectedScurveDepartment" [vendor]="selectedVendor?.id" (showSelectedGraph)="toggleDropdown($event)"></app-stats>
+</div>

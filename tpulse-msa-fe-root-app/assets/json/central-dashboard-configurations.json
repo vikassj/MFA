@@ -1,0 +1,128 @@
+{
+    "infraTitle": {
+        "titleName": [
+            {
+                "title": "Workplace Safety",
+                "modules": [
+                    {
+                        "moduleName": "Safety Assistant",
+                        "subtitle": "Safety Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    },
+                    {
+                        "moduleName": "Safety Assistant",
+                        "subtitle": "Safety Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    },
+                    {
+                        "moduleName": "Safety Assistant",
+                        "subtitle": "Safety Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    },
+                    {
+                        "moduleName": "Safety Assistant",
+                        "subtitle": "Safety Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    },
+                    {
+                        "moduleName": "Red zone Assistant",
+                        "subtitle": "Red zone Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    },
+                    {
+                        "moduleName": "Health Assistant",
+                        "subtitle": "Health Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    },
+                    {
+                        "moduleName": "Health Assistant",
+                        "subtitle": "Health Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    },
+                    {
+                        "moduleName": "Health Assistant",
+                        "subtitle": "Health Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    }
+                ]
+            },
+            {
+                "title": "Workplace Operations",
+                "modules": [
+                    {
+                        "moduleName": "Safety Assistant",
+                        "subtitle": "Safety Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    },
+                    {
+                        "moduleName": "Red zone Assistant",
+                        "subtitle": "Red zone Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    },
+                    {
+                        "moduleName": "Health Assistant",
+                        "subtitle": "Health Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    }
+                ]
+            },
+            {
+                "title": "Workplace Inspections",
+                "modules": [
+                    {
+                        "moduleName": "Safety Assistant",
+                        "subtitle": "Safety Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    },
+                    {
+                        "moduleName": "Red zone Assistant",
+                        "subtitle": "Red zone Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    },
+                    {
+                        "moduleName": "Health Assistant",
+                        "subtitle": "Health Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    }
+                ]
+            },
+            {
+                "title": "Workplace Security",
+                "modules": [
+                    {
+                        "moduleName": "Safety Assistant",
+                        "subtitle": "Safety Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    },
+                    {
+                        "moduleName": "Red zone Assistant",
+                        "subtitle": "Red zone Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    },
+                    {
+                        "moduleName": "Health Assistant",
+                        "subtitle": "Health Assistant",
+                        "icon": "fa fa-edit",
+                        "routePath": "/safety-and-surveillance/analytics"
+                    }
+                ]
+            }
+        ]
+    }
+}

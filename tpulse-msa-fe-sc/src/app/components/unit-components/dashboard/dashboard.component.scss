@@ -1,0 +1,499 @@
+.filter {
+  font-size: 12px;
+}
+
+.filter div {
+  padding: 3px;
+  background-color: #00aaff;
+  border-radius: 5px;
+  color: white;
+  margin: 0 5px;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.height {
+  height: calc(100vh - 130px);
+  overflow-y: auto;
+  overflow-x: hidden !important;
+}
+
+.table-height1 {
+  height: calc(100vh - 440px);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.blocks>div {
+  margin: 5px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-check-input:checked {
+  background-color: #1e3044;
+  border-color: #1e3044;
+}
+
+.updates {
+  font-size: 12px;
+  // overflow: hidden;
+}
+
+::ng-deep .ngx-datatable.material .datatable-footer .datatable-pager {
+  margin: 0 !important;
+  // margin-left: 30px !important;
+
+}
+
+
+::ng-deep .ngx-datatable.material .datatable-footer .datatable-pager .datatable-icon-left,
+::ng-deep .ngx-datatable.material .datatable-footer .datatable-pager .datatable-icon-right {
+  white-space: nowrap;
+}
+
+::ng-deep .ngx-datatable.material .datatable-footer .datatable-pager li a {
+  font-family: "Montserrat" !important;
+}
+
+.updates>div {
+  padding-bottom: 10px;
+}
+
+.last-milestone {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  padding-right: 10px;
+}
+
+.next-milestone {
+  font-size: 12px;
+  padding: 10px;
+}
+
+.h-50 {
+  height: 50%;
+}
+
+.planned-date-bg-color {
+  background-color: #f7f7f7;
+}
+
+.planned-color {
+  color: #6d7885;
+}
+
+.border-radius {
+  border-radius: 8px;
+}
+
+#table1 ::ng-deep .ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
+  padding-top: 7px !important;
+
+  align-items: center !important;
+  font-size: 11px !important;
+}
+
+#table1 ::ng-deep.ngx-datatable.material .datatable-body {
+  position: relative;
+  height: calc(100vh - 315px) !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#table ::ng-deep.ngx-datatable.material .datatable-body {
+  position: relative;
+  height: calc(100vh - 445px) !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#table1::ng-deep.ngx-datatable.material.single-selection .datatable-body-row.active .datatable-row-group {
+  border-bottom: 1px solid #dee2e6 !important;
+  border-top: 1px solid #dee2e6 !important;
+  //  border-left: 1px solid #6D7885 !important;
+  border-right: 1px solid #dee2e6 !important;
+  transform: translate3d(0px, 0px, 0px) !important;
+  // color: #212121 !important;
+}
+
+#table1 ::ng-deep.ngx-datatable.material .datatable-body-row {
+  border-bottom: 1px solid #ebebe0 !important;
+  word-wrap: break-word !important;
+}
+
+#table1 ::ng-deep.ngx-datatable.material .datatable-footer .page-count {
+  flex: none !important;
+  overflow-x: hidden !important;
+  display: none;
+}
+
+#table1 ::ng-deep.ngx-datatable .datatable-footer {
+  display: block;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+}
+
+#table1 ::ng-deep.ngx-datatable .datatable-footer .datatable-pager .pager,
+.ngx-datatable .datatable-footer .datatable-pager .pager li {
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  list-style: none;
+  justify-content: center;
+}
+
+#table ::ng-deep.ngx-datatable.material .datatable-footer .page-count {
+  flex: none !important;
+  overflow-x: hidden !important;
+  display: none;
+}
+
+#table ::ng-deep.ngx-datatable .datatable-footer .datatable-pager .pager,
+.ngx-datatable .datatable-footer .datatable-pager .pager li {
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  list-style: none;
+  justify-content: center;
+}
+
+::ng-deep .ngx-datatable .datatable-header .datatable-header-cell .datatable-header-cell-template-wrap {
+  font-size: 9px !important;
+}
+
+::ng-deep ngx-datatable-cell-template {
+  font-size: 9px !important;
+}
+
+.fs-9 {
+  font-size: 9px !important;
+}
+
+::ng-deep .ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell {
+  padding-right: 0 !important;
+  margin-right: 10px !important;
+}
+
+::ng-deep .ngx-datatable.material .datatable-body .datatable-body-row .bc-e {
+  background-color: #e5f5ff !important;
+  padding-right: 10px !important;
+}
+
+::ng-deep .ngx-datatable.material .datatable-body .datatable-body-row .bc-r {
+  background-color: #f65150 !important;
+  color: white;
+}
+
+::ng-deep .ngx-datatable.material .datatable-body .datatable-body-row .bc-lr {
+  background-color: #fee5e5 !important;
+  word-wrap: break-word !important;
+  // padding-right: 10px !important;
+}
+
+.percentage-not-critical {
+  background-color: #006699;
+  color: white;
+  margin-top: -10px;
+  padding-left: 0.3rem;
+}
+
+.percentage-critical {
+  background-color: #f65150;
+  color: white;
+  margin-top: -10px;
+  padding-left: 0.3rem;
+}
+
+.cp1 {
+  width: 28px;
+  height: 25px;
+  padding: 3px;
+  background-color: #f65150;
+  color: white;
+  border-radius: 3px;
+}
+
+.filters {
+  width: 100%;
+  height: 40px;
+  // border: 1px solid red;
+  display: flex;
+  margin-top: 1px;
+  margin-bottom: -10px;
+}
+
+.filter {
+  width: max-content;
+  height: 25px;
+  background-color: #2196f3;
+  color: white;
+  font-style: "Montserrat";
+  border-radius: 8px;
+  padding: 2px;
+  margin: 1px;
+  cursor: pointer;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.milestone-cards {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.milestone-1 {
+  height: 100px;
+  width: 49.5%;
+  // border: 1px solid red;
+  background: #f5f5f5 0% 0% no-repeat padding-box;
+  cursor: pointer;
+}
+
+.milestone-2 {
+  height: 100px;
+  width: 49.5%;
+  // border: 1px solid red;
+  background: #f5f5f5 0% 0% no-repeat padding-box;
+  cursor: pointer;
+}
+
+.tableHeight {
+  margin-top: 3px;
+}
+
+.milestone-header {
+  margin-top: 15px;
+  margin-left: 50px;
+  font-size: 10px;
+  color: #006699;
+  opacity: 1;
+}
+
+.overall-percentage {
+  font-size: 26px;
+  color: #6d7885;
+}
+
+.actual-text {
+  opacity: 0.6;
+  font-size: 11px;
+}
+
+.planned-text {
+  opacity: 1;
+  font-size: 11px;
+}
+
+.box-height {
+  height: 30%;
+  width: 102%;
+}
+
+.total-ta {
+  padding-top: 20px;
+  font-size: 10px;
+  width: 70%;
+}
+
+.fs-10 {
+  font-size: 10px;
+}
+
+.fs-10-bold {
+  font-size: 10px;
+  font-weight: 600 !important;
+}
+
+.fs-11-bold {
+  font-size: 11px;
+  font-weight: 600 !important;
+}
+
+.jc-s-even {
+  justify-content: space-evenly !important;
+}
+
+.jc-s-around {
+  justify-content: space-around !important;
+}
+
+.jc-s-between {
+  justify-content: space-between !important;
+}
+
+.jc-s-normal {
+  justify-content: normal !important;
+}
+
+.jc-s-center {
+  justify-content: center;
+}
+
+.align-items-baseline {
+  align-items: baseline;
+}
+
+.other-tasks {
+  margin-left: -15px;
+  width: 53.5%;
+}
+
+.other-tasks-heading {
+  // margin-top: -5px;
+  // margin-bottom: 4px;
+}
+
+.buffer-text {
+  // margin-top: 6px;
+  margin-left: 10px;
+}
+
+.buffer-left-text {
+  margin-top: 18px;
+  margin-left: 5px;
+}
+
+.total-buffer-text {
+  margin-top: 18px;
+  margin-left: 5px;
+}
+
+.ngx-datatable {
+  height: 101%;
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.daily-report {
+  color: #006699;
+  text-decoration: underline;
+  cursor: pointer !important;
+}
+
+.one-liner {
+  font-size: 12px;
+  font-weight: 700;
+  width: 50%;
+  margin-right: 8px;
+  display: inline-block;
+  /* important */
+  white-space: nowrap;
+  overflow: hidden;
+
+  &:not(:hover) {
+    text-overflow: ellipsis;
+  }
+
+  /* animate on either hover or focus */
+  &:hover,
+  &:focus {
+    span {
+      display: inline-block;
+      animation-name: scroll-text;
+      animation-duration: 7s;
+      animation-timing-function: linear;
+      animation-delay: 0s;
+      animation-iteration-count: infinite;
+      animation-direction: normal;
+      /* FYI this would be the shorthand:
+        animation: scroll-text 5s ease 0s 2 normal;
+      */
+    }
+  }
+
+  /* define the animation */
+  @keyframes scroll-text {
+    0% {
+      transform: translateX(0%);
+    }
+
+    90% {
+      transform: translateX(-100%);
+    }
+
+    95% {
+      transform: translateX(0%);
+    }
+
+    100% {
+      transform: translateX(0%);
+    }
+  }
+}
+
+.ngx-datatable.material {
+  // background: #fff;
+  box-shadow: none !important;
+}
+
+#table3 ::ng-deep .ngx-datatable.fixed-header .datatable-header {
+  border-bottom: 1px solid white !important;
+}
+
+#table3 ::ng-deep.ngx-datatable.material .datatable-body-row {
+  border-bottom: 1px solid #ebebe0 !important;
+}
+
+.fs-14 {
+  font-size: 12px;
+}
+
+
+// NEW CSS
+
+.page-height {
+  height: calc(100vh - 130px);
+  background-color: #F4F7FC;
+  overflow-x: hidden;
+}
+
+.w-40 {
+  width: 40%;
+}
+
+.w-60 {
+  width: 60%;
+}
+
+.fs-12 {
+  font-size: 12px;
+}
+
+.page-height1 {
+  height: calc(100vh - 220px) !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+@media screen and (max-height: 700px) {
+
+  #table ::ng-deep.ngx-datatable.material .datatable-body {
+    position: relative;
+    height: calc(100vh - 450px) !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+}
+
+.modal-content {
+  .modal-body {
+    #table3::ng-deep.ngx-datatable.material .datatable-body {
+      height: calc(100vh - 220px) !important;
+      overflow-y: auto;
+      overflow-x: hidden !important;
+    }
+  }
+}

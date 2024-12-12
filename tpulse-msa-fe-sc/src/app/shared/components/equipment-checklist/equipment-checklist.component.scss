@@ -1,0 +1,51 @@
+.border-basic {
+  border: 1px solid rgb(0, 102, 153);
+}
+
+.fw-bold {
+  font-weight: 800;
+}
+
+::ng-deep .largeModal .modal-dialog {
+  max-width: 80%;
+  width: 80%;
+
+}
+::ng-deep .largeModal .modal-body {
+  overflow: hidden;
+  max-height: 80%;
+}
+
+.text-color {
+  color: #0a77ae;
+}
+
+.border-outline {
+  border: 1px solid #006699;
+}
+
+
+.equipmentChecklistTable ::ng-deep .datatable-body-cell-label {
+  display: flex;
+  height: 100%;
+}
+
+.equipmentChecklistTable ::ng-deep .datatable-footer-inner {
+  overflow-y: hidden;
+}
+
+.equipmentChecklistTable ::ng-deep  .datatable-body {
+  height: 400px;
+}
+
+.accordion-button {
+  background-color: #F8F8F8 !important;
+}
+
+.modal-content {
+  height: 90vh;
+}
+
+.inputCss {
+  height: 30px;
+}

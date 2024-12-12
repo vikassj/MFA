@@ -1,0 +1,45 @@
+<div class="w-100 h-100 d-flex flex-column">
+  <!-- <div class="status-bar">
+    Last achieved CDU Loop (Milestone) in 20-02-2022, Next milestone CDU Furnace due on 30-04-2022
+  </div> -->
+  <div class="h-100 w-100 d-flex flex-column p-2">
+    <div class="menus shadow-sm bg-white primary-color ps-2 pe-2 w-100 d-flex align-items-center justify-content-center"
+      style="height:50px">
+      <div *ngIf="selectedTab == 'gantt-chart'">
+        <!-- <button class="btn btn-sm btn-primary secondary-bg-color border-none-outline-none ms-2"
+        (click)="createSurprise()">Create new Surprise
+        task</button> -->
+      </div>
+      <div class="d-flex flex-column justify-content-between  ms-2 cursor h-100 pt-2"
+        (click)="getSelectedTab('gantt-chart')">
+        <div class="pt-2" [ngClass]="selectedTab == 'gantt-chart'?'':'primary-color opacity'">Gantt Chart</div>
+        <div [ngClass]="selectedTab == 'gantt-chart'?'border-under-selected-page pt-2':'primary-color'"></div>
+      </div>
+      <div class=" d-flex flex-column justify-content-between ms-5 cursor h-100 pt-2"
+        (click)="getSelectedTab('delay-tasks')">
+        <div class="pt-2" [ngClass]="selectedTab == 'delay-tasks'?'':'primary-color opacity'">Delayed Tasks</div>
+        <div [ngClass]="selectedTab == 'delay-tasks'?'border-under-selected-page pt-2':'primary-color'"></div>
+      </div>
+      <div class="d-flex flex-column justify-content-between ms-5 cursor h-100 pt-2"
+        (click)="getSelectedTab('s-curve')">
+        <div class="pt-2" [ngClass]="selectedTab == 's-curve'?'':'primary-color opacity'">S-Curve and Statistics</div>
+        <div [ngClass]="selectedTab == 's-curve'?'border-under-selected-page pt-2':'primary-color'"></div>
+      </div>
+    </div>
+
+    <div class="content w-100 h-100 bg-white">
+      <ng-container *ngIf="selectedTab == 'delay-tasks'">
+        <app-delay-tasks *ngIf="selectedUnit" [selectedUnit]="selectedUnit" [selectedDepartment]="selectedDepartment" [selectedVendor]="selectedVendor" [selectedEquipmentCategory]="selectedEquipmentCategory"></app-delay-tasks>
+      </ng-container>
+      <ng-container *ngIf="selectedTab == 'gantt-chart'">
+        <app-gantt class="w-100" [selectedUnit]="selectedUnit" [selectedEquipmentCategory]="selectedEquipmentCategory"
+          [equipments]="equipments" [selectedDepartment]="selectedDepartment " [selectedVendor]="selectedVendor">
+        </app-gantt>
+      </ng-container>
+      <ng-container *ngIf="selectedTab == 's-curve'">
+        <app-s-curve></app-s-curve>
+      </ng-container>
+    </div>
+  </div>
+
+</div>

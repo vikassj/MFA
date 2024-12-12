@@ -1,0 +1,348 @@
+<div class="m-2 notifications-page-height align-items-center shadow-sm  bg-white">
+    <!-- <div class="d-flex justify-content-between w-50 p-4"> -->
+    <!-- <div class="w-100">
+            <label class="fs-12">Equipment Category</label>
+            <div class="form-control w-100">
+                <select class="border-none-outline-none w-100" (change)="getEquipments(true)"
+                    [(ngModel)]="equipmentCategory_id">
+                    <option *ngFor="let equipmentCategory of equipmentCategories" [value]="equipmentCategory.id">
+                        {{equipmentCategory.name}}</option>
+                </select>
+            </div>
+        </div> -->
+    <!-- <div class="w-100 ms-5">
+            <label class="fs-12">Equipment</label>
+            <div class="form-control w-100">
+                <select class="border-none-outline-none w-100" (change)="getTasks(true)" [(ngModel)]="equipment_id">
+                    <option *ngFor="let equipment of equipmentsList" [value]="equipment.id">{{equipment.name}}</option>
+                </select>
+            </div>
+        </div> -->
+    <!-- <div class="w-100 ms-5">
+            <label class="fs-12">Task</label>
+            <div class="form-control w-100">
+                <select class="border-none-outline-none w-100" [(ngModel)]="task_id">
+                    <option *ngFor="let task of tasks_list" [value]="task.id">{{task.name}}</option>
+                </select>
+            </div>
+        </div> -->
+    <div class="d-flex justify-content-between w-50 p-4 py-1">
+        <div class="w-100 ms-5 me-3">
+            <label class="fs-12 fw-600 primary-color">Issue Type</label>
+            <div class="issue form-control w-100">
+                <select class="issue border-none-outline-none w-100" style="height: 20px;" [(ngModel)]="issue_type_id">
+                    <option [value]="null" selected>Select Issue Type</option>
+                    <option *ngFor="let issue_type of issue_types_list" [value]="issue_type.id">{{issue_type.name}}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between w-50 p-4 py-2">
+        <div class="w-100 ms-5 me-3">
+            <label class="fs-12 fw-600 primary-color">Issue Summary</label>
+            <div class="sum form-control w-100 defalut-riskrating-bg-color">
+                <!-- <input class="issue border-none-outline-none  w-100" maxlength="100" name="summary" [(ngModel)]="summary" placeholder="Summary" style="height: 20px;" (keyup)="validateSummary()">
+                    <span id="Summary"></span> -->
+                <textarea type="text" class="issue border-none-outline-none  w-100" rows="3" placeholder="Summary"
+                    [(ngModel)]="summary" style="height: 66px;">
+                    </textarea>
+            </div>
+            <p *ngIf="!commonServices.alphaNumericWithoutSpaceValidator(summary)"
+                            class="font-italic text-danger mb-0 fs-12">Issue Summary cannot be empty and shouldn't have space
+                            characters</p>
+        </div>
+
+    </div>
+    <!-- </div> -->
+    <div class="d-flex justify-content-between w-80 p-4 py-2">
+        <!-- <div class="w-100">
+            <label class="fs-12">Date</label>
+            <div class="form-control w-100 defalut-riskrating-bg-color">
+                <input disabled type="text" [(ngModel)]="issue_created_date" class="border-none-outline-none w-100"
+                    required>
+            </div>
+        </div> -->
+        <!-- <div class="w-100 ms-5 me-3">
+            <label class="fs-12 fw-600 primary-color">Unit</label>
+            <div class="issue form-control w-100">
+                <select class="issue border-none-outline-none w-100" [(ngModel)]="task_id">
+                    <option *ngFor="let task of tasks_list" [value]="task.id">{{task.name}}</option>
+                </select>
+            </div>
+        </div> -->
+        <div class="w-100 ms-5 me-3">
+            <label class="fs-12 fw-600 primary-color">Equipment Category</label>
+            <div class="issue form-control w-100">
+                <select class="issue w-100 border-none-outline-none" (change)="getEquipments(true)"
+                    [(ngModel)]="equipmentCategory_id" style="height: 20px;">
+                    <option *ngFor="let equipmentCategory of equipmentCategories" [value]="equipmentCategory.id">
+                        {{equipmentCategory.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="w-100 ms-5 me-3">
+            <label class="fs-12 fw-600 primary-color">Equipment</label>
+            <div class="issue form-control w-100">
+                <select class="issue  w-100 border-none-outline-none" (change)="getTasks(true)"
+                    [(ngModel)]="equipment_id" style="height: 20px;">
+                    <option *ngFor="let equipment of equipmentsList" [value]="equipment.id">{{equipment.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="w-100 ms-5 me-3">
+            <label class="fs-12 fw-600 primary-color">Task</label>
+            <div class="issue form-control w-100">
+                <select class="issue border-none-outline-none w-100" [(ngModel)]="task_id" style="height: 20px;">
+                    <option value="null">Select Task Name</option>
+                    <option *ngFor="let task of tasks_list" [value]="task.id">{{task.name}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="w-100 ms-5">
+            <label class="fs-12">Created by</label>
+            <div class="form-control w-100 defalut-riskrating-bg-color">
+                <input class="border-none-outline-none w-100" disabled [value]="created_by.email">
+            </div>
+        </div> -->
+    <!-- <div class="w-100 ms-5">
+            <label class="fs-12">Deadline to Close</label>
+            <div class="form-control w-100">
+                <input type="date" [(ngModel)]="deadline_to_close" class="border-none-outline-none w-100">
+            </div>
+        </div> -->
+    <!-- <div class="w-100 ms-5">
+            <label class="fs-12">Status</label>
+            <div class="form-control w-100 p-0">
+                <select class="border-none-outline-none w-100 status-dropdown-open " disabled>
+                    <option>open</option>
+                </select>
+            </div>
+        </div> -->
+    <!-- <div class="w-100 ms-5">
+            <label class="fs-12">Risk Rating</label>
+            <div class="w-100">
+                <div class="progress riskrating-bar-w-h riskrating-bg-color">
+                    <div class="cursor" (click)="decreaseRiskRatingLevel()">
+                        <i class="fas fa-minus-square icon-cog" style="font-size:20px ;"></i>
+                    </div>
+                    <div [ngClass]="(risk_rating == 1 || risk_rating == 2 || risk_rating == 3 ||risk_rating == 4 || risk_rating == 5)?'progress-bar-color':'defalut-riskrating-bg-color'"
+                        class="cursor low-level riskrating-bar-radius ms-2" title="very Low" role="progressbar"
+                        style="width:16px" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div [ngClass]="(risk_rating == 2 || risk_rating == 3 ||risk_rating == 4 || risk_rating == 5)?'progress-bar-color-2':'defalut-riskrating-bg-color'"
+                        class=" cursor low ms-2  riskrating-bar-radius" title="Low" role="progressbar"
+                        style="width:16px" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div [ngClass]="(risk_rating == 3 ||risk_rating == 4 || risk_rating == 5)?'progress-bar-color-3':'defalut-riskrating-bg-color'"
+                        class=" cursor medium ms-2  riskrating-bar-radius" title="Medium" role="progressbar"
+                        style="width:16px" aria-valuenow="" aria-valuemin=" 0" aria-valuemax="100">
+                    </div>
+                    <div [ngClass]="(risk_rating == 4 || risk_rating == 5)?'progress-bar-color-4':'defalut-riskrating-bg-color'"
+                        class=" cursor high ms-2  riskrating-bar-radius" title="High" role="progressbar"
+                        style="width:16px" aria-valuenow="" aria-valuemin=" 0" aria-valuemax="100"></div>
+                    <div [ngClass]="(risk_rating == 5)?'progress-bar-color-5':'defalut-riskrating-bg-color'"
+                        class=" cursor very-high ms-2  riskrating-bar-radius" title="very High" role="progressbar"
+                        style="width:16px" aria-valuenow="" aria-valuemin=" 0" aria-valuemax="100"></div>
+                    <div class="ms-2 cursor" (click)="increaseRiskRatingLevel()"><i class="fas fa-plus-square icon-cog"
+                            style="font-size:20px ;"></i> </div>
+                </div>
+            </div>
+        </div> -->
+
+    <div class="d-flex justify-content-between w-50 p-4 py-2">
+        <div class="w-100 ms-5 me-3">
+            <label class="fs-12 fw-600 primary-color">Deadline to Close</label>
+            <div class="issue w-100">
+                <input type="date" id="txtDates" [(ngModel)]="deadline_to_close"
+                    class="issue w-100 border-none-outline-none" style="height: 20px; padding: 7px 11px 2px;
+                font-weight: 200;" (click)="inputDisable()">
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="d-flex justify-content-between w-50 p-4 py-2 ms-5">
+        <img  src="photoFileName+PhotoFilePath" alt='image'>
+        <i class="fa fa-camera" aria-hidden="true">
+        <input type="file" (change)="onSelectFile($event)"></i>
+    </div> -->
+    <!-- <div class="">
+        <button class="att btn btn-sm attech-btn  fs-10px fw-800 cursor-pointer" style="padding: 6px 15px;
+        margin: 1px 5px;" title="Select document"><i
+            class="fas fa-paperclip pe-2 text-basic fw-800"></i>Attach</button>
+        <input type="file" accept="image/jpeg" class="cursor-pointer" title="Select document"
+          (change)="onSelectFile($event)" (click)="$event.target.value=null">
+    </div> -->
+    <div class="w-50 p-4 " style="margin-left: 15px;">
+        <div class="btn-file w-40px ms-4 cursor-pointer">
+            <!-- <button class="btn btn-sm browse-btn px-2  fs-10px fw-800">Browse Image</button> -->
+            <button class="att btn btn-sm attech-btn fs-10px fw-800 cursor-pointer" title="Select document"><img
+                    src="/assets/icons/image_upload.svg" class="cursor-pointer" width="30px" height="30px" />
+            </button>
+            <input type="file" accept="image/jpeg" class="cursor-pointer" multiple title="Select document"
+                (change)="onSelectFile($event)" (click)="$event.target.value=null">
+        </div>
+    </div>
+    <div class="d-flex flex-wrap px-4 " style="margin-left: 40px;">
+        <div class="d-flex flex-wrap m-1" *ngFor="let item of actionCommentImage;let i = index">
+          <div class="postImage position-relative w-125px">
+            <div class="pe-2 pb-2 w-125px">
+              <img [src]="item.actionImage" width="80px" height="50px">
+              <!-- <div class="h-30px rounded-bottom bg-dark text-white w-125px p-1">
+                <div class=" fs-8px">{{images.filename | imageNameHideInfo }}</div>
+                <div class="d-flex fs-8px">
+                  <div class="me-2 fw-bold"><i class="far fa-calendar-alt pe-2"></i>{{images.created_at | date : 'yyyy-MM-dd'}}
+                  </div>
+                  <div class=" fw-bold"><i class="far fa-clock pe-2"></i>{{images.created_at | date : 'HH:mm:ss'}}</div>
+                </div>
+              </div> -->
+            </div>
+            <div class="delete-option">
+              <div class="d-flex justify-content-center align-items-center">
+                <!-- <div class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center me-1" (click)="downloadImg()"><i class="fas fa-download text-color"></i></div> -->
+                <div
+                  class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center cursor-pointer"
+                  (click)="deleteSlectedCommentImg(i)"><i class="fas fa-trash custom"></i></div>
+              </div>
+            </div>
+          </div>
+            <!-- <div
+        class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center cursor-pointer"
+        (click)="deleteSlectedCommentImg(i)">x
+    </div> -->
+        </div>
+
+    </div>
+
+
+    <!-- <img [src]="observationImage" > -->
+
+
+    <div class="d-flex justify-content-between w-50 p-4 py-2">
+        <div class="w-100 ms-5">
+            <label class="fs-12 fw-600 primary-color">Risk Rating</label>
+            <div class="w-100">
+                <div class="progress riskrating-bar-w-h riskrating-bg-color" style="margin-left: -8px;">
+                    <!-- <div class="cursor" (click)="decreaseRiskRatingLevel()">
+                        <img src="assets/icons/Reduce.svg" id="minuss" alt="reduce" height="20px">
+                    </div> -->
+                    <div [ngClass]="(risk_rating == 1 || risk_rating == 2 || risk_rating == 3 ||risk_rating == 4 || risk_rating == 5)?'progress-bar-color':'defalut-riskrating-bg-color'"
+                        class="cursor riskrating-bar-radius ms-2 " title="very Low" role="progressbar"
+                        style="width:16px; height: 20px;" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"
+                        (click)=" selectRiskRating(1)"></div>
+                    <div [ngClass]="(risk_rating == 2 || risk_rating == 3 ||risk_rating == 4 || risk_rating == 5)?'progress-bar-color-2':'defalut-riskrating-bg-color'"
+                        class="cursor low ms-1 riskrating-bar-radius" title="Low" role="progressbar" style="width:16px"
+                        aria-valuenow="" aria-valuemin="0" aria-valuemax="100" (click)=" selectRiskRating(2)">
+                    </div>
+                    <div [ngClass]="(risk_rating == 3 ||risk_rating == 4 || risk_rating == 5)?'progress-bar-color-3':'defalut-riskrating-bg-color'"
+                        class="cursor medium ms-1  riskrating-bar-radius" title="Medium" role="progressbar"
+                        style="width:16px" aria-valuenow="" aria-valuemin=" 0" aria-valuemax="100"
+                        (click)=" selectRiskRating(3)">
+                    </div>
+                    <div [ngClass]="(risk_rating == 4 || risk_rating == 5)?'progress-bar-color-4':'defalut-riskrating-bg-color'"
+                        class="cursor high ms-1  riskrating-bar-radius" title="High" role="progressbar"
+                        style="width:16px" aria-valuenow="" aria-valuemin=" 0" aria-valuemax="100"
+                        (click)=" selectRiskRating(4)"></div>
+                    <div [ngClass]="(risk_rating == 5)?'progress-bar-color-5':'defalut-riskrating-bg-color'"
+                        class="cursor very-high ms-1  riskrating-bar-radius" title="very High" role="progressbar"
+                        style="width:16px" aria-valuenow="" aria-valuemin=" 0" aria-valuemax="100"
+                        (click)="selectRiskRating(5)"></div>
+                    <!-- <div class="ms-2 cursor" (click)="increaseRiskRatingLevel()">
+                        <img src="assets/icons/Adding.svg" id="adding" alt="add" height="20px">
+                    </div> -->
+                    <!-- <div>
+                            <button class="btn btn-sm ratingSubmitBtn h-16px" style="height: 22px;
+                            width: 4px;
+                            padding: 1px 1px;
+                            margin-left: 7px;">
+                               <div class="border-radius-3 d-flex justify-content-center align-items-center me-1 cursor-pointer" style="background: green;
+                               height: 19px;
+                               width: 19px;
+                               color: white;
+                               border-radius: 5px;">
+                                <i class="far fa-check-circle fs-12px"></i>
+                               </div>
+                            </button>
+                        </div> -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between w-50 p-4 py-2 ms-5">
+        <div style="width:65%;">
+            <div class="d-flex justify-content-between level1">
+                <div class="fs-12 fw-600 primary-color">Tagged persons ({{taggedEmailIds?.length}})</div>
+                <div class="level2">
+                    <!-- <input type="text" onkeypress="return /[0-9a-zA-Z ]/i.test(event.key)" #data
+                        [(ngModel)]="selectedEmail.email" (keyup)="getSelectedEmail(data.value)"
+                        placeholder="Search To Tag User" class="border-none-outline-none border-bottom">
+                    <div class="popup" [ngClass]="searchRelatedEmailData?.length > 0 ?'coustom-border':''">
+                        <div class="cursor" *ngFor="let email of searchRelatedEmailData; let i = index" title="{{email?.email}}"
+                            (click)="chipsData(email)">
+                            {{email?.email?.slice(0,25)}}...
+                        </div>
+                    </div>
+                    <button [disabled]="!selectedEmail?.email?.includes('@')" (click)="addEmailIds()"
+                        class="border-none-outline-none primary-bg-color primary-color btn btn-sm ms-3"><img src="assets/icons/add_icon.svg" class="me-1" width="10px" height="10px">Add</button> -->
+                </div>
+            </div>
+            <div class="defalut-riskrating-bg-color mt-1 pb-2" style="height:28px; background-color: whitesmoke;">
+               <div class="d-flex">
+                 <!-- <input type="text" onkeypress="return /[0-9a-zA-Z ]/i.test(event.key)" #data
+                        [(ngModel)]="selectedEmail.email" (keyup)="getSelectedEmail(data.value)"
+                        placeholder="Search To Tag User" class="border-none-outline-none border-bottom"> -->
+                <!-- <input *ngIf="selectedEmail.email !='created_by'" type="text"
+                    onkeypress="return /[0-9a-zA-Z ]/i.test(event.key)" #data [(ngModel)]="selectedEmail.email"
+                    (keyup)="getSelectedEmail(data.value)" placeholder="Search to Tag User......"
+                    class="border-none-outline-none fs-12"
+                    style="padding: 5px 10px;background: whitesmoke; width: 80%; font-weight: 500;"> -->
+                    <ng-select class="" [items]="searchRelatedEmailData" [multiple]="true" [closeOnSelect]="true"
+                      name="tag_person" [(ngModel)]="selectedEmail" placeholder="Search to Tag user..." bindLabel="email"
+                      bindValue="id">
+                      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <div class="ng-value">
+                          <span class="ng-value-label">{{items.length}} selected</span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+
+                <!-- <div class="popup" [ngClass]="searchRelatedEmailData?.length > 0 ?'coustom-border':''">
+                        <div class="cursor" *ngFor="let email of searchRelatedEmailData; let i = index" title="{{email?.email}}"
+                            (click)="chipsData(email)">
+                            {{email?.email?.slice(0,25)}}...
+                        </div>
+                    </div> -->
+                <button [disabled]="!selectedEmail?.length" (click)="addEmailIds()"
+                    class="border-none-outline-none primary-color btn btn-sm ms-3"
+                    style="font-weight: 600; width:65px;"><i class="fas fa-plus"></i> Add</button>
+                <!-- <div class="popup" [ngClass]="searchRelatedEmailData?.length > 0 ?'coustom-border':''">
+                    <div class="cursor popups" *ngFor="let email of searchRelatedEmailData; let i = index"
+                        title="{{email?.email}}" (click)="chipsData(email)">
+                        {{email?.email?.slice(0,25)}}...
+                    </div>
+                </div> -->
+               </div>
+                <div *ngFor="let email of taggedEmailIds"
+                    class="btn btn-sm bg-primary text-light ms-1 mt-2 fs-10 cursor-default">{{email.email}}<span
+                        class="text-light ms-2 cursor" (click)="removeTaggedEmail(email)">X</span></div>
+            </div>
+        </div>
+        <!-- <div class="w-100" style="margin-left:3%;">
+            <label class="fs-12">Comments</label><br>
+            <div class="mt-2">
+                <textarea placeholder="Enter Discription" [(ngModel)]="comments"
+                    class="w-75 p-2 border-none-outline-none defalut-riskrating-bg-color rounded-3"
+                    style="height:8vh;overflow-y:auto;"></textarea>
+            </div>
+        </div> -->
+    </div>
+</div>
+<div class="d-flex p-2 ms-5">
+    <button class="btn btn-sm secondary-bg-color text-light ps-4 p-2 pe-4 ms-4" (click)="createIssue()"
+        style="width: 151px;"
+        [disabled]="equipmentCategories.length < 1 || equipmentsList.length < 1 || tasks_list < 1 || !commonServices.alphaNumericWithoutSpaceValidator(summary) || !summary || taggedEmailIds.length < 1 || issue_type_id.value === 'null' || task_id.value === 'null'">CREATE
+    </button>
+    <button (click)="resetCreateIssueForm()"
+        class="primary-color btn btn-sm btn-border border-none-outline-none ms-3 ps-4 p-2 pe-4">CANCEL
+    </button>
+</div>

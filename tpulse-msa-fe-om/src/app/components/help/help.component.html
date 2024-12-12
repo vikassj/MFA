@@ -1,0 +1,17 @@
+<div class="row d-flex w-100 ps-2 pt-2 ">
+    <div class="col-2 shadow-lg left-col-height rounded-3 ">
+        <div class="  py-2 ps-2 active pointer ">
+            <div class="saidBar-icon">
+                <i class="fa fa-book pe-3 m-auto fs-5"></i>
+            </div>User Manual
+        </div>
+    </div>
+    <div class="col shadow-lg right-col-height mx-2 rounded-3">
+        <div class="p-3 fw-bold">
+            Occupancy Monitoring
+        </div>
+        <!-- <embed src="./assets/pdf/Occupancy Monitoring-User Manual.pdf" width="100%" height="93%"
+            class="ps-3 pe-3 pb-3" /> -->
+            <embed [src]="safeUserManuals" type="application/pdf" width="100%" height="93%" class="ps-3 pe-3 pb-3"  />
+    </div>
+</div>

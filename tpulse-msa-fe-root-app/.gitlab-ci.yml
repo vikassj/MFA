@@ -1,0 +1,4 @@
+variables:
+  BOT_USER: "detect-gitlab-bot"
+include:
+  - remote: 'https://github.com/detecttechnologies/Gitlab-CI-CD-Templates/raw/main/dashboard-templates/frontend.gitlab-ci.yml'

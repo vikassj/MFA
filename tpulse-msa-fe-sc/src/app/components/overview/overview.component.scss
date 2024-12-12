@@ -1,0 +1,125 @@
+.primary-color {
+  color: #006699;
+}
+
+.secodary-bg-color {
+  background-color: #E2F5FF !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Container for flexboxes */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Create four equal columns */
+.column {
+  flex: 25%;
+  padding: 20px;
+}
+
+/* On screens that are 992px wide or less, go from four columns to two columns */
+@media screen and (max-width: 992px) {
+  .column {
+    flex: 50%;
+  }
+
+}
+
+/* On screens that are 600px wide or less, make the columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .row {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-height: 700px) {
+
+  .fs-12 {
+    font-size: 10px !important;
+  }
+
+}
+
+.over-view-page-height {
+  // height:80vh;
+  // background-color: #f4f7fc!important;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#bold {
+  font-weight: 900;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+}
+
+.fs-9 {
+  font-size: 9px;
+}
+
+.fs-12 {
+  font-size: 12px;
+}
+
+.text-warn {
+  color: #f76665;
+}
+
+.bg-red {
+  background-color: #f76665;
+}
+
+.bg-warn {
+  background-color: #FEE5E5 !important;
+}
+
+.text-safe {
+  color: #33a437;
+}
+
+.bg-green {
+  background-color: #33a437;
+}
+
+.bg-safe {
+  background-color: #D5FFD5 !important;
+}
+
+.bg-planned {
+  background-color:#6D7885;
+}
+.planned-date-bg-color{
+  background-color: #00000026;
+}
+.planned-color {
+  color: #6D7885;
+}
+.border{
+  border: 1px solid #00000026 !important;
+  padding:7px !important;
+}
+
+.border-radius {
+  border-radius: 8px;
+}
+
+.border-radius-top {
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.border-radius-bottom {
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}

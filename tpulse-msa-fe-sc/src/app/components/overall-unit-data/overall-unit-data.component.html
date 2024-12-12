@@ -1,0 +1,186 @@
+<div class="border m-2 border-radius page-height">
+    <div class="d-flex w-100 justify-content-between p-2" style="height:14vh;">
+        <div class="w-40 class d-flex justify-content-between align-items-center">
+            <div style="height:12vh;" class="primary-bg-color w-50 border-radius ps-3 pe-3">
+                <div class="d-flex justify-content-between align-items-center" style="height:6vh;">
+                    <div class="fs-5">{{unit_id.unit_name}}</div>
+                    <div style="padding-top: 1px;padding-bottom: 1px;"
+                        class="btn btn-sm cursor text-light secondary-bg-color fs-10 ps-3 pe-3" (click)="toggleShow()">
+                        COLLAPSE</div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center" style="height:6vh;">
+                    <div class="edit-btn cursor fs-12" (click)="openPDF('url')">Exception report</div>
+                </div>
+            </div>
+            <div style="height:12vh;"
+                [ngClass]="overAllUnitData?.critical_path_delay[0] == '-'?'bg-safe text-safe':'bg-warn text-warn'"
+                class="w-50 border-radius ps-3 pe-3 ms-2">
+                <div class="mt-3 d-flex">Critical Path Tasks <span class="ps-2" [ngClass]="overAllUnitData?.critical_path_delay?.[0] == '-'?'d-block':'d-none'">Gain</span> <span  [ngClass]="overAllUnitData?.critical_path_delay?.[0] != '-'?'d-block':'d-none'">Delay</span></div>
+                <div class="mt-2">{{overAllUnitData?.critical_path_delay}}</div>
+            </div>
+        </div>
+        <div class="w-60">
+            <div class="w-100 d-flex justify-content-between">
+                <div class="w-25 ms-3">
+                    <div class="fs-12 mt-1">
+                        <div class="d-flex"><span>Palnned</span><span
+                                class="ms-2">{{overAllUnitData?.start_date_time?.planned_date_to_start}} |
+                                {{overAllUnitData?.start_date_time?.planned_time_to_start}}</span></div>
+                    </div>
+                    <div class="fs-12  mt-2">
+                        <div class="d-flex"><span>Actual</span><span
+                                class="ms-3">{{overAllUnitData?.start_date_time?.actual_date_to_start}} |
+                                {{overAllUnitData?.start_date_time?.actual_time_to_start}}</span></div>
+                    </div>
+
+                </div>
+                <div class="w-50">
+                    <app-over-view-chart *ngIf="overAllUnitData" [graphData]="overAllUnitData"></app-over-view-chart>
+                </div>
+                <div class="w-25">
+                    <div class="d-flex fs-12 mt-1">
+                        <div>Palnned</div>
+                        <div class="ms-2">{{overAllUnitData?.end_date_time?.planned_date_to_complete}} |
+                            {{overAllUnitData?.end_date_time?.planned_time_to_complete}}</div>
+                    </div>
+                    <div class="d-flex fs-12 mt-2">
+                        <div>Actual</div>
+                        <div class="ms-3">{{overAllUnitData?.end_date_time?.actual_date_to_complete}} |
+                            {{overAllUnitData?.end_date_time?.actual_time_to_complete}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="w-25"></div>
+                <div class="d-flex justify-content-between rounded-3 pe-2 ps-2  align-items-center w-48"
+                    style="height:4vh;">
+                    <div class="fs-12">Start</div>
+                    <div class="d-flex justify-content-between align-items-center ms-1">
+                        <div class="rounded-0 bg-planned" style="width:7px;height:7px;"></div>
+                        <div class="ps-2 fs-12 planned-color">Planned</div>
+                        <div class="ps-2 fs-12 planned-color">{{overAllUnitData?.planned_percentage_completed }}%</div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center ms-1">
+                        <hr style="width:20px;height:1px;">
+                        <div class="mx-2 fs-9">VS</div>
+                        <hr style="width:20px;height:1px;">
+                    </div>
+                    <div class=" d-flex justify-content-between align-items-center ms-1">
+                        <div class="rounded-0 bg-green" style="width:7px;height:7px;"></div>
+                        <div class="text-safe ps-2 fs-12">Actual</div>
+                        <div class="ps-2 text-safe fs-12">{{overAllUnitData?.actual_percentage_completed}}%</div>
+                    </div>
+                    <div class="ms-1 fs-12">End</div>
+                </div>
+                <div class="w-25"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="d-flex  w-100 p-2">
+        <!--********************* part-1****************************-->
+        <div class="w-33">
+            <div class="fs-6">DELAYED CRITICAL PATH TASKS</div>
+            <div class="table-height">
+                <div *ngFor="let delyed of overAllUnitData?.delayed_critical_tasks"
+                    class="d-flex justify-content-between bg-warn border-radius p-3 me-2 mt-2" style="height:14vh;">
+                    <div class="fs-12 text-warn">
+                        <div>{{delyed.equipment}}</div>
+                        <div>{{delyed.department}}</div>
+                        <div class="mt-2">Delayed</div>
+                        <div>20hrs 30min</div>
+                    </div>
+                    <div class="fs-12">
+                        <div class="text-warn">{{delyed.name}}</div>
+                        <div class="primary-color">Actual/</div>
+                        <div class="primary-color">Expected start date</div>
+                        <div class="primary-color">
+                            <span *ngIf="delyed?.actual_start_date != null">{{delyed?.actual_start_date}}</span>
+                            <span *ngIf="delyed?.actual_start_date == null">NA</span>
+                            <span *ngIf="delyed?.actual_date_of_completion != null">/{{delyed?.actual_date_of_completion}}</span>
+                            <span *ngIf="delyed?.actual_date_of_completion == null">/NA</span>
+                        </div>
+                    </div>
+                    <div class="primary-color fs-12 mt-3">
+                        <div></div>
+                        <div>Actual/</div>
+                        <div>Expected end date</div>
+                        <div> 
+                            <span *ngIf="delyed?.planned_date_to_start != null">{{delyed.planned_date_to_start}}</span>
+                            <span *ngIf="delyed?.planned_date_to_start == null">NA</span>
+                            <span *ngIf="delyed?.planned_date_to_complete != null">/{{delyed.planned_date_to_complete}}</span>
+                            <span *ngIf="delyed?.planned_date_to_complete == null">/NA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--********************* part-2****************************-->
+        <div class="w-33 ms-3 me-3">
+            <div class="fs-6">MILESTONE</div>
+            <div class=" planned-date-bg-color border-radius p-3 me-2 mt-2 fs-12" style="height:14vh;">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div>Last Milestone Achieved</div>
+                        <div>Due:{{last_milestone?.actual_date_of_completion}} <span>{{last_milestone?.actual_time_of_completion}}</span></div>
+                    </div>
+                    <div>
+                        <div>{{last_milestone?.delay}}</div>
+                        <div>Delay/Gain</div>
+                    </div>
+                </div>
+                <div class="bg-white primary-color p-2 border-radius mt-2">{{last_milestone?.name}}</div>
+            </div>
+            <div class="fs-6 mt-2">CRITICAL ESCALATED ISSUES</div>
+            <div class="table-height1">
+                <div *ngFor="let escalated of overAllUnitData?.critical_escalated_issues"
+                    class="bg-warn border-radius p-2 me-2 mt-2 fs-12" style="height:14vh;">
+                    <div class="d-flex justify-content-between">
+                        <div class="fw-bold primary-color">
+                            {{escalated?.equipment_category_name}}:{{escalated.equipment_name}}</div>
+                        <div>#{{escalated.issue_number}}</div>
+                    </div>
+                    <div class="mt-1">
+                        <span class="fw-bold">Task:</span>
+                        <span class="text-warn">{{escalated.task_name}}</span>
+                    </div>
+                    <div class="bd-bottom mt-1 p-0"></div>
+                    <div class="fw-bold mt-1">DESCRIPTION</div>
+                    <div class="mt-1">{{escalated.remarks}}</div>
+                </div>
+            </div>
+        </div>
+        <!--********************* part-3****************************-->
+        <div class="w-33">
+            <div class="primary-bg-color border-radius p-3 me-2 fs-12" style="height:14vh;margin-top:27px;">
+                <div>Next Milestone</div>
+                <div>Due: {{next_milestone?.planned_date_to_complete}} <span>{{next_milestone?.planned_time_to_complete}}</span></div>
+                <div class="bg-white primary-color p-2 border-radius mt-2">{{next_milestone?.name}}</div>
+            </div>
+            <div class="fs-6 mt-2 ">MOST RECENT UPDATES ON CRITICAL PATH</div>
+            <div class="table-height1">
+                <div *ngFor="let notification of overAllUnitData?.notifications" class="ps-3 pe-3 mt-3 me-2 pb-3 fs-12 border-bottom">
+                    <div>
+                        <span class="primary-color">{{notification?.description}}</span>
+                        <!-- <span>Tagged you in the</span> -->
+                        <!-- <span class="text-warn">issue#1234</span> -->
+                    </div>
+                    <!-- <div>
+                        <span>Which is in high risk level and it is in</span>
+                        <span class="text-warn">critical path</span>
+                    </div> -->
+                    <!-- <div>
+                        <span class="text-warn">number at 1 Task-333</span>
+                    </div> -->
+                    <div class="pt-2">
+                        <span>{{notification?.equipment_name}}</span>
+                    </div>
+                    <div class="pt-2">
+                        <span>{{notification?.hour_cal}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

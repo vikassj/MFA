@@ -1,0 +1,94 @@
+{
+    "header": [
+        {
+            "identifier": "dashboard",
+            "acronym": "Home",
+            "name": "Dashboard",
+            "class": "/icons/S&Shome.png",
+            "routePath": "/employee-wellness/dashboard"
+        },
+        {
+            "identifier": "help",
+            "acronym": "Help",
+            "name": "Help",
+            "class": "/icons/S&Shelp.png",
+            "routePath": "/employee-wellness/help"
+        }
+    ],
+    "userManualFound": true,
+    "helpDetails": {
+        "sidebar": [
+            {
+                "camelName": "userManual",
+                "name": "User Manual",
+                "class": "fa fa-book"
+            }
+        ],
+        "tableColumns": [],
+        "tableRows": []
+    },
+    "unitModule": {
+        "header": [
+            {
+                "camelName": "unitDashboard",
+                "acronym": "Dashboard",
+                "name": "Dashboard",
+                "class": "fa fa-tachometer-alt",
+                "routePath": "/employee-wellness/unit/dashboard"
+            },
+            {
+                "camelName": "help",
+                "acronym": "Help",
+                "name": "Help",
+                "class": "fa fa-question-circle",
+                "routePath": "/employee-wellness/unit/help"
+            }
+        ],
+        "dashboardDetails": {
+            "recordColumns": [
+                {
+                    "prop": "zone",
+                    "name": "Booth#",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "emp_id",
+                    "name": "Employee ID",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "temp_in_deg",
+                    "name": "Temperature(°F)",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "heart_rate",
+                    "name": "Heart Rate(BPM)",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "O2_saturation",
+                    "name": "O2 Saturation",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "dateTime",
+                    "name": "Date/ Time",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                }
+            ]
+        }
+    }
+}

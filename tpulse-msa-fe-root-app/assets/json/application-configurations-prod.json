@@ -1,0 +1,153 @@
+{
+  "url": "https://tpulse-exxonmobil-us.detectpl.com/",
+  "apiUrl": "https://tpulse-project-intelligence-test-api.detectpl.com/",
+  "websocketUrl": "wss://tpulse-msa-automation-qa-api.detectpl.com/ws/",
+  "matomoSiteId": "6",
+  "matomoTrackerUrl": "https://tpulse-web-analytics.detectpl.com/",
+  "mobileMatomoSiteId": "7",
+  "mobileMatomoTrackerUrl": "https://tpulse-web-analytics.detectpl.com/",
+  "appTimeout": null,
+  "appTimeoutCutOff": 30,
+  "imageDecryptionKey": "su5k#_vyQ$_G[SPX",
+  "cognitoUrl": "https://tpulse-msa-dev.auth.ap-south-1.amazoncognito.com/oauth2/authorize",
+  "identityProvider": "Azure-Login",
+  "redirectUri": "https://tpulse-msa-dev.detectpl.com/cognito-auth/sign-in",
+  "scope": "openid",
+  "plantName": "RJ Gas",
+"userPoolId": "ap-northeast-1_JfsxfbyBB",
+"clientId": "4lcm5vn5dnohscmjsda24ihkln",
+  "headerLogoPath": "detectLogo.png",
+  "headerLogoWhitePath": "DTLogo(white).png",
+  "defaultModule": "/safety-and-surveillance",
+  "imageDecryptionKey": "su5k#_vyQ$_G[SPX",
+  "userActivityPushInterval": 60000,
+  "notificationFound": true,
+  "disableBEV": true,
+  "modules": [
+    {
+      "identifier": "safety-and-surveillance",
+      "moduleName": "Safety Assistant",
+      "shortName": "S&S",
+      "iconClass": "/assets/icons/S&S1.png",
+      "iconClassWhiteColor": "/assets/icons/S&S_White.png",
+      "routeUrl": "/safety-and-surveillance/dashboard",
+      "spinnerType": "tpulse"
+    },
+    {
+      "identifier": "security-assistant-perimeter",
+      "moduleName": "Security Assistant",
+      "shortName": "SAP",
+      "iconClass": "/assets/icons/S&S1.png",
+      "iconClassWhiteColor": "/assets/icons/S&S_White.png",
+      "routeUrl": "/security-assistant-perimeter/dashboard",
+      "spinnerType": "tpulse"
+    },
+    {
+      "identifier": "schedule-control",
+      "moduleName": "Schedule Assistant",
+      "shortName": "SC",
+      "iconClass": "/assets/icons/AM1.png",
+      "iconClassWhiteColor": "/assets/icons/AM_White.png",
+      "routeUrl": "/schedule-control/unit",
+      "spinnerType": "tpulse"
+    },
+    {
+      "iconClass": "/assets/icons/S&S1.png",
+      "iconClassWhiteColor": "/assets/icons/S&S_White.png",
+      "identifier": "security-assistant",
+      "moduleName": "Security Assistant",
+      "routeUrl": "/security-assistant-lsa/dashboard",
+      "shortName": "SA",
+      "spinnerType": "tpulse"
+    },
+    {
+      "identifier": "manpower-counting",
+      "moduleName": "Occupancy Monitoring",
+      "shortName": "OM",
+      "iconClass": "/assets/icons/mpc1.png",
+      "iconClassWhiteColor": "/assets/icons/MPC_White.png",
+      "routeUrl": "/manpower-counting/dashboard",
+      "spinnerType": "tpulse"
+    },
+    {
+      "identifier": "compliance",
+      "moduleName": "PPE Compliance",
+      "shortName": "PPE",
+      "iconClass": "/assets/icons/ppe3.png",
+      "iconClassWhiteColor": "/assets/icons/PPE_White.png",
+      "routeUrl": "/compliance",
+      "spinnerType": "tpulse"
+    },
+    {
+      "identifier": "inspection",
+      "moduleName": "Asset Inspection",
+      "shortName": "Inspection",
+      "iconClass": "/assets/icons/noun-broken-pipe-192016.svg",
+      "iconClassWhiteColor": "/assets/icons/noun-broken-pipe-192016-white.svg",
+      "routeUrl": "/inspection/dashboard",
+      "spinnerType": "tpulse"
+    },
+    {
+      "identifier": "live-streaming",
+      "moduleName": "Web-Based Streaming",
+      "shortName": "Live Streaming",
+      "iconClass": "/assets/icons/ls1.png",
+      "iconClassWhiteColor": "/assets/icons/LS_White.png",
+      "routeUrl": "/live-streaming/dashboard",
+      "spinnerType": "tpulse"
+    },
+    {
+      "identifier": "central-tower",
+      "moduleName": "Central Tower",
+      "shortName": "Central Tower",
+      "iconClass": "/assets/icons/ls1.png",
+      "iconClassWhiteColor": "/assets/icons/LS_White.png",
+      "routeUrl": "/central-tower",
+      "spinnerType": "tpulse"
+    },
+    {
+      "identifier": "productivity-monitoring",
+      "moduleName": "Productivity Monitoring",
+      "shortName": "Productivity Monitoring",
+      "iconClass": "/assets/icons/ls1.png",
+      "iconClassWhiteColor": "/assets/icons/LS_White.png",
+      "routeUrl": "/productivity-monitoring/dashboard",
+      "spinnerType": "tpulse"
+    },
+    {
+      "identifier": "employee-wellness",
+      "moduleName": "Employee Wellness",
+      "shortName": "Employee Wellness",
+      "iconClass": "/assets/icons/ew1.png",
+      "iconClassWhiteColor": "/assets/icons/EW_White.png",
+      "routeUrl": "/employee-wellness/dashboard",
+      "spinnerType": "default"
+    },
+    {
+      "identifier": "vendor-management",
+      "moduleName": "Vendor Management",
+      "shortName": "VM",
+      "iconClass": "fas fa-boxes",
+      "iconClassWhiteColor": "fa fa-boxes",
+      "routeUrl": "/vendor-management/client",
+      "spinnerType": "default",
+      "type": "module"
+    },
+    {
+      "identifier": "admin-app",
+      "moduleName": "Admin",
+      "routeUrl": "/admin-app/uam",
+      "spinnerType": "default",
+      "type": "module"
+    },
+    {
+      "identifier": "camera-configuration",
+      "moduleName": "Camera Configuration",
+      "routeUrl": "/camera-configuration",
+      "iconClass": "fas fa-camera",
+      "iconClassWhiteColor": "fas fa-camera",
+      "spinnerType": "default",
+      "type": "module"
+    }
+  ]
+}

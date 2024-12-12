@@ -1,0 +1,27 @@
+.popup {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    width: 500px;
+    max-height: 400px;
+    overflow-y: auto;
+    right: 11px;
+    top: 91px;
+}
+.listOfEle:hover{
+  background-color: #E2F5FF;
+}
+.listName {
+  white-space: nowrap;
+  // width: 490px;
+  overflow: hidden;
+  text-overflow: ellipsis !important;
+}
+.greyFont {
+    color: grey !important;
+}
+.text-no-wrap{
+  white-space: nowrap;
+}

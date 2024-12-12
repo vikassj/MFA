@@ -1,0 +1,18 @@
+{
+    "header": [
+        {
+            "identifier": "dashboard",
+            "acronym": "Home",
+            "name": "Dashboard",
+            "class": "/icons/S&Shome.png",
+            "routePath": "/live-streaming/dashboard"
+        },
+        {
+            "identifier": "help",
+            "acronym": "Help",
+            "name": "Help",
+            "class": "/icons/S&Shelp.png",
+            "routePath": "/live-streaming/help"
+        }
+    ]
+}

@@ -1,0 +1,28 @@
+<div class="w-100 d-flex flex-column p-2 bg-color">
+  <div
+    class="menus bg-white primary-color ps-2 pe-2 w-100 d-flex align-items-center justify-content-center border-bottom"
+    style="height:35px">
+    <div class=" ms-2 cursor pt-2" [ngClass]="selectedTab == 'equipment'?'padding-top-2px':'primary-color pb-3 opacity'"
+      (click)="getSelectedTab('equipment')">
+      Equipment
+      <div [ngClass]="selectedTab == 'equipment'?'border-under-selected-page pt-2':'primary-color'"></div>
+    </div>
+    <div class=" ms-5 cursor pt-2"
+      [ngClass]="selectedTab == 'bulk-equipment'?'padding-top-2px':'primary-color pb-3 opacity'"
+      (click)="getSelectedTab('bulk-equipment')">
+      Miscellaneous Jobs
+    
+      <div [ngClass]="selectedTab == 'bulk-equipment'?'border-under-selected-page pt-2':'primary-color'"></div>
+    </div>
+  </div>
+  <div class="w-100 bg-white">
+    <ng-container *ngIf="selectedTab == 'equipment'">
+      <app-equipment-page *ngIf="unit && department" [unitName]="unit.name" [department]="department"
+        [unitId]="unit?.id" [taskCategory]="taskCategory">
+      </app-equipment-page>
+    </ng-container>
+    <ng-container *ngIf="selectedTab == 'bulk-equipment'">
+      <app-bulk-equipment *ngIf="unit" [unit]="unit"></app-bulk-equipment>
+    </ng-container>
+  </div>
+</div>

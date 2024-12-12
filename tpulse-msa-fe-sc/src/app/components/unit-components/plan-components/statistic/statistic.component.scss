@@ -1,0 +1,582 @@
+.gantt-chart {
+  position: relative;
+  width: 100%;
+
+}
+
+.gantt-chart-Height {
+  min-height: calc(100vh - 145px);
+  max-height: calc(100vh - 145px);
+  overflow: auto;
+}
+
+/* left said text color */
+#gantt ::ng-deep .gantt_task_line.high .gantt_task_content .gantt_grid_data .gantt_cell {
+  /* border-right: none; */
+  color: #db4242 !important;
+  white-space: break-spaces !important;
+}
+
+/* right said bar insaid text color */
+#gantt ::ng-deep .gantt_task_content {
+  font-size: 12px;
+  color: #fff;
+  width: 100%;
+  top: 0;
+  cursor: pointer;
+  position: absolute;
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* right said bar insaid background color */
+#gantt ::ng-deep .gantt_task_line {
+  border-radius: 2px;
+  position: absolute;
+  box-sizing: border-box;
+  background-color: #d0d3d4;
+  border: 0px solid !important;
+  -webkit-user-select: none;
+  /* -moz-user-select: none;
+  -moz-user-select: -moz-none; */
+}
+
+/* vertical borders */
+#gantt ::ng-deep .gantt_task_cell {
+  display: inline-block;
+  height: 100%;
+  border-right: 1px solid #ebebeb;
+}
+
+/* horizontal border bottom */
+#gantt ::ng-deep .gantt_row {
+  border-bottom: 1px solid #ebebeb;
+  background-color: #fff;
+}
+
+#gantt ::ng-deep .custom_progress {
+  display: inline-block;
+  vertical-align: top;
+  text-align: center;
+  height: 100%;
+}
+
+#gantt ::ng-deep .gantt_task_row {
+  border-bottom: 1px solid #ebebeb;
+  background-color: #fff;
+}
+
+/* background color of task bars*/
+#gantt ::ng-deep .gantt_task_line.completed_with_slack {
+  background-color: #80D8FF !important;
+  border: 0px solid #2898b0 !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.pending_delay_with_slack {
+  background-color: #80D8FF !important;
+  border: 0px solid #2898b0 !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.pending_gain_with_slack {
+  background-color: #80D8FF !important;
+  border: 0px solid #2898b0 !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.in_progress_with_slack {
+  background-color: #80D8FF !important;
+  border: 0px solid #2898b0 !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.cp1_with_slack {
+  background-color: #80D8FF !important;
+  border: 0px solid #2898b0 !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.cp2_with_slack {
+  background-color: #80D8FF !important;
+  border: 0px solid #2898b0 !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.delayed_with_slack {
+  background-color: #80D8FF !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.completed_with_delayEnd {
+  background-color: #1E3044 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.completed_with_delayStart {
+  background-color: #006699 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.pending_gain_with_slack {
+  background-color: #33A437 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.completed_with_gain {
+  background-color: #33A437 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.pending_with_gain {
+  background-color: #33A437 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.in_progress_with_gain {
+  background-color: #33A437 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.cp1_with_gain {
+  background-color: #33A437 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.cp1_with_delay {
+  background-color: #1E3044 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.cp2_with_gain {
+  background-color: #33A437 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.cp2_with_delay {
+  background-color: #1E3044 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.delayed_with_gain {
+  background-color: #33A437 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .gantt_task_line.delayed_with_delay {
+  background-color: #1E3044 !important;
+  border: 0px solid !important;
+}
+
+/* text color */
+/* #gantt ::ng-deep .gantt_task_line .gantt_task_content {
+  color: #fff;
+}
+
+/* progress fill */
+/* #gantt ::ng-deep .gantt_task_progress {
+  background: green;
+} */
+
+/* common styles for overriding borders/progress color */
+#gantt ::ng-deep .gantt_task_line {
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+#gantt ::ng-deep .gantt_task_line .gantt_task_progress {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+/* task completed */
+#gantt ::ng-deep .gantt_task_line.completed .gantt_task_progress {
+  background-color: #006699;
+}
+
+#gantt ::ng-deep .gantt_task_line.completed_with_slack .gantt_task_progress {
+  background-color: #006699;
+}
+
+
+#gantt ::ng-deep .gantt_task_line.completed_with_gain .gantt_task_progress {
+  background-color: #006699;
+}
+
+#gantt ::ng-deep .gantt_task_line.completed_with_delayEnd .gantt_task_progress {
+  background-color: #006699;
+}
+
+#gantt ::ng-deep .gantt_task_line.completed_with_delayStart .gantt_task_progress {
+  background-color: #1E3044;
+}
+
+#gantt ::ng-deep .gantt_task_line.pending_with_delay .gantt_task_progress {
+  background-color: #1E3044;
+}
+
+#gantt ::ng-deep .gantt_task_line.pending_delay_with_slack .gantt_task_progress {
+  background-color: #1E3044;
+}
+
+#gantt ::ng-deep .gantt_task_line.completed .gantt_task_content {
+  color: #fff;
+}
+
+/* task pending */
+#gantt ::ng-deep .gantt_task_line.pending .gantt_task_progress {
+  background-color: #6D7885;
+}
+
+#gantt ::ng-deep .gantt_task_line.cp1 .gantt_task_progress {
+  background-color: #F65150;
+}
+
+#gantt ::ng-deep .gantt_task_line.cp2 .gantt_task_progress {
+  background-color: #FFBC00;
+}
+
+#gantt ::ng-deep .gantt_task_line.pending_with_slack {
+  background-color: #80D8FF;
+}
+
+#gantt ::ng-deep .gantt_task_line.pending_with_gain .gantt_task_progress {
+  background-color: #6D7885;
+}
+
+#gantt ::ng-deep .gantt_task_line.pending .gantt_task_content {
+  color: #fff;
+}
+
+/* task in progress */
+#gantt ::ng-deep .gantt_task_line.in_progress .gantt_task_progress {
+  background-color: #FFBC00;
+}
+
+#gantt ::ng-deep .gantt_task_line.in_progress_with_slack .gantt_task_progress {
+  background-color: #FFBC00;
+}
+
+#gantt ::ng-deep .gantt_task_line.cp1_with_slack .gantt_task_progress {
+  background-color: #F65150;
+}
+
+#gantt ::ng-deep .gantt_task_line.cp2_with_slack .gantt_task_progress {
+  background-color: #FFBC00;
+}
+
+#gantt ::ng-deep .gantt_task_line.in_progress_with_gain .gantt_task_progress {
+  background-color: #FFBC00;
+}
+
+#gantt ::ng-deep .gantt_task_line.cp1_with_gain .gantt_task_progress {
+  background-color: #F65150;
+}
+
+#gantt ::ng-deep .gantt_task_line.cp1_with_delay .gantt_task_progress {
+  background-color: #F65150;
+}
+
+#gantt ::ng-deep .gantt_task_line.cp2_with_gain .gantt_task_progress {
+  background-color: #FFBC00;
+}
+
+#gantt ::ng-deep .gantt_task_line.cp2_with_delay .gantt_task_progress {
+  background-color: #FFBC00;
+}
+
+#gantt ::ng-deep .gantt_task_line.in_progress .gantt_task_content {
+  color: #fff;
+}
+
+/* task delayed */
+#gantt ::ng-deep .gantt_task_line.delayed .gantt_task_progress {
+  background-color: #1E3044;
+}
+
+#gantt ::ng-deep .gantt_task_line.delayed_with_slack .gantt_task_progress {
+  background-color: #1E3044;
+}
+
+#gantt ::ng-deep .gantt_task_line.delayed_with_gain .gantt_task_progress {
+  background-color: #1E3044;
+}
+
+#gantt ::ng-deep .gantt_task_line.delayed_with_delay .gantt_task_progress {
+  background-color: #1E3044;
+}
+
+#gantt ::ng-deep .gantt_task_line.delayed .gantt_task_content {
+  color: #fff;
+}
+
+#gantt ::ng-deep .gantt_grid_data .gantt_row.gantt_selected,
+.gantt_grid_data .gantt_row.odd.gantt_selected,
+.gantt_task_row.gantt_selected {
+  background-color: #cce6ff !important;
+}
+
+
+#gantt ::ng-deep .criticalPath1_color,
+.criticalPath1_color.odd {
+  background: #FFF7F7 0% 0% no-repeat padding-box;
+}
+
+#gantt ::ng-deep .criticalPath2_color,
+.criticalPath2_color.odd {
+  background: #FFF8E4 !important;
+}
+
+#gantt ::ng-deep .updColor {
+  background-color: #ffeb8a !important;
+}
+
+#gantt ::ng-deep .gantt_grid_scale .gantt_grid_head_cell {
+  color: #006699 !important;
+  background-color: #E2F5FF !important;
+  line-height: normal !important;
+  font-size: 11px !important;
+  white-space: normal !important;
+  align-items: center !important;
+
+  font-weight: 600 !important;
+  display: inline-grid;
+  text-align: left;
+  padding: 7px 5px;
+  border-top: none !important;
+  border-right: none !important;
+}
+
+#gantt ::ng-deep .gantt_task .gantt_task_scale .gantt_scale_cell {
+  color: #006699 !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+
+  background-color: #E2F5FF !important;
+  border-right: 1px solid #c5c2c2;
+}
+
+#gantt ::ng-deep .task_completed {
+  color: #006699 !important;
+}
+
+#gantt ::ng-deep .task_pending {
+  color: #6D7885 !important;
+}
+
+#gantt ::ng-deep .task_in_progress {
+  color: #FFBC00 !important;
+}
+
+#gantt ::ng-deep .task_delayed {
+  color: #1E3044 !important;
+}
+
+#gantt ::ng-deep .task_cp1 {
+  color: #F65150 !important;
+}
+
+#gantt ::ng-deep .task_cp2 {
+  color: #FFBC00 !important;
+}
+
+
+#gantt ::ng-deep .float-right {
+  text-align: right !important;
+}
+
+#gantt ::ng-deep .pointer {
+  cursor: pointer;
+}
+
+#gantt ::ng-deep .text_wrap {
+  line-height: normal !important;
+  /* white-space: normal !important; */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  text-align: left;
+
+}
+
+#gantt ::ng-deep .task_wrap {
+  line-height: normal !important;
+  white-space: normal !important;
+  /* align-items: center; */
+  text-align: left;
+
+}
+
+#gantt ::ng-deep .gantt_tree_content {
+  height: 100%;
+  white-space: nowrap;
+  min-width: 0;
+  align-items: center;
+  display: flex;
+}
+
+
+/* #gantt[_ngcontent-ati-c63] .gantt_grid_data .gantt_row.gantt_selected, .gantt_grid_data[_ngcontent-ati-c63] .gantt_row.odd.gantt_selected[_ngcontent-ati-c63], .gantt_task_row.gantt_selected[_ngcontent-ati-c63] {
+  background-color: #fff3a1;
+} */
+
+
+::ng-deep .fw-600 {
+  font-weight: 600 !important;
+}
+
+::ng-deep .fs-11 {
+  font-size: 11px !important;
+}
+
+::ng-deep .fs-12 {
+  font-size: 12px !important;
+}
+
+#gantt ::ng-deep #gantt[_ngcontent-kxl-c63] .gantt_task_line {
+  position: absolute;
+  box-sizing: border-box;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep #gantt[_ngcontent-ljc-c63] .gantt_task_line {
+  background-color: #c9cccd !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .gantt_layout_cell_border_bottom {
+  border-bottom: 0px solid #cecece;
+}
+
+#gantt ::ng-deep .gantt_layout_cell_border_top {
+  border-top: 0px solid #cecece;
+}
+
+#gantt ::ng-deep .gantt_layout_cell_border_right {
+  border-right: 0px solid #cecece;
+}
+
+#gantt ::ng-deep .gantt_layout_cell_border_left {
+  border-left: 0px solid #cecece;
+}
+
+#gantt ::ng-deep .gantt_grid_scale,
+.gantt_task_scale {
+  color: #6b6b6b;
+  font-size: 12px;
+  border-bottom: 0px solid #cecece;
+  box-sizing: border-box;
+}
+
+#gantt ::ng-deep .gantt_grid_data {
+  border-right: 6px solid #f4f7fc !important;
+}
+
+#gantt ::ng-deep .gantt_grid_scale>.gantt_last_cell {
+  border-right: 6px solid #f4f7fc !important;
+  /* width: 51px !important; */
+}
+
+::ng-deep .gantt-error {
+  display: none !important;
+}
+
+#gantt ::ng-deep .gantt_cell_tree>.gantt_tree_content {
+  width: 100% !important;
+}
+
+#gantt ::ng-deep .gantt_layout_cell .gantt_hor_scroll {
+  position: absolute;
+  right: 0px !important;
+  width: calc(50% - 6px) !important;
+}
+
+#gantt ::ng-deep .custom_progress {
+  display: inline-block;
+  vertical-align: top;
+  text-align: center;
+  height: 100%;
+}
+
+#gantt ::ng-deep .task_progress {
+  background-color: #006699;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .task_slack {
+  background-color: #80D8FF;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .task_gain {
+  background-color: #33A437 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .yet_to_start {
+  background-color: #B0B0B0 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .in_progress {
+  background-color: #FFBC00 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .completed {
+  background-color: #006699 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .slack {
+  background-color: #80D8FF !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .delay {
+  background-color: rgba(var(--bs-black-rgb), var(--bs-bg-opacity)) !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .gain {
+  background-color: #33A437 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .task_delay {
+  background-color: #1E3044 !important;
+  border: 0px solid !important;
+}
+
+#gantt ::ng-deep .task_remaining {
+  background-color: white;
+  border: 1px solid #c2bdbd !important;
+  border-left: none !important;
+}
+
+#gantt ::ng-deep .gantt_line_wrapper div {
+  background-color: white !important;
+  display: none !important;
+}
+
+#gantt ::ng-deep.gantt_link_arrow_right {
+  border-width: 4px 0 4px 6px;
+  border-top-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+  border-left-color: #ffa011;
+  display: none !important;
+}
+
+#gantt ::ng-deep.gantt_task_line.gantt_milestone .gantt_task_content {
+  display: none;
+}
+
+#gantt ::ng-deep.gantt_side_content.gantt_right {
+  left: 100%;
+  padding-left: 10px;
+  padding-top: 2px !important;
+}
+
+#gantt ::ng-deep.gantt_side_content.gantt_link_crossing {
+  bottom: 0px;
+  top: auto;
+}
+.height {
+  height: calc(100vh - 200px);
+  background-color: #f4f7fc !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+}

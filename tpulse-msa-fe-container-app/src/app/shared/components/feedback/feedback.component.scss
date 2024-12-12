@@ -1,0 +1,46 @@
+#feedBackModal.modal{
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  margin: auto;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: 0.3rem;
+  outline: 0;
+}
+
+.fs-10px{
+  font-size: 10px;
+}
+.fs-12px{
+  font-size: 12px;
+}
+
+.fs-25px{
+  font-size: 25px;
+}
+.op-2{
+  opacity: 0.2;
+}
+.cursor-pointer{
+  cursor: pointer;
+}
+.fw-600{
+  font-weight: 600 !important;
+}
+.fw-800{
+  font-weight: 800;
+}
+.text-blue{
+  color: #006699;
+}
+
+
+.tooltip-arrow {background-color: #f00 !important;}
+

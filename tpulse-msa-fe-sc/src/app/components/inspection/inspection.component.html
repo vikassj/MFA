@@ -1,0 +1,1293 @@
+<div style="background-color: #F4F7FC;" (click)="closeAllOpenBtns()">
+  <div class="headernavbar" style="background-color: white; width: 100%;">
+    <div class="col-5 d-flex align-items-center" style="height:50px">
+      <div class="primary-color d-flex align-items-center" style="height:50px">
+        <div class="fs-12 ms-2 cursor " (click)="getCategoryAndEquipment(); this.isRouteClicked = true">
+          <button class="border-none-outline-none primary-color bg-white fw-bold">FILTER</button>
+        </div>
+      </div>
+      <div class="tab-dropdown">
+        <div class="d-flex align-items-center form-control pt-2 pb-2 ps-2 pe-1">
+          <select class="border-none-outline-none  w-100" [(ngModel)]="selectedUnit"
+            (change)="switchBetweenUnits(selectedUnit)">
+            <option *ngFor="let unit of units" [value]="unit.id">
+              {{unit.name}}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-2 px-0 d-flex align-items-center" style="height:50px">
+          <input  id="globalSearchInput" type="text" class="form-control" [(ngModel)]="globalSearch" (ngModelChange)="onGlobalSearch()"
+            placeholder="Global Search..." />
+        </div> -->
+  </div>
+  <div class="d-flex">
+    <div class="equips" style="margin: 10px; background-color: white; width: 17%;">
+      <div style="background: white;" class="p-2">
+        <div class="d-flex form-control">
+          <input type="text" placeholder="Search Equipment" class="fs-12 border-none-outline-none w-100"
+            [(ngModel)]="filterEquipment" name="fiterEquipment" (ngModelChange)="filterEquipmentList()" />
+          <i class="fa fa-search" style="padding: 5px;"></i>
+        </div>
+      </div>
+      <div class="page-height border-right border-top w-100" style="background-color: white;">
+        <div class="cats2">
+          <div class="category border-bottom w-100" *ngFor="let cat of category; let i=index;">
+            <div class="ps-2 d-flex align-items-center justify-content-between">{{cat.equipment_category_name}}
+              <!-- ({{cat?.equipments?.length}}) -->
+              ({{returnObsRecEquipmentCount(cat?.equipments)}}/{{cat?.equipments?.length}})
+              <i [ngClass]="cat.istoggled? 'fas fa-angle-up': 'fas fa-angle-down'" class="text-color cursor pe-2"
+                (click)="onToggleClick(cat)"></i>
+            </div>
+            <ng-container *ngIf="cat.istoggled">
+              <div class="id cursor w-100 d-flex justify-content-between"
+                [ngClass]="selectedCategory == id.equipment_id?'id-active':'cats'"
+                *ngFor="let id of category[i].equipments"
+                (click)="selectSidebar(cat.equipment_category_id,id.equipment_id, id.equipment_name,cat.equipment_category_name)">
+                <span class="inline-block text-wrap fs-12">
+                  {{id.equipment_name}}
+                </span>
+                <span class="float-end inline-block no-wrap fs-12">(O-{{id.total_obs_count}}/
+                  R-{{id.total_rec_count}})</span>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="viewingarea d-flex  jc-s-even" style="width:81%; margin-top: 10px;">
+      <div class="obs-rec" style="width: 38%;">
+        <!-- <div class="d-flex flex-column" style="width: 100%; height: 30px;"> -->
+        <div class="" style=" background-color: white;">
+          <div class="edit-btn fs-12 d-inline-block ps-2" [ngClass]="validateReportGenerate() ? 'cursor' : 'opacity-75'"
+            (click)="generateReport()">Generate Report</div><br>
+          <div class="d-flex ps-2 pe-2 pb-1 pt-1"
+            style="width: 100%;align-items: center; justify-content: space-between;">
+            <div class="form-check form-switch d-flex  fs-12" style="align-items: center;">
+              <div class="form-check-label " for="flexSwitchCheckNotChecked">Observations</div>
+              <div class="pl-40">
+                <input (click)="toggle()" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                  [checked]="observationsRecommendationsToggle">
+              </div>
+              <div class="form-check-label" for="flexSwitchCheckChecked">Recommendations</div>
+            </div>
+            <div class="create d-flex" style="justify-content: end; padding: 2px; width: 30%; height: fit-content;">
+              <!-- <button class="btn btn-sm" [disabled]="userGroup?.indexOf('observation_or_recommendation') === -1" -->
+              <button class="btn btn-sm" [disabled]="loggedInUserDepartment != 'Inspection'"
+                style="font-size: 10px; background-color: #006699; color: white; font-weight: 600;"
+                data-bs-toggle="modal" data-bs-target="#exampleModalCenter"
+                (click)="this.createRecomondations.observation_id = ''; clearPopUpData('')"><i
+                  class="fa fa-thin fa-plus" style="margin-right: 10px;"></i>CREATE</button>
+            </div>
+          </div>
+        </div>
+        <!-- </div> -->
+        <div class="" id="table1">
+          <ngx-datatable #table class="material expandable w-100" [columnMode]="ColumnMode.force" [headerHeight]="35"
+            [footerHeight]="0" [rowHeight]="'auto'" [scrollbarH]="true" [rows]="rows"
+            [selectionType]="selectionType.single" [selected]="selected" (select)="onObsSelect($event)">
+            <ngx-datatable-column name="Start" [sortable]="true" cellClass="comp-cell-class">
+              <ng-template ngx-datatable-header-template let-column="column">
+                <span title="Start">Component Name</span>
+              </ng-template>
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div *ngIf="observationsRecommendationsToggle == false" class="fs-10" title="{{row.component_name}}">
+                  {{row?.component_name}}
+                </div>
+                <div *ngIf="observationsRecommendationsToggle == true" class="fs-10" title="{{row.component_name}}">
+                  {{row?.component_name}}
+                </div>
+                <div *ngIf="observationsRecommendationsToggle == false" class="fs-10" title="{{row.component_date}}">
+                  {{row?.date}} | {{row?.time}}
+                </div>
+                <div *ngIf="observationsRecommendationsToggle == true" class="fs-10" title="{{row.component_date}}">
+                  {{row?.date}} | {{row?.time}}
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="observations" [sortable]="true" cellClass="obs-cell-class">
+              <ng-template ngx-datatable-header-template let-column="column">
+                <span *ngIf="observationsRecommendationsToggle == false" title="observations">Observations</span>
+                <span *ngIf="observationsRecommendationsToggle == true" title="recommendations">Recommendations</span>
+              </ng-template>
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div class="d-flex flex-column w-100" style="align-items: flex-start;">
+                  <div class="d-flex " style="
+                            align-items: baseline;">
+                    <div *ngIf="observationsRecommendationsToggle == false" class="fs-9" style="background-color: #2196F3;
+                              color: white;
+                              height: 22px;
+                              width: max-content;
+                              padding: 4px;
+                              border-radius: 5px;
+                              margin-bottom: 5px ;">#{{row?.observation_id}}</div>
+                    <div *ngIf="observationsRecommendationsToggle == true" class="fs-9" style="background-color: #2196F3;
+                              color: white;
+                              height: 22px;
+                              width: max-content;
+                              padding: 4px;
+                              border-radius: 5px;
+                              margin-bottom: 5px ;">#{{row?.recommendation_id}}</div>
+                    <div
+                      [ngClass]="{'open': row?.status === 'Open', 'approved' : (row?.status === 'Maintenance Accepted' || row?.status === 'Closed'),  'rejected' : row?.status === 'Maintenance Rejected'}"
+                      *ngIf="observationsRecommendationsToggle == true">
+                      <span class="text-capitalize px-2">{{row?.status}}</span>
+                    </div>
+                  </div>
+                  <div *ngIf="observationsRecommendationsToggle == true" class="fs-11"
+                    style="font-weight: 600; color: #006699;word-wrap: break-word;">{{row?.recommendation}}</div>
+                  <div *ngIf="observationsRecommendationsToggle == false" class="fs-11"
+                    style="font-weight: 600; color: #006699;word-wrap: break-word">{{row?.observation}}</div>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
+        </div>
+      </div>
+      <ng-container *ngIf="!selectedObservation?.observation_id && !selectedRecommendation?.recommendation_id">
+        <div class="d-flex fullWidth">
+          <p class="m-auto">Select a observation or recommendation to display here</p>
+        </div>
+      </ng-container>
+      <ng-container
+        *ngIf="(observationsRecommendationsToggle === false && selectedObservation?.observation_id) || (observationsRecommendationsToggle && selectedRecommendation?.recommendation_id)">
+        <div class="rec-rem-att"
+          style="height:calc(100vh - 120px); width:50%; background-color: white; margin-left: 10px;">
+          <div class="d-flex flex-column w-100 ps-2" style="height: 100%; width:100% !important; overflow-y: auto;">
+            <div style="height: 10%;">
+              <div class="d-flex  w-100 h-100" style="align-items: start; font-size: 12px; color: #006699;">
+                <div class="no-wrap" style="padding: 15px; padding-right: 0; padding-left: 0; margin-right: 5px;">
+                  <span *ngIf="observationsRecommendationsToggle == false">OBSERVATION</span>
+                  <span *ngIf="observationsRecommendationsToggle == true">RECOMMENDATION</span>
+                  <span *ngIf="observationsRecommendationsToggle == false" class="ms-2"
+                    style="width: 200px;">#{{selectedObservation?.observation_id}} :
+                  </span>
+                  <span *ngIf="observationsRecommendationsToggle == true"
+                    class="ms-2">#{{selectedRecommendation?.recommendation_id}}
+                    : </span>
+                </div>
+                <div class="line-ellipses" *ngIf="observationsRecommendationsToggle == false"
+                  style="padding: 15px; padding-left: 0; width: 200px;">
+                  {{selectedObservation?.observation}}
+                </div>
+                <div class="line-ellipses" *ngIf="observationsRecommendationsToggle == true"
+                  style="padding: 15px; padding-left: 0;word-break:break-word; width: 200px;">
+                  {{selectedRecommendation?.recommendation}}
+                </div>
+              </div>
+            </div>
+            <div class="w-100 pe-2">
+              <div class="d-flex flex-column w-100" style=" margin-bottom: 10px">
+                <div *ngIf="observationsRecommendationsToggle == false" class="sideHeaders">
+                  Observation
+                </div>
+                <div *ngIf="observationsRecommendationsToggle == true" class="sideHeaders">
+                  Recommendation
+                </div>
+                <div class="sideHeaders-content d-flex flex-column">
+                  <div *ngIf="observationsRecommendationsToggle == false" style="word-break: break-word;">
+                    {{selectedObservation?.observation}}
+                  </div>
+                  <div *ngIf="selectedObservation?.observation == ''">
+                    NA
+                  </div>
+                  <div *ngIf="observationsRecommendationsToggle == true" style="word-break: break-word;">
+                    {{selectedRecommendation?.recommendation}}
+                  </div>
+                  <div *ngIf="observationsRecommendationsToggle == false" class="sideHeaders-content-email">
+                    {{selectedObservation?.obs_created_by}}
+                  </div>
+                  <div *ngIf="observationsRecommendationsToggle == true" class="sideHeaders-content-email">
+                    {{selectedRecommendation?.recommendation_created_by}}
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="observationsRecommendationsToggle == false" class="d-flex flex-column w-100">
+                <div class="sideHeaders">
+                  Remarks
+                </div>
+                <div class="sideHeaders-content d-flex flex-column">
+                  <textarea rows="6" cols="2" id="textarea" class="remarks p-2 text-dark fs-12"
+                    (click)="showCauseBtns()" [(ngModel)]="selectedObservationRemarks" name="remarks"></textarea>
+                  <div class="sideHeaders-content-email">
+                    {{selectedObservation?.remarks_created_by}}
+                  </div>
+                  <div class="mt-1" *ngIf="remarksUpdate">
+                    <button class="btn btn-sm btn-basic me-2" (click)="updateRemarkObservation()">SAVE</button>
+                    <button class="btn btn-sm btn-outline-basic"
+                      (click)="this.selectedObservationRemarks = this.selectedObservation.remarks">CANCEL</button>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex flex-column w-100 py-2">
+                <div *ngIf="observationsRecommendationsToggle == false"
+                  class="sideHeaders d-flex align-items-center justify-content-between" style="width:100%;">
+                  <div>Attachments ({{attachmentCount}})</div>
+                  <!-- <div>Attachments ({{selectedObservation?.images?.length}})</div> -->
+                  <div class="d-flex flex-wrap m-1 btn-file">
+                    <div class="postImage position-relative">
+                      <div class="d-flex align-items-center attach float-end" data-bs-toggle="modal"
+                        data-bs-target="#attachmentModal">
+                        <img src="/assets/icons/add_icon.svg" class="size me-1"> ADD
+                      </div>
+                    </div>
+                    <input type="file" #obsFileInput class="cursor-pointer" title="Add Images  or Files"
+                      accept="image/jpeg,image/png,application/pdf" multiple (change)="onFileUpload($event, 'obs')">
+                  </div>
+                </div>
+                <div *ngIf="observationsRecommendationsToggle == true"
+                  class="sideHeaders d-flex align-items-center justify-content-between" style="width:100%;">
+                  <div>Attachments ({{attachmentCount}})</div>
+                  <!-- <div>Attachments ({{selectedRecommendation?.images?.length}})</div> -->
+                  <div class="d-flex flex-wrap m-1 btn-file">
+                    <div class="postImage position-relative">
+                      <div class="attach d-flex align-items-center float-end" data-bs-toggle="modal"
+                        data-bs-target="#attachmentModal">
+                        <img src="/assets/icons/add_icon.svg" class="size me-1">ADD
+                      </div>
+                    </div>
+                    <input type="file" #recFileInput class="cursor-pointer"
+                      accept="image/jpeg,image/png,application/pdf" multiple (change)="onFileUpload($event, 'rec')">
+                  </div>
+                </div>
+                <div>
+                  <div class="d-flex flex-wrap mb-2"
+                    *ngIf="observationsRecommendationsToggle == false && selectedObservation.images_path != '' && selectedObservation.images_path != null">
+                    <div class="d-flex flex-wrap m-1" *ngFor="let item of selectedObservation?.images;let i = index">
+                      <div class="postImage position-relative" [ngClass]="(item?.image_path)?'d-block':'d-none'">
+                        <div class="align-items-center">
+                          <img
+                            *ngIf="item.image_path.includes('.jpg') && (item.image_path != null || item.image_path != '') || item.image_path.includes('.jpeg')&& (item.image_path != null || item.image_path != '') || item.image_path.includes('.png') && (item.image_path != null || item.image_path != '')"
+                            [src]="item?.image_path" width="125px" height="100px">
+                          <!-- <img *ngIf="item.image_path.includes('.pdf')" src="/assets/icons/pdf.png" width="125px"
+                            height="110px" class="rounded-corners"> -->
+                          <span *ngIf="item.image_path.includes('.pdf')" class="inline-block ms-2" style="height:90px">
+                            <i class="fas fa-file-pdf primary-color fa-7x"></i>
+                          </span>
+                          <div class="h-30px rounded-bottom bg-dark text-white w-125px p-1">
+                            <div class=" fs-8px" [title]="displayImageFileName(item.image_path) ">{{
+                              displayImageFileName(item.image_path) }}</div>
+                            <div class="d-flex fs-8px">
+                              <div class="me-2 fw-bold"><i class="far fa-calendar-alt pe-2"></i>{{item?.date | date :
+                                'yyyy-MM-dd'}}
+                              </div>
+                              <div class=" fw-bold"><i class="far fa-clock pe-2"></i>{{item?.time}}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="delete-option">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <div
+                              class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center me-1 cursor-pointer"
+                              (click)="downloadImg(item.image_path)"><i class="fas fa-download text-color"></i></div>
+                            <div>
+                              <button type="button"
+                                [ngClass]="{'disabled': loggedInUserMail != item?.created_by , 'cursor-pointer': loggedInUserMail == item?.created_by }"
+                                class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center"
+                                data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                (click)="showConfirmationModal('observation', item?.id)"><i
+                                  class="fas fa-trash custom"></i></button>
+                            </div>
+                            <div
+                              class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center cursor-pointer ms-1"
+                              (click)="selectImageToDisplay(item)"><i class="fa-solid fa-eye primary-color"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="d-flex flex-wrap" style="overflow-x: hidden;overflow-y:scroll; max-height: 200px;"
+                    *ngIf="observationsRecommendationsToggle == true">
+                    <div class="d-flex flex-wrap m-1" *ngFor="let item of selectedRecImages;let i = index">
+                      <div class="postImage position-relative" [ngClass]="(item?.image_path)?'d-block':'d-none'">
+                        <div class="pe-2 pb-2 cursor-pointer">
+                          <img
+                            *ngIf="item?.image_path?.includes('.jpg') || item?.image_path?.includes('.jpeg') || item?.image_path?.includes('.png')"
+                            [src]="item?.image_path" width="120px" height="100px">
+                          <span *ngIf="item.image_path.includes('.pdf')" class="inline-block ms-2" style="height:90px;">
+                            <i class="fas fa-file-pdf primary-color fa-7x"></i>
+                          </span>
+                          <!-- <img *ngIf="images?.image_path?.includes('.pdf')" src="/assets/icons/pdf.png" width="125px"
+                            height="110px" class="rounded-corners"> -->
+                          <div class="h-30px rounded-bottom bg-dark text-white w-120px p-1">
+                            <div class=" fs-7px" [title]="displayImageFileName(item.image_path) ">{{
+                              displayImageFileName(item.image_path) }}</div>
+                            <div class="d-flex fs-7px">
+                              <div class="me-2 fw-bold"><i class="far fa-calendar-alt pe-2"></i>{{item?.date | date :
+                                'yyyy-MM-dd'}}
+                              </div>
+                              <div class=" fw-bold"><i class="far fa-clock pe-2"></i>{{item?.time}}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="delete-option">
+                          <div class="d-flex justify-content-center align-items-center">
+                            <div
+                              class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center me-1 cursorPointer"
+                              (click)="downloadImg(item?.image_path)"><i class="fas fa-download text-color"></i>
+                            </div>
+                            <div>
+                              <button type="button"
+                                [ngClass]="{'disabled': loggedInUserMail != item?.created_by , 'cursor-pointer': loggedInUserMail == item?.created_by }"
+                                class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center"
+                                data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                (click)="showConfirmationModal('recommendation', item?.id,loggedInUserMail != item?.created_by)">
+                                <i class="fas fa-trash custom"></i>
+                              </button>
+                            </div>
+                            <div
+                              class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center cursor-pointer ms-1"
+                              (click)="selectImageToDisplay(item)"><i class="fa-solid fa-eye primary-color"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="observationsRecommendationsToggle == true" class="w-100" style="height: 50%; ">
+                <!-- <div class="sideHeaders">
+                  Activities
+                </div>
+                <div class="sideHeaders-content" style="height: 70%; overflow-y: scroll;">
+                  <div *ngFor="let item of activities" class="activity">
+                    <div style="color: black; font-weight: 600;">
+                      <span *ngFor="let item of item.taggedPeople" style="color: #006699;"
+                        class="fs-10">@{{item}}</span>
+                      {{item?.comment}}
+                    </div>
+                    <div class="sideHeaders-content-email">
+                      {{item?.email}}
+                    </div>
+                    <div *ngIf="item.attachments.length > 0">
+                      <div class="d-flex flex-wrap">
+                        <div class="d-flex flex-wrap m-1"
+                          *ngFor="let item of selectedRecommendation?.image_path;let i = index">
+                          <div class="postImage position-relative w-125px">
+                            <div class="pe-2 pb-2 w-125px">
+                              <img [src]="item" width="120px" height="70px">
+
+                            </div>
+                            <div class="delete-option">
+                              <div class="d-flex justify-content-center align-items-center">
+                                <div
+                                  class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center me-1"
+                                  (click)="downloadImg(item)"><i class="fas fa-download text-color"></i></div>
+                                <div
+                                  class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center cursor-pointer"
+                                  (click)="deleteSlectedCommentImg(i)"><i class="fas fa-trash custom"></i></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style="position: fixed; width: 29%; height: 10%; justify-content: end;" class="d-flex flex-column">
+                  <div class="d-flex ">
+                    <div style="width: calc(100% - 110px);">
+                      <input [(ngModel)]="activityComment" type="text" placeholder="Enter message here..."
+                        style="width: 100%; height: 100%; outline: none; border: none; background-color: transparent;">
+                    </div>
+                    <div style="width: 40px; padding-left: 10px;">
+                      <input id="fileInput" type="file" class="cursor-pointer" title="Select document"
+                        (change)="getFile($event)" (click)="$event.target.value=null" style="display: none;">
+                      <button class="attach" onclick="document.getElementById('fileInput').click();">
+                        <i class="fa fa-paperclip" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                    <div style="width: 50px;">
+                      <button class="send" (click)="addComment()">
+                        SEND
+                      </button>
+                    </div>
+                  </div>
+                  <div class="d-flex " style="height: 60%;">
+                    <div *ngFor="let item of commentAttachments"
+                      style="width: 20%; height: 10%; background-color: #2196F3; color: white;">
+                      {{item}} <span style="margin-left: 10px;"> x </span>
+                    </div>
+                  </div>
+                </div> -->
+                <app-inspection-chatbox [recommendation_id]="selectedRecommendation?.recommendation_id"
+                  [listOfUsers]="allUsersList" [selectedUnit_id]="selectedUnit" [unitsList]="units"
+                  [selectedRecommendation]="selectedRecommendation" [selectedEquipmentId]="selectedCategory"
+                  [selectedRecommendationStatus]="selectedRecommendation.status"
+                  [commentTagging]="commentTagging"></app-inspection-chatbox>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cname-date d-flex flex-column pe-2"
+          style=" height:calc(100vh - 120px);  width: 32%; background-color: white; padding-top: 4.5%; overflow-y: auto;">
+          <div *ngIf="observationsRecommendationsToggle == true" class="d-flex flex-column w-100">
+            <div class="sideHeaders">
+              Status
+            </div>
+            <div class="d-flex flex-column" style="margin-left: -5px; width: max-content;">
+              <!-- <div [ngClass]="{'open': selectedRecommendation.status === 'open', 'approved' : selectedRecommendation.status === 'maintenance_approved',  'rejected' : selectedRecommendation.status === 'maintenance_rejected'}" *ngIf="observationsRecommendationsToggle == true">
+              <span>{{selectedRecommendation.status}}</span>
+            </div> -->
+              <div class="mt-2" style="height:30px;" *ngIf="selectedRecommendation?.status">
+                <select class="ms-2 py-1 px-2 fs-11 w-110px text-capitalize rounded fw-800"
+                  aria-label="Default select example" [(ngModel)]="selectedRecommendation.status"
+                  (change)="changeIssueStatus()" [disabled]="loggedInUserDepartment != 'Inspection'"
+                  [ngClass]="{'status-dropdown-open' : (selectedRecommendation.status == 'Open' || selectedRecommendation.status == 'Maintenance Rejected'), 'status-dropdown-close' : !(selectedRecommendation.status == 'Open' || selectedRecommendation.status == 'Maintenance Rejected'), 'cursorDisabled': (selectedRecommendation.status==='Maintenance Rejected' ||  selectedRecommendation.status === 'Maintenance Accepted')} "
+                  [disabled]="selectedRecommendation.status == 'Maintenance Rejected' || selectedRecommendation.status == 'Maintenance Accepted'">
+                  <option class="status-dropdown-close" *ngFor="let s of status"
+                    [ngClass]="{'status-dropdown-open' : (s == 'Maintenance Rejected' || s == 'Open') , 'status-dropdown-close' : !(s == 'Maintenance Rejected' || s == 'Maintenance Rejected'),'d-none':(s=='Open')}">
+                    {{s}}</option>
+                </select>
+              </div>
+            </div>
+            <div *ngIf="selectedRecommendation.status === 'Maintenance Rejected'" class="sideHeaders mt-2">
+              <button type="button" class="btn btn-sm attach fs-12 p-2 no-wrap"
+                [disabled]="loggedInUserDepartment != 'Inspection'"
+                (click)="createRecommendation(selectedObservation.observation_id)"
+                style="width: 100%; font-weight: 600; border-radius: 5px;background-color: #E2F5FF; border: 1px solid #006699;"
+                data-bs-toggle="modal" data-bs-target="#exampleModalCenter" class="primary-color primary-bg-color"><i
+                  class="fa fa-thin fa-plus"></i> RE-CREATE
+                RECOMMENDATION</button>
+            </div>
+          </div>
+          <div class="d-flex flex-column w-100 mt-2" style=" height: 10%;">
+            <div class="sideHeaders">
+              Component Name
+            </div>
+            <div class="sideHeaders-content d-flex flex-column">
+              <div *ngIf="observationsRecommendationsToggle == false">
+                {{selectedObservation?.component_name}}
+              </div>
+              <div *ngIf="observationsRecommendationsToggle == true">
+                {{selectedRecommendation?.component_name}}
+              </div>
+            </div>
+          </div>
+          <div *ngIf="observationsRecommendationsToggle == true" class="d-flex flex-column w-100 py-2"
+            style=" height: 12%;">
+            <div class="sideHeaders">
+              Fault
+            </div>
+            <div class="sideHeaders-content d-flex flex-column">
+              <div>
+                {{selectedRecommendation?.fault}}
+              </div>
+            </div>
+          </div>
+          <div class="d-flex flex-column w-100 py-2" style=" height: 15%;">
+            <div class="sideHeaders">
+              Date
+            </div>
+            <div class="sideHeaders-content d-flex flex-column" style="height: max-content;">
+              <div *ngIf="observationsRecommendationsToggle == false">
+                {{selectedObservation?.date}}
+              </div>
+              <div *ngIf="observationsRecommendationsToggle == true">
+                {{selectedRecommendation?.date}}
+              </div>
+            </div>
+          </div>
+          <div *ngIf="observationsRecommendationsToggle == true">
+            <div class="py-2">
+              <div class=" text-basic fs-11 fw-bold">Tagged Persons({{selectedRecommendation?.tagged_user?.length}})
+              </div>
+              <div class="d-flex align-items-center level1 bg-ash justify-content-between">
+                <div class="level2 width-person-input">
+                  <input type="text" class="border-none-outline-none bg-ash w-100 ps-2 h-35px fs-12"
+                    onkeypress="return /[0-9a-zA-Z ]/i.test(event.key)" #data [(ngModel)]="selectedEmail.email"
+                    placeholder="Search to Tag User..." (keyup)="getSelectedEmail(data.value)">
+                  <div class="popup" [ngClass]="searchRelatedEmailData?.length > 0 ?'coustom-border':''">
+                    <div class="cursor col-md-3" title="{{email.email}}"
+                      *ngFor="let email of searchRelatedEmailData; let i = index" (click)="chipsData(email)">
+                      {{email?.email.slice(0,25)}}...
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <button class=" text-basic fw-800 btn btn-sm  ms-2 border-none-outline-none d-flex align-items-center"
+                    [disabled]="!selectedEmail?.email?.includes('@')"
+                    (click)="addEmailIds(selectedRecommendation?.recommendation_id, [selectedEmail?.id])"><span
+                      class="pluseIcon">+</span> Add</button>
+                </div>
+              </div>
+            </div>
+            <div class="border mt-2 pb-2 rounded-3 taggedUsers" *ngIf="selectedRecommendation?.tagged_user?.length > 0">
+              <div *ngFor="let email of selectedRecommendation?.tagged_user"
+                class="fs-10 cursor-default d-flex align-items-center justify-content-between p-2"
+                title="{{email.email}}">
+                <div class="d-flex align-items-center">
+                  <div
+                    class="min-w-20px w-20px h-20px bg-danger rounded-circle d-flex align-items-center justify-content-center me-1 ">
+                    {{getUserName(email, '') | uppercase}}</div>
+                  <div [title]="getUserName(email, 'full')">{{getUserName(email, 'full') | titlecase}}</div>
+                </div>
+                <div class="fs-10 opacity-75">{{email?.department}}</div>
+                <!-- <div class="text-dark ms-2" [ngClass]="loginUserEmail == firtIssue?.created_by ? 'cursor' : ''"
+                (click)="removeTaggedEmail(email)">X</div> -->
+              </div>
+            </div>
+          </div>
+          <div *ngIf="observationsRecommendationsToggle == true" class="d-flex flex-column w-100 py-3"
+            style=" height: 20%;">
+            <div class="sideHeaders">
+              Linked Observations
+            </div>
+            <div *ngFor="let obs of selectedRecommendation?.linked_obs" class="sideHeaders-content d-flex flex-column"
+              style="height: max-content; margin-bottom: 10px;">
+              <div style="display: flex; flex-direction: row">
+                <div style="background-color: #2196F3;
+                                        color: white;
+                                        height: 25px;
+                                        width: max-content;
+                                        padding-left: 10px;
+                                        padding-right: 10px;
+                                        padding-top: 5px;
+                                        border-radius: 5px;
+                                         font-weight: 600;
+                                         cursor: pointer;" (click)="navigateToLinkedObservation(obs)">#{{obs?.id}}
+                </div>
+                <div style="color: #2196F3; font-weight: 600; margin-left: 10px; margin-top: 5px;">
+                  <!-- {{selectedEquipmentName}} -->
+                  {{obs?.component_name__component_name}}
+                </div>
+              </div>
+              <!-- <div style="color : #2196f3;  font-weight: 600; margin-top: 10px;">
+                {{obs?.component_name__component_name}}
+              </div> -->
+              <div style="margin-top: 10px">
+                {{obs?.observation}}
+              </div>
+              <div style="margin-top: 12px; display: flex;">
+                <div style="display: flex; flex-direction: row;">
+                  <i class="fa fa-calendar" style="color: gray"></i>
+                  <div style="margin-left: 10px; font-weight: 600;">
+                    {{obs?.date}}
+                  </div>
+                </div>
+                <div style="display: flex; margin-left: 20px">
+                  <i class="fa fa-clock-o" style=" font-size: 20px"></i>
+                  <div style="margin-left: 10px; font-weight: 600;">
+                    {{obs?.time}}
+                  </div>
+                </div>
+                <!-- </div> -->
+              </div>
+              <hr class="mb-0">
+            </div>
+          </div>
+          <div *ngIf="observationsRecommendationsToggle == false" class="create d-flex" style="width: 100%;">
+            <!-- [disabled]="!(userGroup?.indexOf('observation_or_recommendation') > -1)" -->
+            <button type="button" class="btn btn-sm btn-outline-primary attach fs-12 p-2"
+              [disabled]="loggedInUserDepartment != 'Inspection'"
+              (click)="createRecommendation(selectedObservation.observation_id)"
+              style="width: 100%;font-weight: 600; border-radius: 5px;background-color: #E2F5FF; border: 1px solid #006699;font-size: 12px;"
+              data-bs-toggle="modal" data-bs-target="#exampleModalCenter" class="primary-color primary-bg-color"><i
+                class="fa fa-thin fa-plus extra"></i> CREATE RECOMMENDATION</button>
+          </div>
+
+        </div>
+        <!-- </div> -->
+      </ng-container>
+
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="btn btn-sm" data-bs-dismiss="modal" aria-label="Close"
+                (click)="clearPopUpData('clearObservation')">
+                <i class="fas fa-arrow-left pe-1"></i>
+                Back
+              </button>
+              <div class="w-90 text-center">
+                <div *ngIf="observationsRecommendationsToggle == false" class="text-basic fs-11 fw-800">CREATE
+                  OBSERVATION
+                </div>
+                <div *ngIf="observationsRecommendationsToggle == true" class="text-basic fs-11 fw-800">CREATE
+                  RECOMMENDATION</div>
+              </div>
+            </div>
+            <div class="modal-body d-flex flex-column fs-12">
+              <div class="d-flex flex-column" style="margin-bottom: 25px;">
+                <div class="sideHeaders fs-12">
+                  Component Name
+                </div>
+                <div class="sideHeaders-content fs-12">
+                  <select [(ngModel)]="componentId" class="w-100">
+                    <option *ngFor="let component of componentList" [ngValue]="component.id">
+                      {{component.component_name}}
+                    </option>
+                  </select>
+                </div>
+                <!-- <div *ngIf="observationsRecommendationsToggle == false" class="sideHeaders-content fs-12">
+            <input id="fileInput" placeholder="Enter Component Name" type="text" class="cursor-pointer" style="border: none; outline: none; width: 90%; background-color: transparent;" [(ngModel)]="selectedObservation.component_name">
+          </div>
+          <div *ngIf="observationsRecommendationsToggle == true" class="sideHeaders-content fs-12">
+            <input id="fileInput" placeholder="Enter Component Name" type="text" class="cursor-pointer" style="border: none; outline: none; width: 90%; background-color: transparent;" [(ngModel)]="selectedRecommendation.component_name">
+          </div> -->
+              </div>
+              <div *ngIf="observationsRecommendationsToggle == false" class="d-flex flex-column"
+                style="margin-bottom: 5px;">
+                <div class="sideHeaders fs-12">
+                  Observation
+                </div>
+                <div class="sideHeaders-content fs-12">
+                  <textarea placeholder="Enter Observation Description" type="text"
+                    style="border: none; outline: none; background-color: transparent;"
+                    [(ngModel)]="createObservations.observation_desc" class="w-100">
+                      </textarea>
+                </div>
+              </div>
+
+              <div *ngIf="observationsRecommendationsToggle == true" class="d-flex flex-column"
+                style="    margin-bottom: 25px;">
+                <div class="sideHeaders fs-12">
+                  Fault
+                </div>
+                <div class="sideHeaders-content fs-12">
+                  <input placeholder="Enter Fault" type="text"
+                    style="border: none; outline: none; background-color: transparent;" class="w-100"
+                    [(ngModel)]="createRecomondations.fault">
+                </div>
+              </div>
+              <div *ngIf="observationsRecommendationsToggle == true" class="d-flex flex-column"
+                style="margin-bottom: 5px;">
+                <div class="sideHeaders fs-12">
+                  Recommendation
+                </div>
+                <div class="sideHeaders-content fs-12">
+                  <textarea placeholder="Enter Recommendation Description" type="text" class="w-100"
+                    style="border: none; outline: none; background-color: transparent;"
+                    [(ngModel)]="createRecomondations.recommendation_desc">
+                    </textarea>
+                </div>
+              </div>
+              <div class="d-flex flex-column" style="margin-bottom: 25px;">
+                <div class="sideHeaders fs-12">
+                  Date
+                </div>
+                <div class="sideHeaders-content fs-12">
+                  <input type="date" style="border: none; outline: none; background-color: transparent;"
+                    [(ngModel)]="createObservations.date" class="w-100" max="{{date | date:'yyyy-MM-dd'}}">
+                </div>
+              </div>
+
+              <!-- <div *ngIf="observationsRecommendationsToggle == true" class="d-flex flex-column"
+            style="    margin-bottom: 25px;">
+            <div class="sideHeaders fs-12">
+              Tagged Persons
+            </div>
+            <div class="sideHeaders-content fs-12">
+              <input placeholder="Search to tag user..." type="text"
+                style="border: none; outline: none; width: 90%; background-color: transparent;">
+            </div>
+          </div> -->
+
+              <div *ngIf="observationsRecommendationsToggle == true" class="d-flex flex-column"
+                style="margin-bottom: 25px;">
+                <div class="sideHeaders fs-12">
+                  Tagged Persons
+                </div>
+                <div class="sideHeaders-content fs-12">
+                  <ng-select [items]="taggedUsersList" [multiple]="true" [closeOnSelect]="false"
+                    [(ngModel)]="createRecomondations.tagged_users" bindLabel="email" bindValue="id"
+                    placeholder="Select users">
+                    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                      <div class="ng-value" *ngFor="let item of items | slice:0:2">
+                        <span class="ng-value-label" [title]="item">{{item.email | hideInfo}}</span>
+                        <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                      </div>
+                      <div class="ng-value" *ngIf="items.length > 2">
+                        <span class="ng-value-label">{{items.length - 2}} more...</span>
+                      </div>
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                      <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                      {{item.email}}<br />
+                      {{item.department}}
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+              <div *ngIf="observationsRecommendationsToggle == true" class="d-flex flex-column"
+                style="margin-bottom: 25px;">
+                <div class="sideHeaders fs-12">
+                  Choose Observation
+                </div>
+                <div class="sideHeaders-content fs-12"
+                  *ngIf="observationsRecommendationsToggle == true && dropDownShow == true">
+                  <!-- <select [(ngModel)]="createRecomondations.observation_id" class="w-100">
+                    <option *ngFor="let observation of observationsList" [ngValue]="observation?.observation_id">
+                      {{observation?.observation}}
+                    </option>
+                  </select> -->
+                  <ng-select [items]="observationsList" [multiple]="true" [closeOnSelect]="false"
+                    [(ngModel)]="createRecomondations.observation_id" bindLabel="observation" bindValue="observation_id"
+                    placeholder="Select Observations">
+                    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                      <div class="ng-value" *ngFor="let item of items | slice:0:2">
+                        <span class="ng-value-label" [title]="item">{{item.observation | hideInfo}}</span>
+                        <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                      </div>
+                      <div class="ng-value" *ngIf="items.length > 2">
+                        <span class="ng-value-label">{{items.length - 2}} more...</span>
+                      </div>
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                      <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />{{item.observation}}
+                    </ng-template>
+                  </ng-select>
+                </div>
+                <div class="sideHeaders-content fs-12"
+                  *ngIf="observationsRecommendationsToggle == true && dropDownShow == false">
+                  <input type="text" class="w-100" [(ngModel)]="createRecomondations.observation_id"
+                    style="border: none; outline: none; background-color: transparent;" [disabled]="true">
+                </div>
+              </div>
+              <div class="d-flex flex-column" style="margin-bottom: 20px;">
+                <div *ngIf="!url" class="sideHeaders fs-12">
+                  Upload File
+                </div>
+                <div>
+                  <div *ngIf="!url" appFileDragNDrop (filesChangeEmiter)="onChange($event)">
+                    <div class="observation-body text-center p-3 px-4" style="width: max-content !important;">
+                      <div><img src="assets/images/observation-img.svg" width="40px"></div>
+                      <div class="mt-2 fs-11px">Drag and drop an observation images/file (Max. size is 5MB)</div>
+                      <div class="mt-2  btn-file">
+                        <button class="btn btn-sm cursor-pointer browse-btn px-2  fs-10px fw-800">Browse
+                          file</button>
+                        <input type="file" #myInput class="cursor-pointer" accept="image/jpeg,image/png,application/pdf"
+                          (change)="onChange($event.target.files)">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div class=" w-400px h-250px" id="rawImagePath">
+              <img id="selectedObservationImage" width="100%" height="100%">
+            </div> -->
+                  <div class="d-inline-flex">
+                    <div class="scene-container">
+                      <div *ngIf="url" id="markedImageDiv" class=""
+                        [ngClass]="this.url.includes('image')?'img-zoom':''">
+                        <div style="margin-top:10px" class="border rounded-pill d-inline-block p-2 text-color"><span
+                            class="inline-block mt-3 cursor" (click)="removePdf()">Remove<span
+                              class="ms-2 cursor">X</span></span></div>
+                        <div class="fitDivCss" [ngClass]="{'scalize': selectedMode}">
+                          <img *ngIf="this.url.includes('image')" style="height: calc(100vh - 200px);width:800px;"
+                            id="modalImage" class="mt-2" [ngClass]="{'target': selectedMode}" src="{{url}}" crossorigin
+                            alt="Image">
+                          <div class="inline-block mt-2 w-300px" *ngIf="this.url.includes('pdf')">{{file?.name}}</div>
+                          <div *ngIf="selectedMode">
+                            <ng-container *ngFor="let point of actionPoints">
+                              <div class="item-point circle cursorPointer pulse2"
+                                [ngStyle]="{top: point.top + 'px', left: point.left + 'px'}"
+                                (click)="openAnnotationModal(point)">
+                                <div>
+                                  <a href="#" class="toggle"></a>
+                                </div>
+                                <p>{{point.index}}</p>
+                              </div>
+                            </ng-container>
+                          </div>
+                          <canvas *ngIf="url?.includes('image')" id="canvas" class=""></canvas>
+                        </div>
+                        <div class="nextBtn text-center d-flex align-items-center fs-10px mt-2">
+                          <button type="button" *ngIf="url?.includes('image')" class="btn btn-sm w-80px p-1 ps-0"
+                            (click)="removePdf()"
+                            style="background-color: white; border: 1px solid #006699; color: #006699"
+                            #closeModal>BACK</button>
+                          <button *ngIf="!selectedMode&&url?.includes('image')" type="button"
+                            class="btn btn-sm btn-basic w-80px p-1 ps-0 ms-2" (click)="changeMode()"
+                            [disabled]="!url">NEXT</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <app-inspection-annotations *ngIf="selectedMode && url" [imageModalData]="selectedMedia"
+                [trigger]="trigger" [canvasHeight]="canvasHeight" [canvasWidth]="canvasWidth"
+                [canvasRatio]="canvasRatio" [selectAnnotation]="selectAnnotation"
+                (selectedAnnotation)="openSelectedAnnotation($event)" (refresh)="getMediaData()"
+                (emitAnnotation)="storeAnnotation($event)">
+              </app-inspection-annotations>
+            </div>
+            <div class="modal-footer px-0 pb-0" style="justify-content: center;">
+              <button type="button" *ngIf="observationsRecommendationsToggle == false" class="btn btn-primary"
+                style="width: 10rem; background-color: #006699; color: white" (click)="createObServation()"
+                [disabled]="!componentId || !createObservations.observation_desc || !createObservations.date || !this.annotationSaved"
+                data-bs-dismiss="modal">SUBMIT</button>
+              <button type="button" *ngIf="observationsRecommendationsToggle == true" class="btn btn-primary"
+                style="width: 10rem; background-color: #006699; color: white" (click)="createRecomondation()"
+                [disabled]="!componentId || !createRecomondations.fault || !createRecomondations.recommendation_desc || !createObservations.date || !this.annotationSaved"
+                data-bs-dismiss="modal">SUBMIT</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                (click)="clearPopUpData('clearObservation')"
+                style="background-color: white; border: 1px solid #006699; color: #006699" #closeModal>CANCEL</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!------ ****************************** Filter Code *************************************---------->
+      <div class="route-nav shadow-sm scroll side-bar-height position bg-white  bg-body p-2" style="width:280px;"
+        *ngIf="isRouteClicked">
+        <div class="d-flex mb-2">
+          <button id="back-button" class="border-none-outline-none bg-white" (click)="onRouteClicked()"
+            style="margin-right: auto">
+            <i class="fas fa-arrow-left primary-color"></i>
+          </button>
+          <button class="btn btn-sm secondary-bg-color text-light" [disabled]="storePreviousFilter == true" (click)="filterApply()"><span>APPLY</span></button>
+          <button class=" primary-color btn btn-sm btn-border border-none-outline-none ms-2"
+            (click)="filterReset()">RESET</button>
+        </div>
+        <div class="route-nav-blocks">
+          <div class="select-vehicle">
+          </div>
+          <div class="select-vehicle">
+            <fieldset class="side-bar-fieldset" id="clear">
+              <legend class="side-bar-legend">observations and recommendations</legend>
+              <ng-select [items]="observationAndRecommendation" [multiple]="false" bindLabel="name"
+                [closeOnSelect]="false" [(ngModel)]="observationAndRecommendationFilter" (ngModelChange)="onFilterChange()">
+                <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.gender | uppercase}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
+                </ng-template>
+              </ng-select>
+            </fieldset>
+          </div>
+          <div class="select-vehicle">
+            <fieldset class="side-bar-fieldset">
+              <legend class="side-bar-legend">Select Date</legend>
+              <div [owlDateTimeTrigger]="dt1">
+                <div id="editDatePicker" class="h-30px ps-2 pb-1 no-wrap d-flex align-items-center">
+                  <span class="trigger cursor">
+                    <i class="fa fa-calendar-alt"></i>
+                  </span>
+                  <input id="dateTime" class="date-picker-input ps-2 border-none-outline-none" [selectMode]="'range'" [(ngModel)]="selectedDate"
+                    [max]="currentDate" readonly="true" name="datPicker" placeholder="Select date range"
+                    (ngModelChange)="datePicker($event)" (click)="inputDisable()" [owlDateTime]="dt1">
+                  <owl-date-time #dt1 [pickerType]="'calendar'">
+                  </owl-date-time>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <div class="select-vehicle">
+            <fieldset class="side-bar-fieldset">
+              <legend class="side-bar-legend">Equipment Category</legend>
+              <!-- <ng-multiselect-dropdown id="multiSelect" class="border-none-outline-none" [placeholder]="'Filter by Status'"
+          [settings]="dropdownSettings" [data]="equipmentClass" [(ngModel)]="selectedEquipmentClass"
+          (onSelect)="onItemSelect($event)" (onDeSelect)="onItemDeSelect($event)">
+        </ng-multiselect-dropdown> -->
+              <ng-select [items]="equipmentClass" [multiple]="true" [closeOnSelect]="false" bindLabel="equipment_category_name"  bindValue="equipment_category_id"
+                [(ngModel)]="selectedEquipmentClass" (ngModelChange)="onFilterChange()"
+                placeholder="Select Equipment Category" [closeOnSelect]="false">
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                    <span class="ng-value-label" [title]="item">{{item.equipment_category_name | hideInfo}}</span>
+                    <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                  </div>
+                  <div class="ng-value" *ngIf="items.length > 1">
+                    <span class="ng-value-label">{{items.length - 1}} more...</span>
+                  </div>
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                  {{item?.equipment_category_name}}
+                </ng-template>
+                <ng-template ng-footer-tmp>
+                  <div class="d-flex justify-content-between">
+                    <button [disabled]="selectedEquipmentClass.length == equipmentClass.length"
+                      (click)="selectedAllEquipmentClass()" class="btn btn-sm btn-basic fs-10px">Select all</button>
+                    <button [disabled]="selectedEquipmentClass.length == 0" (click)="unSelectAllEquipmentClass()"
+                      class="btn btn-sm btn-basic ms-2 fs-10px">Unselect all</button>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </fieldset>
+          </div>
+          
+          <div class="select-vehicle">
+            <fieldset class="side-bar-fieldset">
+              <legend class="side-bar-legend" id="ng-select">Equipment</legend>
+              <!-- <ng-multiselect-dropdown id="multiSelect" class="border-none-outline-none" [placeholder]="'Filter by Status'"
+          [settings]="dropdownSettings" [data]="equipmentNumber" [(ngModel)]="selectedEquipmentNumber"
+          (onSelect)="onItemSelect($event)" (onDeSelect)="onItemDeSelect($event)">
+        </ng-multiselect-dropdown> -->
+              <ng-select [items]="equipmentNumber" [multiple]="true" [closeOnSelect]="false" bindLabel="equipment_name"  bindValue="equipment_id"
+                [(ngModel)]="selectedEquipmentNumber" placeholder="Select Equipment" [closeOnSelect]="false" (ngModelChange)="onEquipmentChange()">
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                    <span class="ng-value-label" [title]="item">{{item?.equipment_name | hideInfo}}</span>
+                    <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                  </div>
+                  <div class="ng-value" *ngIf="items.length > 1">
+                    <span class="ng-value-label">{{items.length - 1}} more...</span>
+                  </div>
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                  {{item?.equipment_name}}
+                </ng-template>
+                <ng-template ng-footer-tmp>
+                  <div class="d-flex justify-content-between">
+                    <button [disabled]="selectedEquipmentNumber.length == equipmentNumber.length "
+                      (click)="selectedAllEquipmentNumber()" class="btn btn-sm btn-basic fs-10px">Select all</button>
+                    <button [disabled]="selectedEquipmentNumber.length == 0" (click)="unSelectAllEquipmentNumber()"
+                      class="btn btn-sm btn-basic ms-2 fs-10px">Unselect all</button>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </fieldset>
+          </div>
+          <div class="select-vehicle" *ngIf="observationsRecommendationsToggle">
+            <fieldset class="side-bar-fieldset">
+              <legend class="side-bar-legend">Status</legend>
+              <!-- <ng-multiselect-dropdown id="multiSelect" class="border-none-outline-none" [placeholder]="'Filter by Status'"
+          [settings]="dropdownSettings" [data]="status" [(ngModel)]="statusFilter"
+          (onSelect)="onItemSelect($event)" (onDeSelect)="onItemDeSelect($event)">
+        </ng-multiselect-dropdown> -->
+              <ng-select [items]="status" [multiple]="true" [closeOnSelect]="false" [(ngModel)]="statusFilter"
+                placeholder="Select Status" [closeOnSelect]="false" (ngModelChange)="statusFilterChange()">
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <div class="ng-value" *ngFor="let item of items | slice:0:1">
+                    <span class="ng-value-label" [title]="item">{{item | hideInfo}}</span>
+                    <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                  </div>
+                  <div class="ng-value" *ngIf="items.length > 1">
+                    <span class="ng-value-label">{{items.length - 1}} more...</span>
+                  </div>
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                  <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                  {{item}}
+                </ng-template>
+                <ng-template ng-footer-tmp>
+                  <div class="d-flex justify-content-between">
+                    <button [disabled]="statusFilter.length == status.length" (click)="selectedAllFilter()"
+                      class="btn btn-sm btn-basic fs-10px">Select all</button>
+                    <button [disabled]="statusFilter.length == 0" (click)="unSelectAllFilter()"
+                      class="btn btn-sm btn-basic ms-2 fs-10px">Unselect all</button>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+
+      <!-- Button trigger modal -->
+      <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+  Launch demo modal
+</button> -->
+
+
+
+      <!--*********************************** Attachment POP-UP Modal ************************************************-->
+      <div class="modal fade" id="inspectionImageViewer" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div data-bs-dismiss="modal" aria-label="Close" class="mx-2 text-basic fs-11 cursor"> <i
+                  class="fas fa-arrow-left pe-1"></i> Back</div>
+              <div class="w-75 text-center">
+                <div class="att text-basic fs-11 fw-800">Attachments for
+                  {{observationsRecommendationsToggle===false?'Observation':'Recommendation'}}</div>
+                <!-- <div class="opacity-75">Remove</div> -->
+              </div>
+            </div>
+            <div class="modal-body h-400px">
+              <div class="d-flex">
+                <div class="w-135px left-part scroll">
+                  <div class="d-flex p-1"
+                    *ngFor="let images of ((observationsRecommendationsToggle === false)?selectedObservation?.images:selectedRecImages)">
+                    <div class="imageComments position-relative mt-2" (click)="onImageSelect(images)">
+                      <div class="img pe-2 pb-2" id="modalImage">
+                        <img
+                          *ngIf="images.image_path.includes('.jpg') || images.image_path.includes('.jpeg') || images.image_path.includes('.png')"
+                          [src]="images.image_path" width="125px" height="110px" class="rounded-corners">
+                        <img *ngIf="images.image_path.includes('.pdf')" class="inline-block"
+                          class="inline-block fas fa-file-pdf primary-color fa-10x">
+                        <!-- <img *ngIf="images.image_path.includes('.pdf')" src="/assets/icons/pdf.png" width="125px"
+                          height="110px" class="rounded-corners"> -->
+                        <!-- <div class="h-35px rounded-bottom bg-dark text-white w-125px p-1">
+                  <div class=" fs-8 issueImageName">{{images.filename}}</div>
+                  <div class="d-flex fs-8 py-1">
+                    <div class="me-2 fw-bold"><i class="far fa-calendar-alt pe-2"></i>{{images.created_at | date :
+                      'yyyy-MM-dd'}}
+                    </div>
+                    <div class=" fw-bold"><i class="far fa-clock pe-2"></i>{{images.created_at | date : 'HH:mm:ss'}}</div>
+                  </div>
+                </div> -->
+                      </div>
+                      <div class="download-option">
+                        <div class=" fs-8 issueImageName text-white px-2">{{images?.image_path}}</div>
+                        <div class="d-flex justify-content-center align-items-center mt-2">
+                          <div
+                            class="w-25px h-25px bg-white cursor rounded d-flex justify-content-center align-items-center me-1"
+                            (click)="downloadImg(images?.image_path, false)">
+                            <i class="fas fa-download text-color"></i>
+                          </div>
+                          <!-- <div class="w-25px h-25px bg-white rounded d-flex justify-content-center align-items-center">
+                    <button class="btn btn-sm p-0 cursor" [disabled]="!(loggedUserEmail == selectedIssue?.created_by)"
+                      (click)="deleteIssueImage(selectedIssue?.id, images.id)">
+                      <i class="fas fa-trash text-danger"></i>
+                    </button>
+                  </div> -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="fullImage pt-1 pe-1">
+                  <div class="fullHeight">
+                    <div
+                      class="px-2 fs-12 bg-image-popup h-30px rounded text-white d-flex align-items-center justify-content-between">
+                      <div class="issueImageName">{{selectedImageName}}</div>
+                      <div class="d-flex align-items-center">
+                        <div class="pe-2">{{selectedImage?.['created_by']}}</div>
+                        <div>{{selectedImage?.['date'] | date :'yyyy-MM-dd'}} | </div>
+                        <div class="ms-1">{{selectedImage?.['time']}}</div>
+                        <!-- <div class="w-25px h-25px cursor rounded d-flex justify-content-center align-items-center"
+                          (click)="downloadImg(selectedImage?.['image_path'], false)">
+                          <i class="fas fa-download text-color"></i>
+                        </div> -->
+                      </div>
+                    </div>
+                    <div class="w-100 image-height pt-1">
+                      <div
+                        *ngIf="selectedImage?.['image_path']?.includes('.jpg') || selectedImage?.['image_path']?.includes('.jpeg') || selectedImage?.['image_path']?.includes('.png')"
+                        id="popupMarkedImageDiv" class="fullHeight fullWidth"
+                        [ngClass]="selectedImage?.['image_path']?'img-zoom':''">
+                        <div class="fitDivCss d-flex" [ngClass]="{'scalize': selectedMode}">
+                          <img *ngIf="selectedImage?.['image_path']" id="popupModalImage" class="m-auto fullWidth"
+                            height="auto" [ngClass]="{'target': selectedMode}" src="{{selectedImage?.['image_path']}}"
+                            alt="Image">
+                          <div *ngIf="selectedMode">
+                            <ng-container *ngFor="let point of actionPoints">
+                              <div class="item-point circle cursorPointer pulse2"
+                                [ngStyle]="{top: point.top + 'px', left: point.left + 'px'}"
+                                (click)="openAnnotationModal(point)">
+                                <div>
+                                  <a href="#" class="toggle"></a>
+                                </div>
+                                <p>{{point.index}}</p>
+                              </div>
+                              <div id="content{{point.index}}" class="content right bottom">
+                                <div class="head">
+                                  <span class="exit cursorPointer">
+                                    <img src="assets/icons/close.png" alt="Close"
+                                      (click)="closeAnnotationModal(point.index)" /></span>
+                                  <h6 class="title">Annotation #{{point.index}}</h6>
+                                </div>
+                                <div class="body">
+                                  <p>{{point.comment}}</p>
+                                </div>
+                              </div>
+                            </ng-container>
+                          </div>
+                          <canvas id="popupCanvas" class="m-auto"></canvas>
+                        </div>
+                      </div>
+                      <!-- <img
+                        *ngIf="selectedImage?.['image_path']?.includes('.jpg') || selectedImage?.['image_path']?.includes('.jpeg') || selectedImage?.['image_path']?.includes('.png')"
+                        [src]="selectedImage?.['image_path']" width="100%" height="100%" class="rounded"> -->
+                      <!-- <iframe *ngIf="selectedImage?.['image_path']?.includes('pdf')"
+                        [src]="selectedImage?.['image_path'] | safeUrl" width="100%" height="100%"></iframe> -->
+                      <!-- <embed *ngIf="selectedImage?.['image_path']?.includes('pdf')" type="application/pdf"
+                        [src]="selectedImage?.['image_path'] | safeUrl" width="100%" height="100%"> -->
+                      <ngx-extended-pdf-viewer *ngIf="selectedImage?.['image_path']?.includes('.pdf')"
+                        [src]="selectedImage?.['image_path']" [useBrowserLocale]="true" [textLayer]="true" height="85%"
+                        [showHandToolButton]="true" [zoom]="'page-width'" [showOpenFileButton]="false"
+                        [showFindButton]="false" [showBookmarkButton]="false" [showPropertiesButton]="false"
+                        [showSpreadButton]="true">
+                      </ngx-extended-pdf-viewer>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete Pop-up -->
+      <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" id="deleteConfirmation">
+          <div class="modal-content">
+            <div class="text-center border-bottom">
+              <div class="modal-title text-danger p-2" id="exampleModalLabel">Confirmation</div>
+            </div>
+            <div class="modal-body text-center">
+              <div *ngIf="observationsRecommendationsToggle == false ">Are you sure, delete the Observation image/file?
+              </div>
+              <div *ngIf="observationsRecommendationsToggle == true ">Are you sure, delete the Recommendation
+                image/file?</div>
+            </div>
+            <div class="text-center p-1 mb-2">
+              <button type="button" class="btn btn-sm secondary-bg-color text-light fs-12"
+                (click)="deleteObservation()">YES</button>
+              <button type="button" class="btn btn-sm secondary-bg-color text-light ms-2 fs-12 "
+                data-bs-dismiss="modal">NO</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--*********************Add new attachment ***********************-->
+      <!-- <div class="modal fade" id="attachmentModal" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="btn btn-sm" data-bs-dismiss="modal" aria-label="Close"
+                (click)="clearPopUpData('clearObservation')">
+                <i class="fas fa-arrow-left pe-1"></i>
+                Back
+              </button>
+              <div class="w-100 text-center">
+                <div *ngIf="observationsRecommendationsToggle == false" class="text-basic fs-11 fw-800">CREATE
+                  OBSERVATION
+                </div>
+                <div *ngIf="observationsRecommendationsToggle == true" class="text-basic fs-11 fw-800">CREATE
+                  RECOMMENDATION</div>
+              </div>
+            </div>
+            <div class="modal-body d-flex flex-column fs-12">
+              <div *ngIf="observationsRecommendationsToggle == true" class="d-flex flex-column"
+                style="margin-bottom: 25px;">
+                <div class="sideHeaders fs-12">
+                  Tagged Persons
+                </div>
+                <div class="sideHeaders-content fs-12">
+                  <ng-select [items]="taggedUsersList" [multiple]="true" [closeOnSelect]="false"
+                    [(ngModel)]="createRecomondations.tagged_users" bindLabel="email" bindValue="id"
+                    placeholder="Select users">
+                    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                      <div class="ng-value" *ngFor="let item of items | slice:0:2">
+                        <span class="ng-value-label" [title]="item">{{item.email | hideInfo}}</span>
+                        <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                      </div>
+                      <div class="ng-value" *ngIf="items.length > 2">
+                        <span class="ng-value-label">{{items.length - 2}} more...</span>
+                      </div>
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                      <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />
+                      {{item.email}}<br />
+                      {{item.department}}
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+              <div class="d-flex flex-column" style="margin-bottom: 60px;">
+                <div class="sideHeaders fs-12">
+                  Upload File
+                </div>
+                <div>
+                  <div appFileDragNDrop (filesChangeEmiter)="onChange($event)">
+                    <div class="observation-body text-center p-3 px-4" style="width: max-content !important;">
+                      <div><img src="assets/images/observation-img.svg" width="40px"></div>
+                      <div class="mt-2 fs-11px">Drag and drop an observation images/file (Max. size is 5MB)</div>
+                      <div class="mt-2  btn-file">
+                        <button class="btn btn-sm cursor-pointer browse-btn px-2  fs-10px fw-800">Browse
+                          file</button>
+                       <input *ngIf="observationsRecommendationsToggle == true" type="file" #recFileInput class="cursor-pointer"
+                      accept="image/jpeg,image/png,application/pdf" multiple (change)="onFileUpload($event, 'rec')">
+                        <input *ngIf="observationsRecommendationsToggle == false" type="file" #obsFileInput class="cursor-pointer" title="Add Images  or Files"
+                      accept="image/jpeg,image/png,application/pdf" multiple (change)="onFileUpload($event, 'obs')">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-inline-flex">
+                    <div class="scene-container">
+                      <div *ngIf="imageSrc?.[0]?.image" id="markedImageDiv" class=""
+                        [ngClass]="imageSrc?.[0]?.image?.includes('image')?'img-zoom':''">
+                        <div class="fitDivCss d-flex" [ngClass]="{'scalize': selectedMode}">
+                          <span class="position-absolute inline-block mt-3">Remove<span class="ms-2 cursor"
+                              (click)="removePdf()">X</span></span>
+                          <img *ngIf="imageSrc?.[0]?.image?.includes('image')" style="height: calc(100vh - 200px);width:100%;"
+                            id="modalImage" class="mt-5" [ngClass]="{'target': selectedMode}" src="{{imageSrc?.[0]?.image}}" crossorigin
+                            alt="Image">
+                          <span class="inline-block mt-5" *ngIf="imageSrc?.[0]?.image?.includes('pdf')">{{file?.name}}</span>
+                          <div *ngIf="selectedMode">
+                            <ng-container *ngFor="let point of actionPoints">
+                              <div class="item-point circle cursorPointer pulse2"
+                                [ngStyle]="{top: point.top + 'px', left: point.left + 'px'}"
+                                (click)="openAnnotationModal(point)">
+                                <div>
+                                  <a href="#" class="toggle"></a>
+                                </div>
+                                <p>{{point.index}}</p>
+                              </div>
+                            </ng-container>
+                          </div>
+                          <canvas *ngIf="this.imageSrc?.[0]?.image?.includes('image')" id="canvas" class=""></canvas>
+                        </div>
+                        <div class="nextBtn text-center d-flex align-items-center fs-10px mt-2">
+                          <button type="button" *ngIf="imageSrc?.[0]?.image?.includes('image')" class="btn btn-sm w-80px p-1 ps-0"
+                            (click)="removePdf()"
+                            style="background-color: white; border: 1px solid #006699; color: #006699"
+                            #closeModal>BACK</button>
+                          <button *ngIf="!selectedMode && imageSrc?.[0].image?.includes('image')" type="button"
+                            class="btn btn-sm btn-basic w-80px p-1 ps-0 ms-2" (click)="changeMode()"
+                            [disabled]="!imageSrc?.[0]?.image">NEXT</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <app-inspection-annotations *ngIf="selectedMode && imageSrc?.[0]?.image" [imageModalData]="selectedMedia"
+                [trigger]="trigger" [canvasHeight]="canvasHeight" [canvasWidth]="canvasWidth"
+                [canvasRatio]="canvasRatio" [selectAnnotation]="selectAnnotation"
+                (selectedAnnotation)="openSelectedAnnotation($event)" (refresh)="getMediaData()"
+                (emitAnnotation)="storeAnnotation($event)">
+              </app-inspection-annotations>
+            </div>
+            <div class="modal-footer px-0 pb-0" style="justify-content: center;">
+              <button type="button" *ngIf="observationsRecommendationsToggle == false" class="btn btn-primary"
+                style="width: 10rem; background-color: #006699; color: white" (click)="createObServation()"
+                [disabled]="!componentId || !createObservations.observation_desc || !createObservations.date">SUBMIT</button>
+              <button type="button" *ngIf="observationsRecommendationsToggle == true" class="btn btn-primary"
+                style="width: 10rem; background-color: #006699; color: white" (click)="createRecomondation()"
+                [disabled]="!componentId || !createRecomondations.fault || !createRecomondations.recommendation_desc || createRecomondations.observation_id.length < 1 || !createObservations.date">SUBMIT</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                (click)="clearPopUpData('clearObservation')"
+                style="background-color: white; border: 1px solid #006699; color: #006699" #closeModal>CANCEL</button>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+
+      <div class="modal fade" id="exampleModalToggle" tabindex="-1" role="dialog" aria-hidden="true">
+        <div id="exampleModalToggle" class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header border-bottom">
+              <div class="d-flex align-items-center p-2">
+                <em class="fas fa-exclamation-circle pe-1"></em>
+                Confirmation
+              </div>
+            </div>
+            <div class="modal-body p-2">
+              Do you want to generate inspection report for {{selectedEquipmentName}}?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-basic btn-sm" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-basic btn-sm" (click)="createGenerateReport()">Confirm</button>
+            </div>
+          </div>
+        </div>
+      </div>

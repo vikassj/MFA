@@ -1,0 +1,27 @@
+<div class="modal" id="modalPdfViewer" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static"
+    data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content fullHeight">
+            <div class="modal-header p-2">
+                <h5 class="modal-title text-dark">
+                    <i class="far fa-file-pdf pe-1"></i>
+                    {{name}}
+                </h5>
+                <button type="button" class="btn-close pe-3" data-bs-dismiss="modal" aria-label="Close">
+                    <!-- <span aria-hidden="true">&times;</span> -->
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <ngx-extended-pdf-viewer *ngIf="url" [src]="url" [useBrowserLocale]="true" [textLayer]="true"
+                    height="85%" [showHandToolButton]="true" [zoom]="'page-width'" [showOpenFileButton]="false"
+                    [showFindButton]="false" [showBookmarkButton]="false" [showPropertiesButton]="false"
+                    [showSpreadButton]="true">
+                </ngx-extended-pdf-viewer>
+
+            </div>
+            <div class="modal-footer p-2">
+                <button type="button" class="btn btn-sm btn-light rounded-pill" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

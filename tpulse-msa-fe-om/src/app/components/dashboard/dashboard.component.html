@@ -1,0 +1,308 @@
+<div>
+    <div class="row width">
+        <div class="d-flex p-2 mx-1 height1">
+            <!--------------------------- Card-1 starts from  here -- -------------------->
+            <div class="col-6  box-shadow card-color">
+                <!----nav bar statrs from  here -->
+                <ul class="nav nav-tabs bg-color  border-0 justify-content-between">
+                    <div *ngFor="let filter of locationFilters">
+                        <li class="nav-item fs-5 ">
+                            <a class="nav-link  fw-bold text-dark  border-0 mt-1 pointer  " aria-current="page"
+                                (click)="selectedNavItems(filter)"
+                                [ngClass]="filter == selectedNavItem ? 'active text-dark fs-5 border-radius nav-bg-color' : 'color'">{{filter}}</a>
+                        </li>
+                    </div>
+                    <div
+                        class="border-bottom pt-2 mb-2  me-3 nav-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <input type="text" [(ngModel)]="filteredZone" placeholder="Search location.."
+                                class=" bg-color  color " #keyEnter (keyup)="searchFilter()">
+                        </div>
+                        <div><i class="fas fa-search text-color"></i></div>
+                    </div>
+                </ul>
+                <!----nav bar ends  here -->
+
+                <!---- unit level gate level cards -->
+                <div class="row mt-3">
+                    <div class="bdr col ms-3 min-width items-center shadow-sm"
+                        [ngClass]="selectedNavItem == 'Gate-wise' ? 'd-none':''"
+                        *ngIf="locationFilters.indexOf('Unit-wise') > -1">
+                        <div class="mt-5 map">
+                            <h3 style="text-align:right;">
+                                <img src="assets/images/unit level icon.png" width="70px" height="70px">
+                            </h3>
+                        </div>
+                        <div class="d-flex  justify-content-between w-100 pe-3">
+                            <div class=" text-center ms-2 no-wrap">
+                                <div class="font-weight   ">Unit Level OM as on</div>
+                                <div class="fw-bold ">{{overallMpcData.date}} at {{overallMpcData.time}}</div>
+                            </div>
+                            <div class=" card-pd fw-900  ms-3 fs-25 mt-1 no-wrap">{{overallMpcData.unitCount}}</div>
+                        </div>
+                    </div>
+                    <div class="bdr ms-4  me-3 col min-width items-center shadow-sm"
+                        *ngIf="locationFilters.indexOf('Gate-wise') > -1"
+                        [ngClass]="selectedNavItem == 'Unit-wise' ? 'd-none':''">
+                        <div class="mt-5 map">
+                            <h3 style="text-align:right;">
+                                <img src="assets/images/Intersection icon.png" width="70px" height="70px">
+                            </h3>
+                        </div>
+                        <div class="d-flex  justify-content-between w-100 pe-3">
+                            <div class="  text-center ms-2 no-wrap">
+                                <div class="font-weight">Gate Level OM as on</div>
+                                <div class="fw-bold  ">{{overallMpcData.date}} at {{overallMpcData.time}}</div>
+                            </div>
+                            <div class="float-end card-pd fw-900  ms-3 fs-25 mt-1 no-wrap">
+                                {{overallMpcData.gateCount}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!---- unit level gate level cards ends here-->
+
+                <!---- location filters data starts from here -->
+                <div class="mt-2 list-color zonelist-height" *ngIf="!filteredZone"
+                    [ngClass]="selectedNavItem == 'All locations' ? 'd-block':'d-none'">
+                    <div class="" #firstZone *ngFor="let mpcDatas of mpcData " (click)="active(mpcDatas)">
+                        <div class=" w-100 ps-2 padding-b-t d-flex justify-content-between align-items-center pointer zoneList"
+                            (click)="slectedZoneHighlight(mpcDatas.zone)"
+                            [ngClass]="selectedZone == mpcDatas.zone ? 'mystyle ps-3':''">
+                            <div class="  mx-2 w-25 ">
+                                <i class="fas fa-location-arrow"></i> <span
+                                    class="fw-bold mx-3 ">{{mpcDatas.zone}}</span>
+                            </div>
+                            <div class="font-size w-50 ">
+                                <span class="fs-5 " id="hoverColor"> OM as on</span> <span
+                                    class="fw-bold fs-5 ms-2">{{mpcDatas.date}} at
+                                    {{mpcDatas.time}}</span>
+                            </div>
+                            <div class="w-25" [ngClass]="selectedZone == mpcDatas.zone ? '':''">
+                                <span class="fw-900 fs-18" id="hoverColor1">{{mpcDatas.count}} </span>
+                            </div>
+                        </div>
+                        <div class="border-bottom "></div>
+                    </div>
+                </div>
+                <div class="mt-2 list-color zonelist-height" *ngIf="filteredZone"
+                    [ngClass]="selectedNavItem == 'All locations' ? 'd-block':'d-none'">
+                    <div class="" #firstZone *ngFor="let mpcDatas of mpcDataTemp1 " (click)="active(mpcDatas)">
+                        <div class=" w-100 ps-2 padding-b-t d-flex justify-content-between align-items-center pointer zoneList"
+                            (click)="slectedZoneHighlight(mpcDatas.zone)"
+                            [ngClass]="selectedZone == mpcDatas.zone ? 'mystyle ps-3':''">
+                            <div class="  mx-2 w-25 ">
+                                <i class="fas fa-location-arrow"></i> <span
+                                    class="fw-bold mx-3 ">{{mpcDatas.zone}}</span>
+                            </div>
+                            <div class="font-size w-50 ">
+                                <span class="fs-5 " id="hoverColor"> OM as on</span> <span
+                                    class="fw-bold fs-5 ms-2">{{mpcDatas.date}} at
+                                    {{mpcDatas.time}}</span>
+                            </div>
+                            <div class="w-25" [ngClass]="selectedZone == mpcDatas.zone ? '':''">
+                                <span class="fw-900 fs-18" id="hoverColor1">{{mpcDatas.count}} </span>
+                            </div>
+                        </div>
+                        <div class="font-size w-50 ">
+                            <span class="fs-5 " id="hoverColor"> OM as on</span> <span
+                                class="fw-bold fs-5 ms-2">{{mpcDatas.date}} at
+                                {{mpcDatas.time}}</span>
+                        </div>
+                        <div class="w-25" [ngClass]="selectedZone == mpcDatas.zone ? '':''">
+                            <span class="fw-900 fs-18" id="hoverColor1">{{mpcDatas.count}} </span>
+                        </div>
+                        <!-- <div>
+                            <span><i class="fas fa-caret-left  d-none " id="z"></i></span>
+                            </div> -->
+
+                        <!-- <div>
+                           <i class="fas fa-caret-left fs-16 "  id="z"></i>
+                              </div> -->
+                    </div>
+                </div>
+                <div class="mt-2 list-color zonelist-height" *ngIf="!filteredZone"
+                    [ngClass]="selectedNavItem == 'Unit-wise' ? 'd-block':'d-none'">
+                    <div class="" #firstZone *ngFor="let unitMpc of unitLevelMpcDataLive " (click)="active(unitMpc)">
+                        <div class=" w-100 ps-2 padding-b-t d-flex justify-content-between align-items-center pointer zoneList"
+                            (click)="slectedZoneHighlight(unitMpc.zone)"
+                            [ngClass]="selectedZone == unitMpc.zone ? 'mystyle ps-3':''">
+                            <div class="  mx-2 w-25 ">
+                                <i class="fas fa-location-arrow"></i> <span
+                                    class="fw-bold mx-3 ">{{unitMpc.zone}}</span>
+                            </div>
+                            <div class="font-size w-50 ">
+                                <span class="fs-5" id="hoverColor"> OM as on</span> <span
+                                    class="fw-bold fs-5 ms-2">{{unitMpc.date}} at
+                                    {{unitMpc.time}}</span>
+                            </div>
+                            <div class="w-25" [ngClass]="selectedZone == unitMpc.zone ? '':''">
+                                <span class="fw-900 fs-18" id="hoverColor1">{{unitMpc.count}} </span>
+                            </div>
+                        </div>
+                        <div class="border-bottom "></div>
+                    </div>
+                </div>
+                <div class="mt-2 list-color zonelist-height" *ngIf="filteredZone"
+                    [ngClass]="selectedNavItem == 'Unit-wise' ? 'd-block':'d-none'">
+                    <div class="" #firstZone *ngFor="let unitMpc of unitLevelMpcDataLive1 " (click)="active(unitMpc)">
+                        <div class=" w-100 ps-2 padding-b-t d-flex justify-content-between align-items-center pointer zoneList"
+                            (click)="slectedZoneHighlight(unitMpc.zone)"
+                            [ngClass]="selectedZone == unitMpc.zone ? 'mystyle ps-3':''">
+                            <div class="  mx-2 w-25 ">
+                                <i class="fas fa-location-arrow"></i> <span
+                                    class="fw-bold mx-3 ">{{unitMpc.zone}}</span>
+                            </div>
+                            <div class="font-size w-50 ">
+                                <span class="fs-5" id="hoverColor"> OM as on</span> <span
+                                    class="fw-bold fs-5 ms-2">{{unitMpc.date}} at
+                                    {{unitMpc.time}}</span>
+                            </div>
+                            <div class="w-25" [ngClass]="selectedZone == unitMpc.zone ? '':''">
+                                <span class="fw-900 fs-18" id="hoverColor1">{{unitMpc.count}} </span>
+                            </div>
+                        </div>
+                        <div class="border-bottom "></div>
+                    </div>
+                </div>
+                <div class="mt-2 list-color zonelist-height" *ngIf="!filteredZone"
+                    [ngClass]="selectedNavItem == 'Gate-wise' ? 'd-block':'d-none'">
+                    <div class="" #firstZone *ngFor="let gateMpc of gateLevelMpcDataLive " (click)="active(gateMpc)">
+                        <div class=" w-100 ps-2 padding-b-t d-flex justify-content-between align-items-center pointer zoneList"
+                            (click)="slectedZoneHighlight(gateMpc.zone)"
+                            [ngClass]="selectedZone == gateMpc.zone ? 'mystyle':''">
+                            <div class="  mx-2 w-25 ">
+                                <i class="fas fa-location-arrow"></i> <span
+                                    class="fw-bold mx-3 ">{{gateMpc.zone}}</span>
+                            </div>
+                            <div class="font-size w-50 ">
+                                <span class="fs-5 " id="hoverColor"> OM as on</span> <span
+                                    class="fw-bold fs-5 ms-2">{{gateMpc.date}} at
+                                    {{gateMpc.time}}</span>
+                            </div>
+                            <div class="w-25" [ngClass]="selectedZone == gateMpc.zone ? '':''">
+                                <span class="fw-900 fs-18" id="hoverColor1">{{gateMpc.count}} </span>
+                            </div>
+                        </div>
+                        <div class="border-bottom "></div>
+                    </div>
+                </div>
+                <div class="mt-2 list-color zonelist-height" *ngIf="filteredZone"
+                    [ngClass]="selectedNavItem == 'Gate-wise' ? 'd-block':'d-none'">
+                    <div class="" #firstZone *ngFor="let gateMpc of gateLevelMpcDataLive1 " (click)="active(gateMpc)">
+                        <div class=" w-100 ps-2 padding-b-t d-flex justify-content-between align-items-center pointer zoneList"
+                            (click)="slectedZoneHighlight(gateMpc.zone)"
+                            [ngClass]="selectedZone == gateMpc.zone ? 'mystyle':''">
+                            <div class="  mx-2 w-25 ">
+                                <i class="fas fa-location-arrow"></i> <span
+                                    class="fw-bold mx-3 ">{{gateMpc.zone}}</span>
+                            </div>
+                            <div class="font-size w-50 ">
+                                <span class="fs-5 " id="hoverColor"> OM as on</span> <span
+                                    class="fw-bold fs-5 ms-2">{{gateMpc.date}} at
+                                    {{gateMpc.time}}</span>
+                            </div>
+                            <div class="w-25" [ngClass]="selectedZone == gateMpc.zone ? '':''">
+                                <span class="fw-900 fs-18" id="hoverColor1">{{gateMpc.count}} </span>
+                            </div>
+                        </div>
+                        <div class="border-bottom "></div>
+                    </div>
+                </div>
+                <!---- location filters data ends here -->
+            </div>
+            <!--------------------------- Card-1 ends here -- -------------------->
+
+            <!--------------------------- Card-2 start from here -- -------------------->
+            <div class="col-6 shadow-lg p-2 ">
+                <app-live-data [locationData]="locationData" [firstZone]="firstZone"></app-live-data>
+                <div class="d-flex mt-4">
+                    <fieldset class="side-bar-fieldset position-relative mx-2 ">
+                        <legend class="side-bar-legend">Start Date</legend>
+                        <span class="d-flex" >
+                            <input class="color pointer" name="mydate1" placeholder="{{overallMpcData.date}}" (click)="overAllCalender1.toggleCalendar()"
+                                angular-mydatepicker #overAllCalender1="angular-mydatepicker"
+                                [(ngModel)]="startDateCalenderModel" [options]="startDateCalenderOptions"
+                                [ngClass]="fdate == null ? 'value={{defalutSD}}' : ''" [value]="defalutSD" 
+                                (dateChanged)="onStartDateChanged($event)" [readonly]="true" />
+                            <span class="d-inline-block color pointer " >
+                                <i class="far fa-calendar-alt fs-4 " (click)="disabledDates()"></i>
+                            </span>
+                        </span>
+                    </fieldset>
+                    <fieldset class="side-bar-fieldset position-relative mx-2">
+                        <legend class="side-bar-legend">Start Time</legend>
+                        <span class="d-flex">
+                            <input class="color pointer" [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1" [value]="startTime"
+                                placeholder="00:00:00" (dateTimeChange)="onChangeStartTime($event)" [readonly]="true">
+                            <owl-date-time #dt1 [pickerType]="'timer'"></owl-date-time>
+                            <span class="d-inline-block color pointer" [owlDateTimeTrigger]="dt1">
+                                <i class="far fa-clock"></i></span>
+                        </span>
+                    </fieldset>
+                    <fieldset class="side-bar-fieldset position-relative mx-2">
+                        <legend class="side-bar-legend">End Date</legend>
+                        <span class="d-flex ">
+                            <input class="color pointer" name="mydate" placeholder="{{overallMpcData.date}}"
+                                angular-mydatepicker #overAllCalender="angular-mydatepicker"
+                                [(ngModel)]="endDateCalenderModel" [options]="endDateCalenderOptions"
+                                [value]="defalutED" [ngClass]="fdate == null ? 'value={{defalutED}}' : ''"
+                                (dateChanged)="onEndDateChanged($event)" [readonly]="true" (click)="overAllCalender.toggleCalendar()"/>
+                            <span class="d-inline-block color " >
+                                <i class="far fa-calendar-alt fs-4 pointer" (click)="disabledDates()"></i>
+                            </span>
+                        </span>
+                    </fieldset>
+                    <fieldset class="side-bar-fieldset position-relative mx-2 ">
+                        <legend class="side-bar-legend">End TIme</legend>
+                        <span class="d-flex ">
+                            <input class="color pointer" [owlDateTime]="dt" [owlDateTimeTrigger]="dt" [value]="endTime"
+                                placeholder=" 00:00:00" (dateTimeChange)="onChangeEndTime($event)" [readonly]="true">
+                            <owl-date-time #dt [pickerType]="'timer'"></owl-date-time>
+                            <span class="d-inline-block color pointer" [owlDateTimeTrigger]="dt">
+                                <i class="far fa-clock"></i></span>
+                        </span>
+                    </fieldset>
+                </div>
+                <div class="ps-3 pe-3 mt-4">
+                    <div class="bdr1  text-color row  items-center">
+                        <div class="col-10 ">
+                            Occupancy Monitoring for as on<span class="fw-bold ms-2 ">{{overallMpcData.date}} at
+                                {{liveTime}}</span>
+                        </div>
+                        <div class="col-2">
+                            <span class="text-color fw-bold  fs-25 ">{{liveCount}} </span>
+                        </div>
+                    </div>
+                </div>
+                <div class=" mt-4">
+                    <div [ngClass]="locationData ? 'd-none' : ''" class="f-ss">
+                        <div class="ms-3 fw-bold"
+                            [ngClass]=" locationData || fixSDate !== undefined || fixEDate !== undefined ? 'd-none': '' ">
+                            {{liveZone}} - Occupancy Monitoring
+                            for <span class="text-color">{{liveZone}}</span> <span class="text-color ms-1">from
+                                {{overallMpcData.date}} to {{overallMpcData.date}}</span></div>
+                        <div class="ms-3 fw-bold"
+                            [ngClass]=" fixSDate !== undefined && fixEDate !== undefined ? 'd-block': 'd-none' ">
+                            {{liveZone}} - Occupancy Monitoring
+                            for <span class="text-color">{{liveZone}}</span> <span class="text-color ms-1">from
+                                {{fdate}} to {{fedate}}</span></div>
+                        <div class="ms-3 fw-bold"
+                            [ngClass]="fixSDate !== undefined && fixEDate == undefined ? 'd-block': 'd-none' ">
+                            {{liveZone}} - Occupancy Monitoring
+                            for <span class="text-color">{{liveZone}}</span> <span class="text-color ms-1">from
+                                {{fdate}} to {{overallMpcData.date}}</span></div>
+                        <div class="ms-3 fw-bold"
+                            [ngClass]="fixSDate == undefined && fixEDate !== undefined ? 'd-block': 'd-none' ">
+                            {{liveZone}} - Occupancy Monitoring
+                            for <span class="text-color">{{liveZone}}</span> <span class="text-color ms-1">from
+                                {{overallMpcData.date}} to {{fedate}}</span></div>
+                    </div>
+                    <app-mpc-line-chart [lineData]="mpcChartData" [thresholdData]="mpcThresholds" [noDataMsg]="''"
+                        [locationData]="locationData" [fedate]="fedate" [fdate]="fdate"
+                        [overallMpcData]="overallMpcData" [fixSDate]="fixSDate" [fixEDate]="fixEDate">
+                    </app-mpc-line-chart>
+                </div>
+            </div>
+        </div>
+    </div>

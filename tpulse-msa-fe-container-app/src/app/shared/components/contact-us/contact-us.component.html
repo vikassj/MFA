@@ -1,0 +1,49 @@
+<div title="Contact Us" class="float-nav">
+    <button id="contactUs" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactUsModal"
+        (click)="jhsfdahsfa()">
+        <em class="far fa-envelope text-white me-2"></em> Contact Us
+    </button>
+</div>
+
+
+<div class="modal fade z-index" id="contactUsModal" tabindex="-1" role="dialog"
+    data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content mx-4">
+            <div class="modal-header p-2">
+                <h5 class="modal-title text-dark">Contact Us</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="resetContactUsData()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="row justify-content-center fullHeight m-0">
+                    <div class="col-12 my-auto py-3">
+                        <p class="text-blue">Name</p>
+                        <div class="d-flex pb-3">
+                            <em class="fa fa-user icon"></em>
+                            <input (keypress)="omit_special_char($event)" class="input-field" type="text" [(ngModel)]="name">
+                        </div>
+                        <p class="text-blue">Email ID</p>
+                        <div class="d-flex pb-3">
+                            <em class="fas fa-at icon"></em>
+                            <input class="input-field" type="email" [(ngModel)]="emailId">
+                        </div>
+                        <p class="text-blue">Comments</p>
+                        <div class="d-flex pb-4">
+                            <em class="fas fa-comments icon my-auto"></em>
+                            <textarea (keypress)="omit_special_char($event)" class="input-field commentsCss" [(ngModel)]="comments"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="button" class="btn btn-sm btn-basic  pe-2" (click)="contactUs()"
+                    [disabled]="name === '' || emailId === '' || comments === '' || !validateEmail()">Submit</button>
+                <button type="button" class="btn btn-sm btn-outline-basic" data-bs-dismiss="modal"
+                    (click)="resetContactUsData()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

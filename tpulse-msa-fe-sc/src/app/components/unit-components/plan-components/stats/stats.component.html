@@ -1,0 +1,40 @@
+<div class="d-flex h-100 w-100 position-relative">
+  <div class="col-12 stats-chart-height pt-4 rounded bg-white">
+    <div class="d-flex align-items-center flex-wrap   mt-1 position">
+
+    </div>
+    <div echarts [options]="sCurvePlannedVsActualBarChart" class="w-100 h-100 overflow-hidden"
+      *ngIf="selectedGraph == 'Planned vs. Actual Bar Graph (count)' && !chartDataNotAvailable"></div>
+    <div echarts [options]="sCurvePlannedVsActualCurveChart" class="w-100 h-100 overflow-hidden"
+      *ngIf="selectedGraph == 'Planned vs. Actual S-Curve (hours)' && !chartDataNotAvailable"></div>
+    <div echarts [options]="sCurveDelayedStartChart" class="w-100 h-100 overflow-hidden"
+      *ngIf="selectedGraph == 'Delayed start tasks graph' && !chartDataNotAvailable"></div>
+    <div echarts [options]="sCurveDelayedFinishChart" class="w-100 h-100 overflow-hidden"
+      *ngIf="selectedGraph == 'Delayed finish tasks' && !chartDataNotAvailable"></div>
+    <div echarts [options]="sCurveTimeOverRunChart" class="w-100 h-100 overflow-hidden"
+      *ngIf="selectedGraph == 'Time overrun tasks' && !chartDataNotAvailable"></div>
+    <div class="w-100 h-100 text-center padding-top overflow-hidden" *ngIf="chartDataNotAvailable">
+      <h1>No Data available</h1>
+    </div>
+  </div>
+  <div class="overflow overlay-dropdown form-control w-20">
+    <select class="border-none-outline-none w-100 fs-12" (change)="selecteGraph()" [(ngModel)]="selectedGraph">
+      <option *ngFor="let selectGraph of graphFilter" [value]="selectGraph">{{selectGraph}}</option>
+    </select>
+    <!-- <div class="ms-4">
+      <div class="dropdown" [style.width]="graphDropdownWidth + 'px'">
+        <div
+          class="select-border-bottom pb-1 text-dark-blue fs-11 ff-montserrat fw-bold d-flex justify-content-between w-100 cursor-pointer"
+          (click)="graphDropdownShow()">
+          <div>{{selectedGraph}}</div>
+          <div><i class="fas fa-caret-down fs-15 ms-2"></i></div>
+        </div>
+        <div class="dropdown-style shadow rounded w-100" *ngIf="graphDropdown">
+          <div class="options text-dark-blue  fs-11 ff-montserrat fw-semibold pe-4"
+            *ngFor="let selectGraph of graphFilter" [ngClass]="selectGraph == selectedGraph ? 'selected-dropdown':''"
+            (click)="selecteGraph(selectGraph)">{{selectGraph}}</div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</div>

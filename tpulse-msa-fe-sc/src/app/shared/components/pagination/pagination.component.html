@@ -1,0 +1,19 @@
+<nav aria-label="page navigation example">
+  <ul class="pagination">
+    <li class="page-item previous fs-10px"><button
+        class="prev page-link text-dark p-0 h-25px w-70px d-flex align-items-center justify-content-center"
+        (click)="onClickPage(activePage - 1)" [ngClass]="activePage == pages[0] ?'navigationDisabledCss':''"
+        [disabled]="activePage == pages[0]" href="javascript:void(0);"><img [src]="backArrowIcon" class="pe-2"
+          height="7px"> P R E V</button></li>
+
+    <li class="page-item border-none" *ngFor="let item of pages" (click)="onClickPage(item)"><a
+        class="page-link p-0 page-numbers" [ngClass]="activePage === item ? 'selected-item':'notselected'"
+        href="javascript:void(0);">{{item}}</a></li>
+
+    <li class="page-item next fs-10px"><button
+        class="next page-link text-dark p-0 h-25px w-70px d-flex align-items-center justify-content-center"
+        [ngClass]="activePage == pages[pages.length-1] ?'navigationDisabledCss':''"
+        (click)="onClickPage(activePage + 1)" [disabled]="activePage == pages[pages.length-1]"
+        href="javascript:void(0);">N E X T <img [src]="frontArrowIcon" class="ps-2" height="7px"></button></li>
+  </ul>
+</nav>

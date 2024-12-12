@@ -1,0 +1,165 @@
+<div class="homeContainer p-1">
+ <div class="radius w-100 h-100">
+  <div class="w-100 px-1  bg-white shadow-sm header-height d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center m-10">
+      <div class="text-basic fs-12 toggleView" (click)="openFilter()" *ngIf="!isShow">FILTER</div>
+      <!-- <div class="locationBox mx-2">
+        <select class="fw-600 me-1 my-1" [style.width]="equipmentDropdownWidth + 'px'" [(ngModel)]="selectedLocation" (change)="selectLocation($event)">
+          <option *ngIf="liveStreamLocationData.length == 0" [style.width]="equipmentDropdownWidth + 'px'" value="undefine">undefine</option>
+          <option  [style.width]="equipmentDropdownWidth + 'px'" *ngFor="let location of liveStreamLocationData;" [value]="location.name">
+            {{location.name}}</option>
+        </select>
+      </div> -->
+      <div class="unit-dropdown-page mx-2" *ngIf="!isShow">
+        <ng-select #select [items]="unitList" [multiple]="true" [bindLabel]="'unit_name'" [bindValue]="'unit_id'" [searchable]="false" [dropdownPosition]="'bottom'"
+        [closeOnSelect]="false" placeholder="Select {{unitNomenclature}}s" [(ngModel)]="selectedUnitItems" [clearable]="false">
+        <ng-template ng-header-tmp>
+          <div class="px-2 py-1 fs-11 d-flex align-items-center pointer">
+            <input type="checkbox" class="me-2" (change)="toggleCheckAll($event,'unit')"  [checked]="selectedUnitItems.length == unitList.length"/>All {{unitNomenclature}}s
+          </div>
+        </ng-template>
+        <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+          <div class="ng-value">
+            <span class="ng-value-label fs-12">
+              <span *ngIf="selectedUnitItems.length != unitList.length" class="pe-1">{{selectedUnitItems.length}} {{selectedUnitItems.length > 1 ? unitNomenclature + 's' : unitNomenclature}}</span>
+              <span *ngIf="selectedUnitItems.length == unitList.length" class="pe-1">All {{unitNomenclature}}s</span>
+            </span>
+          </div>
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+          <div class="px-2 py-1 fs-11 d-flex align-items-center">
+            <input id="item-{{index}}" class="me-2" type="checkbox" [checked]="item$.selected" /> {{item.unit_name}}
+          </div>
+        </ng-template>
+        <ng-template ng-footer-tmp>
+          <div class="d-flex justify-content-center">
+            <div>
+              <button class="btn btn-sm btn-basic fs-10px" style="width: 150px;" [disabled]="(selectedUnitItems.length) < 1"
+                (click)="applyBtn(select,'unit')">APPLY</button>
+            </div>
+          </div>
+        </ng-template>
+        </ng-select>
+      </div>
+
+      <div class="dropdown-page" *ngIf="!isShow">
+        <!-- <select class="fw-600 me-1 my-1" [(ngModel)]="selectedType">
+          <option *ngIf="listOfType.length == 0" value="undefine">undefine</option>
+          <option *ngFor="let type of listOfType;" [value]="type">
+            {{type}}</option>
+        </select> -->
+        <ng-select #select [items]="listOfType" [multiple]="false" [closeOnSelect]="true" [(ngModel)]="selectedType"
+         (change)="changeType($event)" [searchable]="false">
+          <ng-template ng-multi-label-tmp let-items="items">
+            <div class="ng-value" *ngFor="let item of items | slice:0:1">
+              <span class="ng-value-label" [title]="item">{{item}}</span>
+              <!-- <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span> -->
+            </div>
+            <div class="ng-value" *ngIf="items.length > 1">
+              <span class="ng-value-label">{{items.length - 1}} more...</span>
+            </div>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <!-- <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> -->
+            {{item}}
+          </ng-template>
+
+        </ng-select>
+      </div>
+      <div class="width-calender-search ms-2" *ngIf="selectedType == 'Time lapse (Video summary)' && !isShow">
+        <app-date-header></app-date-header>
+      </div>
+      <div class="locationBox mx-2 w-200px" [ngClass]="isShow ? 'd-inline-block' : 'd-none' ">
+        <div  class="ms-2 pe-2 py-1 w-200px"> <input type="input"
+            placeholder="Search Camera" id="gsearch" name="gsearch" class="input w-90" [(ngModel)]="searchValue"><i
+            class="fas fa-search"></i>
+        </div>
+      </div>
+    </div>
+    
+    <!-- <div class="obsDropdownCss" *ngIf="isPermitEnabled">
+      <ng-select #permitSearch [items]="permitNumberList"  bindLabel=""
+        [(ngModel)]="selectedPermit" [virtualScroll]="true" (open)="OnOpen()" [searchFn]="testSearch" (search)="OnSearch($event)" (blur)="OnBlue()"
+        (change)="navigateFromSearch()"
+        placeholder="Search by permit number..." [clearable]="true">
+        <ng-template ng-option-tmp let-item="item">
+          <p class="mb-1 fs-10">{{item}}</p>
+        </ng-template>
+      </ng-select>
+     </div> -->
+     <div>
+      <div class="unit-dropdown-page mx-2" *ngIf="isPermitEnabled && !isShow">
+        <ng-select #permit [items]="permitNumberList" [multiple]="true" [bindLabel]="''" [bindValue]="''" [searchable]="true" [dropdownPosition]="'bottom'"
+        [closeOnSelect]="false" placeholder="Select permits" [(ngModel)]="selectedPermit" [clearable]="false" [searchFn]="testSearch" (open)="onOpenStatus('permit')" (close)="onCloseStatus('permit')">
+        <ng-template ng-header-tmp>
+          <div class="px-2 py-1 fs-11 d-flex align-items-center pointer">
+            <input type="checkbox" class="me-2" (change)="toggleCheckAll($event,'permit')"  [checked]="selectedPermit.length == permitNumberList.length" id="permits"/> <label for="permits">All Permits</label>
+          </div>
+        </ng-template>
+        <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+          <div class="ng-value">
+            <span class="ng-value-label fs-12">
+              <span *ngIf="selectedPermit.length != permitNumberList.length" class="pe-1">{{selectedPermit.length}} {{selectedPermit.length > 1 ? ' Permits' : ' Permit'}} <span *ngIf="isbeingSearched == true" class="ms-2 toggleView" (click)="navigateFromSearch()">X</span></span>
+              <span *ngIf="selectedPermit.length == permitNumberList.length" class="pe-1">All Permits 
+              <!-- <span class="ms-2 toggleView" *ngIf="isbeingSearched == true || selectedPermit.length > 0" (click)="navigateFromSearch()">X</span> -->
+              </span>
+            </span>
+          </div>
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+          <div class="py-1 fs-11 d-flex align-items-center" title="{{item}}" [ngClass]="item?.length > 17 ?'one-liner':''">
+            <input id="item-{{index}}" class="me-2 z-index-1" type="checkbox" [checked]="item$.selected" /><span>{{item}}</span>
+          </div>
+        </ng-template>
+        <ng-template ng-footer-tmp>
+          <div class="d-flex justify-content-center">
+            <div>
+              <button class="btn btn-sm btn-basic fs-10px" style="width: 150px;" [disabled]="selectedPermit?.length < 1"
+                (click)="applyBtn(permit,'permit')">APPLY</button>
+            </div>
+          </div>
+        </ng-template>
+        </ng-select>
+      </div>
+     </div>
+
+    <div class="d-flex justify-content-end pe-3 width">
+      <div class="center-items align-items-center">
+        <div class="form-check-label list-view-align fs-12" for="flexSwitchCheckDefault">List view</div>
+        <div class="form-check form-switch toggleView" [attr.title]="(toggleDisabled) ? 'Select videos to view in gallery view' : ''">
+          <input class="form-check-input"  type="checkbox" role="switch" id="flexSwitchCheckDefault"  [disabled]="toggleDisabled" [ngClass]="toggleDisabled ?'':'form-check-input1'"
+            (change)="toggle()">
+        </div>
+        <div class="form-check-label fs-12" for="flexSwitchCheckDefault">Gallery view</div>
+      </div>
+      <!-- <fieldset class="side-bar-fieldset ">
+                <legend class=" side-bar-legend fw-bold">Location</legend>
+                <select class="w-100">
+                    <option class="dropdown-toggle" *ngFor="let data of liveStreamLocationData;">{{data.name}}</option>
+                </select>
+            </fieldset> -->
+
+    </div>
+
+
+  </div>
+  <ng-container *ngIf="unitList.length>0; else noDataTemplate">
+    <div class="viewHeight" [ngClass]="isShow ? 'd-none':'d-block' ">
+      <app-list-view [selectedLocation]="selectedLocation" [isNotListView]="isShow" [selectedType]="selectedType" (selectedVidoes)="selectedVidoes($event)" [isPermitEnabled]="isPermitEnabled" (selectedTypeData)="selectedTypeData($event)" [videoStopStreamUpdated]="videoStopStreamUpdated"></app-list-view>
+    </div>
+    <div class="viewHeight" [ngClass]="isShow ? 'd-block':'d-none' ">
+      <app-gallery-view [selectedLocation]="selectedLocation" [isGalleryView]="isShow" [searchValue]="searchValue" [selectedType]="selectedType" [selectedVideos]="selectedVideos" [isPermitEnabled]="isPermitEnabled" (videoStopStream)="videoStopStream($event)" (emitGalleryMode)="emitGalleryMode($event)">
+      </app-gallery-view>
+    </div>
+  </ng-container>
+ </div>
+
+</div>
+
+<ng-template #noDataTemplate>
+  <div class="row viewHeight rounded bg-white ff-montserrat m-0">
+    <h4 class="m-auto text-center">No data available</h4>
+  </div>
+</ng-template>
+
+<app-filter [isPermitEnabled]="isPermitEnabled" [selectedType]="selectedType" [selectedItems]="selectedItems" [selectedPermitNumber]="selectedPermit" (filterApply)="filterApply($event)" (permitNumbers)="permitNumbers($event)"></app-filter>

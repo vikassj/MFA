@@ -1,0 +1,1493 @@
+<div class="page-height  px-3 fs-12 d-flex flex-column">
+  <div class="card bg-color border-none-outline-none">
+    <div class="d-flex p-2 w-100 align-items-center  position-relative">
+      <div class="edit-btn primary-color cursor" (click)="showTaskSummary(false)">Tasks Summary</div>
+      <div class=" primary-color ms-3">Task Detail View</div>
+      <div class="primary-color ms-3" *ngIf="selectedTask?.equipment">Equipment Id <span class="text-dull ms-1">
+          {{selectedTask?.equipment == 'NA'?'N/A':selectedTask?.equipment}}
+        </span>
+      </div>
+      <div class="btn btn-sm border-basic primary-bg-color primary-color fw-bold ms-3"
+        *ngIf="selectedTask?.type == 'Manual'">
+        Manual inspection Required</div>
+      <div class="d-flex align-items-center ms-2" *ngIf="selectedTask?.equipment">
+        <div class="rounded border-basic" style="min-width:150px;height:100%"
+          *ngIf="(!selectedTask?.is_group && selectedTask?.status != 'NOT STARTED')">
+          <div class="progress  bg-white padding-1px cursor" style="height:27px;">
+            <div class="progress-bar secondary-bg-color " role="progressbar"
+              [ngStyle]="{'width':selectedTask?.actual_percentage_completed+'%'}"
+              [attr.aria-valuenow]="selectedTask?.actual_percentage_completed" aria-valuemin="0" aria-valuemax="100">
+              <span class="progress-text">{{selectedTask?.actual_percentage_completed}}%</span>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="wrapper">
+          <div class="range">
+            <input type="range"/>
+          </div>
+        </div> -->
+        <ng-container *ngIf="!selectedTask?.is_milestone &&!selectedTask?.is_group">
+          <button *ngIf="selectedTask?.equipment"
+            [ngClass]="(selectedTask?.actual_percentage_completed == 0 && selectedTask?.status=='NOT STARTED')?'d-block':'d-none'"
+            class="btn btn-sm border-basic ms-2 secondary-bg-color text-light"
+            [disabled]="selectedTask?.actual_percentage_completed > 0 || selectedTask?.status!='NOT STARTED'"
+            data-bs-toggle="modal" data-bs-target="#updateTaskpercentage" (click)="onTaskUpdate('Start')">START</button>
+          <button class=" cursor btn btn-sm border-basic ms-2 secondary-bg-color text-light"
+            *ngIf="selectedTask?.status!='NOT STARTED' &&  selectedTask?.status!='COMPLETED' " data-bs-toggle="modal"
+            data-bs-target="#updateTaskpercentage" (click)="onTaskUpdate('Update')">
+            UPDATE
+          </button>
+
+          <button class="primary-color cursor btn-sm text-basic btn-border bg-none border-none-outline-none ms-2"
+            *ngIf="selectedTask?.actual_percentage_completed==100 && selectedTask?.status=='COMPLETED'"
+            data-bs-toggle="modal" data-bs-target="#updateTaskpercentage" (click)="onTaskUpdate('Reopen')">
+            REOPEN
+          </button>
+        </ng-container>
+
+
+        <!-- <button *ngIf="selectedTask?.equipment"
+          [ngClass]="(selectedTask?.actual_percentage_completed > 0 && selectedTask?.actual_percentage_completed < 100)?'d-block':'d-none'"
+          class="btn btn-sm border-basic ms-2 secondary-bg-color text-light"
+          (click)="mannualUpdationOfDateAndTime(true,'Stop')">STOP</button> -->
+
+
+        <!-- <button class="btn btn-sm border-basic ms-2 primary-color fw-bold"
+          [disabled]="selectedTask?.actual_percentage_completed == 100" (click)="finishTask()">FINISH</button> -->
+
+        <div class="btn btn-sm btn-outline-danger ms-2 fw-bold" *ngIf="selectedTask?.equipment">{{selectedTask?.status |
+          titlecase}}</div>
+        {{avai}}
+        <app-equipment-checklist class="mb-1" *ngIf="selectedTask?.equipment"
+          [availableChecklists]="availableChecklists" [selectedChecklist]="selectedChecklist"
+          [selectedChecklistColumns]="selectedChecklistColumns" [selectedChecklistRows]="selectedChecklistRows"
+          [userDepartment]="userDepartment" (emitSelectedChecklist)="onSelectChecklist($event)"
+          (emitChecklistSave)="onChecklistSave($event)" (emitChecklistSubmit)="onChecklistSubmit($event)">
+        </app-equipment-checklist>
+        <div class="btn btn-sm border-basic primary-bg-color primary-color fw-bold ms-3" *ngIf="selectedTask?.equipment"
+          (click)="getDrawing();open(pdfpopup,'largeModal')">DRAWING</div>
+        <div class="btn btn-sm border-basic primary-color fw-bold ms-3" *ngIf="selectedTask?.equipment"
+          (click)="getSOP();open(pdfpopup,'largeModal');">SOP</div>
+        <div class="popups bg-white shadow rounded" *ngIf="mannualDateTimeEntry == true">
+          <div class="adjacentTasks w-100 d-flex">
+            <fieldset class="side-bar-fieldset">
+              <legend class="side-bar-legend">Date</legend>
+              <div class="input-group p-1 w-100">
+                <input type="date" class=" w-100 border-none-outline-none" [(ngModel)]="date" name="date" required
+                  max="{{toDateFliter}}">
+              </div>
+            </fieldset>
+            <fieldset class="side-bar-fieldset ms-2">
+              <legend class="side-bar-legend">Time</legend>
+              <div class="input-group p-1 w-100">
+                <input type="time" class=" w-100 border-none-outline-none" [(ngModel)]="time" name="time" required
+                  max="{{toDateFliter}}" step="2">
+              </div>
+            </fieldset>
+          </div>
+          <div class="p-2">
+            <button type="button" class="btn btn-sm fs-12 secondary-bg-color text-light" (click)="startTask()"
+              [disabled]="!date || !time">CONFIRM</button>
+            <button type="button" class="btn btn-sm fs-12 secondary-bg-color text-light ms-2"
+              (click)="mannualUpdationOfDateAndTime(false)" (click)="clearPreviousData()">CANCEL</button>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="equipmentName">
+        {{selectedTask?.equipment == 'NA'?'':selectedTask?.equipment}}
+      </div> -->
+    </div>
+  </div>
+  <div class="d-flex justify-content-between py-2 bg-white p-3">
+    <div class="position-relative">
+      <div class="primary-color">Predecessor Task</div>
+      <div class=" text-dull-dark cursor fs-10" *ngIf="predecessors.length > 1" (click)="showPopup('predecessors')">
+        <div class="fw-800">Set of Predecessor</div>
+        <div>({{returnCompletedTask(predecessors)}}/{{predecessors.length}}) Completed</div>
+      </div>
+      <div class="edit-btn primary-color cursor" *ngIf="predecessors.length == 1"
+        (click)="getPrimaryTask(predecessors[0].id)">
+        {{predecessors[0].name}}
+      </div>
+      <div class="popups bg-white shadow rounded" *ngIf="openedPopup=='predecessors'">
+        <div class="primary-color popup-heading">
+          {{openedPopup | uppercase}}
+          <!-- <div (click)="hidePopup()"><span aria-hidden="true" class="close text-right fs-16 col-2 text-right cursor"
+              aria-label="Close">×</span></div> -->
+        </div>
+        <div class="adjacentTasks w-100">
+          <div *ngFor="let predecessor of predecessors" class="d-flex justify-content-between">
+            <div class="edit-btn cursor" (click)="getPrimaryTask(predecessor.id)">{{predecessor.name}}</div>
+            <div class="text-danger">{{predecessor.actual_percentage_completed }}%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class=" d-flex justify-content-between">
+      <div class="d-flex align-items-center cursor" *ngIf="predecessors?.length > 0" (click)="switchTask('previous')"
+        style="min-width:20px;">
+        <!-- <img src="assets/icons/leftArrow.svg" alt=""> -->
+        <i class="fas fa-chevron-left text-black"></i>
+      </div>
+      <div class="d-flex align-items-center w-100 px-3">
+        <!-- <div>
+          <img src="/assets/images/T-Pulse.png" width="50px" height="50px" alt="">
+        </div> -->
+        <div>
+          <div class="text-successGain ms-2">
+            <!-- <div class="">
+              <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                [checked]="selectedTask?.is_knowledge_captured">
+            </div> -->
+            <!-- <div class="cursor" (click)="onCaptureKnowledge()">
+              <span *ngIf="!selectedTask?.is_knowledge_captured"><i class="far fa-regular fa-star me-1"></i> Capture
+                Knowledge</span>
+              <span *ngIf="selectedTask?.is_knowledge_captured"><i class="fas fa-regular fa-star me-1"></i> Capturing
+                Knowledge</span>
+            </div> -->
+          </div>
+          <div class="heading text-center fs-6 fw-bold">
+            {{selectedTask?.name}}
+          </div>
+          <div>
+            <div *ngIf="selectedTask?.critical" class="bg-red btn btn-sm text-light me-1"
+              style="line-height: 12px;margin-bottom: 2px;">CP1</div>
+            <span (click)="getTaskHistory();open(history)"><i class="fas fa-clock blue-color"></i>&nbsp;<span
+                class="edit-btn cursor">History</span></span>
+            <span class="ms-2 me-2 text-yellow">|</span>
+            <span *ngIf="!selectedTask?.is_escalated">
+              <span class="escalate-btn primary-color cursor" title="More"
+                [ngClass]="userValidation(selectedTask)? 'cursorDisabled' : 'd-none'">
+                Escalate
+              </span>
+              <span class="cursor escalate-btn primary-color" title="More" (click)="showIssueRelatedData()"
+                data-bs-toggle="modal" data-bs-target="#escalateModal"
+                [ngClass]="userValidation(selectedTask)? 'd-none' : ''">
+                Escalate
+              </span>
+            </span>
+            <span class="text-danger cursorDisabled" *ngIf="selectedTask?.is_escalated" disabled>Escalated</span>
+
+          </div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center cursor" *ngIf="successors?.length > 0" (click)="switchTask('next')"
+        style="min-width:20px;">
+        <!-- <img src="assets/icons/rightArrow.svg" alt=""> -->
+        <i class="fas fa-chevron-right text-black"></i>
+      </div>
+    </div>
+    <div class="position-relative">
+      <div class="primary-color">Successor Task</div>
+      <div class=" text-dull-dark cursor fs-10" *ngIf="successors.length > 1" (click)="showPopup('successors')">
+        <div class="fw-800">Set of Successor</div>
+        <div>({{returnCompletedTask(successors)}}/{{successors.length}}) Completed</div>
+      </div>
+      <div class="edit-btn primary-color cursor" *ngIf="successors.length == 1"
+        (click)="getPrimaryTask(successors[0].id)">
+        {{successors[0].name}}
+      </div>
+      <div class="popups bg-white shadow rounded popup-left" *ngIf="openedPopup=='successors'">
+        <div class="primary-color popup-heading">
+          {{openedPopup | uppercase}}
+          <!-- <span (click)="hidePopup()" aria-hidden="true" class="close text-right fs-16 col-2 text-right cursor"
+            aria-label="Close">×</span> -->
+        </div>
+        <div class="adjacentTasks w-100">
+          <div *ngFor="let successor of successors" class="d-flex justify-content-between">
+            <div class="edit-btn cursor" (click)="getPrimaryTask(successor.id)">{{successor.name}}</div>
+            <div class="text-danger">{{successor.actual_percentage_completed }}%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-between pb-3 mt-1 bg-white p-3 fs-13">
+    <div>
+      <div class="text-dull-dark">Scheduled Start Date & Time</div>
+      <div class="text-dull">{{selectedTask?.planned_date_to_start?selectedTask?.planned_date_to_start:'N/A'}} |
+        {{selectedTask?.planned_time_to_start?selectedTask?.planned_time_to_start:'N/A'}}</div>
+    </div>
+    <div>
+      <div class=" primary-color">Actual Start Date & Time</div>
+      <div class="">{{selectedTask?.actual_start_date?selectedTask?.actual_start_date:'N/A'}} |
+        {{selectedTask?.actual_start_time?selectedTask?.actual_start_time:'N/A'}}</div>
+    </div>
+    <div>
+      <div class="text-dull-dark">Scheduled End Date & Time</div>
+      <div class="text-dull">{{selectedTask?.planned_date_to_complete?selectedTask?.planned_date_to_complete:'N/A'}} |
+        {{selectedTask?.planned_time_to_complete?selectedTask?.planned_time_to_complete:'N/A'}}</div>
+    </div>
+    <div>
+      <div class="primary-color">Actual End Date & Time</div>
+      <div class="">{{selectedTask?.actual_date_of_completion?selectedTask?.actual_date_of_completion:'N/A'}} |
+        {{selectedTask?.actual_time_of_completion?selectedTask?.actual_time_of_completion:'N/A'}}</div>
+    </div>
+    <div>
+      <div class="text-dull-dark">Scheduled Duration</div>
+      <div class="">{{selectedTask?.planned_duration?selectedTask?.planned_duration:'N/A'}}</div>
+    </div>
+    <div>
+      <div class=" primary-color">Actual Duration</div>
+      <!-- <div *ngIf="selectedTask?.status!='COMPLETED'" class="">
+        {{selectedTask?.elapsed_duration?selectedTask?.elapsed_duration:'N/A'}}</div> -->
+      <div>{{(selectedTask?.status=='COMPLETED' && selectedTask?.elapsed_duration)? selectedTask?.elapsed_duration:
+        selectedTask?.elapsed_duration?'0hr':'N/A'}}</div>
+    </div>
+    <div>
+      <div class=" primary-color">PERMIT Status</div>
+      <div [ngClass]="(selectedTask?.task_permit != null)?'d-block':'d-none'" (change)="updatePermitStatus()">
+        <select class="border-none-outline-none rounded-1" [(ngModel)]="permitStatus"
+          [ngClass]="{'text-danger status-dropdown-open1': permitStatus == '1','text-safe status-dropdown-close1':permitStatus == '2','text-dull status-dropdown-normal':permitStatus == '3'}">
+          <option *ngFor="let permit of totalPermitStatus"
+            [ngClass]="{'status-dropdown-open1-option': permit?.id == '1','status-dropdown-close1-option':permit?.id == '2','status-dropdown-normal-option':permit?.id == '3' }"
+            [value]="permit?.id">
+            {{permit?.name}}</option>
+        </select>
+      </div>
+      <div [ngClass]="(selectedTask?.task_permit == null)?'d-block':'d-none'">N/A</div>
+    </div>
+    <!-- <div>
+      <div class="edit-btn primary-color">Total Man Count</div>
+      <div class="">N/A</div>
+    </div> -->
+    <div>
+      <div class="edit-btn primary-color">Gain/Delay Duration</div>
+      <div class=""
+        [ngClass]="{'text-safe' : selectedTask?.delay  < '0', 'text-black' : selectedTask?.delay == '0hr',  'text-danger':selectedTask?.delay > '0'}">
+        <span
+          [ngClass]="{'text-black' : (selectedTask?.delay == 'NA') || !(selectedTask?.status=='COMPLETED' || selectedTask?.planned_date_elapsed)}">
+          {{(selectedTask?.delay && selectedTask?.status=='COMPLETED') || selectedTask?.planned_date_elapsed ?
+          (selectedTask?.delay|replaceNegativeSymbol) : selectedTask?.delay ? '0hr':'N/A'}}
+        </span>
+      </div>
+      <!-- <div *ngIf="selectedTask?.status=='COMPLETED'" >
+        0hr
+      </div> -->
+    </div>
+  </div>
+  <div class="d-flex  mt-1 " *ngIf="!selectedTask?.is_milestone && !selectedTask?.is_group && selectedTask?.id">
+    <div class="col-4 bg-white border-right pt-2 pb-2 height1">
+      <div class="d-flex flex-column w-100  align-items-center">
+        <div class=" w-100 row pb-2">
+          <div class="col-12  w-100 d-flex flex-column">
+            <div class="heading primary-color">Issues</div>
+            <div class="issues" id="table">
+              <ngx-datatable #table class="material expandable tableHeight  w-100" [columnMode]="ColumnMode.force"
+                [headerHeight]="50" [footerHeight]="0" [rowHeight]="'auto'" [rows]="issuesList" [scrollbarH]="true">
+                <ngx-datatable-column name="Description" [sortable]="true" [width]="40">
+                  <ng-template let-column="column" let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <span class="edit-btn cursor" (click)="navigate(row.id)">{{row.summary}}</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Due date" [sortable]="true" [width]="70">
+                  <ng-template let-column="column" let-row="row" let-value="value" ngx-datatable-cell-template>
+                    {{row.deadline_to_close}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Status" [sortable]="true" [width]="40">
+                  <ng-template let-column="column" let-row="row" let-value="value" ngx-datatable-cell-template>
+                    <div id="removeIcon">
+                      <select class="py-1 px-2 w-100 text-capitalize  rounded font-weight-bold border-none-outline-none"
+                        ria-label="Default select example" disabled
+                        [ngClass]="row.status == 'Open' ? 'status-dropdown-open': 'status-dropdown-close' ">
+                        <option>{{row.status}}</option>
+                      </select>
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+              </ngx-datatable>
+            </div>
+            <div class="ps-2 d-flex align-items-center">
+              <div class=" align-items-center cursorPointer" (click)="navigateToCreateIssues()"><button
+                  class="add-btn  btn activePerson p-1 text-center font-size-12px"><i class="fas fa-plus"></i>
+                  Create</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="row w-100 pb-2">
+          <div class="col-12 w-100 h-100">
+            <app-comment [selectedTask]="selectedTask" [selectedUnit]="selectedUnit" [users]="users"
+              (getLatestData)="getLatestData()"></app-comment>
+          </div>
+
+        </div>
+        <div class="row  w-100 ">
+          <div class="w-100 font-size-10px col-12  d-flex flex-column">
+            <div class="d-flex w-100 justify-content-between align-items-center pb-2">
+              <div class="primary-color">Active Persons</div>
+              <div class="d-flex">
+                <div>
+                  <ng-select class="" [items]="unTaggedEmails" [multiple]="true" [closeOnSelect]="true"
+                    name="tag_person" [(ngModel)]="firstEmail" placeholder="Search to Tag user..." bindLabel="email"
+                    bindValue="id">
+                    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                      <div class="ng-value">
+                        <span class="ng-value-label">{{items.length}} selected</span>
+                      </div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+                <div class="ps-2 d-flex align-items-center">
+                  <div class=" align-items-center cursorPointer" (click)="addTaggedUser()"><button
+                      class="add-btn  btn activePerson p-1 text-center font-size-12px" [disabled]="!firstEmail"><i
+                        class="fas fa-plus"></i> Add</button></div>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex w-100  flex-column align-items-center">
+              <div class="email row  w-100">
+                <div class="d-flex align-items-center cursor" *ngFor="let persons of activePersons?.tagged_users">
+                  <!-- <ng-container *ngIf="filteredArray?.includes(persons)">
+                    <div class="online"></div>
+                  </ng-container>
+                  <ng-container *ngIf="!filteredArray?.includes(persons)">
+                    <div class="offline"></div>
+                  </ng-container> -->
+                  <div class="" [title]="persons?.email_id" [ngbTooltip]="persons?.email_id">
+                    {{persons?.acronym}}
+                  </div>
+                  <!-- <div class="fw-550 w-100  d-flex justify-content-between align-items-center active-person-name">
+
+                    <div class="remove-icon" title="Delete user"><i class="fas fa-trash text-warn cursorPointer"
+                        (click)="deleteselectedTaggedPerson(activePersons?.id, persons)"></i></div>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+            <!-- <div id="selectdPersons">
+              <ng-select class=" w-100" [items]="unTaggedEmails" [multiple]="true" [closeOnSelect]="true"
+                name="tag_person" [(ngModel)]="firstEmail" placeholder="Search to Tag user..." bindLabel="name"
+                bindValue="name">
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                  <div class="ng-value">
+                    <span class="ng-value-label">{{items.length}} selected</span>
+                  </div>
+                </ng-template>
+              </ng-select>
+
+            </div>
+            <div class="mt-2 ">
+              <div class=" align-items-center cursorPointer" (click)="addTaggedUser()"><button
+                  class="add-btn activePerson p-1 text-center font-size-12px" [disabled]="!firstEmail"><i
+                    class="fas fa-plus"></i> Add</button></div>
+            </div>
+            <div class="font-weight-bold  text-basic mt-2 font-size-12px">Tag List</div>
+            <div class="activeBarHeight">
+              <div class="d-flex align-items-center font-size-12px mt-3 ps-2"
+                *ngFor="let persons of activePersons?.tagged_users">
+                <ng-container *ngIf="filteredArray?.includes(persons)">
+                  <div class="online"></div>
+                </ng-container>
+                <ng-container *ngIf="!filteredArray?.includes(persons)">
+                  <div class="offline"></div>
+                </ng-container>
+                <div class="fw-550 w-100  d-flex justify-content-between align-items-center active-person-name"
+                  [title]="persons">
+                  <div class="mx-2">{{persons.slice(0,8)}}...</div>
+                  <div class="remove-icon"><i class="fas fa-trash text-warn cursorPointer"
+                      (click)="deleteselectedTaggedPerson(activePersons?.id, persons)"></i></div>
+
+                </div>
+              </div>
+            </div> -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="col-8  d-flex flex-column ms-1">
+      <div class="menus shadow-sm bg-white primary-color  w-100 d-flex align-items-center">
+        <div class="col-10 d-flex justify-content-between align-items-center">
+          <!-- <div class="d-flex"> -->
+          <!-- <div class=" d-flex flex-column justify-content-between ms-2 cursor h-100 pt-2"
+              (click)="getSelectedTab('visual')">
+              <div class="pt-2" [ngClass]="selectedTab == 'visual'?'':'primary-color opacity'">Visual</div>
+              <div [ngClass]="selectedTab == 'visual'?'border-under-selected-page pt-2':'primary-color'"></div>
+            </div> -->
+          <!-- <div class="d-flex flex-column justify-content-between  ms-5 cursor h-100 pt-2"
+              (click)="getSelectedTab('inspection')">
+              <div class="pt-2" [ngClass]="selectedTab == 'inspection'?'':'primary-color opacity'">Inspection</div>
+              <div [ngClass]="selectedTab == 'inspection'?'border-under-selected-page pt-2':'primary-color'"></div>
+            </div> -->
+          <!-- </div> -->
+          <div class="d-flex align-items-center" *ngIf="selectedTab == 'inspection'">
+            <div class="btn btn-sm border-basic primary-color fs-12 fw-bold" (click)="open(checklist)">
+              CHECKLIST
+            </div>
+            <div class="ps-3 align-items-center cursorPointer"><button
+                class="add-btn  btn activePerson p-1 text-center font-size-12px"><img
+                  src="/assets/icons/upload_image.png" class="img-fluid w-20px">
+                Upload</button></div>
+          </div>
+        </div>
+        <div class="col-2">
+
+        </div>
+
+      </div>
+      <div class="d-flex w-100">
+        <div class=" d-flex flex-column height2 me-1" [ngClass]="selectedTab == 'visual'?'col-10':'col-12'">
+          <div class=" w-100 h-100 ">
+            <ng-container *ngIf="selectedTab == 'visual'">
+              <div class="bg-white  w-100 h-100">
+                <ng-container *ngIf="selectedTask else noDataTemplate">
+                  <div
+                    class="px-2 d-flex justify-content-between align-items-center font-size-10px activePerson min-h-30px">
+                    <ng-container *ngIf="selectedMedia?.id && !showAll">
+                      <div class="image-visual-walthrough">
+                        <span class="font-weight-bold me-2"><span
+                            *ngIf="selectedImageVideoButton == 'Image'">Image#</span><span
+                            *ngIf="selectedImageVideoButton == 'Video'">Video#</span>{{selectedMedia?.id}}
+                          ({{currentIndex}}/{{selectedTaskMediaData.length}})
+                        </span><span class="border-bottom-basic fs-italic cursorPointer"
+                          (click)="changeShowMode()">Gallery</span>
+                      </div>
+                      <div class="d-flex align-items-center w-auto">
+                        <div class="fw-bold line-height text-dark font-size-12px pe-3">{{selectedTask?.name}}</div>
+                        <div class="min-w-70px"><span class="font-weight-bold "><i class="fas fa-caret-left"></i>
+                            {{currentIndex}}
+                            <i class="fas fa-caret-right"></i></span> of {{selectedTaskMediaData.length}}</div>
+                      </div>
+                      <div class="d-flex font-weight-bold image-date-time">
+                        <div class="me-2"><i class="far fa-calendar-alt me-1"></i>{{selectedMedia?.date}}</div>
+                        <div><i class="far fa-clock me-1"></i>{{selectedMedia?.time}}</div>
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="showAll">
+                      <div class="d-flex  all-image-checkBox">
+                        <i class="fas fa-chevron-left cursorPointer me-2 my-auto" (click)="changeShowMode()"></i>
+                        <ng-container *ngIf="showAllImages">
+                          <!-- <input type="checkbox" id="selectAll" class="me-2 my-auto" [checked]="allImages"
+                              (change)="selectAllImages()" /> -->
+                          <label for="selectAll" class="font-weight-bold me-2 my-auto">All <span
+                              *ngIf="selectedImageVideoButton == 'Image'">images</span>
+                            <span *ngIf="selectedImageVideoButton == 'Video'">videos</span>
+                            ({{selectedTaskMediaData.length}})</label>
+                        </ng-container>
+                      </div>
+                      <div class="d-flex align-items-center">
+                        <div class="font-weight-bold text-dark font-size-12px me-3">{{selectedTask?.name}}</div>
+                      </div>
+                      <div class="d-flex">
+                        <!-- <div class="me-2 font-size-10px d-flex align-items-center">
+                          <div class="font-weight-bold pe-2 m-0" [ngClass]="{'text-secondary': showAllImages}"
+                            for="mediaType">
+                            Timelapse</div>
+                          <div>
+                            <label class="switch">
+                              <input type="checkbox" (change)="onToggleChange()" checked>
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+                          <div class="custom-control-label ps-2 font-weight-bold"
+                            [ngClass]="{'text-secondary': !showAllImages}" for="mediaType">Image</div>
+
+                          <label class="font-weight-bold pe-2 m-0" [ngClass]="{'text-secondary': showAllImages}"
+                              for="mediaType">Timelapse</label>
+                            <div class="custom-control custom-switch d-inline">
+                              <input type="checkbox" class="custom-control-input" id="mediaType" [checked]="showAllImages"
+                                (change)="onToggleChange()">
+                              <label class="custom-control-label font-weight-bold" [ngClass]="{'text-secondary': !showAllImages}"
+                                for="mediaType">Image</label>
+                            </div>
+                        </div> -->
+                        <!-- <i class="fa fa-upload cursorPointer font-size-16px"></i> -->
+                        <!-- <img *ngIf="showAllImages" src="assets/images/download-blue.png" class="cursorPointer me-2" width="15px"
+                            height="15px" (click)="downloadAll()" [ngClass]="{'cursorDisabled': disableDownload()}"> -->
+                        <div><i class="fas fa-exclamation-triangle text-danger cursorPointer font-size-16px"
+                            *ngIf="selectedTask?.issues_count > 0"
+                            (click)="navigateToIssues(selectedTask, false, null)"></i>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                  <div *ngIf="!showAll" class="">
+                    <div class="h-100 position-relative">
+                      <div *ngIf="selectedMedia?.id else noMediaTemplate" class="fullHeight fullWidth d-inline-flex">
+                        <em class="navigationCss ms-2" [ngClass]="{'navigationDisabledCss': prevBtn}"
+                          (click)="navigateImages('prev')">
+                          <img [src]="imageLeftArrow" class="image-icon" width="8px" height="12px"></em>
+                        <div *ngIf="selectedImageVideoButton == 'Image'" class="h-100 scene-container">
+                          <div *ngIf="selectedMedia?.unmarked_image else noDataTemplate" id="markedImageDiv"
+                            class="img-zoom fullHeight fullWidth" (dblclick)="resetZoom()">
+                            <div class="fitDivCss d-flex" [ngClass]="{'scalize': selectedMode}">
+                              <img id="modalImage" class="m-auto height3" id="imageModal" [ngClass]="{'target': selectedMode}"
+                                src="{{selectedMedia?.unmarked_image}}"
+                                (error)="fetchEncryptedImageData('modalImage', selectedMedia?.unmarked_image)"
+                                (dblclick)="resetZoom()" alt="Image">
+                              <div *ngIf="selectedMode">
+                                <ng-container *ngFor="let point of actionPoints">
+                                  <div class="item-point circle cursorPointer"
+                                    [ngClass]="{'pulse2': sendObservationData.showAnimation}"
+                                    [ngStyle]="{top: point.top + 'px', left: point.left + 'px'}"
+                                    (click)="openAnnotationModal(point)">
+                                    <div>
+                                      <a href="#" class="toggle"></a>
+                                    </div>
+                                    <p>{{point.index}}</p>
+                                  </div>
+                                  <!-- <div id="content{{point.index}}" class="content right bottom">
+                                      <div class="head">
+                                        <span class="exit cursorPointer">
+                                          <img src="assets/icons/close.png" alt="Close"
+                                            (click)="closeAnnotationModal(point.index)" /></span>
+                                        <h6 class="title">Annotation #{{point.index}}</h6>
+                                      </div>
+                                      <div class="body">
+                                        <p>{{point.comment}}</p>
+                                      </div>
+                                    </div> -->
+                                </ng-container>
+                              </div>
+                              <canvas id="canvas" class="m-auto"></canvas>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="selectedImageVideoButton === 'Video'" class="videContainer height3">
+                          <!-- <app-zoomable-video *ngIf="selectedMedia?.unmarked_video" id="modalImage"
+                            [attr.src]="selectedMedia?.unmarked_video" [uuid]="selectedMedia?.uuid"
+                            [url]="selectedMedia?.unmarked_video">
+                          </app-zoomable-video> -->
+                          <div>
+                            <!-- <app-zoomable-video *ngIf="selectedMedia?.unmarked_image" id="modalImage"
+                              [attr.src]="selectedMedia?.unmarked_image" [uuid]="selectedMedia?.uuid"
+                              [url]="selectedMedia?.unmarked_image">
+                            </app-zoomable-video> -->
+                            <video id="imageModal" [src]="selectedMedia?.unmarked_image" class="height5" width="100%" height="100%"
+                              *ngIf="selectedMedia?.unmarked_image" controls autoplay controlsList="nodownload"></video> <br />
+                          </div>
+                          <div *ngIf="selectedMedia?.unmarked_video === null"
+                            class="fullHeight fullWidth d-flex text-center">
+                            <div class="m-auto">
+                              <h3>No video available</h3>
+                            </div>
+                          </div>
+                        </div>
+                        <em class=" navigationCss ms-2" [ngClass]="{'navigationDisabledCss':
+                                    nextBtn}" (click)="navigateImages('next')">
+                          <img [src]="imageRightArrow" class="image-icon" width="8px" height="12px"></em>
+                      </div>
+                      <div class="height4" *ngIf="!selectedMedia?.unmarked_image">
+                        <div class="absolute m-auto" *ngIf="selectedImageVideoButton == 'Image'">Images are not
+                          available</div>
+                        <div class="absolute m-auto" *ngIf="selectedImageVideoButton == 'Video'">Videos are not
+                          available</div>
+                      </div>
+                      <div
+                        class="font-size-12px primary-bg-color w-100 position-index fw-bold text-white px-3 rounded d-flex justify-content-between align-items-center">
+                        <div class="me-3">
+                          <div class="radius p-1 my-1 all-btn-bg-color text-white icon-color d-flex align-items-center">
+                            <div class="w-25px pointer h-15px  radius d-flex justify-content-center align-items-center"
+                              (click)="changeMediaType('Image')" [ngClass]="
+                              selectedImageVideoButton == 'Image'?'btn-bg-color text-color' : ''
+                          ">
+                              <i class="fas fa-image"></i>
+                            </div>
+                            <div
+                              class="w-25px pointer h-15px icon-color radius d-flex justify-content-center align-items-center"
+                              (click)="changeMediaType('Video')" [ngClass]="
+                              selectedImageVideoButton == 'Video'?'btn-bg-color text-color' : ''
+                          ">
+                              <i class="fas fa-video"></i>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="d-flex align-items-center">
+                          <!-- <div class="me-3">
+                              <div class="radius padding my-2 all-btn-bg-color text-white icon-color d-flex align-items-center">
+                                <div class="w-30px pointer h-18px  radius d-flex justify-content-center align-items-center"
+                                  (click)="selectedImageVideoButtons(IMAGE)" [ngClass]="
+                                  selectedImageVideoButton == 'Image' ? 'btn-bg-color text-color' : ''">
+                                  <i class="fas fa-image"></i>
+                                </div>
+                                <div
+                                  class="w-30px pointer h-18px icon-color radius d-flex justify-content-center align-items-center"
+                                  (click)="selectedImageVideoButtons(VIDEO)" [ngClass]="
+                                  selectedImageVideoButton == 'Video' ? 'btn-bg-color text-color' : ''">
+                                  <i class="fas fa-video"></i>
+                                </div>
+                              </div>
+                            </div> -->
+
+                          <div *ngIf="selectedImageVideoButton === 'Image' && selectedMedia?.id"
+                            class="me-3 d-flex align-items-center annotationMode">
+                            <input type="checkbox" id="annotationMode" class="" [checked]="selectedMode"
+                              (change)="changeMode()" />
+                            <label for="annotationMode" class="ms-1 my-auto primary-color">Annotation mode</label>
+                          </div>
+                        </div>
+                        <!-- <div>
+                            Total Man Count <span class="border border-4 px-1">{{selectedMedia?.total_man_count}}</span>
+                          </div> -->
+                        <div>
+                          <span class="image-upload  mt-3 d-inline" title="upload images">
+                            <label for="file-input" class="cursor">
+                              <!-- <img src="https://via.placeholder.com/300x300.png?text=Select Files" > -->
+                              <!-- <img src="assets/images/paper-clip.svg"> -->
+                              <span class="primary-color  pe-3">
+                                <img src="assets/images/observation-img.svg" width="20px" height="20px"> <span
+                                  class="ms-2">Upload <span
+                                    *ngIf="selectedImageVideoButton == 'Image'">Images</span><span
+                                    *ngIf="selectedImageVideoButton == 'Video'">Videos</span></span>
+                              </span>
+                            </label>
+                            <input *ngIf="selectedImageVideoButton == 'Image'" id="file-input" [disabled]="file" type="file" name="file" multiple
+                              accept=".png, .jpg, .jpeg" #myInputFile (click)="myInputFile.value = ''"
+                              class="form-group" (change)="onChange($event)">
+                            <input *ngIf="selectedImageVideoButton == 'Video'" id="file-input" [disabled]="file" type="file" name="file" multiple accept=".mp4"
+                              #myInputFile (click)="myInputFile.value = ''" class="form-group"
+                              (change)="onChange($event)">
+                          </span>
+
+                          <span
+                            *ngIf="(selectedImageVideoButton === 'Image' && selectedMedia?.unmarked_image) || (selectedImageVideoButton === 'Video' && selectedMedia?.unmarked_image)"
+                            class="cursorPointer" (click)="downloadImage()">
+                            <!-- <img src="assets/images/download.png" class="cursorPointer" width="15px"
+                              height="15px"> -->
+                            <i class="fas fa-download text-black" title="download-image"></i>
+                          </span>
+
+                        </div>
+                      </div>
+                    </div>
+                    <app-activity-monitor-annotations *ngIf="selectedMode" [imageModalData]="selectedMedia"
+                      [trigger]="trigger" [canvasHeight]="canvasHeight" [canvasWidth]="canvasWidth"
+                      [canvasRatio]="canvasRatio" [selectAnnotation]="selectAnnotation" [show]="selectedMode"
+                      (selectedAnnotation)="openSelectedAnnotation($event)" (refresh)="getMediaData()">
+                    </app-activity-monitor-annotations>
+                  </div>
+                  <div *ngIf="showAll" class=" p-2">
+                    <div *ngIf="showAllImages" class="m-0">
+                      <div *ngFor="let image of selectedTaskMediaData; let i = index"
+                        class="w-25 ps-0 pe-2 mb-2 container d-inline-block">
+                        <video class="image" style="height:130px;" id="myVideo" [src]="image?.unmarked_image"
+                          *ngIf="selectedImageVideoButton == 'Video'" controls id="tileImage{{image.id}}"></video>
+                        <img *ngIf="selectedImageVideoButton == 'Image'" id="tileImage{{image.id}}"
+                          class="image" height="130px" src="{{image.unmarked_image}}" alt="Image"
+                          (error)="fetchEncryptedImageData('tileImage' + image.id, image.unmarked_image)">
+                        <div class="contents text-white" [ngClass]="{'containerContentsHover': image.checked}">
+                          <!-- <div class="checked  image-checkBox">
+                              <input type="checkbox" class="mt-2 ml-2" [(ngModel)]="image.checked"
+                                (ngModelChange)="selectImages()" />
+                            </div> -->
+                          <div class="download text-white">
+                            <img src="assets/images/download.png" class="cursorPointer me-2" alt="download"
+                              (click)="downloadTileImage(image.id)">
+                            <!-- <i class="fa fa-download cursorPointer fa-2x text-center"
+                                                  (click)="downloadTileImage('tileImage' + i)"></i> -->
+                          </div>
+                          <div class="d-flex font-size-10px text">
+                            <div class="d-flex mx-auto fw-600 image-date-time-color">
+                              <p class="mb-0 fw-700 "><i class="far fa-clock me-1"></i>{{image.date}}</p>
+                              <p class="mb-0 ms-3 fw-700"><i class="far fa-calendar me-1"></i>{{image.time}}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="!showAllImages" class="fullHeight fullWidth m-0">
+                      <ng-container *ngIf="selectedTaskTimelapseData.length > 0 else noTimelapseTemplate">
+                        <div *ngFor="let video of selectedTaskTimelapseData; let i = index"
+                          class="col-6 ps-0 pe-2 mb-2 container">
+                          <app-zoomable-video class="w-100" [attr.src]="video.url" [uuid]="video.uuid"
+                            [url]="video.url">
+                          </app-zoomable-video>
+                          <div class="contents text-white">
+                            <div class="d-flex font-size-10px video">
+                              <div class="d-flex mx-auto fw-600 image-date-time-color">
+                                <p class="mb-0 fw-700 "><i class="far fa-clock me-1"></i>{{video.date}}</p>
+                                <p class="mb-0 ms-3 fw-700"><i class="far fa-calendar me-1"></i>{{video.time}}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+
+            </ng-container>
+            <ng-container *ngIf="selectedTab == 'inspection'">
+              <ng-container *ngIf="recommendationCreated">
+                <div class="row">
+                  <div class="recommendation col-12 pb-3">
+                    <div class="d-flex pb-2">
+                      <div class="primary-color">Recommendation</div>
+                      <div class="edit-btn cursor ps-4">View attachments</div>
+                      <div class="ps-4"><img src="/assets/icons/edit-icon.svg" alt=""></div>
+                    </div>
+                    <div class="bg-light-grey d-flex justify-content-between p-2">
+                      <div>
+                        <div class="pb-3">
+                          Remove & Dump in waste material area
+                        </div>
+                        <div class="text-dull">
+                          shiv@detecttechnologies.com
+                        </div>
+                      </div>
+                      <div class="open-close d-flex justify-content-center align-items-center">
+                        <select name="" id="" class="border-none-outline-none rounded" [(ngModel)]="status"
+                          [ngClass]="status == 'open' ? 'status-dropdown-open': 'status-dropdown-close' ">
+                          <option value="open">Open</option>
+                          <option value="close">Close</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex flex-column">
+                  <div class="primary-color">Linked Observations</div>
+                  <div class="row pb-2">
+                    <div class="observations bg-light-grey overflow-auto col-9">
+                      <div class="w-100 h-100 p-2">
+                        <div class="pb-3 bg-white" *ngFor="let obs of linkedObservations">
+                          <div class="pb-3">{{obs.observation}}</div>
+                          <div class="w-100 d-flex justify-content-between">
+                            <div>{{obs.email}}</div>
+                            <div class="edit-btn cursor">View attachments</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-3">
+                      <div class="d-flex" *ngFor="let item of [1,2,3]; index as i">
+                        <ng-container>
+                          <div class="w-20 position-relative d-flex align-items-end flex-column">
+                            <div class="border rounded-circle h-12px w-21px equipment-circle bg-basic"
+                              contentType="template"></div>
+                            <div class="border w-4px h-100 margin bg-secondary">
+                            </div>
+                          </div>
+                          <div class="w-80 ms-3">
+                            <div class="d-flex justify-content-start">
+                              Recommendation created by Samraat
+                            </div>
+                            <div class="d-flex justify-content-start primary-color font-style-italic">
+                              <div>
+                                05-Mar-23
+                              </div>
+                              <div class="ps-3">
+                                09:34:23
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-9 d-flex flex-column">
+                      <div class="pb-2"><input type="text" class="form-control"
+                          placeholder="Enter new Observation here..."></div>
+                      <div class="d-flex align-items-center row">
+                        <div class="d-flex align-items-center col-9">
+                          <div class="attach-btn btn btn-sm d-flex align-items-center fs-12"><i class="fa fa-paperclip"
+                              aria-hidden="true"></i>&nbsp;Attachments</div>
+                          <div class="row">
+                            <div class=" attachments col-6">
+                              <div class="d-flex justify-content-between w-100">
+                                <div>
+                                  Document-1332kd2.pdf
+                                </div>
+                                <div>x</div>
+                              </div>
+                            </div>
+                            <div class=" attachments col-6 ">
+                              <div class="d-flex justify-content-between w-100">
+                                <div>
+                                  Document-1332kd2.pdf
+                                </div>
+                                <div>x</div>
+                              </div>
+                            </div>
+                            <div class=" attachments col-6">
+                              <div class="d-flex justify-content-between w-100">
+                                <div>
+                                  Document-1332kd2.pdf
+                                </div>
+                                <div>x</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-3 text-right">
+                          <button class="btn btn-sm secondary-bg-color text-light ">SUBMIT</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="!recommendationCreated">
+                <div class="row">
+                  <div class="recommendation col-12 pb-3">
+                    <div class="d-flex pb-2">
+                      <div class="primary-color">Recommendation</div>
+                    </div>
+                    <div class="bg-light-grey d-flex justify-content-between p-2">
+                      <div class="w-100">
+                        <textarea placeholder="Enter new Recommendation here...." rows="4"
+                          class="w-100 form-control"></textarea>
+                      </div>
+                      <div class="open-close d-flex justify-content-center align-items-center">
+                        <select name="" id="" class="border-none-outline-none rounded" [(ngModel)]="status"
+                          [ngClass]="status == 'open' ? 'status-dropdown-open': 'status-dropdown-close' ">
+                          <option value="open">Open</option>
+                          <option value="close">Close</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-9 d-flex flex-column w-100">
+                      <div class="d-flex align-items-center row">
+                        <div class="d-flex align-items-center col-9">
+                          <div class="attach-btn btn btn-sm d-flex align-items-center fs-12"><i class="fa fa-paperclip"
+                              aria-hidden="true"></i>&nbsp;Attachments</div>
+                          <div class="row">
+                            <div class=" attachments col-6">
+                              <div class="d-flex justify-content-between w-100">
+                                <div>
+                                  Document-1332kd2.pdf
+                                </div>
+                                <div>x</div>
+                              </div>
+                            </div>
+                            <div class=" attachments col-6 ">
+                              <div class="d-flex justify-content-between w-100">
+                                <div>
+                                  Document-1332kd2.pdf
+                                </div>
+                                <div>x</div>
+                              </div>
+                            </div>
+                            <div class=" attachments col-6">
+                              <div class="d-flex justify-content-between w-100">
+                                <div>
+                                  Document-1332kd2.pdf
+                                </div>
+                                <div>x</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-3 text-right">
+                          <button class="btn btn-sm secondary-bg-color text-light ">CREATE</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+        <div class=" bg-white height2 col-2" *ngIf="selectedTab == 'visual'">
+          <div *ngFor="let image of selectedTaskMediaData; let i = index" class="w-100 ps-0 pe-2 mb-2 container cursor"
+            (click)="selectImage(i)">
+            <!-- <i *ngIf="selectedImageVideoButton == 'Video'" class="fas fa-video primary-color fa-7x"
+              id="tileImage{{image.id}}"></i> -->
+            <video [ngClass]="(image?.id == selectedMedia?.id)?'border-round':''" class="image fullWidth"
+              [src]="image?.unmarked_image" *ngIf="selectedImageVideoButton == 'Video'" controls
+              id="tileImage{{image.id}}"></video>
+            <img [ngClass]="(image?.id == selectedMedia?.id)?'border-round':''"
+              *ngIf="selectedImageVideoButton == 'Image'" id="tileImage{{image.id}}" class="image fullWidth"
+              height="auto" src="{{image.unmarked_image}}" alt="Image"
+              (error)="fetchEncryptedImageData('tileImage' + image.id, image.unmarked_image)">
+            <div class="contents text-white" [ngClass]="{'containerContentsHover': image.checked}">
+              <!-- <div class="checked  image-checkBox">
+                <input type="checkbox" class="mt-2 ml-2" [(ngModel)]="image.checked"
+                  (ngModelChange)="selectImages()" />
+              </div> -->
+
+              <div class="d-flex font-size-10px text">
+                <div class="d-flex mx-auto fw-600 image-date-time-color">
+                  <p class="mb-0 fw-700 "><i class="far fa-clock me-1"></i>{{image.date}}</p>
+                  <p class="mb-0 ms-3 fw-700"><i class="far fa-calendar me-1"></i>{{image.time}}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex w-100 h-100  justify-content-center align-items-center fs-16"
+    *ngIf="selectedTask?.is_milestone || selectedTask?.is_group">
+    Please navigate to a task!
+  </div>
+  <div class="d-flex w-100 h-100  justify-content-center align-items-center fs-16" *ngIf="!selectedTask?.id">
+    Tasks not available!
+  </div>
+</div>
+
+
+<!-- <ng-template #history let-modal>
+  <div class="modal-header row fs-12">
+    <div class="primary-color col-2 cursor fw-bold" data-bs-dismiss="modal"> <img src="./assets/icons/Back.svg"
+        width="15px" height="10px" class="me-2">Back</div>
+    <div class="primary-color pop-w2  fw-bold col-8 text-center">HISTORY</div>
+    <span aria-hidden="true" class="close text-right fs-16 col-2 text-right cursor" aria-label="Close"
+      (click)="modal.dismiss('Cross click')">×</span>
+  </div>
+  <div class="modal-body fs-12">
+    <div class="row">
+      <div class="col-6 pb-3">
+        <div class="w-100">
+          <div class="primary-color action-heading">Action 1 - Progress Updation</div>
+          <div class="p-2">
+            <div class="pb-2">
+              <div class="primary-color pb-1">Progress</div>
+              <div>0% to 25%</div>
+            </div>
+            <div>
+              <div class="primary-color pb-1">Progress updated by</div>
+              <div>Ram@detecttechnologies.com</div>
+              <div>01.02.2023 | 20:22:00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 pb-3">
+        <div class="w-100">
+          <div class="primary-color action-heading">Action 2 - Issue creation</div>
+          <div class="p-2">
+            <div class="d-flex justify-content-between">
+              <div class="pb-2">
+                <div class="primary-color pb-1">Issue ID</div>
+                <div class="bg-red p-2 text-white rounded">#343254</div>
+              </div>
+              <div>
+                <div class="primary-color pb-1">Issue Category</div>
+                <div>Inspection</div>
+              </div>
+            </div>
+            <div>
+              <div class="primary-color pb-1">Created by</div>
+              <div>Sam@detecttechnologies.com</div>
+              <div>01.02.2023 | 20:22:00</div>
+            </div>
+            <div class="edit-btn cursor">
+              See Issue History
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 pb-3">
+        <div class="w-100">
+          <div class="primary-color action-heading">Action 1 - Progress Updation</div>
+          <div class="p-2">
+            <div class="pb-2">
+              <div class="primary-color pb-1">Progress</div>
+              <div>0% to 25%</div>
+            </div>
+            <div>
+              <div class="primary-color pb-1">Progress updated by</div>
+              <div>Ram@detecttechnologies.com</div>
+              <div>01.02.2023 | 20:22:00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 pb-3">
+        <div class="w-100">
+          <div class="primary-color action-heading">Action 2 - Issue creation</div>
+          <div class="p-2">
+            <div class="d-flex justify-content-between">
+              <div class="pb-2">
+                <div class="primary-color pb-1">Issue ID</div>
+                <div class="bg-red p-2 text-white rounded">#343254</div>
+              </div>
+              <div>
+                <div class="primary-color pb-1">Issue Category</div>
+                <div>Inspection</div>
+              </div>
+            </div>
+            <div>
+              <div class="primary-color pb-1">Created by</div>
+              <div>Sam@detecttechnologies.com</div>
+              <div>01.02.2023 | 20:22:00</div>
+            </div>
+            <div class="edit-btn cursor">
+              See Issue History
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 pb-3">
+        <div class="w-100">
+          <div class="primary-color action-heading">Action 1 - Progress Updation</div>
+          <div class="p-2">
+            <div class="pb-2">
+              <div class="primary-color pb-1">Progress</div>
+              <div>0% to 25%</div>
+            </div>
+            <div>
+              <div class="primary-color pb-1">Progress updated by</div>
+              <div>Ram@detecttechnologies.com</div>
+              <div>01.02.2023 | 20:22:00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 pb-3">
+        <div class="w-100">
+          <div class="primary-color action-heading">Action 2 - Issue creation</div>
+          <div class="p-2">
+            <div class="d-flex justify-content-between">
+              <div class="pb-2">
+                <div class="primary-color pb-1">Issue ID</div>
+                <div class="bg-red p-2 text-white rounded">#343254</div>
+              </div>
+              <div>
+                <div class="primary-color pb-1">Issue Category</div>
+                <div>Inspection</div>
+              </div>
+            </div>
+            <div>
+              <div class="primary-color pb-1">Created by</div>
+              <div>Sam@detecttechnologies.com</div>
+              <div>01.02.2023 | 20:22:00</div>
+            </div>
+            <div class="edit-btn cursor">
+              See Issue History
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 pb-3">
+        <div class="w-100">
+          <div class="primary-color action-heading">Action 1 - Progress Updation</div>
+          <div class="p-2">
+            <div class="pb-2">
+              <div class="primary-color pb-1">Progress</div>
+              <div>0% to 25%</div>
+            </div>
+            <div>
+              <div class="primary-color pb-1">Progress updated by</div>
+              <div>Ram@detecttechnologies.com</div>
+              <div>01.02.2023 | 20:22:00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 pb-3">
+        <div class="w-100">
+          <div class="primary-color action-heading">Action 2 - Issue creation</div>
+          <div class="p-2">
+            <div class="d-flex justify-content-between">
+              <div class="pb-2">
+                <div class="primary-color pb-1">Issue ID</div>
+                <div class="bg-red p-2 text-white rounded">#343254</div>
+              </div>
+              <div>
+                <div class="primary-color pb-1">Issue Category</div>
+                <div>Inspection</div>
+              </div>
+            </div>
+            <div>
+              <div class="primary-color pb-1">Created by</div>
+              <div>Sam@detecttechnologies.com</div>
+              <div>01.02.2023 | 20:22:00</div>
+            </div>
+            <div class="edit-btn cursor">
+              See Issue History
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template> -->
+
+<ng-template #checklist let-modal id="history">
+  <div class="modal-header row fs-12">
+    <div class="primary-color col-2 cursor fw-bold" data-bs-dismiss="modal"> <img src="./assets/icons/Back.svg"
+        width="15px" height="10px" class="me-2">Back</div>
+    <div class="primary-color pop-w2  fw-bold col-8 text-center">HISTORY</div>
+    <span aria-hidden="true" class="close text-right fs-16 col-2 text-right cursor" aria-label="Close"
+      (click)="modal.dismiss('Cross click')">×</span>
+  </div>
+  <div class="modal-body fs-12 modal-body1">
+    <div class="primary-color py-2">VESSELS</div>
+    <div>
+      Note:Inspection to be conducted prior to work on board and in the company of a Vessel representative. Inspection
+      to be conducted prior to work on board and in the company of a Vessel representative.
+    </div>
+    <div>
+      <div class="py-1">
+        <div class="primary-color py-1">Department - Instruments</div>
+        <div class="py-1">
+          Inspection recommendation jobs/other jobs assosiated with Vessel complete
+        </div>
+        <div>
+          <div class="blue-color">
+            <div class="form-check form-switch d-flex p-0">
+              <div class="form-check-label " for="flexSwitchCheckNotChecked">Yes</div>
+              <div class="pl-40">
+                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+              </div>
+              <div class="form-check-label" for="flexSwitchCheckChecked">No</div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between py-1">
+          <div><input type="text" disabled placeholder="Comments/location"></div>
+          <div class="very-light-grey p-2">Checked by Hari</div>
+        </div>
+      </div>
+      <div class="py-1">
+        <div class="primary-color py-1">Department - Instruments</div>
+        <div class="py-1">
+          Inspection recommendation jobs/other jobs assosiated with Vessel complete
+        </div>
+        <div>
+          <div class="blue-color">
+            <div class="form-check form-switch d-flex p-0">
+              <div class="form-check-label " for="flexSwitchCheckNotChecked">Yes</div>
+              <div class="pl-40">
+                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+              </div>
+              <div class="form-check-label" for="flexSwitchCheckChecked">No</div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between py-1">
+          <div><input type="text" disabled placeholder="Comments/location"></div>
+          <div class="very-light-grey p-2">Checked by Hari</div>
+        </div>
+      </div>
+      <div class="py-1">
+        <div class="primary-color py-1">Department - Instruments</div>
+        <div class="py-1">
+          Inspection recommendation jobs/other jobs assosiated with Vessel complete
+        </div>
+        <div>
+          <div class="blue-color">
+            <div class="form-check form-switch d-flex p-0">
+              <div class="form-check-label " for="flexSwitchCheckNotChecked">Yes</div>
+              <div class="pl-40">
+                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+              </div>
+              <div class="form-check-label" for="flexSwitchCheckChecked">No</div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between py-1">
+          <div><input type="text" disabled placeholder="Comments/location"></div>
+          <div class="very-light-grey p-2">Checked by Hari</div>
+        </div>
+      </div>
+      <div class="py-1">
+        <div class="primary-color py-1">Department - Instruments</div>
+        <div class="py-1">
+          Inspection recommendation jobs/other jobs assosiated with Vessel complete
+        </div>
+        <div>
+          <div class="blue-color">
+            <div class="form-check form-switch d-flex p-0">
+              <div class="form-check-label " for="flexSwitchCheckNotChecked">Yes</div>
+              <div class="pl-40">
+                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+              </div>
+              <div class="form-check-label" for="flexSwitchCheckChecked">No</div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between py-1">
+          <div><input type="text" disabled placeholder="Comments/location"></div>
+          <div class="very-light-grey p-2">Checked by Hari</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!--*************** Mannual updation of task percentage ************************-->
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="updateTaskpercentage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body p-0 ">
+        <div class="text-center primary-color fs-6 p-2 border-bottom" id="exampleModalLabel">Update Task Percentage
+        </div>
+        <div class="d-flex w-100 p-2" *ngIf="selectedTask?.status!='NOT STARTED'">
+          <div class="ps-2 w-75" style="min-width:150px;height:100%" (click)="updateProgress($event)">
+            <div class="progress zero-radius  padding-1px" style="height:27px;">
+              <div class="progress-bar secondary-bg-color" role="progressbar" [ngStyle]="{'width':newTaskProgress+'%'}"
+                [attr.aria-valuenow]="newTaskProgress" aria-valuemin="0" aria-valuemax="100">
+                {{newTaskProgress}}%</div>
+            </div>
+          </div>
+          <div class="w-25 form-control ms-3 p-0" style="height:27px;">
+            <input type="number" (keyup)="restrictValue()" class="border-none-outline-none w-100"
+              [disabled]="selectedTask?.status=='NOT STARTED'" [value]="selectedTask?.actual_percentage_completed"
+              [(ngModel)]="newTaskProgress" max="100" min="0">
+          </div>
+        </div>
+        <div class="adjacentTasks w-100 d-flex">
+          <fieldset class="side-bar-fieldset">
+            <legend class="side-bar-legend">Date</legend>
+            <div class="input-group p-1 w-100">
+              <input type="date" min="{{selectedTask?.actual_start_date | date:'yyyy-MM-dd'}}"
+                class=" w-100 border-none-outline-none" [(ngModel)]="date" name="date" (click)="inputDateDisabled()"
+                id="update" required>
+            </div>
+          </fieldset>
+          <fieldset class="side-bar-fieldset ms-2">
+            <legend class="side-bar-legend">Time</legend>
+            <div class="input-group p-1 w-100">
+              <input type="time" class=" w-100 border-none-outline-none" [(ngModel)]="time" name="time" required
+                (change)="inputDateTimeDisabled($event)" step="60">
+            </div>
+          </fieldset>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button type="button" class="btn btn-sm secondary-bg-color text-light" *ngIf="newTaskProgress == 100"
+          data-bs-toggle="modal" data-bs-target="#finishTaskModal" [disabled]="!date || !time">Save</button>
+        <button type="button" class="btn btn-sm secondary-bg-color text-light" *ngIf="newTaskProgress != 100"
+          (click)="updateTaskStatus()" [disabled]="!date || !time ">Save</button>
+        <button type="button" class="btn btn-sm border-basic primary-color" #progressModalClose data-bs-dismiss="modal"
+          (click)="clearPreviousData()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- *******************  Start task confirmation msg *************************-->
+<div class="modal fade" id="startTaskModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="text-center border-bottom">
+        <div class="modal-title text-danger p-2" id="exampleModalLabel">Confrimation</div>
+      </div>
+      <div class="modal-body text-center">
+        Do you want to start this task?
+      </div>
+      <div class="text-center p-2">
+        <button type="button" class="btn secondary-bg-color text-light" (click)="startTask()">YES</button>
+        <button type="button" class="btn secondary-bg-color text-light ms-2" data-bs-dismiss="modal">NO</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- *******************  Finish task confirmation msg *************************-->
+<div class="modal fade" id="finishTaskModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="text-center border-bottom">
+        <div class="modal-title text-danger p-2" id="exampleModalLabel">Confrimation</div>
+      </div>
+      <div class="modal-body text-center">
+        This will make this task complete!
+      </div>
+      <div class="text-center p-2">
+        <button type="button" class="btn secondary-bg-color text-light" (click)="updateTaskStatus()"
+          data-bs-dismiss="modal">OK</button>
+        <button type="button" class="btn secondary-bg-color text-light ms-2" data-bs-dismiss="modal"
+          #taskCompleteModalClose>CANCEL</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--********************* Mannual updation of task start date and time ************************* -->
+
+<div class="modal fade" id="dateTimeEntryModal">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        This will make this task complete!
+      </div>
+      <div class="text-center p-2">
+        <button type="button" class="btn secondary-bg-color text-light" data-bs-toggle="modal"
+          data-bs-target="#startTaskModal">CONFRIM</button>
+        <button type="button" class="btn secondary-bg-color text-light ms-2" data-bs-dismiss="modal">CANCEL</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- SOP DRAWING -->
+<ng-template #pdfpopup let-modal>
+  <div class="modal-header row m-0 p-2">
+    <div class="primary-color col-2 ps-0 cursor fw-bold" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <img src="./assets/icons/Back.svg" width="15px" height="10px" class="me-2">Back
+    </div>
+    <div class="primary-color pop-w2 fw-bold col-8 text-center"><b>{{modalHeader | uppercase}}</b></div>
+    <div class="col-2"></div>
+  </div>
+  <div class="modal-body fs-12 ">
+    <ng-container *ngIf="isPdfLoaded">
+      <div *ngFor="let pdf of pdfData" class="w-100 h-100">
+        <iframe [src]="pdf | safeUrl" width="100%" height="100%"></iframe>
+      </div>
+    </ng-container>
+    <div *ngIf="!pdfData?.length" style="text-transform: uppercase;"
+      class="h-100 d-flex align-items-center justify-content-center">
+      <span class="text-grey"> No {{modalHeader}}s available at the moment </span>
+    </div>
+  </div>
+</ng-template>
+
+
+<div class="modal fade" id="escalateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="text-center border-bottom">
+        <div class="modal-title text-danger p-2" id="exampleModalLabel">Confirmation</div>
+      </div>
+      <div class="modal-body text-center fs-12 ">
+        Are you sure, need to Escalate the task?
+      </div>
+      <div class="text-center p-1 mb-2">
+        <button type="button" class="btn btn-sm secondary-bg-color text-light fs-12 "
+          (click)="taskEscalated()">YES</button>
+        <button type="button" class="btn btn-sm secondary-bg-color text-light ms-2 fs-12 "
+          data-bs-dismiss="modal">NO</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<ng-template #history let-modal>
+  <div class="modal-header row m-0 p-2">
+    <div class="modal-header row m-0 p-2">
+      <div class="primary-color col-2 ps-0 cursor fw-bold" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <img src="./assets/icons/Back.svg" width="15px" height="10px" class="me-2">Back
+      </div>
+      <div class="primary-color pop-w2 fw-bold col-8 text-center"><b>HISTORY</b></div>
+      <div class="col-2"></div>
+    </div>
+  </div>
+  <div class="modal-body fs-12">
+    <div class="row">
+      <div class="pb-3">
+        <div class="w-100" *ngFor="let history of taskHistory">
+          <ng-container *ngIf="history?.action=='Progress Updation'">
+            <div class="primary-color primary-bg-color action-heading p-2">{{history?.action}}</div>
+            <div class="p-2">
+              <div class="pb-2">
+                <div class="primary-color fw-bold pb-1">Progress</div>
+                <div>{{history?.description}}</div>
+              </div>
+              <div>
+                <div class="primary-color fw-bold pb-1">Progress updated by</div>
+                <div class="fs-12">{{history?.created_by}}</div>
+                <div class="fs-10 font-style-italic">{{ history.created_at | date:'dd.MM.yyyy | HH:mm:ss' }}</div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="history?.action=='Person Tag'">
+            <div class="primary-color primary-bg-color action-heading p-2">{{history.action}}</div>
+            <div class="p-2">
+              <div class="pb-2">
+                <div class="m-1 fs-12 btn btn-sm btn-primary">{{history?.description}}</div>
+              </div>
+              <div>
+                <div class="primary-color fw-bold pb-1">Tagged by</div>
+                <div class="fs-12">{{history?.created_by}}</div>
+                <div class="fs-10 font-style-italic">{{ history.created_at | date:'dd.MM.yyyy | HH:mm:ss'}} </div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="history?.action=='Knowledge Capture'">
+            <div class="primary-color primary-bg-color action-heading p-2">{{history.action}}</div>
+            <div class="p-2">
+              <div>
+                <div class="primary-color fw-bold pb-1">Captured by</div>
+                <div class="fs-12">{{history?.created_by}}</div>
+                <div class="fs-10 font-style-italic">{{ history.created_at | date:'dd.MM.yyyy | HH:mm:ss' }}</div>
+              </div>
+            </div>
+          </ng-container>
+
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!taskHistory.length" style="text-transform: uppercase;"
+      class="h-100 d-flex align-items-center justify-content-center">
+      <span class="text-grey"> No history logged at the moment </span>
+    </div>
+  </div>
+</ng-template>
+
+
+<!-- OLD HISTORY MODEL -->
+<ng-template>
+  <div class="modal-header row fs-12 m-0">
+    <!-- <div class="primary-color col-2 cursor fw-bold" data-bs-dismiss="modal"> <img src="./assets/icons/Back.svg"
+                width="15px" height="10px" class="me-2">Back</div> -->
+    <div class="primary-color pop-w2  fw-bold col-8 text-center w-95">HISTORY</div>
+    <span aria-hidden="true" class="close text-right fs-16 col-2 text-right cursor w-5 m-0 p-0" aria-label="Close"
+      (click)="modal.dismiss('Cross click')">×</span>
+  </div>
+  <div class="modal-body fs-12">
+    <div class="row">
+      <div class="pb-3">
+        <div class="w-100" *ngFor="let history of taskHistory">
+          <ng-container *ngIf="history?.action=='Progress Updation'">
+            <div class="primary-color primary-bg-color action-heading p-2">{{history?.action}}</div>
+            <div class="p-2">
+              <div class="pb-2">
+                <div class="primary-color fw-bold pb-1">Progress</div>
+                <div>{{history?.description}}</div>
+              </div>
+              <div>
+                <div class="primary-color fw-bold pb-1">Progress updated by</div>
+                <div class="fs-12">{{history?.created_by}}</div>
+                <div class="fs-10 font-style-italic">{{ history.created_at | date:'dd.MM.yyyy |HH:mm:ss' }}</div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="history?.action=='Person Tag'">
+            <div class="primary-color primary-bg-color action-heading p-2">{{history.action}}</div>
+            <div class="p-2">
+              <div class="pb-2">
+                <div class="m-1 fs-12 btn btn-sm btn-primary">{{history?.description}}</div>
+              </div>
+              <div>
+                <div class="primary-color fw-bold pb-1">Tagged by</div>
+                <div class="fs-12">{{history?.created_by}}</div>
+                <div class="fs-10 font-style-italic">{{ history.created_at | date:'dd.MM.yyyy | HH:mm:ss'}} </div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="history?.action=='Knowledge Capture'">
+            <div class="primary-color primary-bg-color action-heading p-2">{{history.action}}</div>
+            <div class="p-2">
+              <div>
+                <div class="primary-color fw-bold pb-1">Captured by</div>
+                <div class="fs-12">{{history?.created_by}}</div>
+                <div class="fs-10 font-style-italic">{{ history.created_at | date:'dd.MM.yyyy | HH:mm:ss' }}</div>
+              </div>
+            </div>
+          </ng-container>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

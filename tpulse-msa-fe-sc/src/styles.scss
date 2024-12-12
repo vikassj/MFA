@@ -1,0 +1,303 @@
+/* You can add global styles to this file, and also import other style files */
+.ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
+  background-color: #E2F5FF;
+  color: #006699 !important;
+  font-size: 12px !important;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.ngx-datatable.material .datatable-header .datatable-header-cell {
+  background-color: #E2F5FF;
+  color: #006699 !important;
+  font-size: 12px !important;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.ngx-datatable.material .datatable-footer .datatable-pager li.active a {
+  background-color: #006699 !important;
+  align-items: center;
+  color: white !important;
+  font-weight: bold;
+}
+
+.ngx-datatable.material .datatable-footer .datatable-pager {
+  color: #006699 !important;
+  background-color: transparent !important;
+}
+
+.ngx-datatable.material .datatable-footer .datatable-pager a {
+  color: #006699 !important;
+  margin: auto !important;
+  border-radius: 25px !important;
+}
+
+.ngx-datatable.material .datatable-footer .datatable-pager a:hover {
+  background-color: #006699 !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+.ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell {
+  font-weight: 600 !important;
+  font-size: 11px !important;
+  padding-right: 0;
+  // padding-left: 0.1rem;
+  // border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+
+.ngx-datatable.material {
+  box-shadow: none !important;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px !important;
+}
+
+.edit-btn {
+  color: #006699 !important;
+  text-decoration: underline !important;
+}
+
+.edit-btn-normal {
+  text-decoration: underline !important;
+}
+
+.cursor {
+  cursor: pointer
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+.cursor-none {
+  cursor: none;
+}
+
+.cursor-default {
+  cursor: default !important;
+}
+
+.border-none-outline-none {
+  border: none !important;
+  outline: none !important;
+}
+
+.secondary-bg-color {
+  background-color: #006699 !important;
+}
+
+.primary-bg-color {
+  background-color: #E2F5FF !important;
+}
+
+.btn-border {
+  border: 1px solid #006699 !important;
+}
+
+input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+select {
+  -webkit-appearance: button !important;
+  -moz-appearance: button !important;
+  appearance: button !important;
+  cursor: pointer;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.ngx-datatable.material.single-selection .datatable-body-row.active .datatable-row-group {
+  background-color: #eff5fa !important;
+  border-right: 0;
+  border-left: 0;
+}
+
+.fs-12 {
+  font-size: 10px;
+}
+
+.fs-10 {
+  font-size: 10px;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.primary-color {
+  color: #006699 !important;
+}
+
+.datatable-icon-right:before {
+  content: "N E X T" !important;
+  // font-family: 'am-Montserrat', sans-serif !important;
+  font-size: 10px !important;
+  color: black !important;
+}
+
+.datatable-icon-skip:before {
+  content: "⭢" !important;
+  font-size: 20px !important;
+  line-height: 14px !important;
+  font-style: normal !important;
+  // font-style: none !important;
+}
+
+.datatable-icon-left:before {
+  content: "P R E V" !important;
+  font-style: normal !important;
+  font-size: 10px !important;
+  color: black !important;
+}
+
+
+
+.datatable-icon-prev:before {
+  content: "⭠" !important;
+  font-size: 20px !important;
+  font-style: normal !important;
+  line-height: 14px !important;
+}
+
+
+.ngx-datatable.material .datatable-footer .datatable-pager ul li a .datatable-icon-left::before {
+  font-family: 'Montserrat' !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-feature-settings: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ngx-datatable.material .datatable-footer .datatable-pager ul li a .datatable-icon-right::before {
+  font-family: 'Montserrat' !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-feature-settings: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.box {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border: 1px solid red;
+}
+
+.pl-40 {
+  padding-left: 40px;
+}
+
+.blue-color {
+  color: #006699;
+}
+
+.light-blue-bgcolor {
+  background-color: #E2F5FF;
+}
+
+.off-color {
+  color: #6D7885;
+}
+
+.grey-bg-dark-font {
+  background: #F5F5F5;
+  color: #1E3044
+}
+
+.blue-bg-dark-font {
+  background-color: #E2F5FF;
+  color: #006699;
+}
+
+.green-bg-green-font {
+  background-color: #D5FFD7;
+  color: #33A437;
+}
+
+.heading {
+  font-weight: 600;
+  font-size: 10px;
+}
+
+.red-bg-white-font {
+  background-color: #F65150;
+  color: white;
+}
+
+.red-bg-red-font {
+  background-color: #FFE8E8;
+  color: #F65150;
+}
+
+.text-big {
+  font-size: 20px;
+  width: 42%;
+}
+
+.text-bigger {
+  font-size: 30px;
+}
+
+.bg-light-grey {
+  background-color: #FBFBFB;
+}
+
+.very-light-grey {
+  background-color: #FAFAFA;
+}
+
+.datatable-body-cell-label {
+  width: 100%;
+}
+
+.mention-item:hover {
+  background-color: #006699 !important;
+  color: #fff !important;
+  cursor: pointer !important;
+}
+
+// .progress {
+//   height: 30px;
+//   position: relative;
+// }
+
+// .progress-bar {
+//   line-height: 30px;
+//   text-align: center;
+// }
+
+// .progress-text {
+//   position: absolute;
+//   left: 50%;
+//   top: 50%;
+//   transform: translate(-50%, -50%);
+//   width: 100%;
+//   color: #fff;
+// }
+
+.common-bg-color {
+  background-color: #006699 !important;
+}
+
+.common-color {
+  color: #006699 !important;
+}
+
+.fitDivCss {
+  position: relative !important;
+  width: 100% !important;
+  // height: 100% !important;
+}

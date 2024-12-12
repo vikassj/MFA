@@ -1,0 +1,146 @@
+<div class="dashboardContainer">
+  <div class="row col-12 p-2">
+    <div class="col-2 pe-2">
+      <div class="unit-side-bar-height shadow-sm bg-body rounded ">
+        <div class="ps-4  pointer" (click)="active(locationMpcDatas.name)"
+          *ngFor="let locationMpcDatas of locationMpcData "
+          [ngClass]="locationMpcDatas.name == zones ? 'selectedItem fw-bold ' : 'color'" (click)="fetchReportsData1()">
+          <div class="  py-2">{{locationMpcDatas.name}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-10 side-bar-height">
+      <div class="d-flex align-items-center my-2">
+        <ng-container *ngIf="refreshDayMonthYear">
+          <div class=" pt-2 pb-2">
+            <select class="fw-bold border-bottom border-dark bg " #data [(ngModel)]="selectedItemDate"
+              (change)="dayMonthYearWiseData(data.value)" name="slectedItemDate">
+              <option *ngFor="let selectItem of selectedItems" [value]="selectItem">
+                {{selectItem}}
+              </option>
+            </select>
+          </div>
+          <div class="ps-3 pt-2 pb-2" *ngIf="selectedItemDate == 'Month wise'">
+            <select class=" fw-bold border-bottom border-dark bg dropdown-bg-color" [(ngModel)]="selectMonth"
+              (change)="dayMonthYearWiseData(data.value)">
+              <option *ngFor="let month of months" [value]="month.key">
+                {{month.value}}
+              </option>
+            </select>
+          </div>
+          <div class="ps-3 pt-2 pb-2">
+            <select class=" fw-bold border-bottom border-dark bg dropdown-bg-color " [(ngModel)]="selectedYear"
+              (change)="dayMonthYearWiseData(data.value)">
+              <option *ngFor="let year of getYears(5)" [value]="year">
+                {{year}}
+              </option>
+            </select>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!refreshDayMonthYear">
+          <div class=" pt-2 pb-2">
+            <select class="fw-bold border-bottom border-dark bg " #data [(ngModel)]="selectedItemDate"
+              (change)="dayMonthYearWiseData(data.value)" name="slectedItemDate">
+              <option *ngFor="let selectItem of selectedItems" [value]="selectItem">
+                {{selectItem}}
+              </option>
+            </select>
+          </div>
+          <div class="ps-3 pt-2 pb-2" [ngClass]="selectedItemDate == selectedItems?.[0]?'d-block':'d-none'">
+            <select class=" fw-bold border-bottom border-dark bg dropdown-bg-color" [(ngModel)]="selectMonth"
+              (change)="dayMonthYearWiseData(data.value)">
+              <option *ngFor="let month of months" [value]="month.key">
+                {{month.value}}
+              </option>
+            </select>
+          </div>
+          <div class="ps-3 pt-2 pb-2">
+            <select class=" fw-bold border-bottom border-dark bg dropdown-bg-color " [(ngModel)]="selectedYear"
+              (change)="dayMonthYearWiseData(data.value)">
+              <option *ngFor="let year of getYears(5)" [value]="year">
+                {{year}}
+              </option>
+            </select>
+          </div>
+        </ng-container>
+      </div>
+      <div class="mt-3">
+        <div>
+          <ngx-datatable class="material expandable onBoarded-table-height" [rows]="reportRows"
+            [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50" [rowHeight]="70" [scrollbarV]="true"
+            [selected]="selected" [selectionType]="SelectionType.checkbox">
+            <ngx-datatable-column name="Report Name" prop="name" [sortable]="true"></ngx-datatable-column>
+            <ngx-datatable-column name="Date" prop="date"></ngx-datatable-column>
+            <ngx-datatable-column name="Time" prop="time"></ngx-datatable-column>
+            <ngx-datatable-column name="File" prop="file">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div *ngIf="row.file !== null ">
+                  <button class="btn btn-outline-primary btn-sm" (click)="openPDF(row.file)">VIEW FILE</button>
+                </div>
+                <div *ngIf="row.file == null ">
+                  no file available
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="route-nav border scroll side-bar-height position col-2  bg-body p-1" *ngIf="isRouteClicked">
+  <div class="d-flex mb-2">
+    <button id="back-button" (click)="onRouteClicked()" style="margin-right: auto">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <button [ngClass]=" (reportStartDate == null)?  'not-allowed' :(reportEndDate == null)?'not-allowed':'' "
+      class="btn btn-basic btn-sm me-2 ps-4 pe-4 cancel-button " (click)="fetchFilterReportsData()">APPLY</button>
+    <button class="cancel-button" (click)="onZsFilterReset()">RESET</button>
+  </div>
+  <div class="route-nav-blocks">
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Location</legend>
+        <div class="input-group p-1 w-100">
+          <select class="w-100" [(ngModel)]="zones">
+            <option *ngFor="let locationMpcDatas of locationMpcData" [value]="locationMpcDatas.name">
+              {{locationMpcDatas.name}}</option>
+          </select>
+          <div class="d-flex pointer align-items-center justify-content-center"
+            (click)="startDateCalender.toggleCalendar()">
+
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Start Date</legend>
+        <div class="input-group p-1 w-100">
+          <input class="form-control input-border bg-white" name="mydate" placeholder="dd-mm-yyyy" angular-mydatepicker
+            #startDateCalender="angular-mydatepicker" [(ngModel)]="reportStartDate" [options]="startDateOptions"
+            [readonly]="true" />
+          <div class="d-flex pointer align-items-center justify-content-center"
+            (click)="startDateCalender.toggleCalendar()">
+            <i class="far fa-calendar-alt fs-4" (click)="disabledDates()"></i>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">End Date</legend>
+        <div class="input-group p-1 w-100">
+          <input class="form-control input-border bg-white" name="mydate" placeholder="dd-mm-yyyy" angular-mydatepicker
+            #endDateCalender="angular-mydatepicker" [(ngModel)]="reportEndDate" [options]="endDateOptions"
+            [readonly]="true" />
+          <div class="d-flex pointer align-items-center justify-content-center"
+            (click)="endDateCalender.toggleCalendar()">
+            <i class="far fa-calendar-alt fs-4" (click)="disabledDates()"></i>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+</div>

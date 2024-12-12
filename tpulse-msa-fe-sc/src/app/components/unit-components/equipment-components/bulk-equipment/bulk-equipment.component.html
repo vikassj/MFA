@@ -1,0 +1,275 @@
+
+
+
+
+<div style="height:40px" class="d-flex justify-content-between align-items-center w-100 p-3">
+  <div class="primary-color p-3 w-25">Miscellaneous Jobs</div>
+  <div class="text-blue d-flex w-50 p-0 fs-12 justify-content-center">
+    <div class="d-flex pe-2">
+      <div class="mx-3 d-flex align-items-center">
+        <div class="me-2 bg-blue h-10px w-10px"></div>
+        <div class="text-blue font-size-10px">Completed</div>
+      </div>
+      <div class="mx-3 d-flex align-items-center">
+        <div class="me-2 bg-secondry h-10px w-10px"></div>
+        <div class="text-secondry font-size-10px">Yet to start</div>
+      </div>
+      <!-- <div class="mx-3 d-flex align-items-center">
+        <div class="me-2 bg-red h-10px w-10px"></div>
+        <div class="text-red font-size-10px">Delay</div>
+      </div>
+      <div class="mx-3 d-flex align-items-center">
+        <div class="me-2 bg-successGain h-10px w-10px"></div>
+        <div class="text-successGain font-size-10px">Gain</div>
+      </div> -->
+      <div class="mx-3 d-flex align-items-center">
+        <div class="me-2 bg-yellow h-10px w-10px"></div>
+        <div class="text-yellow font-size-10px">Inprogress</div>
+      </div>
+    </div>
+  </div>
+  <div class="primary-color w-25 text-center"></div>
+</div>
+
+
+<div class=" w-100 d-flex">
+  <div class="border-right border-top page-height w-15">
+    <!-- <div class="primary-color fs-12">Bulk Equipment</div> -->
+    <div class="category border-bottom" *ngFor="let cat of rawCategories">
+      <div class="p-2 cursor" (click)="selectSidebar(cat.id)"
+        [ngClass]="selectedEquipmentCategoryId == cat.id?'id-active':''">
+        {{cat.name}}({{cat.count}})
+      </div>
+      <!-- <div>
+        <div class="id " *ngFor="let equipment of categories[cat.name]">
+          {{equipment.name}}
+        </div>
+      </div> -->
+    </div>
+  </div>
+  <div class="page-height w-80 justify-content-around d-flex">
+    <div class="bulk-content">
+      <!-- <div class="text-blue d-flex justify-content-center w-100 p-0 fs-12">
+        <div class="d-flex pe-2">
+          <div class="mx-3 d-flex align-items-center">
+            <div class="me-2 bg-blue h-10px w-10px"></div>
+            <div class="text-blue font-size-10px">Completed</div>
+          </div>
+          <div class="mx-3 d-flex align-items-center">
+            <div class="me-2 bg-secondry h-10px w-10px"></div>
+            <div class="text-secondry font-size-10px">Yet to start</div>
+          </div>
+          <div class="mx-3 d-flex align-items-center">
+            <div class="me-2 bg-red h-10px w-10px"></div>
+            <div class="text-red font-size-10px">Delay</div>
+          </div>
+          <div class="mx-3 d-flex align-items-center">
+            <div class="me-2 bg-successGain h-10px w-10px"></div>
+            <div class="text-successGain font-size-10px">Gain</div>
+          </div>
+          <div class="mx-3 d-flex align-items-center">
+            <div class="me-2 bg-yellow h-10px w-10px"></div>
+            <div class="text-yellow font-size-10px">Inprogress</div>
+          </div>
+        </div>
+      </div> -->
+      <div class="bulk-list">
+        <div class="accordion " id="accordionExample">
+          <div class="accordion-item my-2" *ngFor="let task of bulkList;let i = index">
+            <h2 class="accordion-header" [attr.id]="'headingOne'+i">
+              <div class="accordion-button fs-12 text-color collapsed"
+                [ngClass]="selectedTask==task.name?'bulk-active':''" (click)="selectTask(task)" type="button"
+                data-bs-toggle="collapse" [attr.data-bs-target]="'#collapseOne'+i" aria-expanded="true"
+                [attr.aria-controls]="'collapseOne'+i">
+                <div class="d-flex justify-content-between align-items-center cursor w-100">
+                  <div class="fw-bold w-90" [ngClass]="{ 'text-basic' : task.status == 'completed', 'text-yellow' : task.status == 'in_progress', 'text-secondary' :  task.status == 'not_started'}">{{task.name}}</div>
+                  <div>{{task.current_equipment_count}}/{{task.total_equipment_count}}</div>
+                  <!-- <div>
+                    <button *ngIf="selectedTask == task.name" class="btn btn-outline-primary btn-sm fs-12"
+                      (click)="updateChecklist(i)" [disabled]="showValidation" required>SAVE &
+                      UPDATE
+                    </button>
+                  </div> -->
+                </div>
+              </div>
+            </h2>
+            <div [attr.id]="'collapseOne'+i" class="accordion-collapse collapse" [attr.aria-labelledby]="'headingOne'+i"
+              data-bs-parent="#accordionExample">
+              <div class="accordion-body d-flex flex-column fs-12">
+                <div class=" w-100 row pb-3">
+                  <div class="col-3 d-flex align-items-center">Completion Progress</div>
+                  <div class="col-2"><input type="number" class="w-100 form-control"
+                      [(ngModel)]="task.current_count" min="0" [max]="task.total_equipment_count"  (input)="enforceMaxValue(task,$event)" >
+                    </div>
+                      <div class="col-7 d-flex flex-column justify-content-center align-items-center">
+                    <div class=" progress h-100 w-100">
+                      <div class="progress-bar" role="progressbar" 
+                        [ngStyle]="{'width':task?.percentage_completed+'%'}"
+                        [attr.aria-valuenow]="task.percentage_completed" aria-valuemin="0" aria-valuemax="100">
+                        {{task?.percentage_completed}}%
+                      </div>
+                    </div>
+                  </div>
+                  <span class="fs-10 text-danger mt-2" *ngIf="showValidation">{{validationMsg}}</span>
+
+                </div>
+                <!-- <div class="row pb-3">
+                  <div class="edit-btn cursor col-12" (click)="open(mymodal)">View Recommendations and Observations
+                  </div>
+                </div> -->
+                <div class="row pb-3">
+                  <div class="col-12">
+                    <input type="text" class="form-control" [(ngModel)]="task.remarks"
+                      placeholder="Enter Remarks here..">    
+                  </div>
+                </div>
+                <div>
+                  <button *ngIf="selectedTask == task.name" class="btn btn-outline-primary btn-sm fs-12"
+                  (click)="updateChecklist(i)" [disabled]="showValidation" required>SAVE &
+                  UPDATE
+                </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- <div class="pt-2"> -->
+        <!-- <label for="upload">Upload Checklist</label> -->
+        <!-- <form class="d-flex justify-content-between" [formGroup]="uploadForm" (submit)="uploadNewChecklist()">
+          <div>
+            <input type="file" accept=".csv" formControlName="checklist" (change)="handleFileInput($event.target.files)"
+              id="upload" class="form-control ">
+          </div>
+          <div>
+            <button type="submit" [disabled]="uploadForm.invalid" class="btn btn-sm btn-outline-danger">Create <i
+                class="fas fa-exclamation-triangle text-red ps-1"></i></button>
+          </div>
+        </form>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+
+<ng-template #mymodal let-modal>
+  <div class="modal-header row fs-12">
+    <div class="primary-color col-2 cursor fw-bold fs-12" data-bs-dismiss="modal"> <img src="./assets/icons/Back.svg"
+        width="15px" height="10px" class="me-2">Back</div>
+    <!-- <div class="primary-color pop-w2  fw-bold fs-12 col-8 text-center">Bulk Equipment</div> -->
+    <span aria-hidden="true" class="close fs-16 col-2 text-right cursor" aria-label="Close"
+      (click)="modal.dismiss('Cross click')">×</span>
+  </div>
+  <div class="modal-body fs-12">
+    <div class="row">
+      <div class="recommendation col-12 pb-3">
+        <div class="d-flex pb-2">
+          <div class="primary-color">Recommendation</div>
+          <div class="edit-btn cursor ps-4">View attachments</div>
+          <div class="ps-4"><img src="/assets/icons/edit-icon.svg" alt=""></div>
+        </div>
+        <div class="bg-light-grey d-flex justify-content-between p-2">
+          <div>
+            <div class="pb-3">
+              Remove & Dump in waste material area
+            </div>
+            <div class="text-dull">
+              shiv@detecttechnologies.com
+            </div>
+          </div>
+          <div class="open-close d-flex justify-content-center align-items-center">
+            <select name="" id="" class="border-none-outline-none rounded" [(ngModel)]="status"
+              [ngClass]="status == 'open' ? 'status-dropdown-open': 'status-dropdown-close' ">
+              <option value="open">Open</option>
+              <option value="close">Close</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="d-flex flex-column">
+      <div class="primary-color">Linked Observations</div>
+      <div class="row pb-2">
+        <div class="observations bg-light-grey overflow-auto col-9">
+          <div class="w-100 h-100 p-2">
+            <div class="pb-3 bg-white" *ngFor="let obs of linkedObservations">
+              <div class="pb-3">{{obs.observation}}</div>
+              <div class="w-100 d-flex justify-content-between">
+                <div>{{obs.email}}</div>
+                <div class="edit-btn cursor">View attachments</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="d-flex" *ngFor="let item of [1,2,3]; index as i">
+            <ng-container>
+              <div class="w-20 position-relative d-flex align-items-end flex-column">
+                <div class="border rounded-circle h-12px w-21px equipment-circle bg-basic" contentType="template"></div>
+                <div class="border w-4px h-100 margin bg-secondary">
+                </div>
+              </div>
+              <div class="w-80 ms-3">
+                <div class="d-flex justify-content-start">
+                  Recommendation created by Samraat
+                </div>
+                <div class="d-flex justify-content-start primary-color font-style-italic">
+                  <div>
+                    05-Mar-23
+                  </div>
+                  <div class="ps-3">
+                    09:34:23
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-9 d-flex flex-column">
+          <div class="pb-2"><input type="text" class="form-control" placeholder="Enter new Observation here..."></div>
+          <div class="d-flex align-items-center row">
+            <div class="d-flex align-items-center col-9">
+              <div class="attach-btn btn btn-sm d-flex align-items-center fs-12"><i class="fa fa-paperclip"
+                  aria-hidden="true"></i>&nbsp;Attachments</div>
+              <div class="row">
+                <div class=" attachments col-6">
+                  <div class="d-flex justify-content-between w-100">
+                    <div>
+                      Document-1332kd2.pdf
+                    </div>
+                    <div>x</div>
+                  </div>
+                </div>
+                <div class=" attachments col-6 ">
+                  <div class="d-flex justify-content-between w-100">
+                    <div>
+                      Document-1332kd2.pdf
+                    </div>
+                    <div>x</div>
+                  </div>
+                </div>
+                <div class=" attachments col-6">
+                  <div class="d-flex justify-content-between w-100">
+                    <div>
+                      Document-1332kd2.pdf
+                    </div>
+                    <div>x</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-3 text-right">
+              <button class="btn btn-sm secondary-bg-color text-light ">SUBMIT</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

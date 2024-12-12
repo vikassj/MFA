@@ -1,0 +1,704 @@
+<!-- <div class="row over-view-page-height m-0 pt-2 pe-2 pb-2" style="width:100%;"> -->
+<app-task *ngIf="showTask && selectedUnit && department" [selectedUnit]="selectedUnit"
+  [equipmentCategory]="equipmentCategory" [department]="department" [routingData]="routingData"
+  (showTaskDetailPage)="toggleTaskPage($event)">
+</app-task>
+<!-- <div class="d-flex justify-content-start">
+    <div class="edit-btn primary-color ms-3 cursor" (click)="onTaskClick(null)">Task Detail View</div>
+</div> -->
+<!-- <div class="w-100 p-2 bg-color"> -->
+
+<div class="over-view-page-height bg-color" *ngIf="!showTask">
+  <div class="primary-color p-3 fw-bold bg-color">Tasks Summary</div>
+  <ng-container class="bg-color">
+    <div class="d-flex">
+      <!-- *************** part-1 *************-->
+      <div class="w-20  border-right ms-2 bg-white">
+        <div class="task cursor" [ngClass]="selectedTaskFilter.key == task.key?'task-active':''"
+          *ngFor="let task of taskSummaryFilter" (click)="getFilteredTasks(task)">
+          {{task.name}}({{task.count}})
+        </div>
+      </div>
+      <!-- *************** part-2 ***********-->
+      <div class="w-85 border-right ms-2 me-2 bg-white">
+        <div class="d-flex p-2">
+          <div class="primary-color fw-bold" style="font-size: 20px;">
+            <i class="fas fa-solid fa-list"></i>
+            <span class="ms-3 fw-bold ">{{selectedTaskFilter.name}}</span>
+          </div>
+          <button style="padding-top: 1px;padding-bottom: 1px;"
+            class="btn btn-sm cursor text-light secondary-bg-color ms-3"
+            *ngIf="selectedTaskFilter.key != 'my_shift_tasks'" [disabled]="!selected.length"
+            (click)="addToMyShiftTask()">
+            Add to My Shift Plan
+          </button>
+          <button style="padding-top: 1px;padding-bottom: 1px;"
+            class="btn btn-sm cursor text-light secondary-bg-color ms-3" [disabled]="!selected.length"
+            *ngIf="selectedTaskFilter.key=='my_shift_tasks'" (click)="removeFromMyShiftTask()">
+            Remove from My Shift Plan
+          </button>
+        </div>
+
+        <div id="ngx-datatable">
+          <ngx-datatable #myTable class="material expandable dataTableHeight" id="dataTableContainer"
+            [columnMode]="ColumnMode.force" [headerHeight]="40" [scrollbarH]="true" [scrollbarV]="true"
+            [rowHeight]="100" [rows]="rows" [footerHeight]="50" [selected]="selected"
+            [messages]="{emptyMessage: 'No tasks recorded.'}" [selectionType]="SelectionType.checkbox"
+            (selected)="onSelect($event)">
+
+            <!-- <ngx-datatable-column [width]="30" [sortable]="false" [draggable]="false" [resizeable]="false"
+                        [canAutoResize]="false" [headerCheckboxable]="true" [checkboxable]="true" (click)="onSelect($event)" cellClass="ps-2 cp-border">
+                    </ngx-datatable-column> -->
+            <ngx-datatable-column [width]="30" [sortable]="false" [canAutoResize]="false" [draggable]="false"
+              [resizeable]="false" cellClass="ps-2 cp-border">
+              <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+                let-selectFn="selectFn">
+                <input type="checkbox" [checked]="allRowsSelected" (change)="selectFn(!allRowsSelected)" />
+              </ng-template>
+              <ng-template ngx-datatable-cell-template let-value="value" let-isSelected="isSelected"
+                let-onCheckboxChangeFn="onCheckboxChangeFn">
+                <input type="checkbox" [checked]="isSelected" (change)="onCheckboxChangeFn($event)" />
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Equipment number" prop="id" [width]="100">
+              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                <div class="ms-2 me-2">
+                  <div>
+                    <span class="text-grey fs-7">{{row?.equipment_name}}</span>
+                    <span *ngIf="row?.is_delayed" class="btn-outline-danger ms-1 mt-2 border-danger border-radius-2">
+                      DELAYED
+                    </span>
+                  </div>
+                  <div class="mt-2 ">
+                    <div *ngIf="row.critical" class="bg-red btn btn-sm text-light me-1"
+                      style="line-height: 12px;margin-bottom: 2px;">CP1</div>
+                    <div *ngIf="row.delay && row?.delay!='0hr'" class="btn btn-sm text-light" style="line-height: 12px;"
+                      [ngClass]="{'bg-red' : row?.delay > '0',  'bg-successGain':row?.delay < '0','d-none':!checkTimeElapsed(row)}">
+                      {{row.delay | replaceNegativeSymbol}}
+                    </div>
+
+                  </div>
+                </div>
+              </ng-template>
+
+              <!-- <div class="taskName fw-bold ps-2 cursorPointer d-flex" (click)="navigateToTask(row)">
+                        <div class="float-left font-size-12px"
+                        [ngClass]="{ 'text-basic' : row.task_status == 'COMPLETED', 'text-yellow' : row.task_status == 'IN-PROGRESS', 'text-secondary' :  row.task_status == 'NOT STARTED' ,  'text-red' :  row.task_status == 'DELAYED'}"
+                        [title]="row.name">{{row.name }}</div>
+                        <span *ngIf="row.task_status == 'DELAYED'" class="cursorPointer" (click)="navigateToIssues()"><i
+                            class="fas fa-exclamation-triangle text-red ps-3"></i></span>
+                    </div> -->
+              <!-- </ng-template> -->
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Task Name" prop="id" [width]="180">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <!-- <div class="taskName fw-bold ps-2 cursorPointer d-flex" (click)="navigateToTask(row)">
+                        <div class="float-left font-size-12px"
+                        [ngClass]="{ 'text-basic' : row.task_status == 'COMPLETED', 'text-yellow' : row.task_status == 'IN-PROGRESS', 'text-secondary' :  row.task_status == 'NOT STARTED' ,  'text-red' :  row.task_status == 'DELAYED'}"
+                        [title]="row.name">{{row.name }}</div>
+                        <span *ngIf="row.task_status == 'DELAYED'" class="cursorPointer" (click)="navigateToIssues()"><i
+                            class="fas fa-exclamation-triangle text-red ps-3"></i></span>
+                    </div> -->
+                <div class="me-2">
+                  <span class="cursor text-grey fs-7" style="text-decoration: underline;"
+                    (click)="onTaskClick(row)">{{row.name}}</span>
+
+                  <div class="col mt-2 d-flex">
+                    <!-- <div class="cursor me-2" (click)="onCaptureKnowledge(row)"
+                                            *ngIf="!row?.is_knowledge_captured"
+                                            style="white-space: nowrap; min-width:141px">
+                                            <i class="far fa-regular fa-star me-1"></i> Capture Knowledge
+                                        </div>
+                                        <div class="text-green cursor me-2" style="white-space: nowrap;"
+                                            (click)="onCaptureKnowledge(row)" *ngIf="row?.is_knowledge_captured">
+                                            <i class="fas fa-solid fa-star me-1"></i> Capturing Knowledge
+                                        </div>
+                                        <div class="text-green" style="white-space: nowrap;"> | </div> -->
+                    <div (click)="getTaskHistory(row);open(history,'mediumModal')" style="white-space: nowrap;">
+                      <span><i class="fas fa-clock blue-color"></i>&nbsp;<span
+                          class="edit-btn cursor">History</span></span>
+                    </div>
+
+                  </div>
+                </div>
+
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Planned / Actual start" [width]="80">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div class="  font-size-11px padding-10px-0px">
+                  <div class=" text-grey fs-7 ff-montserrat fw-semibold">
+                    {{row?.planned_date_to_start}} |
+                    {{row?.planned_time_to_start?.slice(0,5)}}</div>
+                  <div class=" text-grey fs-7 ff-montserrat fw-semibold mt-2">
+                    <span *ngIf="row?.actual_start_date">{{row?.actual_start_date}} |
+                      {{row?.actual_start_time?.slice(0,5)}}</span>
+                    <span *ngIf="!row?.actual_start_date">Yet to start</span>
+                  </div>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Planned / Actual Finish" [width]="80">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div class="  font-size-11px padding-10px-0px">
+                  <div class=" text-grey fs-7 ff-montserrat fw-semibold">
+                    {{row?.planned_date_to_complete}} |
+                    {{row?.planned_time_to_complete?.slice(0,5)}}</div>
+                  <div class=" text-grey fs-7 ff-montserrat fw-semibold mt-2">
+                    <span *ngIf="row?.actual_date_of_completion">{{row?.actual_date_of_completion}}
+                      |
+                      {{row?.actual_time_of_completion?.slice(0,5)}}</span>
+                    <span *ngIf="!row?.actual_date_of_completion">Yet to finish</span>
+                  </div>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Progress" [width]="320">
+              <ng-template let-row="row" ngx-datatable-cell-template class="w-100">
+
+                <div class="d-flex  align-items-center flex-wrap">
+                  <!-- <div class="font-size-11px d-flex w-30 align-items-center padding-10px-0px " style="height:20px;">
+                                   <div class="progress w-100 me-2 border-radius" style="height:20px;">
+                                   <div class="progress-bar" [ngStyle]="{'width':row.actual_percentage_completed+'%'}"
+                                  [ngClass]="{ 'bg-basic' : row.status == 'COMPLETED', 'bg-yellow' : row.status == 'IN-PROGRESS', 'bg-secondary' :  row.status == 'NOT STARTED' ,  'bg-red' :  row.status == 'DELAYED'}"
+                                  role="progressbar" [attr.aria-valuenow]="row.actual_percentage_completed" aria-valuemin="0"
+                                  aria-valuemax="100">
+                                  </div>
+                                  <div class="text-gray ">{{row['actual_percentage_completed']}}%</div>
+                                  </div>
+                                  </div> -->
+                  <div class="ps-2" style="min-width:100px;height:100%">
+                    <div class="progress zero-radius bg-white padding-1px  btn-border h-27px">
+                      <div class="progress-bar secondary-bg-color " role="progressbar"
+                        [ngStyle]="{'width':row?.actual_percentage_completed+'%'}"
+                        [attr.aria-valuenow]="row?.actual_percentage_completed" aria-valuemin="0" aria-valuemax="100">
+
+                      </div>
+                      <span class="progress-text text-black">{{row?.actual_percentage_completed}}%</span>
+                    </div>
+
+                  </div>
+                  <div>
+                    <button
+                      [ngClass]="(row?.actual_percentage_completed == 0 && row?.status=='NOT STARTED')?'d-block':'d-none'"
+                      class="btn btn-sm border-basic ms-2 secondary-bg-color w-75px h-27px text-light"
+                      data-bs-toggle="modal" data-bs-target="#updateTaskpercentage"
+                      (click)="onTaskUpdate('Start',row)">START
+                    </button>
+                  </div>
+
+                  <!-- <button style="padding-top: 1px;padding-bottom: 1px; line-height: 4px"
+                                        data-bs-toggle="modal" data-bs-target="#startTaskModal"
+                                        class="primary-color cursor btn-sm btn-border text-basic fw-bold bg-none border-none-outline-none w-75px h-27px ms-2"
+                                        *ngIf="row?.status=='NOT STARTED'">
+                                        START
+                                        </button> -->
+                  <div>
+                    <button style="padding-top: 1px;padding-bottom: 1px; line-height: 4px"
+                      class="primary-color cursor btn-sm text-basic fw-bold btn-border bg-none border-none-outline-none w-75px h-27px ms-2"
+                      *ngIf="row?.actual_percentage_completed==100 && row?.status=='COMPLETED'" data-bs-toggle="modal"
+                      data-bs-target="#updateTaskpercentage" (click)="onTaskUpdate('Reopen',row)">
+                      REOPEN
+                    </button>
+                  </div>
+                  <!-- <button style="padding-top: 1px;padding-bottom: 1px; line-height: 4px"
+                                        class="primary-color cursor btn-sm text-basic fw-bold btn-border bg-none border-none-outline-none w-75px h-27px ms-2"
+                                        *ngIf="row?.actual_percentage_completed==100 && row?.status=='COMPLETED'"
+                                        data-bs-toggle="modal" data-bs-target="#updateTaskpercentage"
+                                        (click)="mannualUpdationOfDateAndTime(true,'Start',row)"
+                                        >
+                                        REOPEN
+                                        </button> -->
+                  <div>
+                    <button style="padding-top: 1px;padding-bottom: 1px; line-height: 4px"
+                      class=" cursor btn-sm text-light btn-border secondary-bg-color border-none-outline-none w-75px h-27px ms-2"
+                      *ngIf="row?.status!='NOT STARTED' &&  row?.status!='COMPLETED'" data-bs-toggle="modal"
+                      data-bs-target="#updateTaskpercentage" (click)="onTaskUpdate('Update',row)">
+                      UPDATE
+                    </button>
+                  </div>
+                  <!-- <div class="popups bg-white shadow rounded" *ngIf="mannualDateTimeEntry == true && row?.id==selectedTask.id">
+                                        <div class="adjacentTasks w-100 d-flex">
+                                        <fieldset class="side-bar-fieldset">
+                                            <legend class="side-bar-legend">Date</legend>
+                                            <div class="input-group p-1 w-100">
+                                            <input type="date" class=" w-100 border-none-outline-none" [(ngModel)]="date" name="date" required
+                                                max="{{toDateFliter}}">
+                                            </div>
+                                        </fieldset>
+                                        <fieldset class="side-bar-fieldset ms-2">
+                                            <legend class="side-bar-legend">Time</legend>
+                                            <div class="input-group p-1 w-100">
+                                            <input type="time" class=" w-100 border-none-outline-none" [(ngModel)]="time" name="time" required
+                                                max="{{toDateFliter}}" step="2">
+                                            </div>
+                                        </fieldset>
+                                        </div>
+                                        <div class="p-2">
+                                        <button type="button" class="btn btn-sm fs-12 secondary-bg-color text-light"
+                                            (click)="startTask()" [disabled]="!date || !time">CONFIRM</button>
+                                        <button type="button" class="btn btn-sm fs-12 secondary-bg-color text-light ms-2"
+                                            (click)="mannualUpdationOfDateAndTime(false)">CANCEL</button>
+                                        </div>
+                                      </div> -->
+
+                  <div>
+                    <app-equipment-checklist [availableChecklists]="availableChecklists"
+                      [selectedChecklist]="selectedChecklist" [selectedChecklistColumns]="selectedChecklistColumns"
+                      [selectedChecklistRows]="selectedChecklistRows" [userDepartment]="userDepartment"
+                      (emitSelectedChecklist)="onSelectChecklist($event)" (emitChecklistSave)="onChecklistSave($event)"
+                      (emitChecklistSubmit)="onChecklistSubmit($event)" (click)="getEquipmentChecklist(row)">
+                    </app-equipment-checklist>
+                  </div>
+                  <div>
+                    <button style="padding-top: 1px;padding-bottom: 2px; line-height: 4px;margin-top: 4px;"
+                      class="primary-color btn-sm btn-border border-none-outline-none fw-bold bg-light-blue h-27px ms-2"
+                      data-bs-toggle="modal" data-bs-target="#checklist"
+                      (click)="getSOP(row);open(pdfpopup,'largeModal');">
+                      SOP
+                    </button>
+                  </div>
+                  <div>
+                    <button style="padding-top: 1px;padding-bottom: 2px; line-height: 4px;margin-top: 4px;"
+                      class="primary-color btn-sm btn-border border-none-outline-none fw-bold bg-light-blue h-27px ms-2"
+                      (click)="getDrawing(row);open(pdfpopup,'largeModal')">
+                      DRAWING
+                    </button>
+                  </div>
+                </div>
+
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-footer>
+              <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
+                let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
+                <div class="page-count">
+                  <span>Total: {{((activePage - 1) * noOfRows + (rowsLength > 0 ? 1 : 0))}} -
+                    {{((activePage) * noOfRows) < rowsLength ? ((activePage) * noOfRows) : rowsLength}} of
+                      {{rowsLength}}</span>
+                </div>
+                <div *ngIf="rowsLength > 0" class="w-100 h-100 d-flex align-items-center justify-content-center fw-600">
+                  <app-pagination [totalRecords]="rowsLength" [recordsPerPage]="noOfRows"
+                    (onPageChange)="displayActivePage($event)"></app-pagination>
+                </div>
+              </ng-template>
+            </ngx-datatable-footer>
+
+          </ngx-datatable>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+</div>
+
+<!-- Models -->
+<!-- <div class="modal fade" id="startTaskModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="text-center border-bottom">
+                <div class="modal-title text-danger p-2" id="exampleModalLabel">Confrimation</div>
+            </div>
+            <div class="modal-body text-center">
+                Do you want to start this task?
+            </div>
+            <div class="text-center p-2">
+                <button type="button" class="btn secondary-bg-color text-light" (click)="startTask()">YES</button>
+                <button type="button" class="btn secondary-bg-color text-light ms-2" data-bs-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+<!-- <div class="modal fade" id="startTaskModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="text-center border-bottom">
+                <div class="modal-title text-danger p-2" id="exampleModalLabel">Confrimation</div>
+            </div>
+            <div class="modal-body text-center">
+                Do you want to start this task?
+            </div>
+            <div class="text-center p-2">
+                <button type="button" class="btn secondary-bg-color text-light" (click)="startTask()">YES</button>
+                <button type="button" class="btn secondary-bg-color text-light ms-2" data-bs-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+
+<ng-template #history let-modal>
+  <div class="modal-header row fs-12 m-0">
+    <!-- <div class="primary-color col-2 cursor fw-bold" data-bs-dismiss="modal"> <img src="./assets/icons/Back.svg"
+                width="15px" height="10px" class="me-2">Back</div> -->
+    <div class="primary-color pop-w2  fw-bold col-8 text-center w-95">HISTORY</div>
+    <span aria-hidden="true" class="close text-right fs-16 col-2 text-right cursor w-5 m-0 p-0" aria-label="Close"
+      (click)="modal.dismiss('Cross click')">×</span>
+  </div>
+  <div class="modal-body fs-12">
+    <div class="row">
+      <!-- <div class="col-6 pb-3">
+                <div class="w-100">
+                    <div class="primary-color action-heading">Action 1 - Progress Updation</div>
+                    <div class="p-2">
+                        <div class="pb-2">
+                            <div class="primary-color pb-1">Progress</div>
+                            <div>0% to 25%</div>
+                        </div>
+                        <div>
+                            <div class="primary-color pb-1">Progress updated by</div>
+                            <div>Ram@detecttechnologies.com</div>
+                            <div>01.02.2023 | 20:22:00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 pb-3">
+                <div class="w-100">
+                    <div class="primary-color primary-bg-color action-heading">Action 2 - Issue creation</div>
+                    <div class="p-2">
+                        <div class="d-flex justify-content-between">
+                            <div class="pb-2">
+                                <div class="primary-color pb-1">Issue ID</div>
+                                <div class="bg-red p-2 text-white rounded">#343254</div>
+                            </div>
+                            <div>
+                                <div class="primary-color pb-1">Issue Category</div>
+                                <div>Inspection</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="primary-color pb-1">Created by</div>
+                            <div>Sam@detecttechnologies.com</div>
+                            <div>01.02.2023 | 20:22:00</div>
+                        </div>
+                        <div class="edit-btn cursor">
+                            See Issue History
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+      <div class="pb-3">
+        <div class="w-100" *ngFor="let history of taskHistory">
+          <ng-container *ngIf="history?.action=='Progress Updation'">
+            <div class="primary-color primary-bg-color action-heading p-2">{{history?.action}}</div>
+            <div class="p-2">
+              <div class="pb-2">
+                <div class="primary-color fw-bold pb-1">Progress</div>
+                <div>{{history?.description}}</div>
+              </div>
+              <div>
+                <div class="primary-color fw-bold pb-1">Progress updated by</div>
+                <div class="fs-12">{{history?.created_by}}</div>
+                <div class="fs-10 font-style-italic">{{ history.created_at | date:'dd.MM.yyyy |
+                  HH:mm:ss' }}</div>
+              </div>
+            </div>
+          </ng-container>
+          <!-- <ng-container  *ngIf="history?.action=='Issue created'">
+                    <div class="primary-color fw-bold action-heading">Action 2 - Issue creation</div>
+                    <div class="p-2">
+                        <div class="d-flex justify-content-between">
+                            <div class="pb-2">
+                                <div class="primary-color pb-1">Issue ID</div>
+                                <div class="bg-red p-2 text-white rounded">#343254</div>
+                            </div>
+                            <div>
+                                <div class="primary-color pb-1">Issue Category</div>
+                                <div>Inspection</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="primary-color pb-1">Created by</div>
+                            <div>Sam@detecttechnologies.com</div>
+                            <div>01.02.2023 | 20:22:00</div>
+                        </div>
+                        <div class="edit-btn cursor">
+                            See Issue History
+                        </div>
+                    </div>
+                   </ng-container> -->
+          <ng-container *ngIf="history?.action=='Person Tag'">
+            <div class="primary-color primary-bg-color action-heading p-2">{{history.action}}</div>
+            <div class="p-2">
+              <div class="pb-2">
+                <div class="m-1 fs-12 btn btn-sm btn-primary">{{history?.description}}</div>
+              </div>
+              <div>
+                <div class="primary-color fw-bold pb-1">Tagged by</div>
+                <div class="fs-12">{{history?.created_by}}</div>
+                <div class="fs-10 font-style-italic">{{ history.created_at | date:'dd.MM.yyyy |
+                  HH:mm:ss' }}</div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="history?.action=='Knowledge Capture'">
+            <div class="primary-color primary-bg-color action-heading p-2">{{history.action}}</div>
+            <div class="p-2">
+              <div>
+                <div class="primary-color fw-bold pb-1">Captured by</div>
+                <div class="fs-12">{{history?.created_by}}</div>
+                <div class="fs-10 font-style-italic">{{ history.created_at | date:'dd.MM.yyyy |
+                  HH:mm:ss' }}</div>
+              </div>
+            </div>
+          </ng-container>
+
+        </div>
+      </div>
+      <!-- <div class="col-6 pb-3">
+                <div class="w-100">
+                    <div class="primary-color action-heading">Action 2 - Issue creation</div>
+                    <div class="p-2">
+                        <div class="d-flex justify-content-between">
+                            <div class="pb-2">
+                                <div class="primary-color pb-1">Issue ID</div>
+                                <div class="bg-red p-2 text-white rounded">#343254</div>
+                            </div>
+                            <div>
+                                <div class="primary-color pb-1">Issue Category</div>
+                                <div>Inspection</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="primary-color pb-1">Created by</div>
+                            <div>Sam@detecttechnologies.com</div>
+                            <div>01.02.2023 | 20:22:00</div>
+                        </div>
+                        <div class="edit-btn cursor">
+                            See Issue History
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 pb-3">
+                <div class="w-100">
+                    <div class="primary-color action-heading">Action 1 - Progress Updation</div>
+                    <div class="p-2">
+                        <div class="pb-2">
+                            <div class="primary-color pb-1">Progress</div>
+                            <div>0% to 25%</div>
+                        </div>
+                        <div>
+                            <div class="primary-color pb-1">Progress updated by</div>
+                            <div>Ram@detecttechnologies.com</div>
+                            <div>01.02.2023 | 20:22:00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 pb-3">
+                <div class="w-100">
+                    <div class="primary-color action-heading">Action 2 - Issue creation</div>
+                    <div class="p-2">
+                        <div class="d-flex justify-content-between">
+                            <div class="pb-2">
+                                <div class="primary-color pb-1">Issue ID</div>
+                                <div class="bg-red p-2 text-white rounded">#343254</div>
+                            </div>
+                            <div>
+                                <div class="primary-color pb-1">Issue Category</div>
+                                <div>Inspection</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="primary-color pb-1">Created by</div>
+                            <div>Sam@detecttechnologies.com</div>
+                            <div>01.02.2023 | 20:22:00</div>
+                        </div>
+                        <div class="edit-btn cursor">
+                            See Issue History
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 pb-3">
+                <div class="w-100">
+                    <div class="primary-color action-heading">Action 1 - Progress Updation</div>
+                    <div class="p-2">
+                        <div class="pb-2">
+                            <div class="primary-color pb-1">Progress</div>
+                            <div>0% to 25%</div>
+                        </div>
+                        <div>
+                            <div class="primary-color pb-1">Progress updated by</div>
+                            <div>Ram@detecttechnologies.com</div>
+                            <div>01.02.2023 | 20:22:00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 pb-3">
+                <div class="w-100">
+                    <div class="primary-color action-heading">Action 2 - Issue creation</div>
+                    <div class="p-2">
+                        <div class="d-flex justify-content-between">
+                            <div class="pb-2">
+                                <div class="primary-color pb-1">Issue ID</div>
+                                <div class="bg-red p-2 text-white rounded">#343254</div>
+                            </div>
+                            <div>
+                                <div class="primary-color pb-1">Issue Category</div>
+                                <div>Inspection</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="primary-color pb-1">Created by</div>
+                            <div>Sam@detecttechnologies.com</div>
+                            <div>01.02.2023 | 20:22:00</div>
+                        </div>
+                        <div class="edit-btn cursor">
+                            See Issue History
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+    </div>
+  </div>
+</ng-template>
+
+
+<!-- SOP DRAWING -->
+<ng-template #pdfpopup let-modal>
+  <div class="modal-header row m-0 p-2">
+    <div class="primary-color col-2 ps-0 cursor fw-bold" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <img src="./assets/icons/Back.svg" width="15px" height="10px" class="me-2">Back
+    </div>
+    <div class="primary-color pop-w2 fw-bold col-8 text-center"><b>{{modalHeader | uppercase}}</b></div>
+    <div class="col-2"></div>
+  </div>
+  <div class="modal-body fs-12 ">
+    <ng-container *ngIf="isPdfLoaded">
+      <div *ngFor="let pdf of pdfData" class="w-100 h-100">
+        <iframe [src]="pdf | safeUrl" width="100%" height="100%"></iframe>
+      </div>
+    </ng-container>
+    <div *ngIf="!pdfData?.length" style="text-transform: uppercase;"
+      class="h-100 d-flex align-items-center justify-content-center">
+      <span class="text-grey"> No {{modalHeader}}s available at the moment </span>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Modal for update task-->
+<div class="modal fade" id="updateTaskpercentage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body p-0 ">
+        <div class="text-center primary-color fs-6
+       p-2 border-bottom" id="exampleModalLabel">Update Task
+        </div>
+        <div class="d-flex w-100 p-2" [ngClass]="selectedTask?.status!='NOT STARTED'?'d-block' : 'd-none'">
+          <div class="ps-2 w-75" style="min-width:150px;height:100%" (click)="updateProgress($event)">
+            <div class="progress cursor zero-radius  padding-1px" style="height:27px;">
+              <div class="progress-bar secondary-bg-color" role="progressbar" [ngStyle]="{'width':newTaskProgress+'%'}"
+                [attr.aria-valuenow]="newTaskProgress" aria-valuemin="0" aria-valuemax="100">
+                {{newTaskProgress}}%</div>
+
+            </div>
+          </div>
+          <div class="w-25 form-control ms-3 p-0" style="height:27px;">
+            <input type="number" class="border-none-outline-none w-100" max="100" min="0"
+              [disabled]="selectedTask?.status=='NOT STARTED'" [value]="selectedTask?.actual_percentage_completed"
+              [(ngModel)]="newTaskProgress" (keyup)="setValue($event)">
+          </div>
+        </div>
+
+        <div class="bg-white">
+          <div class="adjacentTasks w-100 d-flex">
+            <fieldset class="side-bar-fieldset">
+              <legend class="side-bar-legend">Date</legend>
+              <div class="input-group p-1 w-100">
+                <input type="date" class=" w-100 border-none-outline-none"
+                  min="{{selectedTaskUpdatingProgress?.actual_start_date | date:'yyyy-MM-dd'}}" [(ngModel)]="date"
+                  (click)="inputDateDisabled()" id="update" name="date" required>
+              </div>
+            </fieldset>
+            <fieldset class="side-bar-fieldset ms-2">
+              <legend class="side-bar-legend">Time</legend>
+              <div class="input-group p-1 w-100">
+                <input type="time" class=" w-100 border-none-outline-none" [(ngModel)]="time"
+                  (change)="inputDateTimeDisabled($event)" id="updateTime" name="time"
+                  formControlName="expected_start_time" required step="60">
+              </div>
+            </fieldset>
+          </div>
+          <div class="p-2">
+            <!-- <button type="button" class="btn btn-sm fs-12 secondary-bg-color text-light"
+                (click)="startTask()" [disabled]="!date || !time">CONFIRM</button>
+            <button type="button" class="btn btn-sm fs-12 secondary-bg-color text-light ms-2"
+                (click)="mannualUpdationOfDateAndTime(false)">CANCEL</button> -->
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer d-flex justify-content-center">
+        <button type="button" class="btn btn-sm secondary-bg-color text-light"
+          *ngIf="newTaskProgress == 100 && this.selectedTask?.status !='COMPLETED'" data-bs-toggle="modal"
+          data-bs-target="#finishTaskModal">Save</button>
+        <button type="button" class="btn btn-sm secondary-bg-color text-light"
+          *ngIf="newTaskProgress != 100  || this.selectedTask?.status =='COMPLETED'"
+          (click)="updateTaskStatus()">Save</button>
+        <button type="button" class="btn btn-sm border-basic primary-color" #progressModalClose
+          data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- *******************  Finish task confirmation msg *************************-->
+<div class="modal fade" id="finishTaskModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="text-center border-bottom">
+        <div class="modal-title text-danger p-2" id="exampleModalLabel">Confirmation</div>
+      </div>
+      <div class="modal-body text-center">
+        This will make this task complete!
+      </div>
+      <div class="text-center p-2">
+        <button type="button" class="btn secondary-bg-color text-light" (click)="updateTaskStatus()">OK</button>
+        <button type="button" class="btn secondary-bg-color text-light ms-2" #taskCompleteModalClose
+          data-bs-dismiss="modal">CANCEL</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--********************* Mannual updation of task start date and time ************************* -->
+
+<div class="modal fade" id="dateTimeEntryModal">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        This will make this task complete!
+      </div>
+      <div class="text-center p-2">
+        <button type="button" class="btn secondary-bg-color text-light" data-bs-toggle="modal"
+          data-bs-target="#startTaskModal">CONFIRM</button>
+        <button type="button" class="btn secondary-bg-color text-light ms-2" #taskCompleteModalClose
+          data-bs-dismiss="modal">CANCEL</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- </div> -->
+
+
+
+<!-- <app-task *ngIf="selectedUnit && selectedDepartment" [selectedUnit]="selectedUnit"
+      [equipmentCategory]="selectedEquipmentCategory" [department]="selectedDepartment" [routingData]="routingData">
+</app-task> -->

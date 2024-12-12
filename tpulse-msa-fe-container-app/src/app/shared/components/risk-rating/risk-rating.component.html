@@ -1,0 +1,18 @@
+<!-- <div class="bar-width d-flex">
+  <div class="w-20" *ngFor="let r of riskRatingLevels">
+    <div class="w-100 h-5px" (click)="onRatingSelect(r.rating)" [ngStyle]="selectedRating >= r.rating && {'background-color': r.colorCode, 'border': 'unset'}"></div>
+  </div>
+</div> -->
+<div class="bar-width d-flex">
+  <div class="me-1 d-flex " *ngFor="let r of riskRatingLevels">
+    <ng-container *ngIf="selectedRating >= r.rating">
+      <div class="w-20 h-5px radius" (click)="onRatingSelect(r.rating)" [ngStyle]="selectedRating >= r.rating && {'background-color': r.colorCode, 'border': 'unset'}"></div>
+    </ng-container>
+    <ng-container *ngIf="selectedRating < r.rating">
+      <div class="w-20 h-5px radius" (click)="onRatingSelect(r.rating)" [ngStyle]="selectedRating < r.rating && {'background-color': r.colorCode, 'border': 'unset', 'opacity':'0.2'}"></div>
+    </ng-container>
+  </div>
+</div>
+<div *ngFor="let r of riskRatingLevels">
+  <div class="fs-10px fw-800" *ngIf="selectedRating == r.rating"  [ngStyle]="selectedRating == r.rating && {'color': 'white'}" style="padding-top: 1px;">{{r.ratingName}}</div>
+</div>

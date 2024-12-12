@@ -1,0 +1,55 @@
+<div class="d-flex fd-c">
+    <div class="notification" *ngFor="let notification of notificationsStack" [@slideInOut]>
+        <div  (click)="(notification.type == 'obs_upload' || notification.type == 'start_stream') && navigateFromNotification(notification)">
+            <div class="notification-container">
+                <div class="h-40p w-15p" (click)="closeNotification(notification)">
+                    <i class="fa fa-times"></i>
+                </div>
+            </div>
+            <div class="main-container">
+                <div class="icon-container">
+                    <img [src]="notification.iconClass" class="h-70p w-60p" />
+                </div>
+                <div class="details-container">
+                    <div *ngIf="notification.type == 'obs_upload'" class="details-header">
+                        {{notification.categoryName}} : {{notification.description}}
+                    </div>
+                    <div *ngIf="notification.type !== 'obs_upload'" class="details-header">
+                        {{notification.header}} <span class="ms-2" *ngIf="notification.type == 'battery_low'">{{notification.batteryPercentage}}%</span>
+                    </div>
+                    <div class="details-body">
+                        <div class="zone-time-details">
+                            <div *ngIf="(notification.type !== 'obs_upload' && notification.type !== 'start_stream' && notification.type !== 'stop_stream')" class="camera-details">
+                                {{notification.cameraName}}
+                            </div>
+                            <div class="zone-camera-details">
+                                <div class="zone-area-details">
+                                    {{notification.unitName}} > {{notification.zoneName}} > {{notification.cameraName}}<br>
+                                    <span *ngIf="notification.workPermitNature !== null"> > {{notification.workPermitNature}} </span>
+                                    <span *ngIf="notification.typeOfWork !== null"> > {{notification.typeOfWork}}</span>
+                                    <span *ngIf="notification.permitMode !== null && notification.type == 'obs_upload'" class="camera-type">{{notification.permitMode | cameraType}}</span>
+                                    <span *ngIf="(notification.permitMode !== null && (notification.type == 'start_stream' || notification.type == 'stop_stream' || notification.type == 'battery_low'))" class="camera-type">{{notification.permitMode  | cameraType}}</span>
+                                </div>
+                            </div>
+                            <div class="date-time-details">
+                                <span>
+                                    <i class="far fa-calendar-alt date-time-values"></i>{{notification.displayDate}}
+                                </span>
+                                <span>
+                                    <i class="far fa-clock date-time-values"></i>{{notification.time}}
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="notification.type === 'obs_upload'" class="risk-rating-details d-flex align-items-center">
+                            <app-risk-rating class="w-100" [riskRatingLevels]="riskRatingLevels"
+                              [selectedRating]="notification.rating">
+                            </app-risk-rating>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,166 @@
+{
+    "header": [
+        {
+            "identifier": "dashboard",
+            "acronym": "Home",
+            "name": "Dashboard",
+            "class": "fas fa-home",
+            "routePath": "/manpower-counting/dashboard"
+        },
+        {
+            "identifier": "reports",
+            "acronym": "Reports",
+            "name": "Reports",
+            "class": "/assets/icons/S&Sreports.png",
+            "routePath": "/manpower-counting/reports"
+        },
+        {
+            "identifier": "help",
+            "acronym": "Help",
+            "name": "Help",
+            "class": "fas fa-question-circle",
+            "routePath": "/manpower-counting/help"
+        }
+    ],
+    "userManualFound": true,
+    "locationFilters": [
+        "All locations",
+        "Unit-wise",
+        "Gate-wise"
+    ],
+    "plantModule": {
+        "dashboardDetails": {
+            "mpcRefreshInterval": 10000
+        }
+    },
+    "gateModule": {
+        "liveCountDetails": {
+            "mpcRefreshInterval": 10000,
+            "mpcChartRefreshInterval": 300000,
+            "invalidGates": [],
+            "sidebar": {
+                "gateName": true,
+                "shiftType": false,
+                "startDate": true,
+                "endDate": true,
+                "startTime": true,
+                "endTime": true,
+                "minimumThreshold": false,
+                "maximumThreshold": false
+            }
+        },
+        "reportsDetails": {
+            "sidebar": {
+                "gateName": true,
+                "startDate": true,
+                "endDate": true
+            },
+            "tableColumns": [
+                {
+                    "prop": "name",
+                    "name": "Report Name",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "date",
+                    "name": "Date",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "time",
+                    "name": "Time",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "file",
+                    "name": "File",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "delete",
+                    "name": "Delete",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                }
+            ]
+        }
+    },
+    "unitModule": {
+        "liveCountDetails": {
+            "mpcRefreshInterval": 10000,
+            "mpcChartRefreshInterval": 300000,
+            "invalidZones": [],
+            "sidebar": {
+                "zoneName": true,
+                "startDate": true,
+                "endDate": true,
+                "startTime": true,
+                "endTime": true,
+                "minimumThreshold": false,
+                "maximumThreshold": false
+            }
+        },
+        "reportsDetails": {
+            "sidebar": {
+                "zoneName": true,
+                "startDate": true,
+                "endDate": true
+            },
+            "tableColumns": [
+                {
+                    "prop": "name",
+                    "name": "Report Name",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "date",
+                    "name": "Date",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": true
+                },
+                {
+                    "prop": "time",
+                    "name": "Time",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "file",
+                    "name": "File",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                },
+                {
+                    "prop": "delete",
+                    "name": "Delete",
+                    "resizeable": false,
+                    "draggable": false,
+                    "sortable": false
+                }
+            ]
+        }
+    },
+    "helpDetails": {
+        "sidebar": [
+            {
+                "camelName": "userManual",
+                "name": "User Manual",
+                "class": "fa fa-book"
+            }
+        ]
+    }
+}

@@ -1,0 +1,93 @@
+{
+    "url": "https://tpulse-ext-test.detectpl.com/",
+    "apiUrl": "https://tpulse-msa-be-dev.detectpl.com/",
+    "websocketUrl": "wss://tpulse-ext-test.detectpl.com/ws/api/",
+    "adminUrl": "https://tpulse-ext-test.detectpl.com/client-admin/",
+    "appTimeout": null,
+    "appTimeoutCutOff": 30,
+    "plantName": "Plant",
+    "headerLogoPath": "DTLogo.png",
+    "headerLogoWhitePath": "DTLogo(white).png",
+    "imageDecryptionKey": "su5k#_vyQ$_G[SPX",
+    "defaultModule": "/safety-and-surveillance",
+    "userActivityPushInterval": 60000,
+    "modules": [
+        {
+            "moduleName": "Safety and Surveillance",
+            "shortName": "S&S",
+            "iconClass": "fas fa-hard-hat",
+            "routeUrl": "/safety-and-surveillance",
+            "spinnerType": "drone"
+        },
+        {
+            "moduleName": "Confined Space Monitoring",
+            "shortName": "CSC",
+            "iconClass": "fa fa-vector-square",
+            "routeUrl": "/confined-space-monitoring/unit/confined-space-camera",
+            "spinnerType": "drone"
+        },
+        {
+            "moduleName": "Activity Monitoring",
+            "shortName": "AM",
+            "iconClass": "fas fa-desktop",
+            "routeUrl": "/activity-monitoring/unit/dashboard",
+            "spinnerType": "cctv"
+        },
+        {
+            "moduleName": "Manpower Counting",
+            "shortName": "MPC",
+            "iconClass": "fas fa-users",
+            "routeUrl": "/manpower-counting/plant/dashboard",
+            "spinnerType": "cctv"
+        },
+        {
+            "moduleName": "COVID-19 Solutions",
+            "shortName": "COVID",
+            "iconClass": "fas fa-people-arrows",
+            "routeUrl": "/social-distancing/plant/dashboard",
+            "spinnerType": "cctv"
+        },
+        {
+            "moduleName": "PPE Compliance",
+            "shortName": "PPE",
+            "iconClass": "fas fa-user-shield",
+            "routeUrl": "/covid-solutions/unit/dashboard",
+            "spinnerType": "cctv"
+        },
+        {
+            "moduleName": "Inspection",
+            "shortName": "Inspection",
+            "iconClass": "fas fa-search",
+            "routeUrl": "/inspection/plant/dashboard",
+            "spinnerType": "drone"
+        },
+        {
+            "moduleName": "Live Streaming",
+            "shortName": "Live Streaming",
+            "iconClass": "fas fa-broadcast-tower",
+            "routeUrl": "/live-streaming",
+            "spinnerType": "cctv"
+        },
+        {
+            "moduleName": "Employee Wellness",
+            "shortName": "Employee Wellness",
+            "iconClass": "fas fa-heartbeat",
+            "routeUrl": "/employee-wellness",
+            "spinnerType": "default"
+        },
+        {
+            "moduleName": "Fire Extinguisher Monitoring",
+            "shortName": "FEM",
+            "iconClass": "fas fa-fire-extinguisher",
+            "routeUrl": "/fire-extinguisher-monitoring",
+            "spinnerType": "cctv"
+        },
+        {
+            "moduleName": "Camera Configuration",
+            "shortName": "cc",
+            "iconClass": "fa fa-camera",
+            "routeUrl": "/camera-configuration",
+            "spinnerType": "default"
+        }
+    ]
+}

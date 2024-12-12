@@ -1,0 +1,9 @@
+{
+  "loginLogoPath": "assets/images/detect.png",
+  "productLogoPath": "assets/images/T-Pulse.png",
+  "productName": "T-Pulse",
+  "productSubName": "DIGITAL EHS",
+  "softwareVersion": "22.5.0.3.0",
+  "ssoEnabled": true,
+  "ssoType": "ping"
+}

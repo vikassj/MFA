@@ -1,0 +1,277 @@
+<div (click)="closeFilterPopup()" class=" shadow-sm bg-white primary-color ps-2 pe-2 w-100 d-flex align-items-center" style="height:50px">
+  <div class="w-25 d-flex align-items-center">
+    <div class="fs-12 pe-3" *ngIf="selectedPage != 'createIsuue'">
+      <button class="border-none-outline-none btn btn-sm  primary-color fw-bold"
+        (click)="onRouteClicked()">FILTER</button>
+    </div>
+    <div class="dept_select form-control ms-0 ps-1 pe-1" [ngClass]="selectedPage == 'createIsuue' ? 'create' : ''">
+      <select class="border-none-outline-none w-100 fs-12 fw-500" [(ngModel)]="selectedUnit_id"
+        (change)="getTotalcount();this.parameter = []">
+        <option *ngFor="let unit of unitsList" [value]="unit.id">{{unit.name}}</option>
+      </select>
+    </div>
+    <!-- <div *ngIf="selectedPage != 'createIsuue'" class="dept_select form-control ms-3 me-2 ps-2 pe-1">
+      <select class="border-none-outline-none w-100 fs-12 fw-500" [(ngModel)]="department_id"
+        (change)="getDepartmentsList()">
+        <option value="null">All Departments</option>
+        <option *ngFor="let department of departmentList" [value]="department.id"
+          (click)="getSelectedDepartment(department.id)">{{department.name}}</option>
+      </select>
+    </div> -->
+  </div>
+  <div class="d-flex align-items-center" style="margin-left: 9%;">
+    <div style="width:125px;" class="fs-12 fw-600 cursor text-center"
+      [ngClass]="selectedPage == 'myIsuues'?'padding-top-2px tabActive':'primary-color opacity'"
+      (click)="getSelectedPage('myIsuues')">
+      My Issues
+      <div [ngClass]="selectedPage == 'myIsuues'?'border-under-selected-page pt-2':'primary-color'"></div>
+    </div>
+    <div style="width:125px;" class="fs-12 fw-600 cursor text-center"
+      [ngClass]="selectedPage == 'allIsuues'?'padding-top-2px tabActive':'primary-color opacity'"
+      (click)="getSelectedPage('allIsuues')">
+      All Issues
+      <div [ngClass]="selectedPage == 'allIsuues'?'border-under-selected-page pt-2':'primary-color'"></div>
+    </div>
+    <div style="width:125px;" class="fs-12 fw-600 cursor text-center"
+      [ngClass]="selectedPage == 'createIsuue'?'padding-top-2px tabActive':'primary-color opacity'"
+      (click)="getSelectedPage('createIsuue')">
+      Create Issue
+      <div [ngClass]="selectedPage == 'createIsuue'?'border-under-selected-page pt-2':'primary-color'"></div>
+    </div>
+  </div>
+</div>
+
+<!-- All issues page  -->
+<div (click)="closeFilterPopup()" class="notifications-page-height m-0 pe-2 pb-2 pt-2 d-flex " *ngIf="selectedPage != 'createIsuue'">
+  <!-- <div class="bg-white shadow-sm bg-white" style="width:20%;">
+        <div>
+            <div *ngFor="let category of notificationCategories" (click)="getSelectedCategory(category.id)"
+                class=" d-flex justify-content-between align-items-center p-2 pb-3 pt-3 ps-4 fs-12 cursor border-bottom"
+                [ngClass]="category.id == selectedCategory?'primary-bg-color primary-color border-left':''">
+                <div>{{category.name}}</div>
+            </div>
+        </div>
+    </div> -->
+  <div class="ms-2 bg-white  border-right " style="width:30%;">
+    <!-- <div>
+      <span *ngFor="let department of departmentList"
+        [ngClass]="(department_id == department.id)?'btn btn-sm btn-primary':'btn btn-sm btn-outline-primary'"
+        class="m-1 fs-12" (click)="getSelectedDepartment(department.id)">{{department.name}}</span>
+    </div> -->
+    <!-- <div class="d-flex align-items-center justify-content-between" *ngIf="statusFilter?.length > 0">
+      <div>
+        <div class="btn btn-sm btn-primary m-1 fs-11px cursor-default"
+          *ngFor="let issue_type of statusFilter,let i = index" [ngClass]="i > 2? 'd-none':''">{{issue_type.name}} <span
+            class="cursor" (click)="removeFilterData(issue_type.id)">X</span></div>
+      </div>
+      <div *ngIf="statusFilter?.length > 3" class="float-end fs-11px pe-1"> + {{statusFilter?.length - 3}} Filters</div>
+    </div> -->
+    <div class="bg-white height-left-card p-1" id="table">
+      <!-- <ngx-datatable #table class="material expandable tableHeight w-100" [columnMode]="ColumnMode.force"
+        [headerHeight]="0" [footerHeight]="0" [rowHeight]="'auto'" [rows]="issuesList"
+        [selectionType]="selectionType.single" [scrollbarH]="true" [selected]="selected" [columns]="recordColumns"
+        (select)="onSelect($event)">
+        <ngx-datatable-column name="Equipment" [sortable]="true">
+          <ng-template let-column="column" let-row="row" let-value="value" ngx-datatable-cell-template> -->
+      <ng-container class="fs-12px" *ngFor="let row of issuesList">
+        <ng-container>
+          <div id="issue{{row.id}}" class="p-2"
+            [ngClass]="row.id == selected?.[0]?.id ? 'border border-2' : 'border-bottom cursor-pointer'">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center fw-bold fs-11px word-break w-100" (click)="selectedRow(row)">
+                <div class="me-2 rounded bg-danger p-1 l-h-10px px-2 text-white">#{{row.id}}</div>
+                <div [title]="row.equipment_name" class="listName">{{row.equipment_name}}</div>
+              </div>
+              <!-- [ngClass]="(row.id == selected?.[0].id) ? 'd-block' : (row.id !== selected?.[0].id) ? 'd-none':''" -->
+              <div class=" fs-11px" style="white-space: nowrap;">
+                <!-- <span class="primary-color cursor" title="Chat" (click)="showIssueRelatedChat()">Chat</span> -->
+                <!-- <span class="primary-color mx-2">|</span> -->
+                <span *ngIf="!row.is_escalated">
+                  <span class="escalate-btn primary-color" title="More"
+                    [ngClass]="userValidation(row)? 'cursorDisabled' : 'd-none'">
+                    Escalate
+                  </span>
+                  <span class="cursor escalate-btn primary-color" title="More" (click)="showIssueRelatedData()"
+                    data-bs-toggle="modal" data-bs-target="#escalateModal"
+                    [ngClass]="userValidation(row)? 'd-none' : ''">
+                    Escalate
+                  </span>
+                </span>
+                <span class="text-danger cursorDisabled" *ngIf="row.is_escalated" disabled>Escalated</span>
+              </div>
+            </div>
+            <div (click)="selectedRow(row)" class="w-100 mt-1 fs-11px issueText" [title]="row.summary">{{row.summary}}
+            </div>
+            <div class="fs-11px d-flex justify-content-between align-items-center mt-1">
+              <div class="fs-10px w-100" (click)="selectedRow(row)">
+                <div class="primary-color">Opened Since</div>
+                <div>{{row.date}}</div>
+              </div>
+              <div class="fs-10px w-100" (click)="selectedRow(row)">
+                <div class="primary-color">Deadline to close</div>
+                <div>{{row.deadline_to_close}}</div>
+              </div>
+              <div id="removeIcon">
+                <select
+                  class="cursorDisabled py-1 px-2 m-w-100px text-capitalize  rounded font-weight-bold border-none-outline-none cursor-none"
+                  ria-label="Default select example" disabled
+                  [ngClass]="(row.status == 'Open' || row.status == 'Reopen' ) ? 'status-dropdown-open': 'status-dropdown-close' ">
+                  <option>{{row.status}}</option>
+                </select>
+              </div>
+            </div>
+            <div (click)="selectedRow(row)" [title]="row.task_name" class="fs-10px w-100 text-secondry listName">
+              {{row.task_name}}
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+      <!-- </ng-template>
+        </ngx-datatable-column> -->
+
+      <!-- <ngx-datatable-column name="Actions" prop="actions" [sortable]="false" [width]="100">
+                    <ng-template ngx-datatable-header-template let-column="column">
+                        <span title="Actions">Actions</span>
+                    </ng-template>
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <div [ngClass]="(row.id == selected[0].id) ? 'd-block' : (row.id !== selected[0].id) ? 'd-none':''"
+                            class="cursor"><span class="edit-btn primary-color" title="More"
+                                (click)="showIssueRelatedData()">More</span> <span
+                                class="primary-color mx-2">|</span><span class="primary-color" title="Chat"
+                                (click)="showIssueRelatedChat()">Chat</span></div>
+                    </ng-template>
+                </ngx-datatable-column> -->
+      <!-- </ngx-datatable> -->
+    </div>
+    <div class="h-40px bg-white ">
+      <div *ngIf="issuesLength > 0" class="w-100 h-100 d-flex align-items-center justify-content-center">
+        <app-pagination [totalRecords]="issuesLength" [recordsPerPage]="noOfRows"
+          (onPageChange)="displayActivePage($event)"></app-pagination>
+      </div>
+    </div>
+  </div>
+  <div class="bg-white" style="width: 70%;">
+    <app-issue-popup-box (dataChange)="onDataChange($event)" (getLatestData)="getIssuesList($event)"
+      [selectedIssue]="selectedIssue" [selectedUnitName]="selectedUnitName"
+      [selectedUnit_id]="selectedUnit_id" [departmentList]="departmentList"></app-issue-popup-box>
+  </div>
+</div>
+
+<app-create-new-issue *ngIf="selectedPage == 'createIsuue'" [selectedUnitId]="selectedUnit_id"
+  (issueCreated)="getCreateIssue($event)" (equipmentCategoryList)="getEquipmentCategory($event)" [selectedUnitName]="selectedUnitName"></app-create-new-issue>
+<app-chat-box *ngIf="issueRelatedChat == true" (dataChange)="closeChatBox($event)"></app-chat-box>
+
+
+<!------ ****************************** Filter Code *************************************---------->
+<div class="route-nav shadow-sm scroll side-bar-height position bg-white  bg-body p-2" style="width:20%;"
+  *ngIf="isRouteClicked">
+  <div class="d-flex mb-2">
+    <button id="back-button" class="border-none-outline-none bg-white" (click)="onRouteClicked()"
+      style="margin-right: auto">
+      <i class="fas fa-arrow-left primary-color"></i>
+    </button>
+    <button class="btn btn-sm secondary-bg-color text-light" (click)="filterIssues()" [disabled]="fromDateFliter ===''|| toDateFliter ===''|| statusFilter ===''"
+      (click)="getTotalcount();this.parameter = []
+      "><span>APPLY</span></button>
+    <button class=" primary-color btn btn-sm btn-border border-none-outline-none ms-2"
+      (click)="filterReset();this.parameter = []
+      ">RESET</button>
+  </div>
+  <div class="route-nav-blocks">
+    <div class="select-vehicle">
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">From</legend>
+        <div class="input-group p-1 w-100">
+          <input type="date" id="startDate" class=" w-100 border-none-outline-none" [(ngModel)]="fromDateFliter" name="date" required
+            (click)="startInputDisabled()">
+        </div>
+      </fieldset>
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">To</legend>
+        <div class="input-group p-1 w-100">
+          <input type="date" id="endDate" class=" w-100 border-none-outline-none" [(ngModel)]="toDateFliter" name="date" required
+             (click)="endInputDisabled()">
+        </div>
+      </fieldset>
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Status</legend>
+        <!-- <div class="input-group p-1 w-100"> -->
+        <!-- <select class="w-100 text-capitalize border-none-outline-none" [(ngModel)]="statusFilter">
+                        <option value="" disabled selected hidden>Choose Status</option>
+                        <option *ngFor="let issue of issue_types_list">{{issue.name}}</option>
+                    </select> -->
+        <ng-multiselect-dropdown id="multiSelect" class="border-none-outline-none" [placeholder]="'Filter by Status'"
+          [settings]="dropdownSettings" [data]="issue_types_list" [(ngModel)]="statusFilter"
+          (onSelect)="onItemSelect($event)" (onDeSelect)="onItemDeSelect($event)">
+        </ng-multiselect-dropdown>
+        <!-- <div class="d-flex pointer align-items-center justify-content-center">
+
+                    </div> -->
+        <!-- </div> -->
+      </fieldset>
+    </div>
+    <div class="select-vehicle">
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Equipment Category</legend>
+        <select class="issue border-none-outline-none w-100" [(ngModel)]="equipmentCategoryFilter" (change)="getEquipments()" style="height: 20px;" placeholder="Select">
+          <option [value]="null" selected>Select Category</option>
+          <option *ngFor="let equip of equipmentCategory" [value]="equip.id">{{equip.name}}</option>
+      </select>
+      </fieldset>
+    </div>
+    <div>
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Equipment</legend>
+        <select class="issue border-none-outline-none w-100" [(ngModel)]="equipmentFilter" style="height: 20px;" placeholder="Select" [disabled]="!equipmentCategoryFilter">
+          <option [value]="null" selected>Select Equipment</option>
+          <option *ngFor="let equ of equipmentList" [value]="equ.id">{{equ.name}}</option>
+      </select>
+      </fieldset>
+    </div>
+    <div>
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Critical / Non-critical</legend>
+        <select class="issue border-none-outline-none w-100" [(ngModel)]="critical_BooleanValue" style="height: 20px;">
+          <option value="null" selected>Select</option>
+          <option *ngFor="let critic of critical" [value]="critic.id">{{critic.name}}</option>
+      </select>
+      </fieldset>
+    </div>
+    <div>
+      <fieldset class="side-bar-fieldset">
+        <legend class="side-bar-legend">Escalated / Non-escalated</legend>
+        <select class="issue border-none-outline-none w-100" [(ngModel)]="escalated_BooleanValue"  style="height: 20px;">
+          <option value="null" selected>Select</option>
+          <option *ngFor="let escalate of escalated" [value]="escalate.id">{{escalate.name}}</option>
+      </select>
+      </fieldset>
+    </div>
+  </div>
+</div>
+
+
+<!-- ******************* Escalatd issues *************************-->
+<div class="modal fade" id="escalateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="text-center border-bottom">
+        <div class="modal-title text-danger p-2" id="exampleModalLabel">Confirmation</div>
+      </div>
+      <div class="modal-body text-center fs-12 ">
+        Are you sure, need to Escalate the issue?
+      </div>
+      <div class="text-center p-1 mb-2">
+        <button type="button" class="btn btn-sm secondary-bg-color text-light fs-12 "
+          (click)="issueEscalated()">YES</button>
+        <button type="button" class="btn btn-sm secondary-bg-color text-light ms-2 fs-12 "
+          data-bs-dismiss="modal">NO</button>
+      </div>
+    </div>
+  </div>
+</div>

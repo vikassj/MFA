@@ -1,0 +1,35 @@
+<div id="snackbar">{{message}}</div>
+<!-- <div id="snackbarTop">{{message}}</div> -->
+
+<div class="modal fade" id="snackBarModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 *ngIf="error" class="modal-title text-danger">
+                    <em class="fas fa-times-circle pe-1"></em>
+                    Error
+                </h5>
+                <h5 *ngIf="warning" class="modal-title text-warning">
+                    <em class="fas fa-exclamation-triangle pe-1"></em>
+                    Warning
+                </h5>
+                <h5 *ngIf="confirmation" class="modal-title text-dark">
+                    <em class="fas fa-exclamation-circle pe-1"></em>
+                    Confirmation
+                </h5>
+                <h5 *ngIf="information" class="modal-title text-primary">
+                    <em class="fas fa-info-circle pe-1"></em>
+                    Information
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                {{message}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-basic btn-sm" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

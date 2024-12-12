@@ -1,0 +1,37 @@
+.position {
+    position: fixed;
+    top: 10%;
+    left: 10%;
+    right: 10%;
+    bottom: 10%;
+}
+
+.header-bg-color {
+    background-color: #707070;
+}
+
+.height {
+    position:fixed;
+    height: 68% !important;
+    width: 20%;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+.height2 {
+    position:fixed;
+    height: 64.50% !important;
+    left:30.30%;
+    top:25.50%;
+    width:59.80%;
+    overflow-y: auto !important;
+}
+.height1 {
+    position:absolute;
+    left:26.0%;
+    height: 68% !important;
+    width:73.50%;
+    overflow-y: auto !important;
+}
+.selected-image{
+border: 5px solid black;
+}

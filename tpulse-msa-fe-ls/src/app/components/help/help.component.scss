@@ -1,0 +1,41 @@
+.dashboardContainer {
+  height: calc(100% - 55px);
+  background-color: #f4f7fc;
+}
+.selectedItem{
+  border-left: 3px solid #006699;
+  background-color: #cce6ff;
+  color: #006699;
+  font-weight:bolder;
+  padding-left: 15px;
+}
+.pl-18px{
+  padding-left: 18px;
+}
+.row>*{
+  padding-right: 0px;
+  padding-left: 0px;
+}
+.col-12{
+  margin: 0px;
+}
+.side-bar-height{
+  height: calc(100vh - 70px);
+}
+.pdfHeight{
+  height: calc(100% - 50px);
+}
+.pointer{
+  cursor: pointer;
+}
+
+::ng-deep .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-cell, .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row .datatable-body-group-cell {
+  overflow: hidden;
+  white-space: break-spaces !important;
+  text-overflow: ellipsis;
+  font-size: 13px !important;
+}
+.saidBar-icon{
+  width: 30px;
+  display: inline-block;
+}
